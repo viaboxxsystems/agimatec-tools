@@ -1,0 +1,8 @@
+#summary annotation based code generation framework
+
+= Introduction =
+
+= Documentation =
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/index.html Maven-Site]
+  * [AnnomarkExample Example]
