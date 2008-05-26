@@ -357,7 +357,7 @@
   </reporting>
 
   <properties>
-    <agimatec-version>2.1.1-SNAPSHOT</agimatec-version>
+    <agimatec-version>2.1.2</agimatec-version>
     <agimatec-validation-version>0.6-SNAPSHOT</agimatec-validation-version>
     <janino-version>2.4.3</janino-version>
     <servlet-api-version>2.4</servlet-api-version>
