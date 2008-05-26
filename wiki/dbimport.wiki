@@ -1,0 +1,14 @@
+#summary database import framwork
+
+= Introduction =
+
+A small framework with tools for csv-file, fixed-length-file or xml-file imports.
+An importer can be implemented without any additional configuration. You just implement a java-class that uses some of the utility classes or - even better - write a groovy-script.
+
+Some of the utility classes are designed for simple usage from within groovy.
+
+
+= Documentation =
+  * [http://www.agimatec.de/agimatec-tools/site/dbimport/apidocs/index.html JavaDoc ]
+  * [http://www.agimatec.de/agimatec-tools/site/dbimport/index.html Maven-Site]
+  * [example Example]
