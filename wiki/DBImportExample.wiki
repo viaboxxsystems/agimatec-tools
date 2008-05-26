@@ -1,0 +1,79 @@
+#summary Example for a groovy import script to import a csv file
+
+Prerequisite:
+  * variable "jdbcConnection" contains a java.sql.Connection to the target database
+
+{{{
+import com.agimatec.utility.fileimport.*;
+import com.agimatec.utility.fileimport.groovy.*;
+import java.io.*;
+import groovy.sql.*;
+import org.apache.commons.lang.WordUtils;
+
+def jdbcConnection = tool.targetDatabase.connection;
+def su = SqlUtil.forConnection(jdbcConnection);
+su.defDate('Date', 'yyyy-MM-dd');
+su.defSequence('id', 'SEQ_import');
+ImportController controller = new ImportController(jdbcConnection, su, 'SEQ_import');
+controller.join('zipcode-import'); // wait for other imports of that kind until finished...
+
+def Sql db = new Sql(jdbcConnection);
+
+String postcodeInsert = """
+    INSERT INTO Postcode(postcode_id, zip, description, valid_from, country)
+    values(${su.get('id')}, ?, ?, ?, ?)
+""";
+
+
+def spec = new LineImporterSpecGroovy({ processor ->
+ def row = processor.currentRow;
+ processor.log('row: ' + processor.rowCount + '; insert postcode: ' + row);
+ if(db.executeUpdate (postcodeInsert,
+    [row.PostalCode,
+    WordUtils.capitalizeFully(row.PostalCodeDescription),
+    su.timestamp('Date', row.DateFrom), row.CountryCode]) == 0) {
+      throw new ImporterException("no row inserted: " + postcodeInsert, false);
+    }
+});
+
+def importer = new Importer(spec);
+db.execute 'DELETE FROM Postcode';
+try {
+    FileReader reader = new FileReader("setup/zipcodes.csv");
+    importer.importFrom(reader);
+} finally {
+    controller.end('zipcode-import', importer);  // mark import as finished
+}
+
+}}}
+
+Notes:
+  * You can drop the creation of ImportController and the finally-block. The ImportController is not required basically. It uses a separate table "import_control" to save the status of running imports and to block other imports until an import of the same name (here: "zipcode-import") has finished.
+
+If you want to use an ImportController, you need to create the import_control table (Postgres-syntax):
+
+{{{
+CREATE TABLE Import_Control (
+    import_id BIGINT CONSTRAINT NN_import_id NOT NULL,
+    start_time TIMESTAMP CONSTRAINT NN_start_time NOT NULL,
+    end_time TIMESTAMP,
+    status CHARACTER VARYING(40),
+    import_name CHARACTER VARYING(250) CONSTRAINT NN_import_name NOT NULL,
+    row_count INTEGER,
+    error_count INTEGER,
+    CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id)
+);
+}}}
+
+(Oracle-syntax)
+{{{
+CREATE TABLE Import_Control (
+    import_id INTEGER NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    status VARCHAR2(40),
+    import_name VARCHAR2(250) NOT NULL,
+    row_count INTEGER,
+    error_count INTEGER,
+    CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id));
+}}}
