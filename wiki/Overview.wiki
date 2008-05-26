@@ -17,4 +17,4 @@ Getting started with
   * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations?
 
 = Maven-Site = 
-  * [ http://www.agimatec.de/agimatec-tools/site/index.html Maven-Site]
+  * [http://www.agimatec.de/agimatec-tools/site/index.html Maven-Site]
