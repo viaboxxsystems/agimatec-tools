@@ -275,6 +275,10 @@
   </dependencyManagement>
 
   <distributionManagement>
+    <site>
+      <id>${agimatec-site-id}</id>
+      <url>${agimatec-site-url}/agimatec-tools/site</url>
+    </site>
     <snapshotRepository>
       <id>deployment.dav</id>
       <name>Agimatec Snapshot Artifacts</name>
@@ -323,34 +327,10 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <minmemory>128m</minmemory>
           <maxmemory>1024m</maxmemory>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jdepend-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <configuration>
-          <threshold>Low</threshold>
         </configuration>
       </plugin>
     </plugins>

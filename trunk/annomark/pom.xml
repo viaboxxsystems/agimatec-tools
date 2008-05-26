@@ -16,6 +16,13 @@
   <version>${agimatec-version}</version>
   <name>Codegenerator with Annogen and Freemarker</name>
 
+  <distributionManagement>
+    <site>
+      <id>${agimatec-site-id}</id>
+      <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
+    </site>
+  </distributionManagement>
+
   <dependencies>
 
     <dependency>
@@ -122,9 +129,21 @@
               <goal>run</goal>
             </goals>
           </execution>
+          <execution>
+            <id>create templates.zip</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <zip destfile="target/annomark-templates-${agimatec-version}.zip"
+                     basedir="templates"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
 

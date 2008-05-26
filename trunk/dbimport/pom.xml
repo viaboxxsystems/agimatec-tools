@@ -15,6 +15,13 @@
   <version>${agimatec-version}</version>
   <name>Fileimport tools</name>
   <url>http://www.agimatec.de</url>
+
+  <distributionManagement>
+    <site>
+      <id>${agimatec-site-id}</id>
+      <url>${agimatec-site-url}/agimatec-tools/site/dbimport</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

@@ -14,8 +14,21 @@ import java.util.StringTokenizer;
 
 /**
  * This task takes two bundles and is able to merge new locales in one file into the existing bundle.
- * This is useful if the translation is no complete version of the locale bundle and you can't just
- * replace the file. If there are translations missing, it inserts empty messages for that key. 
+ * This is useful if the translation is not a complete version of the locale bundle and you can't just
+ * replace the file. If there are translations missing, it inserts empty messages for that key.
+ * Example:
+ * <pre>
+    &lt;taskdef name="mergeLocale">
+        classname="com.agimatec.tools.nls.MergeLocaleTask">
+        &lt;classpath refid="maven.test.classpath"/>
+    &lt;/taskdef>
+
+    &lt;mergeLocale
+     fromXML="src/main/bundles/Common.xml"
+     xmlWithNewLocale="src/main/bundles/Common_de_DE.xml"
+     locales="de_DE"
+     toXML="src/main/bundles/Common_de_DE.xml"/>
+ * </pre>
  */
 public class MergeLocaleTask extends Task {
     private String fromXML, xmlWithNewLocale, toXML, locales;

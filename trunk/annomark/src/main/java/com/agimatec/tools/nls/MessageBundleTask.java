@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 /**
  * <p>Description: Generates the interface with message constants and property files
  * (resource bundles) from the descriptions in a xml file.</p>
- *
+ * <p/>
  * <p/>
  * <br>Values for:<br>
  * <pre>
@@ -21,18 +21,18 @@ import java.util.StringTokenizer;
  * writeJson = true (=compressed .js file), false, pretty (formatted .js file)
  * writeInterface = true (keys + bundle name), false, small (bundle name only),
  *  enum (keys + bundle name + enum of all keys), small_enum (bundle name + enum of all keys)
- *
+ * <p/>
  * This utility can generate:
  * Properties: .properties, .xml
  * JSON: .js
  * SQL-Script: .sql
  * Interface: .java
- *
+ * <p/>
  * overwrite = (default false)
  * deleteOldFiles = (default true)
- *
+ * <p/>
  * debugMode = (default false) ignores translations and sets the key as label
- *
+ * <p/>
  * Configuration:
  * bundles = the XML-bundles input file(s), separated by ;
  * sourcePath = to write .java interface to
@@ -41,6 +41,19 @@ import java.util.StringTokenizer;
  * jsonFile = null or the hard-coded json file name
  * sqlScriptDir = to write .sql to
  * <p/>
+ * </pre>
+ * Example:
+ * <pre>
+ * &lt;taskdef name="msgbundle" classname="com.agimatec.tools.nls.MessageBundleTask">
+ * &lt;classpath refid="maven.test.classpath"/>
+ * &lt;/taskdef>
+ *
+ * &lt;msgbundle overwrite="true" bundles="src/main/bundles/Customer.xml;../utilities/base/src/main/bundles/Common.xml"
+ * writeProperties="true"
+ * writeJson="true"
+ * jsonPath="src\main\webapp\js"
+ * jsonFile="i18n"
+ * propertyPath="src\main\webapp\WEB-INF\classes"/>
  * </pre>
  *
  * @author Roman Stumm
@@ -96,9 +109,7 @@ public class MessageBundleTask extends Task {
         this.writeJson = writeJson;
     }
 
-    /**
-     * true when the interface file shall be generated
-     */
+    /** true when the interface file shall be generated */
     public String getWriteInterface() {
         return writeInterface;
     }
@@ -107,9 +118,7 @@ public class MessageBundleTask extends Task {
         writeInterface = aWriteInterface;
     }
 
-    /**
-     * true when the files shall be generated, even if they are up-to-date
-     */
+    /** true when the files shall be generated, even if they are up-to-date */
     public boolean isOverwrite() {
         return overwrite;
     }
@@ -118,9 +127,7 @@ public class MessageBundleTask extends Task {
         overwrite = aOverwrite;
     }
 
-    /**
-     * true when the label shall be the same as the key 
-     */
+    /** true when the label shall be the same as the key */
     public boolean isDebugMode() {
         return debugMode;
     }
@@ -129,9 +136,7 @@ public class MessageBundleTask extends Task {
         this.debugMode = debugMode;
     }
 
-    /**
-     * the path+name of the xml files (; separated)
-     */
+    /** the path+name of the xml files (; separated) */
     public String getBundles() {
         return bundles;
     }
@@ -144,9 +149,7 @@ public class MessageBundleTask extends Task {
         sourcePath = getProject().resolveFile(aSourcePath).getPath();
     }
 
-    /**
-     * the root path to store the property files
-     */
+    /** the root path to store the property files */
     public String getPropertyPath() {
         return propertyPath;
     }
@@ -176,8 +179,8 @@ public class MessageBundleTask extends Task {
         } else {
             fileType = BundleWriter.FileType.SQL;
         }
-        executeBundleWriter(new BundleWriterSql(this, getXMLConfigBundle(), o,
-                getSqlScriptDir(), fileType));
+        executeBundleWriter(
+                new BundleWriterSql(this, getXMLConfigBundle(), o, getSqlScriptDir(), fileType));
     }
 
     private void handleInterface(MBBundle o) throws Exception {
@@ -193,8 +196,8 @@ public class MessageBundleTask extends Task {
         } else {
             fileType = BundleWriter.FileType.JAVA_FULL;
         }
-        executeBundleWriter(new BundleWriterJavaInterface(this, getXMLConfigBundle(), o,
-                sourcePath, fileType));
+        executeBundleWriter(
+                new BundleWriterJavaInterface(this, getXMLConfigBundle(), o, sourcePath, fileType));
     }
 
     private void handleProperties(MBBundle o) throws Exception {
@@ -219,8 +222,8 @@ public class MessageBundleTask extends Task {
         } else {
             fileType = BundleWriter.FileType.JS;
         }
-        executeBundleWriter(
-                new BundleWriterJson(this, getXMLConfigBundle(), o, getJsonPath(), getJsonFile(), fileType));
+        executeBundleWriter(new BundleWriterJson(this, getXMLConfigBundle(), o, getJsonPath(),
+                getJsonFile(), fileType));
     }
 
     public String getJsonFile() {
@@ -238,18 +241,16 @@ public class MessageBundleTask extends Task {
         writer.execute();
     }
 
-    /**
-     * read/parse XML file
-     */
+    /** read/parse XML file */
     protected MBBundles loadBundles() throws Exception {
         if (parsedBundles == null) {
             StringTokenizer tokens = new StringTokenizer(getBundles(), ";");
-            while(tokens.hasMoreTokens()) {
+            while (tokens.hasMoreTokens()) {
                 String bundlesFileName = getProject().resolveFile(tokens.nextToken()).getPath();
                 log("Reading XML from " + bundlesFileName, Project.MSG_INFO);
                 MBBundles loadedBundles =
                         (MBBundles) new MBXMLPersistencer().load(new File(bundlesFileName));
-                if(parsedBundles == null) {
+                if (parsedBundles == null) {
                     parsedBundles = loadedBundles;
                     xmlConfigBundle = bundlesFileName;
                 } else {
@@ -260,16 +261,15 @@ public class MessageBundleTask extends Task {
         return parsedBundles;
     }
 
-    private String getXMLConfigBundle()
-    {
+    private String getXMLConfigBundle() {
         return xmlConfigBundle;
     }
 
     private void mergeBundles(MBBundles loadedBundles) {
         log("Merge XML bundles ...", Project.MSG_VERBOSE);
-        for(MBBundle bundle : loadedBundles.getBundles()) {
+        for (MBBundle bundle : loadedBundles.getBundles()) {
             // Enhancement NYI - duplettencheck
-            for(MBBundle parsedBundle : parsedBundles.getBundles()) {
+            for (MBBundle parsedBundle : parsedBundles.getBundles()) {
                 parsedBundle.getEntries().addAll(bundle.getEntries());
             }
         }
