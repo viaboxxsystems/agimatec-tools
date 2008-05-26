@@ -13,9 +13,9 @@ You can
 = Details =
 
 Getting started with
-  * dbimport
+  * [dbimport DBImport]
     If you need to import files (csv, fixed-length, xml) into a jdbc-database.
-  * [DBMigrate dbmigrate]
+  * [dbmigrate DBMigrate]
     You need a framework for database migration or other tools contained in dbmigrate (e.g. sql script execution)?
-  * [annomark Annomark ]
+  * [annomark Annomark]
     You want to generate source code or other files (properties, xml) driven by annotations?
