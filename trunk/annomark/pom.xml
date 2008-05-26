@@ -19,7 +19,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>agimatec</groupId>
+      <groupId>com.agimatec</groupId>
       <artifactId>dbmigrate</artifactId>
     </dependency>
 
