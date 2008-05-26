@@ -33,17 +33,17 @@
     <dependencies>
       <!-- own modules -->
       <dependency>
-        <groupId>agimatec</groupId>
+        <groupId>com.agimatec</groupId>
         <artifactId>dbimport</artifactId>
         <version>${agimatec-version}</version>
       </dependency>
       <dependency>
-        <groupId>agimatec</groupId>
+        <groupId>com.agimatec</groupId>
         <artifactId>dbmigrate</artifactId>
         <version>${agimatec-version}</version>
       </dependency>
       <dependency>
-        <groupId>agimatec</groupId>
+        <groupId>com.agimatec</groupId>
         <artifactId>annomark</artifactId>
         <version>${agimatec-version}</version>
       </dependency>
