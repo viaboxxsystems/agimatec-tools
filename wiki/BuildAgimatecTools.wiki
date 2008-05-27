@@ -1,0 +1,11 @@
+#summary For developers: how to build the project
+
+= How to build agimatec-tools from source =
+
+If you want to build the project from sources, this page describes what to do:
+
+  * checkout sources from svn, refer to the "Source" tab
+    [http://code.google.com/p/agimatec-tools/source/checkout Source/checkout]
+
+  * The readme.txt file describes how to continue:
+    [http://agimatec-tools.googlecode.com/svn/trunk/readme.txt readme.txt]
