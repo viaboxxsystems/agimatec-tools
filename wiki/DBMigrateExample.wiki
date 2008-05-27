@@ -1,0 +1,44 @@
+#summary Examples for dbmigrate
+
+= Introduction =
+
+== For SVN and maven2 users ==
+1. Checkout the dbmigrate-example from Source with SVN.
+2. Build the project
+   mvn package
+3. Look into the target/dist directory
+
+== For maven2 users that cannot checkout from SVN == 
+1. Download dbmigrate-example-project.zip and extract
+2. Build the project
+   mvn package
+3. Look into the target/dist directory
+
+== For others ==
+1. Download dbmigrate-example-dist.zip
+
+
+The dist-directory contains the distribution of a runnable dbmigrate project.
+
+= Run dbmigrate example =
+1. change to directory with dbtool.sh or dbtool.bat 
+
+2. unix users:
+to setup a new database
+   ./dbtool.sh setup.xml
+to migrate a database
+   ./dbtool.sh upgrade.xml
+
+3. windows users:
+to setup a new database
+   dbtool.bat setup.xml
+to migrate a database
+   dbtool.bat upgrade.xml
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
