@@ -1,6 +1,18 @@
 #summary Examples for dbmigrate
 
-= Introduction =
+= Using the dbmigrate-example project =
+This is a project that demonstrates some of the basic features.
+You can use it as a template to build your own database migration/setup project.
+It is configured to create or migrate an Oracle10 database.
+
+Some of the features demonstated:
+  * setup of database (configurable for different environments)
+  * creation of users, tables, functions
+  * import of data with dbunit
+  * import of data from xml file
+  * import of data from csv file
+  * sanity check of schema, views, triggers
+  * using own java classes (e.g. DeleteHistoryTriggers.java) during setup/migration
 
 == For SVN and maven2 users ==
 1. Checkout the dbmigrate-example from Source with SVN.
