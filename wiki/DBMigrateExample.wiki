@@ -5,7 +5,7 @@ This is a project that demonstrates some of the basic features.
 You can use it as a template to build your own database migration/setup project.
 It is configured to create or migrate an Oracle10 database.
 
-Some of the features demonstated:
+Some of the features demonstrated by the example project:
   * setup of database (configurable for different environments)
   * creation of users, tables, functions
   * import of data with dbunit
