@@ -16,5 +16,8 @@ Getting started with
   * [dbmigrate DBMigrate], if you need a framework for database migration or other tools contained in dbmigrate (e.g. sql script execution)
   * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations?
 
+= Building the project with Maven2 =
+[BuildAgimatecTools How to build agimatec-tools]
+
 = Maven-Site = 
   * [http://www.agimatec.de/agimatec-tools/site/index.html Maven-Site]
