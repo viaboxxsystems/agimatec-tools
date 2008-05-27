@@ -83,3 +83,26 @@ CREATE TABLE Import_Control (
     error_count INTEGER,
     CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id));
 }}}
+
+= Example to import a XML file =
+
+{{{
+import com.agimatec.commons.config.*;
+import com.agimatec.utility.fileimport.*;
+import com.agimatec.utility.fileimport.groovy.*;
+import java.io.*;
+import groovy.sql.*;
+
+...
+def spec = new XmlSlurperSpec(
+{ doc -> doc.user },
+{ processor ->
+  def user = processor.current;
+  
+  processor.log('element: ' + processor.rowCount + ' with: ' + user);
+  def countryCode = su.trim(user.country.text());
+  // ..
+});
+}}}
+
+  * Main difference: XmlSlurperSpec instead of LineImporterSpecGroovy
