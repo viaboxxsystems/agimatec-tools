@@ -16,14 +16,18 @@ Some of the features demonstated:
 
 == For SVN and maven2 users ==
 1. Checkout the dbmigrate-example from Source with SVN.
+
 2. Build the project
    mvn package
+
 3. Look into the target/dist directory
 
 == For maven2 users that cannot checkout from SVN == 
 1. Download dbmigrate-example-project.zip and extract
+
 2. Build the project
    mvn package
+
 3. Look into the target/dist directory
 
 == For others ==
