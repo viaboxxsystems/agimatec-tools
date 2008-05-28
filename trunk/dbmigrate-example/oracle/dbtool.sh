@@ -6,7 +6,6 @@
 
 JAVA_HOME=/usr/jdk/latest
 JAVA_BIN=$JAVA_HOME/bin/java
-LIB_DIR=../server/default/lib
 
 CLASSPATH=lib/ojdbc14.jar:lib/log4j.jar:lib/dbunit.jar:lib/dbmigrate-example.jar:lib/dbmigrate.jar
 CLASSPATH=$CLASSPATH:lib/groovy-all-1.0-jsr.jar:lib/dbimport.jar:lib/freemarker.jar:lib/commons-io.jar:lib/commons-logging.jar:lib/commons-lang.jar
