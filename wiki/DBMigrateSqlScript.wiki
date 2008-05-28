@@ -47,7 +47,7 @@ do what you whould expect.
 
 
 == environment variables ==
-Statements/comments can contain environment variables. This is the way to make the script compatible to different environments (e.g. you test machine, the production system, local developer machine,...)
+Statements/comments can contain environment variables. This is the way to make the script compatible to different environments (e.g. for tests, the production system, local developer machine,...)
 
 {{{
 connect ${DB_USER}/${DB_PASSWORD}@test;
