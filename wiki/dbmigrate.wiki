@@ -1,4 +1,4 @@
-#summary database migration framework
+#summary database migration tool
 
 = Introduction =
 
