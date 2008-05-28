@@ -15,11 +15,11 @@ Look into the detailed documentation to learn the configuration and other featur
   * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/index.html JavaDoc ]
   * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/index.html Maven-Site]
 
-== [DBMigrateConfig AutoMigrationTool] ==
+== !AutoMigrationTool ==
   * [DBMigrateExample Example-Project]
   * [DBMigrateConfig configuration and features ]
 
-== Other Tools (code generation, transformation) ==
+== Other Tools (code generation, transformation) contained in dbmigrate.jar ==
   * InvokerTool 
   * DDLParserTool: Parse SQL-File and save as a xml catalog or serialized !CatalogDescription.
   * DbUnitDumpTool
