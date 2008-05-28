@@ -1,0 +1,89 @@
+#summary xml script features
+
+If you need to invoke java-beans, you cannot do that in sql scripts. You can use a xml script instead which gives you more control about the migration process.
+
+= Example =
+{{{
+<config>
+  <list name="Operations">
+    <text name="doSQLScript" value="subscript.sql"/>
+    <!--<text name="halt" value="manually perform something"/>-->
+    <text name="doSQLScriptIgnoreErrors" value="subscript.sql"/>
+    <text name="version" value="2.0.16"/>
+  </list>
+</config>
+}}}
+
+= Features =
+
+list "Operations" is mandatory and contains the migration steps to execute.
+text name="" is a public method in class "BaseMigrationTool" (or a subclass)
+The methods get a single string parameter.
+
+{{{
+<text name="doSQLScript" value="subscript.sql"/> 
+}}}
+invokes
+{{{
+public void doSQLScript(String parameter); // parameter="subscript.sql"
+}}}
+
+== Predefined methods ==
+
+  * doSQLScript 
+Execute a SQL-Script (parse statements). Fail on SQLExceptions. 
+  * doSQLScriptIgnoreError 
+Execute a SQL-Script (parse statements). Log SQLExceptions and continue.
+  * execSQLScript 
+Execute a SQL-Script as a single jdbc statement. Can be used to install a PL/SQL package.
+Use a separate file for each PL/SQL package-spec, package-body. The script will not be parsed. 
+  * halt 
+Explicit program stop. Some migration steps might require manual activities by the administrator. The migration program can execute until this step and invoke a halt. The given parameter will be printed and logged.
+  * version
+same as -- @version() in sql scripts. set the DB_VERSION value
+  * doGroovyScript 
+invoke a groovy script.
+Name of scripts in value="" can contain optional parameters, use brackets (). 
+The script gets some default Bindings (variables):
+|| binding || description ||
+|| params" || all parameters as a liste of Strings ||
+|| tool || the current instance of MigrationTool (allows access to environment and jdbcConnection) ||
+
+=== Examples ===
+a) no parameter
+{{{
+<text name="doGroovyScript" value="importProductsCsv.groovy"/>
+}}}
+b) 2 parameters
+{{{
+<text name="doGroovyScript" value="importProductsCsv.groovy(products.txt,myapp)"/>
+}}}
+
+  * checkObjectsValid 
+Check if database contains invalid Trigger, Indices, Views.
+Parameter: databaseType ("oracle", "postgres") 
+
+  * checkSchemaComplete 
+Compare schema of datenbase with SQL-Scripts.
+1. Parameter: databaseType ("oracle", "postgres")
+2. (Comma-separated) Name of env-Eintrags, that contains a list of Strings, that are File-URLs. These files are .sql-Files, which will be parsed und compared with the physical database schema (read from the database).
+This is a mightly operation that allows to check whether all schema elements (columns, keys, tables) are correctly migrated.
+
+=== Example ===
+{{{
+<config>
+  <map name="env">
+    <ArrayList name="sqlfiles">
+      <String value="file:setup/application-tables.sql"/>
+      <String value="file:setup/history-tables.sql"/>
+    </ArrayList>
+  </map>
+
+  <list name="Operations">
+    <text name="checkObjectsValid" value="oracle"/>
+    <text name="checkSchemaComplete" value="oracle,sqlfiles"/>
+  </list>
+</config>
+}}}
+  
+
