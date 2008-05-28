@@ -15,4 +15,4 @@ Look into the detailed documentation to learn the configuration and other featur
   * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/index.html JavaDoc ]
   * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/index.html Maven-Site]
   * [DBMigrateExample Example-Project]
-  * [DBMigrateConfig Configuration]
+  * [DBMigrateConfig configuration and features]
