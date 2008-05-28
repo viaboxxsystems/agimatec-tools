@@ -6,4 +6,4 @@ It does not make any difference whether you invoke a groovy script from within a
 
 = Features =
 
-[DBMigrateXmlScript You can more information here (refer to doGroovyScript)]
+[DBMigrateXmlScript Find more information here (refer to doGroovyScript)]
