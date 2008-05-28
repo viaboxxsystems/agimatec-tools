@@ -4,7 +4,7 @@
 
 If you need to understand the configuration details of a database migration project, this side is for you. Mostly you just add new up-.sql files or up-.groovy scripts in the scripts directory without the need to edit the configurations. You can download *dbmigrate-example-dist.zip* which is a completly preconfigured example project.
 
-If you check out the sources from SVN, you can refer to the *test cases* for the classes you need to give you some some hints about features and usage.
+If you check out the sources from SVN, you can refer to the *test cases* for the classes you need to give you some some hints about features and usage. The !JavaDoc of dbmigrate might be useful as well.
 
 Some of the classes in dbmigrate have a startable *main()* method. They should print a usage description to the console when invoked with inadequate parameters.
 
