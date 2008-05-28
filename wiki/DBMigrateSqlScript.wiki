@@ -32,15 +32,18 @@ reconnect to other database (when working with multiple databases).
 The tool currently supports only one jdbc-connection at the same time. You can reconnect within an sql-script to change the database.
 
 {{{
-connect user/password@datenbank
+connect user/password@database
 connect user/password@jdbcUrl
 }}}
 
 == commit and rollback ==
-Statements COMMIT; and ROLLBACK; do what you whould expect.
+Statements 
+{{{COMMIT;}}} and 
+{{{ROLLBACK; }}}
+do what you whould expect.
 (Scripts do not neccessarly run in AUTOCOMMIT-Mode.)
 
-  * But: Some datenbases (e.g. Oracle) implicitly commits after each DDL operation.(CREATE, ALTER, ...). Transactions work with DML statements only (update, insert, ...) for such databases.
+  * But: Some databases (e.g. Oracle) implicitly commit after each DDL operation.(CREATE, ALTER, ...). Transactions work with DML statements only (update, insert, ...) for such databases.
 
 
 == environment variables ==
