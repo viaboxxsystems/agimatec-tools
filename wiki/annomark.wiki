@@ -2,7 +2,15 @@
 
 = Introduction =
 
-= Documentation =
+= Annomark =
   * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
   * [http://www.agimatec.de/agimatec-tools/site/annomark/index.html Maven-Site]
   * [AnnomarkExample Example]
+
+= Other Tools contained in annomark.jar =
+
+== NLS (manage resource bundles) == 
+  * MessageBundleTask
+  * Property2XMLConverterTask
+  * MergeLocaleTask
+  * AddLocaleTask 
