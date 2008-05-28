@@ -1,0 +1,9 @@
+#summary features for groovy scripts
+
+The tool can execute files with suffix .groovy as  [http://groovy.codehaus.org/ groovy scripts].
+
+It does not make any difference whether you invoke a groovy script from within a xml configuration or directly by placing it in the scripts directory (prefix up-) for automatic invocation, except that you cannot provide additional parameters when invoking the script automatically.
+
+= Features =
+
+[DBMigrateXmlScript You can more information here (refer to doGroovyScript)]
