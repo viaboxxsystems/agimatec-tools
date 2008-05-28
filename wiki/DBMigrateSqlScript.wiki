@@ -7,6 +7,8 @@ The tool can substitute enviorment variable and supports conditional execution o
   * Problems with Oracle-packages. You can execute packages by invocation from within a xml configuration file. (see [DBMigrateXmlScript XML scripts])
    
 = Features =
+Each sql statement is terminated by ; or a new line with a sole \ character.
+
 Besides the SQL language features of your database, the tool supports:
 
 == Set Version ==
@@ -108,4 +110,3 @@ DROP TABLE xxx...;
   * Logical operators: & | 
   * Comparison operators: = != 
 (see javadoc of com.agimatec.commons.beans.MapQuery for details).
-
