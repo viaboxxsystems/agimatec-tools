@@ -24,7 +24,7 @@ _usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false
 
 
 = Main configuration file =
-  * [DBMigrateConfigFile Main configuration file...]
+  * [DBMigrateConfigFile Main configuration file]
   * [DBMigrateJdbcConfig JdbcConfig]
   * [DBMigrateSqlScript SQL scripts]
   * [DBMigrateXmlScript XML scripts]
