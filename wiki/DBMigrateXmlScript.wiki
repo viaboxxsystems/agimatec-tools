@@ -73,9 +73,9 @@ Check if database contains invalid Trigger, Indices, Views.
 Parameter: databaseType ("oracle", "postgres") 
 
   * checkSchemaComplete 
-Compare schema of datenbase with SQL-Scripts.
+Compare schema of database with SQL-Scripts.
 1. Parameter: databaseType ("oracle", "postgres")
-2. (Comma-separated) Name of env-Eintrags, that contains a list of Strings, that are File-URLs. These files are .sql-Files, which will be parsed und compared with the physical database schema (read from the database).
+2. (Comma-separated) Name of env-entries, that contains a list of Strings, that are File-URLs. These files are .sql-Files, which will be parsed und compared with the physical database schema (read from the database).
 This is a mightly operation that allows to check whether all schema elements (columns, keys, tables) are correctly migrated.
 
 === Example ===
@@ -95,9 +95,9 @@ This is a mightly operation that allows to check whether all schema elements (co
 </config>
 }}}
   
-== conditional execute with <list> ==
+== conditional execution with <list> ==
 
-Operationen, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tags. 
+Operations, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tag. 
 The name-attribute of the <list> contains the condition expression 
 (same syntax and features as in SQL-Scripts, see -- #if).
 
