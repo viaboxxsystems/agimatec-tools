@@ -1,0 +1,113 @@
+#summary sql script features
+
+dbmigrate tool can execute "standard" sql-scripts. Triggers and PL/SQL-blocks are also supported.
+The tool can substitute enviorment variable and supports conditional execution of statements.
+
+*Known limitations*
+  * Problems with Oracle-packages. You can execute packages by invocation from within a xml configuration file. (see [DBMigrateXmlScript XML scripts])
+   
+= Features =
+Besides the SQL language features of your database, the tool supports:
+
+== Set Version ==
+(Table: DB_Version)
+Each update-script should end with setting the DB_VERSION.
+Shortcut syntax is a sql-comment in format:
+
+{{{
+-- @version(2.0.13)
+
+or
+-- #version(2.0.13)
+}}}
+
+  * This sets the version to 2.0.13
+
+== Reconnect == 
+reconnect to other database (when working with multiple databases).
+The tool currently supports only one jdbc-connection at the same time. You can reconnect within an sql-script to change the database.
+
+{{{
+connect user/password@datenbank
+connect user/password@jdbcUrl
+}}}
+
+== commit and rollback ==
+Statements COMMIT; and ROLLBACK; do what you whould expect.
+(Scripts do not neccessarly run in AUTOCOMMIT-Mode.)
+
+  * But: Some datenbases (e.g. Oracle) implicitly commits after each DDL operation.(CREATE, ALTER, ...). Transactions work with DML statements only (update, insert, ...) for such databases.
+
+
+== environment variables ==
+Statements/comments can contain environment variables. This is the way to make the script compatible to different environments (e.g. you test machine, the production system, local developer machine,...)
+
+{{{
+connect ${DB_USER}/${DB_PASSWORD}@test;
+-- to database test on same host
+
+connect ${DB_USER}/${DB_PASSWORD}@jdbc:postgresql://localhost:5432/test;
+
+-- .reconnect with complate jdbcurl
+}}}
+
+
+== subscripts ==
+@ is used to invoke another sql script.
+Tip: It should not start with "up-" otherwise the tool might execute the subscript automatically.
+
+{{{
+@subscript.sql
+}}}
+
+If you need to execute the subscript as a single statement (e.g. when it is a PL/SQL package which the parser can not handle correctly), you use the > synatx
+
+{{{
+@>subscript.sql
+}}}
+
+== set script variables with SET ==
+
+Example
+{{{
+SET FAIL_ON_ERROR=true;
+}}}
+
+The scope of this statement is the current sql script only or until you change the value with the next SET statement.
+
+Supported variables:
+|| variable || data type|| description || 
+|| FAIL_ON_ERROR || Boolean || true: cancel exection of script in case of a SQLException (Default behavior). This will stop the migration programm. false: log error and continue with next statement in the script. ||
+
+== conditional execution with #if ==
+
+If some statements need to execute in specific enviroments only (e.g. avoid to insert test data in production environments), you can use an #if condition to do so.
+The condition can access environment variables (see [DBMigrateConfigFile Main configuration file], <map name="env">...)
+
+{{{
+-- #if platform=QS & DB_USER=postgres | DB_USER=admin
+-- execute this if condition is true
+ALTER TABLE xxx...;
+DROP TABLE xxx...;
+-- #endif
+}}}
+
+  * All statements, subscripts between -- #if and -- #endif are concerned.
+  * You can nest #if conditions:
+{{{
+-- #if platform=QS
+-- #if DB_USER=postgres
+...
+-- #endif
+-- #if DB_USER=admin
+...
+-- #endif
+-- #endif
+}}}
+
+Logical operators: & | 
+Comparison operators: = != 
+(see javadoc of com.agimatec.commons.beans.MapQuery for details).
+
+
+
