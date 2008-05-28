@@ -29,4 +29,3 @@ _usage: java com.agimatec.dbmigrate.AutoMigrationTool -help -sim true|yes|false 
   * [DBMigrateSqlScript SQL scripts]
   * [DBMigrateXmlScript XML scripts]
   * [DBMigrateGroovyScript groovy scripts]
-  * [DBMigrateScriptOptions script options]
