@@ -14,7 +14,7 @@ You can
 Getting started with
   * [dbimport DBImport], if you need to import files (csv, fixed-length, xml) into a jdbc-database.
   * [dbmigrate DBMigrate], if you need a framework for database migration or other tools contained in dbmigrate (e.g. sql script execution, schema transformation, code generation sql->java)
-  * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations?
+  * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations
 
 = Building the project with Maven2 =
 [BuildAgimatecTools How to build agimatec-tools]
