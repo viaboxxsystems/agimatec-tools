@@ -37,6 +37,15 @@ Execute a SQL-Script (parse statements). Log SQLExceptions and continue.
   * execSQLScript 
 Execute a SQL-Script as a single jdbc statement. Can be used to install a PL/SQL package.
 Use a separate file for each PL/SQL package-spec, package-body. The script will not be parsed. 
+  * invokeBean
+invoke a n-arg-method on a new instance of a class.
+All parameters of the target method must be of type String!
+{{{
+ <text name="invokeBean" value="com.agimatec.database.InsertJasperReport#save(2,user-chart.jrxml)"/>
+}}}
+  * invokeStatic
+invoke a static n-arg-method on a class.
+All parameters of the target method must be of type String!
   * halt 
 Explicit program stop. Some migration steps might require manual activities by the administrator. The migration program can execute until this step and invoke a halt. The given parameter will be printed and logged.
   * version
@@ -86,4 +95,22 @@ This is a mightly operation that allows to check whether all schema elements (co
 </config>
 }}}
   
+== conditional execute with <list> ==
 
+Operationen, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tags. 
+The name-attribute of the <list> contains the condition expression 
+(same syntax and features as in SQL-Scripts, see -- #if).
+
+Example:
+  * Execute "doSQLScript" and "invokeBean" when "testdata_enabled=true"
+{{{
+<config>
+  <list name="Operations">
+    <list name="testdata_enabled=true">
+        <text name="doSQLScript" value="insert-some-data.sql"/>
+        <text name="invokeBean" value="com.agimatec.database.InsertJasperReport#save(2,user-chart.jrxml)"/>
+     </list>
+     <text name="version" value="2.0.24"/>
+  </list>
+</config>
+}}}
