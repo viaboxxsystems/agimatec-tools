@@ -21,7 +21,7 @@ Look into the detailed documentation to learn the configuration and other featur
 
 == Other Tools (code generation, transformation) ==
   * InvokerTool 
-  * DDLParserTool: Parse SQL-File and save as a xml catalog or serialized CatalogDescription.
+  * DDLParserTool: Parse SQL-File and save as a xml catalog or serialized !CatalogDescription.
   * DbUnitDumpTool
   * DbUnitSetupTool
   * HistoryGeneratorTool
