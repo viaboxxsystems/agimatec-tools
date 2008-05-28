@@ -50,7 +50,7 @@ All parameters of the target method must be of type String!
 Explicit program stop. Some migration steps might require manual activities by the administrator. The migration program can execute until this step and invoke a halt. The given parameter will be printed and logged.
   * version
 same as -- @version() in sql scripts. set the DB_VERSION value
-  * doGroovyScript 
+  * *doGroovyScript*
 invoke a groovy script.
 Name of scripts in value="" can contain optional parameters, use brackets (). 
 The script gets some default Bindings (variables):
