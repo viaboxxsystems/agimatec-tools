@@ -6,7 +6,7 @@ CREATE TABLE ${table.tableName} (
 <#list table.columns as column>
     <#include "print-column.ftl"><#if table.columns?last!=column>,
 </#if></#list><#if table.primaryKey??>,
-    <#if table.primaryKey.indexName??>CONSTRAINT ${table.primaryKey.indexName}</#if> PRIMARY KEY (<#list generator.exeptLast(table.primaryKey.columns) as pkCol>${pkCol}, </#list>${generator.last(table.primaryKey.columns)}) USING INDEX TABLESPACE NUCLEUS_INDEX<#list table.constraints as index>,
+    <#if table.primaryKey.indexName??>CONSTRAINT ${table.primaryKey.indexName}</#if> PRIMARY KEY (<#list generator.exeptLast(table.primaryKey.columns) as pkCol>${pkCol}, </#list>${generator.last(table.primaryKey.columns)}) USING INDEX TABLESPACE APP_INDEX<#list table.constraints as index>,
     <#include "print-constraint.ftl"></#list></#if>
 );
 

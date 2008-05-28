@@ -15,7 +15,7 @@ CREATE TABLE H_JOURNAL (
    HIST_TABLE VARCHAR(50) NOT NULL,
    HIST_TIME TIMESTAMP NOT NULL,
    HIST_CONTEXTID VARCHAR(40),
-   CONSTRAINT H_JOURNAL_PK PRIMARY KEY (ID, HIST_TABLE) USING INDEX TABLESPACE NUCLEUS_INDEX
+   CONSTRAINT H_JOURNAL_PK PRIMARY KEY (ID, HIST_TABLE) USING INDEX TABLESPACE APP_INDEX
 );
 
 <#list config.tables as histTable>
@@ -30,7 +30,7 @@ CREATE TABLE ${histTable.historyTable} (<#list histTable.excludeColumns as each>
    HIST_TIME TIMESTAMP NOT NULL,
    HIST_CONTEXTID VARCHAR(40),
    HIST_TYPE CHAR(1) NOT NULL,
-   CONSTRAINT ${histTable.historyTable}_PK PRIMARY KEY (VERSION, <#list table.primaryKey.columns as pkColumn>${pkColumn}<#if pkColumn_has_next>, </#if></#list>) USING INDEX TABLESPACE NUCLEUS_INDEX
+   CONSTRAINT ${histTable.historyTable}_PK PRIMARY KEY (VERSION, <#list table.primaryKey.columns as pkColumn>${pkColumn}<#if pkColumn_has_next>, </#if></#list>) USING INDEX TABLESPACE APP_INDEX
 );
 
 </#list>

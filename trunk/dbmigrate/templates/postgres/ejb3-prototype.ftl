@@ -6,10 +6,9 @@
 ${ejb3schema.generate()}
 
 <#list ejb3schema.ejb3classesCollection?sort as ejb3>
-${generator.outputToFile("com/agimatec/nucleus/persistence/model/${ejb3.className}.java")}package com.agimatec.nucleus.persistence.model;
+${generator.outputToFile("com/agimatec/sample/persistence/model/${ejb3.className}.java")}package com.agimatec.sample.persistence.model;
 
 import com.agimatec.annotations.*;
-import com.agimatec.nucleus.common.model.*;
 import org.compass.annotations.*;
 import javax.persistence.*;
 import java.util.*;
