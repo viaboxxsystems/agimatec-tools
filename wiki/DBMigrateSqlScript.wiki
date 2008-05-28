@@ -105,9 +105,7 @@ DROP TABLE xxx...;
 -- #endif
 }}}
 
-Logical operators: & | 
-Comparison operators: = != 
+  * Logical operators: & | 
+  * Comparison operators: = != 
 (see javadoc of com.agimatec.commons.beans.MapQuery for details).
-
-
 
