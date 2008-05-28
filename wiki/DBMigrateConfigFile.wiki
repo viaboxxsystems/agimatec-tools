@@ -33,7 +33,7 @@ File may end with .sql, .xml or .groovy.
 .xml files can be used to invoke java classes or to describe conditional migration steps. (see below)
 }}}
 
-    * Mandatory: file with database configuration configuration. (JdbcConfig):
+    * Mandatory: file with database configuration configuration. ([DBMigrateJdbcConfig JdbcConfig]):
       <file name="JdbcConfig" file="postgres-test.properties"/>
       
     * Optional: start-version
@@ -100,4 +100,3 @@ ACHTUNG: Wenn diese 4 Variablen angegeben werden, so haben sie Vorrang vor den E
 </config>
 
 }}}
-
