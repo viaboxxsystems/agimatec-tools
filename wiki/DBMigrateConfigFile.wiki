@@ -2,45 +2,54 @@
 
 = migration.xml =
 {{{
-The example project contains two configurations:
-setup.xml to show how to setup a new database
-upgrade.xml to demonstrate a configuration for database migration (upgrade)
+ The example project contains two configurations:
+ setup.xml to show how to setup a new database
+ upgrade.xml to demonstrate a configuration for database migration (upgrade)
 }}}
 
 This configuration is responsible for:
 
     * Optional: Environment variables, usable in sql scripts.
+{{{
       <map name="env">
         <String name="key" value="value"/>
         ...
       </map>
+}}}
       Predefined are: DB_USER, DB_PASSWORD, DB_SCHEMA, DB_URL. (described below)
     * Optional: System-properties usable in SQL-Scripts 
-      All JVM-Systemproperties are accessible as environemt variables. Values in "env" map overwrite they system property.
+      All JVM-Systemproperties are accessible as environemt variables. Values in "env" map overwrite their system property.
     * Mandatory: Directory, in which the upgrade scripts are:
+{{{
       <file name="Scripts" dir="test-scripts" file="" relative="false"/>
+
       dir = Subdirectory
       file = "" this is the way a directory is referenced (otherwise a file is assumed)
       relative = false. true: file is relative to config-root directory (default- config-root is the current directory anyway.)
+}}}
 
-{{{
-Important: Scripts that should be executed automatically must start with prefix "up-".
+
+*Important:* Scripts that should be executed automatically must start with prefix "up-".
 
 Next part of the file name is a version identifier, which determines the sequence of execution.
 
 File may end with .sql, .xml or .groovy.
 
-.xml files can be used to invoke java classes or to describe conditional migration steps. (see below)
-}}}
+.xml files can be used to invoke java classes or to describe conditional migration steps. ([ DBMigrateXmlScript XML-scripts ])
+
 
     * Mandatory: file with database configuration configuration. ([DBMigrateJdbcConfig JdbcConfig]):
       <file name="JdbcConfig" file="postgres-test.properties"/>
       
     * Optional: start-version
+{{{
       <text name="from-version" value="2.0.12"/>
+}}}
       if not given, start version will be read from the database table DB_VERSION (must exist)
     * Optional: target-version
+{{{
       <text name="to-version" value="2.0.15"/>
+}}}
      if not given, the migration will execute the scripts up to the latest version. (this is what you normally want to do.)
 
 = Example = 
