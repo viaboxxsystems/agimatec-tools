@@ -20,14 +20,15 @@ import java.util.*;
  * <#if (ejb3.table.comment)??>${ejb3.table.comment}</#if>
  */
 @Entity
-@Table(name = "${ejb3.table.tableName}")
+@Table(name = "${ejb3.table.tableName}"<#if ejb3.multiUniqueConstraints?size != 0> uniqueConstraints = {
+<#list ejb3.multiUniqueConstraints as uniqueCons>
+@UniqueConstraint(columnNames = {<#list uniqueCons as col>"${col}"<#if col_has_next>,</#if></#list>})<#if uniqueCons_has_next>,</#if>
+</#list>}</#if>)
 <#if ejb3.table.tableName?upper_case?starts_with("CV_")>
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 <#else>
 // @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-</#if><#list ejb3.multiUniqueConstraints as uniqueCons>
-@UniqueConstraint(columnNames = {<#list uniqueCons as col>"${col}"<#if uniqueCons?last!=col>,</#if></#list>})
-</#list>
+</#if>
 public class ${ejb3.className} implements java.io.Serializable {
     // Fields
 <#list ejb3.attributes as attribute>

@@ -69,55 +69,6 @@
                 <outputDirectory>${dist-dir}/lib</outputDirectory>
                 <includeScope>compile</includeScope>
             </configuration>
-            <!--<goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.agimatec</groupId>
-                  <artifactId>dbmigrate</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>dbmigrate.jar</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>com.agimatec</groupId>
-                  <artifactId>dbimport</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>dbimport.jar</destFileName>
-                </artifactItem>                
-                <artifactItem>
-                  <groupId>org.dbunit</groupId>
-                  <artifactId>dbunit</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>dbunit.jar</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>commons-io</groupId>
-                  <artifactId>commons-io</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>commons-io.jar</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>commons-lang</groupId>
-                  <artifactId>commons-lang</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>commons-lang.jar</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>groovy</groupId>
-                  <artifactId>groovy-all-1.0-jsr</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>groovy-all.jar</destFileName>
-                </artifactItem>
-                   <artifactItem>
-                  <groupId>org.freemarker</groupId>
-                  <artifactId>freemarker</artifactId>
-                  <outputDirectory>${dist-dir}/lib</outputDirectory>
-                  <destFileName>freemarker.jar</destFileName>
-                </artifactItem>                
-              </artifactItems>             
-            </configuration>   -->
           </execution>
         </executions>
       </plugin>
