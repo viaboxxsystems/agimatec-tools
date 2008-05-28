@@ -35,7 +35,7 @@ Next part of the file name is a version identifier, which determines the sequenc
 
 File may end with .sql, .xml or .groovy.
 
-.xml files can be used to invoke java classes or to describe conditional migration steps. ([ DBMigrateXmlScript XML-scripts ])
+.xml files can be used to invoke java classes or to describe conditional migration steps. ([DBMigrateXmlScript XML-scripts])
 
 
     * Mandatory: file with database configuration configuration. ([DBMigrateJdbcConfig JdbcConfig]):
@@ -52,7 +52,7 @@ File may end with .sql, .xml or .groovy.
 }}}
      if not given, the migration will execute the scripts up to the latest version. (this is what you normally want to do.)
 
-= Example = 
+= Example migration.xml / upgrade.xml = 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
