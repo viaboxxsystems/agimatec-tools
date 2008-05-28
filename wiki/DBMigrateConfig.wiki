@@ -8,7 +8,7 @@ If you check out the sources from SVN, you can refer to the *test cases* for the
 
 Some of the classes in dbmigrate have a startable *main()* method. They should print a usage description to the console when invoked with inadequate parameters.
 
-= Usage AutoMigrationTool =
+= Usage [DBMigrateConfig AutoMigrationTool] =
 AutoMigrationTool is a class with a main()-method. You need the JDBC driver and some jars (refer to lib directory in dbmigrate-example-dist.zip) in the classpath.
 
 {{{
