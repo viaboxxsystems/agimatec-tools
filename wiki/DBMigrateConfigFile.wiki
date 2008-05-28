@@ -1,0 +1,103 @@
+#summary DBMigrate main configuration file
+
+= migration.xml =
+{{{
+The example project contains two configurations:
+setup.xml to show how to setup a new database
+upgrade.xml to demonstrate a configuration for database migration (upgrade)
+}}}
+
+This configuration is responsible for:
+
+    * Optional: Environment variables, usable in sql scripts.
+      <map name="env">
+        <String name="key" value="value"/>
+        ...
+      </map>
+      Predefined are: DB_USER, DB_PASSWORD, DB_SCHEMA, DB_URL. (described below)
+    * Optional: System-properties usable in SQL-Scripts 
+      All JVM-Systemproperties are accessible as environemt variables. Values in "env" map overwrite they system property.
+    * Mandatory: Directory, in which the upgrade scripts are:
+      <file name="Scripts" dir="test-scripts" file="" relative="false"/>
+      dir = Subdirectory
+      file = "" this is the way a directory is referenced (otherwise a file is assumed)
+      relative = false. true: file is relative to config-root directory (default- config-root is the current directory anyway.)
+
+{{{
+Important: Scripts that should be executed automatically must start with prefix "up-".
+
+Next part of the file name is a version identifier, which determines the sequence of execution.
+
+File may end with .sql, .xml or .groovy.
+
+.xml files can be used to invoke java classes or to describe conditional migration steps. (see below)
+}}}
+
+    * Mandatory: file with database configuration configuration. (JdbcConfig):
+      <file name="JdbcConfig" file="postgres-test.properties"/>
+      
+    * Optional: start-version
+      <text name="from-version" value="2.0.12"/>
+      if not given, start version will be read from the database table DB_VERSION (must exist)
+    * Optional: target-version
+      <text name="to-version" value="2.0.15"/>
+     if not given, the migration will execute the scripts up to the latest version. (this is what you normally want to do.)
+
+= Example = 
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+
+  <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
+   Predefined keys:
+    DB_USER       : if exists, overrule user from JdbcConfig
+    DB_PASSWORD   : if exists, overrule password from JdbcConfig
+    DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
+    DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
+ACHTUNG: Wenn diese 4 Variablen angegeben werden, so haben sie Vorrang vor den Einstellungen im JdbcConfig file (s.u.)
+  -->
+  <map name="env">
+    <String name="DB_USER" value="postgres"/>
+    <String name="DB_PASSWORD" value="anfang"/>
+    <String name="DB_SCHEMA" value="test"/>
+    <!--<String name="DB_URL" value="jdbc:postgresql://localhost:5432/test"/>-->
+  </map>
+
+ <!-- Optional. Scripts-Before-All = the source path for scripts to execute
+      (before the sequence of migration scripts is executed) -->
+  <file name="Scripts-Before-All" dir="upgrade/before-all" file=""/>
+
+  <!-- Scripts = the source path for scripts to scan for -->
+  <file name="Scripts" dir="test-scripts" file="" relative="false"/>
+
+  <!-- Optional. Scripts-After-All = the source path for scripts to execute
+      (after the sequence of migration scripts has been executed) -->
+  <file name="Scripts-After-All" dir="upgrade/after-all" file=""/>
+
+  <file name="JdbcConfig" file="postgres-test.properties"/>
+
+  <!-- optional:
+    CREATE TABLE DB_VERSION (SINCE timestamp, VERSION varchar(100));
+
+    when from-version is not set, determine automatically from database (table: DB_VERSION).
+    when from-version is set, versions higher than this (exclusive!) will be executed. -->
+  <!--<text name="from-version" value="2.0.12"/>-->
+
+  <!-- optional:
+    when to-version is NOT set, execute configs/scripts for ALL LATER versions.
+    when to-version is set, it is the last version (inclusive) to be executed. -->
+  <!--<text name="to-version" value="2.0.15"/>-->
+
+<!-- optionale map to configure the version table. these are the default settings -->
+<!--  <map name="version-meta">
+	<String name="table" value="DB_VERSION"/>
+        <String name="version" value="version" />
+        <String name="since" value="since"/>
+        <Boolean name="insert-only" value="false"/>
+  </map>-->
+
+</config>
+
+}}}
+
