@@ -10,7 +10,7 @@
 = Other Tools contained in annomark.jar =
 
 == NLS (manage resource bundles) == 
-  * MessageBundleTask
-  * Property2XMLConverterTask
-  * MergeLocaleTask
-  * AddLocaleTask 
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MessageBundleTask.html  MessageBundleTask]
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/Property2XMLConverterTask.html Property2XMLConverterTask]
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MergeLocaleTask.html MergeLocaleTask]
+  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/AddLocaleTask.html AddLocaleTask]
