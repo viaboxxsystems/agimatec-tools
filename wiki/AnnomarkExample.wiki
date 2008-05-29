@@ -1,6 +1,27 @@
 #summary Example to demonstrate the use of annomark
 
-= Introduction =
+= Using the annomark-example project =
+This is a project that demonstrates the features of "annomark".
+It creates some classes and xml files based on various annotations.
 
+Some of the features demonstrated by the example project:
+  * launch annomark with groovy (!JAMLauncher.groovy)
+  * process own annotations (DTO, DTOs)
+  * use all templates provided with annomark (POJO, Dozer-mapping, xml-metadata)
+  * generate different objects for same class with relationships between them
 
-= Details =
+== For SVN and maven2 users ==
+1. Checkout the annomark-example from Source with SVN.
+
+2. Build the project
+   mvn clean package
+
+3. Look into the target/generated/src/main directory
+
+== For maven2 users that cannot checkout from SVN == 
+1. Download annomark-example-project.zip and extract
+
+2. Build the project
+   mvn clean package
+
+3. Look into the target/generated/src/main directory
