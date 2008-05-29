@@ -2,6 +2,14 @@
 
 = Introduction =
 
+== Usage ==
+java com.agimatec.dbhistory.HistoryGeneratorTool
+  -conf historyConfig.xml
+  -catalog catalog.xml 
+  -ftldir templates 
+  -dbms dbms 
+  -ftl templateBaseName 
+  -destdir targetDirectory
 
 == Options ==
   * -help  (optional) print help
