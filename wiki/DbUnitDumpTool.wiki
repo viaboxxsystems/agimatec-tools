@@ -1,0 +1,35 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Invoke [http://www.dbunit.org/ DBUnit] to create a database dump in xml or excel format.
+
+== Usage ==
+You can use the invokation "dbDump" from within the dbmigrate tool's xml configuration (see [http://code.google.com/p/agimatec-tools/wiki/DBMigrateXmlScript xml script features]).
+
+{{{
+java com.agimatec.database.DbUnitDumpTool {driver} {url} {user} {password} [-f {outputDataFile}]
+}}}
+
+
+== Options ==
+Parameters in required sequence:
+  * driver  = Jdbc Driver class name
+  * url     = Jdbc Connect url
+  * user    = database user
+  * password = database password
+  * -f output filename (default = data.xml)
+
+The suffix of the output filename determines the output format (refer to the classes of DBUnit):
+  * .xml --> FlatXmlDataSet
+  * .xxml --> XmlDataSet
+  * .xls --> XslDataSet
+
+System properties:
+  * 
+
+= Example =
+
+{{{
+java com.agimatec.database.DbDumpTool -DdataFile=liferay.XML -Ddatabase=lportal
+}}}
