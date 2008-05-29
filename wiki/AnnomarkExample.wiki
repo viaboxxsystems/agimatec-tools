@@ -1,0 +1,6 @@
+#summary Example to demonstrate the use of annomark
+
+= Introduction =
+
+
+= Details =
