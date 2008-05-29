@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Top-level invoker tool to invoke multiple tools in a single jvm-launch.
+This class has a main() method that allows to invoke other tools (main()) with different parameters.
+
+  * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/com/agimatec/database/InvokerTool.html JavaDoc InvokerTool]
+
+= Example =
