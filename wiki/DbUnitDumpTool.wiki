@@ -21,9 +21,9 @@ Parameters in required sequence:
   * -f output filename (default = data.xml)
 
 The suffix of the output filename determines the output format (refer to the classes of [http://www.dbunit.org/ DBUnit]):
-  * .xml --> FlatXmlDataSet
-  * .xxml --> XmlDataSet
-  * .xls --> XslDataSet
+  * .xml --> !FlatXmlDataSet
+  * .xxml --> !XmlDataSet
+  * .xls --> !XslDataSet
 
 = Example =
 
