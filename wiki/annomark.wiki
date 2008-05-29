@@ -12,7 +12,7 @@ With the templates already provided, you can:
 _*Hint:* the javax.persistence annotations can be generated 
 with the CatalogGeneratorTool from your sql schema when you generate ejb3-prototype classes._
 
-_Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints ..._
+Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . If appreciate your ideas and input to enhance "annomark".
 
 = Annomark =
   * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
