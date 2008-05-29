@@ -2,6 +2,17 @@
 
 = Introduction =
 
+"annomark" is a tool that combines [http://annogen.codehaus.org/JAM "annogen"] and [http://freemarker.sourceforge.net/ "freemarker"]. This combination allows to process your classes with your annotations without the need for low-level java-programming with the annogen and freemarker APIs.
+You just annotate your classes (with predefined or own annotations) and use one of the predefined freemarker templates (or create your own templates) to generate one or more output files. 
+With the templates already provided, you can:
+  * generate POJOs as Transfer-Objects (template: java-pojo.ftl)
+  * generate [http://dozer.sourceforge.net/documentation/gettingstarted.html Dozer]-Mappings for the Transfer-Objects (template: dozer-mapping.ftl)
+  * generate xml-beaninfos for the [http://code.google.com/p/agimatec-validation/ agimatec-validation framework] from javax.persistence annotations. 
+
+_*Hint:* the javax.persistence annotations can be generated 
+with the CatalogGeneratorTool from your sql schema when you generate ejb3-prototype classes._
+
+
 = Annomark =
   * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
   * [http://www.agimatec.de/agimatec-tools/site/annomark/index.html Maven-Site]
