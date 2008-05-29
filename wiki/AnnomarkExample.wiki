@@ -25,3 +25,17 @@ Some of the features demonstrated by the example project:
    mvn clean package
 
 3. Look into the target/generated/src/main directory
+
+== Annomark explained ==
+
+1. The pom launches a groovy script that contains all instructions and configurations
+
+_in pom.xml_
+{{{
+ <java classname="org.codehaus.gram.Gram" fork="true"
+       failonerror="true">
+   <classpath refid="maven.test.classpath"/>
+   <arg value="${basedir}/src/main/java/com/agimatec"/>
+   <arg value="src/main/groovy/JAMLauncher.groovy"/>
+ </java>
+}}}
