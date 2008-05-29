@@ -52,11 +52,6 @@
       <artifactId>persistence-api</artifactId>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>ant-contrib</groupId>
-      <artifactId>ant-contrib</artifactId>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.agimatec</groupId>
@@ -103,8 +98,6 @@
             <phase>generate-sources</phase>
             <configuration>
               <tasks>
-                <taskdef resource="net/sf/antcontrib/antcontrib.properties"
-                         classpathref="maven.test.classpath"/>
                 <java classname="org.codehaus.gram.Gram" fork="true"
                       failonerror="true">
                   <classpath refid="maven.test.classpath"/>
