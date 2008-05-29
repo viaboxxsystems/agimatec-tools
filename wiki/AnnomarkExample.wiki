@@ -68,7 +68,7 @@ generator.addInstruction("java-pojo", "target/generated/src/main/java", null)
 generator.generate(dtoClasses);
 }}}
   * _getAnnotation filters classes by annotations (here: DTO and DTOs). You can use own annotations as well._
-  * _[http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMDtoGenerator.html JAMDtoGenerator]_ assists in invoking freemarker to generate !DataTransferObjects _
+  * _[http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMDtoGenerator.html JAMDtoGenerator] assists in invoking freemarker to generate !DataTransferObjects _
   * _refer to documentation of_ [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMGenInstruction.html JAMGenInstruction] 
 
 3. Study the example
