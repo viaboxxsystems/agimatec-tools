@@ -72,7 +72,7 @@ generator.generate(dtoClasses);
   * _refer to documentation of [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMGenInstruction.html JAMGenInstruction] _
 
 3. Study the example
-  * _Take a look at the the annotated model classes and experiment with the @DTO, @DTOAttribute annotations if you need TransferObjects_
+  * _Take a look at the the annotated model classes and experiment with the @DTO, @DTOAttribute annotations if you need !TransferObjects _
   * _Create own annotations or own templates to generate the artifacts you need_
 
 *Let others benefit from your improvements (new templates, best practices). We enjoy your feedback.*
