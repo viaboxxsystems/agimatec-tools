@@ -69,7 +69,7 @@ generator.generate(dtoClasses);
 }}}
   * _getAnnotation filters classes by annotations (here: DTO and DTOs). You can use own annotations as well._
   * _[http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMDtoGenerator.html JAMDtoGenerator]_ assists in invoking freemarker to generate !DataTransferObjects _
-  * _refer to documentation of [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMGenInstruction.html JAMGenInstruction] _
+  * _refer to documentation of_ [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMGenInstruction.html JAMGenInstruction] 
 
 3. Study the example
   * _Take a look at the the annotated model classes and experiment with the @DTO, @DTOAttribute annotations if you need !TransferObjects _
