@@ -25,5 +25,6 @@ Parameters in required sequence:
 = Example =
 
 {{{
-java com.agimatec.database.DbUnitSetupToolorg.postgresql.Driver jdbc:postgresql://localhost:5432/testdb admin password -d delete_data.xml -i testdb.xml
+java com.agimatec.database.DbUnitSetupToolorg.postgresql.Driver jdbc:postgresql://localhost:5432/testdb 
+admin password -d delete_data.xml -i testdb.xml
 }}}
