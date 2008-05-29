@@ -22,7 +22,7 @@ Parameters in required sequence:
 
 The suffix of the output filename determines the output format (refer to the classes of [http://www.dbunit.org/ DBUnit]):
 
-|| suffix || format ||
+|| *suffix* || *format* ||
 || .xml || !FlatXmlDataSet ||
 || .xxml || !XmlDataSet ||
 || .xls || !XslDataSet ||
