@@ -75,4 +75,4 @@ generator.generate(dtoClasses);
   * _Take a look at the the annotated model classes and experiment with the @DTO, @DTOAttribute annotations if you need TransferObjects_
   * _Create own annotations or own templates to generate the artifacts you need_
 
-*Let others benefit from your improvements (new templates, best practices). We are looking forward for your feedback*
+*Let others benefit from your improvements (new templates, best practices). We enjoy your feedback.*
