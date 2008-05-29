@@ -28,5 +28,5 @@ The suffix of the output filename determines the output format (refer to the cla
 = Example =
 
 {{{
-java com.agimatec.database.DbDumpTool -DdataFile=liferay.XML -Ddatabase=lportal
+java com.agimatec.database.DbUnitDumpTool org.postgresql.Driver jdbc:postgresql://localhost:5432/testdb admin password -f testdb.xml
 }}}
