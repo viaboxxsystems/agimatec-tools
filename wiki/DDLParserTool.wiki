@@ -1,4 +1,4 @@
-#summary Parse SQL-File and save as a xml catalog or serialized !CatalogDescription.
+#summary Parse SQL-File and save as a xml catalog or serialized CatalogDescription.
 
 = Introduction =
 
