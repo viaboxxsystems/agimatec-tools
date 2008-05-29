@@ -30,7 +30,7 @@ Some of the features demonstrated by the example project:
 
 1. The pom launches a groovy script that contains all instructions and configurations
 
-_in pom.xml_
+_pom.xml:_
 {{{
  <java classname="org.codehaus.gram.Gram" fork="true"
        failonerror="true">
@@ -39,3 +39,40 @@ _in pom.xml_
    <arg value="src/main/groovy/JAMLauncher.groovy"/>
  </java>
 }}}
+  * _the first parameter is the source directory to parse_
+  * _the second parameter is the groovy script to launch_
+
+2. The groovy script configures annomark:
+
+_JAMLancher.groovy_
+{{{
+import java.util.*;
+import com.agimatec.annotations.jam.*;
+import com.agimatec.annotations.*;
+
+def dtoClasses = new HashSet();
+dtoClasses.addAll(classes.findAll { it.getAnnotation(DTO.class) != null });
+dtoClasses.addAll(classes.findAll { it.getAnnotation(DTOs.class) != null });
+
+generator = new JAMDtoGenerator();
+generator.setTemplateDir("../annomark/templates");
+
+generator.addInstruction("java-pojo", "target/generated/src/main/java", null)
+    .setUsageQualifier("Edit")
+    .setPrefix("Transfer")
+    .setSuffix(".java")
+    .setDefaultPackage("com.agimatec.annomark.example.transfer");
+
+// ... more instructions here ...    
+
+generator.generate(dtoClasses);
+}}}
+  * _getAnnotation filters classes by annotations (here: DTO and DTOs). You can use own annotations as well._
+  * _[http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMDtoGenerator.html JAMDtoGenerator]_ assists in invoking freemarker to generate !DataTransferObjects _
+  * _refer to documentation of [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/annotations/jam/JAMGenInstruction.html JAMGenInstruction] _
+
+3. Study the example
+  * _Take a look at the the annotated model classes and experiment with the @DTO, @DTOAttribute annotations if you need TransferObjects_
+  * _Create own annotations or own templates to generate the artifacts you need_
+
+*Let others benefit from your improvements (new templates, best practices). We are looking forward for your feedback*
