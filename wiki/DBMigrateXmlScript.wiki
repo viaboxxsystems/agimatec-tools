@@ -28,7 +28,7 @@ invokes
 public void doSQLScript(String parameter); // parameter="subscript.sql"
 }}}
 
-== Predefined methods ==
+== Predefined Operations ==
 
   * doSQLScript 
 Execute a SQL-Script (parse statements). Fail on SQLExceptions. 
