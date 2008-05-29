@@ -25,9 +25,6 @@ The suffix of the output filename determines the output format (refer to the cla
   * .xxml --> XmlDataSet
   * .xls --> XslDataSet
 
-System properties:
-  * 
-
 = Example =
 
 {{{
