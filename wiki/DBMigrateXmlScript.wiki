@@ -51,7 +51,8 @@ invoke dbunit, parameter is the output file name, see DbUnitDumpTool
 
   * dbSetup
 invoke dbunit, parameters are delete-data-set (optional) and import-data-set(mandatory).
-example: 
+
+Examples: 
 {{{
 <text name="dbSetup" value="delete_data.xml,data.xml)"/>
 <text name="dbSetup" value="data.xml)"/>
