@@ -5,7 +5,7 @@
 Invoke [http://www.dbunit.org/ DBUnit] to create a database dump in xml or excel format.
 
 == Usage ==
-You can use the invokation "dbDump" from within the dbmigrate tool's xml configuration (see [http://code.google.com/p/agimatec-tools/wiki/DBMigrateXmlScript xml script features]).
+You can use the invocation "dbDump" from within the dbmigrate tool's xml configuration (see [http://code.google.com/p/agimatec-tools/wiki/DBMigrateXmlScript xml script features]).
 
 {{{
 java com.agimatec.database.DbUnitDumpTool {driver} {url} {user} {password} [-f {outputDataFile}]
