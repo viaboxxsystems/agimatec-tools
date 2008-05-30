@@ -16,10 +16,14 @@ Look into the detailed documentation to learn the configuration and other featur
   * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/index.html Maven-Site]
 
 == !AutoMigrationTool ==
+http://www.agimatec.de/agimatec-tools/agimatec-tools-b.jpg
+
   * [DBMigrateExample Example-Project]
   * [DBMigrateConfig configuration and features ]
 
 == Other Tools (code generation, transformation) contained in dbmigrate.jar ==
+http://www.agimatec.de/agimatec-tools/agimatec-tools-a.jpg
+
   * InvokerTool 
   * [DDLParserTool DDLParserTool]
   * DbUnitDumpTool
