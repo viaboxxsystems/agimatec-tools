@@ -140,8 +140,8 @@
     <dist-dir>target/dist</dist-dir>
     <!-- target database version -->
     <database-version>2.2.7</database-version>
-    <!-- set to false when dbtool should not run in phase 'install' -->
-    <dbtool-run>true</dbtool-run>
+    <!-- set to true when dbtool should not run in phase 'install' -->
+    <dbtool-run>false</dbtool-run>
     <!-- set to the name of the configuration to run dbtool with -->
     <dbtool-conf>setup.xml</dbtool-conf>
   </properties>
