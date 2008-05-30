@@ -3,19 +3,17 @@
 
 = Introduction =
 
-agimatec-tools contains 3 framework, more or less independent from each other.
+agimatec-tools contains 3 frameworks, more or less independent of each other:
 
-You can 
-  * use the classes of dbimport without any other agimatec framework.
-  * use dbmigrate (and optionally dbimport from within some of your scripts)
-  * use annomark, but this requires dbmigrate in the classpath as well (because annomark uses some common-utility classes from dbmigrate)
-
-= agimatec-tools =
-
-Getting started with
   * [dbimport DBImport], if you need to import files (csv, fixed-length, xml) into a jdbc-database.
   * [dbmigrate DBMigrate], if you need a framework for database migration or other tools contained in dbmigrate (e.g. sql script execution, schema transformation, code generation sql->java)
   * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations
+
+You can 
+  * use dbimport without any other agimatec framework.
+  * use dbmigrate (and optionally dbimport from within some of your scripts)
+  * use annomark, but this requires dbmigrate in the classpath as well (because annomark uses some common-utility classes from dbmigrate)
+
 
 = Building the project with Maven2 =
 [BuildAgimatecTools How to build agimatec-tools]
