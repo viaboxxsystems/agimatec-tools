@@ -17,7 +17,7 @@ If you need to invoke java-beans, you cannot do that in sql scripts. You can use
 = Features =
 
 list "Operations" is mandatory and contains the migration steps to execute.
-text name="" is a public method in class "BaseMigrationTool" (or a subclass)
+text name="" is a public method in class [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/com/agimatec/dbmigrate/BaseMigrationTool.html BaseMigrationTool] (or a subclass)
 The methods get a single string parameter.
 
 {{{
