@@ -1,4 +1,4 @@
-#summary Example to demonstrate the use of annomark
+#summary Example project to demonstrate annomark
 
 = Using the annomark-example project =
 This is a project that demonstrates the features of "annomark".
