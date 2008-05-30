@@ -9,6 +9,8 @@ With the templates already provided, you can:
   * generate [http://dozer.sourceforge.net/documentation/gettingstarted.html Dozer]-Mappings for the Transfer-Objects (template: dozer-mapping.ftl)
   * generate xml-beaninfos for the [http://code.google.com/p/agimatec-validation/ agimatec-validation framework] from javax.persistence annotations. 
 
+http://www.agimatec.de/agimatec-tools/agimatec-tools-c.jpg
+
 _*Hint:* the entity classes with javax.persistence-annotations can be generated 
 with the CatalogGeneratorTool from your sql schema (template ejb3-prototype.ftl)._
 
