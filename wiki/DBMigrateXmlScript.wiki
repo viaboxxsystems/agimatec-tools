@@ -67,8 +67,8 @@ same as -- @version() in sql scripts. set the DB_VERSION value
 invoke a groovy script.
 Name of scripts in value="" can contain optional parameters, use brackets (). 
 The script gets some default Bindings (variables):
-|| binding || description ||
-|| params" || all parameters as a liste of Strings ||
+|| *binding* || *description* ||
+|| params || all parameters as a list of Strings ||
 || tool || the current instance of MigrationTool (allows access to environment and jdbcConnection) ||
 
 === Examples ===
