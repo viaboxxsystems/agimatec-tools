@@ -10,7 +10,7 @@ With the templates already provided, you can:
   * generate xml-beaninfos for the [http://code.google.com/p/agimatec-validation/ agimatec-validation framework] from javax.persistence annotations. 
 
 _*Hint:* the entity classes with javax.persistence-annotations can be generated 
-with the CatalogGeneratorTool from your sql schema when you generate ejb3-prototype classes._
+with the CatalogGeneratorTool from your sql schema (template ejb3-prototype.ftl)._
 
 Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . If appreciate your ideas and input to enhance "annomark".
 
