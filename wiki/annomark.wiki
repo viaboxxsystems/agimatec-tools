@@ -19,6 +19,10 @@ Create your own templates, e.g. for struts-validation from your Form-Classes, fo
   * [http://www.agimatec.de/agimatec-tools/site/annomark/index.html Maven-Site]
   * [AnnomarkExample Getting started example]
 
+_*Hints:*_
+  * _you need annogen-0.1.1. If you cannot find it on official annogen-sides, refer to the download-section of agimatec-tools. There might be logged errors and warning when using annogen. It works nevertheless._
+  * _annogen-0.1.1 cannot parse static imports. Avoid then when you want your classes processed._
+
 = Other Tools contained in annomark.jar =
 
 == NLS (manage resource bundles) == 
