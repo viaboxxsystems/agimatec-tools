@@ -1,4 +1,5 @@
-#summary Wiki home og agimatec-tools
+#summary Wiki home of agimatec-tools
+#labels Featured
 
 = Introduction =
 
