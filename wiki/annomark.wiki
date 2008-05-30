@@ -9,7 +9,7 @@ With the templates already provided, you can:
   * generate [http://dozer.sourceforge.net/documentation/gettingstarted.html Dozer]-Mappings for the Transfer-Objects (template: dozer-mapping.ftl)
   * generate xml-beaninfos for the [http://code.google.com/p/agimatec-validation/ agimatec-validation framework] from javax.persistence annotations. 
 
-_*Hint:* the javax.persistence annotations can be generated 
+_*Hint:* the entity classes with javax.persistence-annotations can be generated 
 with the CatalogGeneratorTool from your sql schema when you generate ejb3-prototype classes._
 
 Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . If appreciate your ideas and input to enhance "annomark".
