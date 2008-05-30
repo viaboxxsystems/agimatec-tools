@@ -54,8 +54,8 @@ invoke dbunit, parameters are delete-data-set (optional) and import-data-set(man
 
 Examples: 
 {{{
-<text name="dbSetup" value="delete_data.xml,data.xml)"/>
-<text name="dbSetup" value="data.xml)"/>
+<text name="dbSetup" value="delete_data.xml,data.xml"/>
+<text name="dbSetup" value="data.xml"/>
 }}}
 see DbUnitSetupTool
 
