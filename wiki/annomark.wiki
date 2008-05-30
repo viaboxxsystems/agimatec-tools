@@ -2,7 +2,7 @@
 
 = Introduction =
 
-"annomark" is a tool that combines [http://annogen.codehaus.org/JAM "annogen"] and [http://freemarker.sourceforge.net/ "freemarker"]. This combination allows to process your classes with your annotations without the need for low-level java-programming with the annogen and freemarker APIs.
+"annomark" is a tool that combines [http://annogen.codehaus.org/ "annogen"] and [http://freemarker.sourceforge.net/ "freemarker"]. This combination allows to process your classes with your annotations without the need for low-level java-programming with the annogen and freemarker APIs.
 You just annotate your classes (with predefined or own annotations) and use one of the predefined freemarker templates (or create your own templates) to generate one or more output files. 
 With the templates already provided, you can:
   * generate POJOs as Transfer-Objects (template: java-pojo.ftl)
