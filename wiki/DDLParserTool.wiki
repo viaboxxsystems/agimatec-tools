@@ -3,7 +3,7 @@
 = Introduction =
 
 === Motivation for the DDLParserTool ==
-Most ER-Modelling-Tools or UML-Tools support to generate an SQL file with table definitions. The XMI/XML format supported by these tools - if the tool you are using - is rather complex. The proprietary format is often undocumented.
+Most ER-Modelling-Tools or UML-Tools support to generate an SQL file with table definitions. The XMI/XML format supported by these tools - if the tool you are using is supporting it - is rather complex. The proprietary format is often undocumented.
 _We are using [http://www.datanamic.com/dezign/index.html DeZign] to model our databases._
 
 Even if you have a stylesheet to process the XMI created by the ER-tool of your choice, there are sometimes some scripts to define tables, constraints, indices, that you maintain manually. So: you always end up with one or more sql scripts that define your database.
