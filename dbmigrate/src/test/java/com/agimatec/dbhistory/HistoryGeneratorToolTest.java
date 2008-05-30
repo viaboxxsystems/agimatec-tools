@@ -38,12 +38,9 @@ public class HistoryGeneratorToolTest extends TestCase {
         HistTableConfig tc = new HistTableConfig("user_core");
         tc.getExcludeColumns().add("registrationTime");
         conf.addTableConfig(tc);        
-        conf.addTableConfig(new HistTableConfig("parcel"));
-        conf.addTableConfig(new HistTableConfig("box"));
-        conf.addTableConfig(new HistTableConfig("delivery_machine"));
-        conf.addTableConfig(new HistTableConfig("machine_state_summary"));
-        conf.addTableConfig(new HistTableConfig("machine_configuration"));
-//        conf.addTableConfig(new HistTableConfig("it_delivery_machine_tag"));
+        conf.addTableConfig(new HistTableConfig("user_core"));
+        conf.addTableConfig(new HistTableConfig("Privilege"));
+        conf.addTableConfig(new HistTableConfig("Address_1"));
         new XStreamPersistencer()
                 .save(conf, new File("target/historyconfig-example.xml"));
     }

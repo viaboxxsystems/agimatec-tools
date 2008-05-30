@@ -8,6 +8,9 @@ import com.agimatec.sql.meta.TableDescription;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Description: <br/>
  * User: roman.stumm <br/>
@@ -16,6 +19,7 @@ import java.util.List;
  * Copyright: Agimatec GmbH
  */
 public class Ejb3Class extends Ejb3Prototype {
+    private static final Log log = LogFactory.getLog(Ejb3Class.class);
     private final TableDescription table;
     private final List<Ejb3Attribute> attributes = new ArrayList();
     private final List<Ejb3Relationship> relationships = new ArrayList();
@@ -68,8 +72,8 @@ public class Ejb3Class extends Ejb3Prototype {
 
     public void generateRelationships(Ejb3Schema ejb3Schema) {
         if (isManyToManyLink()) {
-            Ejb3RelationshipManyToMany relationship = new Ejb3RelationshipManyToMany(
-                    table.getForeignKey(0), table.getForeignKey(1));
+            Ejb3RelationshipManyToMany relationship =
+                    new Ejb3RelationshipManyToMany(table.getForeignKey(0), table.getForeignKey(1));
             relationship.setOptional(false);
             relationship.generate(ejb3Schema);
             Ejb3Class ejb3Class = ejb3Schema.getEjb3classes()
@@ -82,13 +86,16 @@ public class Ejb3Class extends Ejb3Prototype {
                 relationships.add(relationship);
 
                 // decision: create other side?
-                Ejb3RelationshipOneToMany otherSide = new Ejb3RelationshipOneToMany(fk);
-                Ejb3Class ejb3Class =
-                        ejb3Schema.getEjb3classes().get(fk.getRefTableName());
-                if (relationship.isOneToOne()) otherSide.setOneToOne(true);
-                otherSide.setMappedByRelationship(relationship);
-                otherSide.generate(ejb3Schema);
-                ejb3Class.getRelationships().add(otherSide);                             
+                Ejb3Class ejb3Class = ejb3Schema.getEjb3classes().get(fk.getRefTableName());
+                if (ejb3Class != null) {
+                    Ejb3RelationshipOneToMany otherSide = new Ejb3RelationshipOneToMany(fk);
+                    if (relationship.isOneToOne()) otherSide.setOneToOne(true);
+                    otherSide.setMappedByRelationship(relationship);
+                    otherSide.generate(ejb3Schema);
+                    ejb3Class.getRelationships().add(otherSide);
+                } else {
+                   log.warn("cannot find referenced class for table " + fk.getRefTableName() + " at foreign key " + fk);
+                }
             }
         }
     }
