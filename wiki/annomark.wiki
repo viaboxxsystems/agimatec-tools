@@ -32,6 +32,29 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
 
 == Example ==
 
+=== Resource Bundle as XML ===
+{{{
+<bundles>
+  <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
+    <entry key="key1">
+      <text locale="de">
+        <value>Beispieltext mit ÄÖÜ</value>
+      </text>
+      <text locale="en">
+        <value>An example</value>
+      </text>
+    </entry>
+    <entry key="key2">
+      <text locale="de">
+        <value>anderer Wert</value>
+      </text>
+    </entry>
+  </bundle>
+</bundles>
+}}}
+
+=== Usage ===
+
 This demonstrates the use of the NLS Tasks from within a maven2 pom.xml:
 
 {{{
