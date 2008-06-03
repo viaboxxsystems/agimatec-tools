@@ -18,6 +18,8 @@ Look into the detailed documentation to learn the configuration and other featur
 == !AutoMigrationTool ==
 http://www.agimatec.de/agimatec-tools/agimatec-tools-b.jpg
 
+http://code.google.com/p/agimatec-tools/wiki/agimatec-tools.jpg
+
   * [DBMigrateExample Example-Project]
   * [DBMigrateConfig configuration and features ]
 
