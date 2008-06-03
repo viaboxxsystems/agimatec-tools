@@ -14,7 +14,7 @@ You can
   * use dbmigrate (and optionally dbimport from within some of your scripts)
   * use annomark, but this requires dbmigrate in the classpath as well (because annomark uses some common-utility classes from dbmigrate)
 
-http://www.agimatec.de/agimatec-tools/agimatec-tools-small.jpg
+http://agimatec-tools.googlecode.com/svn/wiki/agimatec-tools-small.jpg
 
 = Building the project with Maven2 =
 [BuildAgimatecTools How to build agimatec-tools]
