@@ -21,7 +21,7 @@ java com.agimatec.dbtransform.CatalogGeneratorTool
   * -conf  (optional) name of configuration file, default is db-conversion.xml
   * -nconf (optional) use NO configuration file
   * -nout  (optional) do NOT write a default output file (let templates handle output file names)
-  * -catalog (required) path of catalog file to read (xml or dump)
+  * -catalog (required) path of catalog file to read (xml or dump), created by [DDLParserTool DDLParserTool]
   * -ftldir  (optional) default: templates. Base directory with .ftl templates (in subdirs)
   * -dbms  (required) subdirs of ftldir with database-specific templates, e.g. oracle, postgres
   * -ftl (required) can appear multiple times. the template base name (without .ftl suffix)
@@ -82,4 +82,3 @@ for details see class [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apid
   </dataTypes>
 </conversion>
 }}}
-
