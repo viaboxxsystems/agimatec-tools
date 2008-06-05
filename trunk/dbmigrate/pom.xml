@@ -85,12 +85,21 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>create templates.zip</id>
+            <id>create dist.zip with source, binary and templates</id>
             <phase>package</phase>
             <configuration>
               <tasks>
-                <zip destfile="target/dbmigrate-templates-${agimatec-version}.zip"
-                     basedir="templates"/>
+                <zip destfile="target/dbmigrate-dist-${agimatec-version}.zip">
+                  <fileset dir=".">
+                    <include name="pom.xml"/>
+                    <include name="templates/**"/>
+                    <include name="src/**"/>
+                    <exclude name="src/test/**"/>
+                  </fileset>
+                  <fileset dir="target">
+                    <include name="dbmigrate-${agimatec-version}.jar"/>
+                  </fileset>
+                </zip>
               </tasks>
             </configuration>
             <goals>

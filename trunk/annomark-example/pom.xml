@@ -116,6 +116,25 @@
             </goals>
           </execution>
 
+           <execution>
+            <id>create dist.zip</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <zip destfile="target/annomark-example-project-${agimatec-version}.zip">
+                  <fileset dir=".">
+                    <include name="pom.xml"/>
+                    <include name="src/**"/>
+                    <include name="target/generated/**"/>
+                    <include name="target/*.jar"/>
+                  </fileset>
+                </zip>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>

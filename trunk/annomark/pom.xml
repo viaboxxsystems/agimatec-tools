@@ -130,12 +130,21 @@
             </goals>
           </execution>
           <execution>
-            <id>create templates.zip</id>
+            <id>create dist.zip with source, binary and templates</id>
             <phase>package</phase>
             <configuration>
               <tasks>
-                <zip destfile="target/annomark-templates-${agimatec-version}.zip"
-                     basedir="templates"/>
+                <zip destfile="target/annomark-dist-${agimatec-version}.zip">
+                  <fileset dir=".">
+                    <include name="pom.xml"/>
+                    <include name="templates/**"/>
+                    <include name="src/**"/>
+                    <exclude name="src/test/**"/>
+                  </fileset>
+                  <fileset dir="target">
+                    <include name="annomark-${agimatec-version}.jar"/>
+                  </fileset>
+                </zip>
               </tasks>
             </configuration>
             <goals>

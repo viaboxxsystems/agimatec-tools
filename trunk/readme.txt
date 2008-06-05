@@ -22,11 +22,6 @@ mvn install
 -----------------------
 mvn site
 
-(optional) generate source-jars:
----------------------
-mvn source:jar
-mvn source:test-jar
-
 (optional) generate an IntelliJ project:
 -----------------------------
 mvn idea:idea
