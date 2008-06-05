@@ -49,7 +49,7 @@
       <groupId>com.agimatec</groupId>
       <artifactId>dbimport</artifactId>
     </dependency>
-    
+
   </dependencies>
 
   <build>
@@ -62,12 +62,12 @@
             <id>copy</id>
             <phase>package</phase>
             <goals>
-                <goal>copy-dependencies</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-                <stripVersion>true</stripVersion>
-                <outputDirectory>${dist-dir}/lib</outputDirectory>
-                <includeScope>compile</includeScope>
+              <stripVersion>true</stripVersion>
+              <outputDirectory>${dist-dir}/lib</outputDirectory>
+              <includeScope>compile</includeScope>
             </configuration>
           </execution>
         </executions>
@@ -82,20 +82,34 @@
               <tasks>
                 <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                          classpathref="maven.test.classpath"/>
-                                                    
-                    <filter filtersfile="${dbms}/filter.properties"/>
-                    <filter token="database-version"
-                            value="${database-version}"/>                    
-                    <copy filtering="true" todir="${dist-dir}" overwrite="true">
-                      <fileset dir="${dbms}">
-                        <exclude name="filter.properties"/>
-                      </fileset>
-                      <fileset dir="src/main">
-                        <include name="groovy/*.groovy"/>
-                      </fileset>
-                    </copy>
-                    <copy file="target/dbmigrate-example-${agimatec-version}.jar"
-                          tofile="${dist-dir}/lib/dbmigrate-example.jar"/>
+
+                <filter filtersfile="${dbms}/filter.properties"/>
+                <filter token="database-version"
+                        value="${database-version}"/>
+                <copy filtering="true" todir="${dist-dir}" overwrite="true">
+                  <fileset dir="${dbms}">
+                    <exclude name="filter.properties"/>
+                  </fileset>
+                  <fileset dir="src/main">
+                    <include name="groovy/*.groovy"/>
+                  </fileset>
+                </copy>
+                <copy file="target/dbmigrate-example-${agimatec-version}.jar"
+                      tofile="${dist-dir}/lib/dbmigrate-example.jar"/>
+
+                <zip destfile="target/dbmigrate-example-dist-${agimatec-version}.zip">
+                  <fileset dir="target/dist">
+                    <include name="**"/>
+                  </fileset>
+                </zip>
+                <zip destfile="target/dbmigrate-example-project-${agimatec-version}.zip">
+                   <fileset dir=".">
+                    <include name="*.xml"/>
+                    <include name="oracle/**"/>
+                    <include name="src/**"/>
+                    <include name="target/*.jar"/>
+                  </fileset>
+                </zip>
               </tasks>
             </configuration>
             <goals>
@@ -121,7 +135,7 @@
                       <arg value="${dbtool-conf}"/>
                     </java>
                   </then>
-                </if>                
+                </if>
               </tasks>
             </configuration>
             <goals>
