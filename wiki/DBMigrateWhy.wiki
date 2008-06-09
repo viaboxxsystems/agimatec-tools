@@ -44,9 +44,12 @@ To solve these problems we've developed "agimatec dbmigrate". This project is no
 
 == Short how to: == 
 
-   1. Download an example project here.
-   2. To create the database call: "dbtool.bat setup.xml"
-   3. To upgrade the database: "dbtool.bat upgrade.xml"
-   4. Have a look at the documentation
+  1. Download an example project here.
+
+  2. To create the database call: "dbtool.bat setup.xml"
+
+  3. To upgrade the database: "dbtool.bat upgrade.xml"
+
+  4. Have a look at the documentation
 
 We look forward to your feedback, questions and are happy to help you with your first "agimatec dbmigrate" project. 
