@@ -38,8 +38,11 @@ To solve these problems we've developed "agimatec dbmigrate". This project is no
 == How to use "agimatec dbmigrate"? == 
 
    1. For "dbmigrate" Java knowledge is not necessary, but, ok, quite helpful.
+
    2. It is therefore usable outside of pure Java projects. "Dbmigrate" can be used for any databases.
+
    3. "dbmigrate" just needs a Java VM to run.
+
    4. The SQL scripts (CREATE TABLE, ALTER TABLE) can be written by hand or via a different tool (such as a modeler or ER-UML tool). 
 
 == Short how to: == 
