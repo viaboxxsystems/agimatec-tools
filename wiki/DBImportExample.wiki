@@ -112,4 +112,17 @@ def spec = new XmlSlurperSpec(
 
 = Import .xls (excel 97 format) file =
 
-.. to be done ..
+{{{
+  LineImporterSpecAutoFields spec = new LineImporterSpecAutoFields();
+  spec.setHeaderSpec(LineImporterSpec.Header.INDEX);
+  spec.setHeaderLineIndex(5); // determine field names from row #5
+
+  spec.setLineTokenizerFactory(new ExcelRowTokenizerFactory());
+
+  Importer importer = new Importer(spec);
+  importer.importFrom(new FileInputStream("Spreadsheet.xls"));
+
+}}}
+
+* You can read all cell attributes (color, font, formular, comment) 
+ (see class ExcelCell and refer to [http://poi.apache.org/hssf/index.html POI-HSSF docs])
