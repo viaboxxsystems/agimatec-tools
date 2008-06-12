@@ -9,7 +9,38 @@ How to compile the project
 ==========================
 Requirements:
 0. Sources require java1.5 or higher. (Tested with JDK 1.5.0._12)
-1. The project is built with maven2. You need to download and install maven2 from: http://maven.apache.org/
+1. Maven2 required
+1a. The project is built with maven2.0.9. 
+You need to download and install maven2 from: http://maven.apache.org/
+
+1b. Prepare local maven2 repository:
+--------------------------------
+Some dependencies might not be available from official maven2-repositories:
+  * Dependency: com.sun:tools:jar:1.5.0_12 missing?
+  To install com.sun:tools, copy the tools.jar from your
+  $JAVA_HOME/lib/tools.jar to $LOCAL_REPOSITORY/com/sun/tools/<jdk-version>/tools-<jdk-version>.jar
+  e.g. com/sun/tools/1.5.0_12/tools-1.5.0_12.jar   
+   
+  Using a different JDK than 1.5.0_12?
+  ------------------------------------
+  Change      
+      <dependency>
+        <groupId>com.sun</groupId>
+        <artifactId>tools</artifactId>
+        <version>1.5.0_12</version>
+      </dependency>
+  in agimatec-tools/pom.xml to match the JDK you are using.
+  
+  * Dependency: oracle:ojdbc14:10.2.0.4 missing?
+  You can download the oracle driver from oracle sites, e.g. 
+  http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html
+  Change the version accordingly in agimatec-tools/pom.xml.
+  Copy the jar to $LOCAL_REPOSITORY/oracle/ojdbc14/<oracle-version>/ojdbc14-<oracle-version>.jar  
+
+  * Dependency: annogen:annogen:0.1.1 missing?
+  Download annogen-0.1.1.zip from this side and unzip it.
+  Copy annogen-0.1.1.jar to $LOCAL_REPOSITORY/annogen/annogen/0.1.1/annogen-0.1.1.jar
+        
 2. Invoke maven2 from within one of the directories that contain a pom.xml file
 
 compile project:
