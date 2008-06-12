@@ -124,5 +124,4 @@ def spec = new XmlSlurperSpec(
 
 }}}
 
-* You can read all cell attributes (color, font, formular, comment) 
- (see class ExcelCell and refer to [http://poi.apache.org/hssf/index.html POI-HSSF docs])
+  * You can read all cell attributes (color, font, formular, comment) inside your processRow() method or groovy closure. (see class ExcelCell and refer to [http://poi.apache.org/hssf/index.html POI-HSSF docs])
