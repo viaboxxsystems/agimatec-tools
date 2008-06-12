@@ -1,7 +1,9 @@
-#summary Example for a groovy import script to import a csv file
+#summary Groovy import script examples
 
 Prerequisite:
   * variable "jdbcConnection" contains a java.sql.Connection to the target database
+
+= Import a csv-file (comma-separated plain text file) =
 
 {{{
 import com.agimatec.utility.fileimport.*;
@@ -47,15 +49,16 @@ try {
 
 }}}
 
-= What happens here? = 
+== What happens here? ==
   * The file "zipcodes.csv" will be imported into a table "Postcode"
   * The LineImporterSpec contains a closure, that the importer will invoke for each row in the csv-file (except a header-row, if exists) to process the data.
   * The script uses plain Groovy-Sql APIs to execute the SQL statements with little assitance of the SqlUtil class used to convert the strings from the csv-file into proper java.sql.Date instances and to generate unique keys with a sequence named "SEQ_import".
 
-= Notes: = 
+== Notes: ==
   * You can use an instance of class SqlUtil to provide some oracle/postgres independent constructs (e.g. handing of sequences) or datatype conversion (here: date). If you do not use SqlUtil, you can use the plain groovy APIs.
   * You can drop the creation of ImportController and the finally-block. The ImportController is not required basically. It uses a separate table "import_control" to save the status of running imports and to block other imports until an import of the same name (here: "zipcode-import") has finished.
 
+= Manage imports in database =
 If you want to use an ImportController, you need to create the import_control table (Postgres-syntax):
 
 {{{
@@ -84,7 +87,7 @@ CREATE TABLE Import_Control (
     CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id));
 }}}
 
-= Example to import a XML file =
+= Import XML file =
 
 {{{
 import com.agimatec.commons.config.*;
@@ -106,3 +109,7 @@ def spec = new XmlSlurperSpec(
 }}}
 
   * Main difference: XmlSlurperSpec instead of LineImporterSpecGroovy
+
+= Import .xls (excel 97 format) file =
+
+.. to be done ..
