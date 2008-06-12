@@ -2,6 +2,7 @@ package com.agimatec.utility.fileimport;
 
 import org.apache.log4j.Logger;
 
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -47,6 +48,18 @@ public class Importer {
      */
     public void importFrom(Reader aReader) throws ImporterException {
         processor.importFrom(aReader);
+    }
+
+    /**
+     * API - this method starts the import process.
+     * It imports the data read from the given stream.
+     * The stream is closed afterwards.
+     *
+     * @param aStream - stream to read the import data from.
+     * @throws Exception
+     */
+    public void importFrom(InputStream aStream) throws ImporterException {
+        processor.importFrom(aStream);
     }
 
     public int getRowCount() {

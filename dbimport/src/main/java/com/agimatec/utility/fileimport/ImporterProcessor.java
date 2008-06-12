@@ -1,8 +1,8 @@
 package com.agimatec.utility.fileimport;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Writer;
 
 /**
@@ -60,7 +60,7 @@ public abstract class ImporterProcessor {
         importer.log(obj);
     }
 
-    protected void importFrom(Reader aReader) {
+    protected void importFrom(Closeable aReader) {
         errorCount = 0;
         rowCount = 0;
     }

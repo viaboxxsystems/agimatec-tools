@@ -1,8 +1,7 @@
 package com.agimatec.utility.fileimport;
 
-import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +15,8 @@ import java.util.Map;
  */
 public class LineImportProcessor extends ImporterProcessor {
     protected final LineImporterSpec spec;
-    protected BufferedReader lineReader;
-    protected String headerLine;
+    protected LineReader lineReader;
+    protected Object headerLine;
     protected Map currentRow;
 
     public LineImportProcessor(LineImporterSpec spec, Importer importer) {
@@ -37,20 +36,26 @@ public class LineImportProcessor extends ImporterProcessor {
      * @param aReader - reader to read the import data from.
      * @throws Exception
      */
-    public void importFrom(Reader aReader) throws ImporterException {
+    public void importFrom(Closeable aReader) throws ImporterException {
         super.importFrom(aReader);
-        lineReader = new BufferedReader(aReader);
         try {
+            lineReader = spec.createLineReader(aReader);
             try {
                 if (spec.getHeaderSpec() == LineImporterSpec.Header.FIRST) {
                     // skip header line
                     headerLine = lineReader.readLine();
                     spec.processHeaderLine(this);
                 }
-                String line = lineReader.readLine();
+                Object line = lineReader.readLine();
                 while (line != null && !isCancelled()) {
                     rowCount++;
-                    importRow(line);
+                    if (spec.getHeaderSpec() == LineImporterSpec.Header.INDEX &&
+                            spec.getHeaderLineIndex() == rowCount) {
+                        headerLine = line;
+                        spec.processHeaderLine(this);
+                    } else {
+                        importRow(line);
+                    }
                     line = lineReader.readLine();
                 }
             } finally {
@@ -59,7 +64,7 @@ public class LineImportProcessor extends ImporterProcessor {
                 logFinished();
             }
         } catch (Exception e) {
-             handleException(e);
+            handleException(e);
         }
     }
 
@@ -68,7 +73,7 @@ public class LineImportProcessor extends ImporterProcessor {
      *
      * @param aLine - a line of data of one record
      */
-    protected void importRow(String aLine) throws ImporterException {
+    protected void importRow(Object aLine) throws ImporterException {
         try {
             transferRow(aLine);
             spec.processRow(this);
@@ -87,10 +92,10 @@ public class LineImportProcessor extends ImporterProcessor {
     }
 
     /** parse a specified record and save the record data in the root model. */
-    protected Map transferRow(String aRecord) throws IOException {
+    protected Map transferRow(Object aRecord) throws IOException {
         currentRow = new HashMap();
         LineTokenizer parser = spec.getLineTokenizerFactory().createTokenizer(aRecord);
-        String singleValue;
+        Object singleValue;
         int fieldIdx = 0;
         while (parser.hasMoreElements()) {
             singleValue = parser.nextElement();
@@ -107,11 +112,11 @@ public class LineImportProcessor extends ImporterProcessor {
         return currentRow;
     }
 
-    protected void setFieldValue(int fieldIdx, String singleValue) {
+    protected void setFieldValue(int fieldIdx, Object singleValue) {
         currentRow.put(spec.getFieldName(fieldIdx), singleValue);
     }
 
-    protected String getHeaderLine() {
+    protected Object getHeaderLine() {
         return headerLine;
     }
 
@@ -119,7 +124,7 @@ public class LineImportProcessor extends ImporterProcessor {
         return currentRow;
     }
 
-    public BufferedReader getLineReader() {
+    public LineReader getLineReader() {
         return lineReader;
     }
 }

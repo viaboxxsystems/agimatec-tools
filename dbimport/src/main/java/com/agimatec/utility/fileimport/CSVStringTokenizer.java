@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
  *
  * @author Roman Stumm
  */
-class CSVStringTokenizer implements LineTokenizer {
+class CSVStringTokenizer implements LineTokenizer<String, String> {
     private final String mySeparators;
     private final String myQuotaChar;
     private StringTokenizer myTokenizer;
@@ -55,7 +55,7 @@ class CSVStringTokenizer implements LineTokenizer {
         return lineIncomplete;
     }
 
-    public String continueParse(Object aSingleValue, String aRecord) {
+    public String continueParse(String aSingleValue, String aRecord) {
         initTokenizer(aRecord);
         return aSingleValue + "\n" + parseQuoted();
     }

@@ -7,14 +7,14 @@ package com.agimatec.utility.fileimport;
  * Time: 16:32:14 <br/>
  * Copyright: Agimatec GmbH
  */
-public class CSVStringTokenizerFactory implements LineTokenizerFactory {
+public class CSVStringTokenizerFactory implements LineTokenizerFactory<String, String> {
     private String delimeter = ";";
 
     /**
      * @param aLine
      * @return a new CSVStringTokenizer
      */
-    public LineTokenizer createTokenizer(String aLine) {
+    public LineTokenizer<String, String> createTokenizer(String aLine) {
         return new CSVStringTokenizer(aLine, getDelimiter());
     }
 
@@ -24,5 +24,9 @@ public class CSVStringTokenizerFactory implements LineTokenizerFactory {
 
     public void setDelimeter(String delimeter) {
         this.delimeter = delimeter;
+    }
+
+    public LineReader<String> createLineReader() {
+        return new StringLineReader();
     }
 }

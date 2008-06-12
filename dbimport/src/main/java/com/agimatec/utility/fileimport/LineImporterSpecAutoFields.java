@@ -25,15 +25,14 @@ public class LineImporterSpecAutoFields extends LineImporterSpec {
      * this implementation assumes, that the first line
      * contains the header line with field names
      * separated by the same separator as the data lines.
-     * @param processor
      */
     @Override
     public void processHeaderLine(LineImportProcessor processor) throws ImporterException {
-        LineTokenizer tokens =
-                getLineTokenizerFactory().createTokenizer(processor.getHeaderLine());
+        LineTokenizer tokens = getLineTokenizerFactory().createTokenizer(processor.getHeaderLine());
         List<String> fieldNames = new ArrayList();
-        while(tokens.hasMoreElements()) {
-            fieldNames.add(tokens.nextElement());
+        while (tokens.hasMoreElements()) {
+            final Object val = tokens.nextElement();
+            fieldNames.add(val == null ? null : String.valueOf(val));
         }
         setFieldNames(fieldNames.toArray(new String[fieldNames.size()]));
     }
