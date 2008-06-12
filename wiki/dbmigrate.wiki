@@ -1,4 +1,5 @@
 #summary database migration tool
+#labels Featured
 
 = Introduction =
 
