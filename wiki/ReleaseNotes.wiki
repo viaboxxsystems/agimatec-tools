@@ -1,4 +1,5 @@
 #summary Change history
+#labels Featured
 
 You can view the complete history of changes on the "Source" tab under "Changes".
 
