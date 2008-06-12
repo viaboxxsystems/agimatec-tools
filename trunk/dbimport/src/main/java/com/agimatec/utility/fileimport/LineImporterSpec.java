@@ -1,6 +1,6 @@
 package com.agimatec.utility.fileimport;
 
-import java.io.Writer;
+import java.io.*;
 
 /**
  * Description:  Not thread-safe! Specify the behavior of an Importer<br/>
@@ -14,6 +14,9 @@ public class LineImporterSpec implements ImporterSpec {
     private LineTokenizerFactory lineTokenizerFactory;
     private String[] fieldNames;
     private Writer errorWriter;
+
+    /** 1 is default */
+    private int headerLineIndex = 1;
 
     public LineTokenizerFactory getLineTokenizerFactory() {
         return lineTokenizerFactory;
@@ -38,7 +41,7 @@ public class LineImporterSpec implements ImporterSpec {
     /** @param fieldNames - array with the fieldNames or null */
     public void setFieldNames(String[] fieldNames) {
         this.fieldNames = fieldNames;
-    }         
+    }
 
     public void setErrorWriter(Writer errorWriter) {
         this.errorWriter = errorWriter;
@@ -54,8 +57,8 @@ public class LineImporterSpec implements ImporterSpec {
     }
 
     public String getFieldName(int fieldIdx) {
-        return (fieldNames == null || fieldNames.length <= fieldIdx) ?
-                "field_" + fieldIdx : fieldNames[fieldIdx];
+        return (fieldNames == null || fieldNames.length <= fieldIdx) ? "field_" + fieldIdx :
+                fieldNames[fieldIdx];
     }
 
     /**
@@ -63,19 +66,47 @@ public class LineImporterSpec implements ImporterSpec {
      * transfered.
      */
     public void processRow(LineImportProcessor processor) throws ImporterException {
-        System.out.println("row: " + processor.getRowCount() + " = " +
-                processor.getCurrentRow());
+        System.out.println("row: " + processor.getRowCount() + " = " + processor.getCurrentRow());
     }
 
     /** overwrite this method to get the behavior after the header line has been read */
     public void processHeaderLine(LineImportProcessor processor) throws ImporterException {
-        System.out.println("header: " + processor.getHeaderLine());
+        System.out.println("header: " + processor.getRowCount() + " = " + processor.getHeaderLine());
+    }
+
+    public void setHeaderLineIndex(int index) {
+        headerLineIndex = index;
+    }
+
+    public int getHeaderLineIndex() {
+        return headerLineIndex;
+    }
+
+    /**
+     * initialize the lineReader. overwrite in subclasses if required
+     *
+     * @throws Exception
+     */
+    public LineReader createLineReader(Closeable aReader) throws IOException {
+        LineReader lineReader = getLineTokenizerFactory().createLineReader();
+        if (aReader instanceof Reader) {
+            lineReader.setReader((Reader) aReader);
+        } else if (aReader instanceof InputStream) {
+            lineReader.setStream((InputStream) aReader);
+        }
+        return lineReader;
     }
 
     public static enum Header {
         /** no header line */
         NONE,
-        /** first line is the header line */
-        FIRST
+        /** first line is the header line, same as INDEX, getHeaderLineIndex()==1 */
+        FIRST,
+        /**
+         * the 1-based index of the header line is given
+         * with {@link LineImporterSpec#setHeaderLineIndex(int)}.
+         * all lines before the index are are processed with generic field names (field_0, field_1, ...)
+         */
+        INDEX
     }
 }

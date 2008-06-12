@@ -174,7 +174,7 @@ public class CSVStringTokenizerTest extends TestCase {
                 "\"2FPAK_________GJ_\";\"1\";\"1\";\"4\";\"2\";\"Zentrum\";\"Hauptstasse\";\"Bahnhofsparkplatz\";;\"78734\";\"Augsburg\";;\"DE\";\"der safe befindet sich auf dem";
         CSVStringTokenizer tokens = new CSVStringTokenizer(halfline, ";");
         int i = 0;
-        List strings = new ArrayList();
+        List<String> strings = new ArrayList();
         while (tokens.hasMoreElements()) {
             String each = tokens.nextElement();
             strings.add(each);

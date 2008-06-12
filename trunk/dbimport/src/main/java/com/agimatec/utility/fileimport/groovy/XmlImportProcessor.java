@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class XmlImportProcessor extends ImporterProcessor {
     protected final XmlSlurperSpec spec;
     protected XmlSlurper xmlSlurper;
-     /** actually the current GPathResult, but could by any object **/
+     /** actually the current GPathResult, but could be any object **/
     protected Object current;
 
     public XmlImportProcessor(XmlSlurperSpec spec, Importer importer) {

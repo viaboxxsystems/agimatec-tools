@@ -37,6 +37,12 @@
       <groupId>groovy</groupId>
       <artifactId>groovy-all-1.0-jsr</artifactId>
     </dependency>
+    <!-- required to read excel spreadsheets -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
 
 </project>

@@ -7,11 +7,11 @@ package com.agimatec.utility.fileimport;
  * Time: 19:30:59 <br/>
  * Copyright: Agimatec GmbH
  */
-public class FixedLengthStringTokenizerFactory implements LineTokenizerFactory
+public class FixedLengthStringTokenizerFactory implements LineTokenizerFactory<String, String>
 {
     private int[] fixedLengths;
 
-    public LineTokenizer createTokenizer(String aLine) {
+    public LineTokenizer<String, String> createTokenizer(String aLine) {
         return new FixedLengthStringTokenizer(aLine, fixedLengths);
     }
 
@@ -21,5 +21,9 @@ public class FixedLengthStringTokenizerFactory implements LineTokenizerFactory
 
     public void setFixedLengths(int[] fixedLengths) {
         this.fixedLengths = fixedLengths;
+    }
+
+    public LineReader<String> createLineReader() {
+        return new StringLineReader();
     }
 }

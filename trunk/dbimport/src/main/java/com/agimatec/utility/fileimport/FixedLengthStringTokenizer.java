@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 19:20:27 <br/>
  * Copyright: Agimatec GmbH
  */
-class FixedLengthStringTokenizer implements LineTokenizer {
+class FixedLengthStringTokenizer implements LineTokenizer<String, String> {
     private List myStringList = new ArrayList();
     private Iterator<String> myStringListIterator = null;
 
@@ -64,7 +64,7 @@ class FixedLengthStringTokenizer implements LineTokenizer {
         return false;
     }
 
-    public String continueParse(Object aSingleValue, String aRecord) {
+    public String continueParse(String aSingleValue, String aRecord) {
         throw new UnsupportedOperationException();
     }
 }
