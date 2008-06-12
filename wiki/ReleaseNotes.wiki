@@ -7,21 +7,21 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 == upcoming 2.1.4 (checkout sources) ==
   * import native excel spreadsheets (using POI)
 
-== 2.1.3 ==
+== 2.1.3 (june 2008) ==
   * import csv, fixed-length, xml files 
   * use java or groovy script to process data
   * optionally counts errors/rows, save status of imports in database
 
 = dbmigrate =
 
-== 2.1.3 ==
+== 2.1.3 (june 2008) ==
   * explicitly supports oracle, postgres
   * migrate/setup/alter database
   * sql, groovy, xml scripts
 
 = annomark =
 
-== 2.1.3 ==
+== 2.1.3 (june 2008) ==
   * Generate files based on annotated java classes
   * Generate java, json, properties, sql for Resourcebundles in XML-format
   * Generate Resourcebundle in XML-format from properties files
