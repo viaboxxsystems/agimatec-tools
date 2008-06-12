@@ -1,4 +1,5 @@
 #summary annotation based code generation framework
+#labels Featured
 
 = Introduction =
 
