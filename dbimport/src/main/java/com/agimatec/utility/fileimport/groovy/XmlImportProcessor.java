@@ -5,6 +5,8 @@ import com.agimatec.utility.fileimport.ImporterException;
 import com.agimatec.utility.fileimport.ImporterProcessor;
 import groovy.util.XmlSlurper;
 
+import java.io.Closeable;
+import java.io.InputStream;
 import java.io.Reader;
 import java.util.Iterator;
 
@@ -18,7 +20,7 @@ import java.util.Iterator;
 public class XmlImportProcessor extends ImporterProcessor {
     protected final XmlSlurperSpec spec;
     protected XmlSlurper xmlSlurper;
-     /** actually the current GPathResult, but could be any object **/
+    /** actually the current GPathResult, but could be any object * */
     protected Object current;
 
     public XmlImportProcessor(XmlSlurperSpec spec, Importer importer) {
@@ -38,12 +40,17 @@ public class XmlImportProcessor extends ImporterProcessor {
      * @param aReader - reader to read the import data from.
      * @throws Exception
      */
-    public void importFrom(Reader aReader) throws ImporterException {
+    @Override
+    public void importFrom(Closeable aReader) throws ImporterException {
         super.importFrom(aReader);
         try {
             xmlSlurper = new XmlSlurper();
             try {
-                current = xmlSlurper.parse(aReader);
+                if (aReader instanceof InputStream) {
+                    current = xmlSlurper.parse((InputStream) aReader);
+                } else {
+                    current = xmlSlurper.parse((Reader) aReader);
+                }
                 spec.processFirst(this);
                 Iterator iter = spec.iterator(this);
                 while (iter.hasNext() && !isCancelled()) {
@@ -57,7 +64,7 @@ public class XmlImportProcessor extends ImporterProcessor {
                 logFinished();
             }
         } catch (Exception ex) {
-             handleException(ex);
+            handleException(ex);
         }
     }
 

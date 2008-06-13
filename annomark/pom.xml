@@ -43,6 +43,12 @@
     <dependency>
       <groupId>groovy</groupId>
       <artifactId>gram</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>groovy</groupId>
+          <artifactId>groovy-all</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
