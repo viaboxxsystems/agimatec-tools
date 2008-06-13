@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Description: Klasse vereinfacht die Verwaltung mehrerer, ggf.
- * nicht parallelisierbarer FileImports ueber eine Datenbanktabelle.
- * Der Einfachheit halber mit JDBC, spart Infrastruktur und EJBs.<br/>
+ * Description: Responsible to simplify the management of
+ * multiple imports that should not run parallel.
+ * Relies on database table 'IMPORT_CONTROL', accessed via JDBC.<br/>
  * User: roman.stumm <br/>
  * Date: 30.08.2007 <br/>
  * Time: 13:02:51 <br/>

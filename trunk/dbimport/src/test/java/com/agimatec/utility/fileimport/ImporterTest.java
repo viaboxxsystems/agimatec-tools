@@ -1,5 +1,7 @@
 package com.agimatec.utility.fileimport;
 
+import groovy.lang.Binding;
+import groovy.util.GroovyScriptEngine;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -28,7 +30,7 @@ public class ImporterTest extends TestCase {
         super.tearDown();
     }
 
-    public void testImportFrom() throws Exception {
+    public void testImportFromCsv() throws Exception {
         LineImporterSpec spec = new LineImporterSpecAutoFields();
         spec.setLineTokenizerFactory(new CSVStringTokenizerFactory());
         Importer importer = new Importer(spec);
@@ -36,6 +38,13 @@ public class ImporterTest extends TestCase {
                 .getResourceAsStream("example-x0304p.txt");
         Reader reader = new InputStreamReader(stream, "ISO-8859-1");
         importer.importFrom(reader);
+    }
+
+    public void testImportFromXml() throws Exception {
+        GroovyScriptEngine engine = new GroovyScriptEngine("src/test/resources");
+        Binding binding = new Binding();
+        Object result = engine.run("ImportFromXmlTest.groovy", binding);
+        assertEquals(new Integer(3), result);
     }
 
     public static Test suite() {
