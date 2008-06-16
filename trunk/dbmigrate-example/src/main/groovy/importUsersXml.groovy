@@ -1,15 +1,17 @@
-import com.agimatec.commons.config.*;
-import com.agimatec.utility.fileimport.*;
-import com.agimatec.utility.fileimport.groovy.*;
-import java.io.*;
-import groovy.sql.*;
+import com.agimatec.commons.config.ConfigManager
+import com.agimatec.utility.fileimport.*
+import com.agimatec.utility.fileimport.groovy.XmlSlurperSpec
+import groovy.sql.Sql
 
 def filename = params[0];
 def jdbcConnection = tool.targetDatabase.connection;
 def su = SqlUtil.forConnection(jdbcConnection);
 su.defSequence('id', 'hibernate_sequence');
 ImportController controller = new ImportController(jdbcConnection, su, 'hibernate_sequence');
-controller.join(filename); // wait for other imports of that kind until finished...
+ImportControl imp = new ImportControl();
+imp.setFileName (filename);
+imp.setImportName ("Users");
+long iid = controller.join(imp); // wait for other imports of that kind until finished...
 
 def Sql db = new Sql(jdbcConnection);
 
@@ -69,5 +71,5 @@ try {
     java.nio.charset.Charset.forName('ISO-8859-1'));
     importer.importFrom(reader);
 } finally {
-    controller.end(filename, importer);  // mark import as finished
+    controller.end(iid, importer);  // mark import as finished
 }
