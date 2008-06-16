@@ -17,7 +17,7 @@ def su = SqlUtil.forConnection(jdbcConnection);
 su.defDate('Date', 'yyyy-MM-dd');
 su.defSequence('id', 'SEQ_import');
 ImportController controller = new ImportController(jdbcConnection, su, 'SEQ_import');
-controller.join('zipcode-import'); // wait for other imports of that kind until finished...
+long iid = controller.join('zipcode-import'); // wait for other imports of that kind until finished...
 
 def Sql db = new Sql(jdbcConnection);
 
@@ -44,7 +44,7 @@ try {
     FileReader reader = new FileReader("setup/zipcodes.csv");
     importer.importFrom(reader);
 } finally {
-    controller.end('zipcode-import', importer);  // mark import as finished
+    controller.end(iid, importer);  // mark import as finished
 }
 
 }}}
@@ -70,8 +70,11 @@ CREATE TABLE Import_Control (
     import_name CHARACTER VARYING(250) CONSTRAINT NN_import_name NOT NULL,
     row_count INTEGER,
     error_count INTEGER,
+    description CHARACTER VARYING(500),
+    file_name CHARACTER VARYING(500),
     CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id)
 );
+
 }}}
 
 (Oracle-syntax)
@@ -84,6 +87,8 @@ CREATE TABLE Import_Control (
     import_name VARCHAR2(250) NOT NULL,
     row_count INTEGER,
     error_count INTEGER,
+    description VARCHAR2(500),
+    file_name VARCHAR2(500),
     CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id));
 }}}
 
