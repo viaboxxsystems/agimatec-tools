@@ -13,12 +13,14 @@ import java.sql.Timestamp;
  */
 public class ImportControl implements Serializable {
    protected long importId;
-   protected String importName;
+   protected String importName; // Unique. mandatory. import_type
    protected Timestamp startTime;
    protected Timestamp endTime;
-   protected String status;
+   protected ImportState status;
    protected Integer rowCount;
    protected Integer errorCount;
+   protected String description;  // optional. description.
+   protected String fileName; // optional. source file name.
 
     public Timestamp getEndTime() {
         return endTime;
@@ -44,9 +46,51 @@ public class ImportControl implements Serializable {
         return startTime;
     }
 
-    public String getStatus() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setErrorCount(Integer errorCount) {
+        this.errorCount = errorCount;
+    }
+
+    public void setImportId(long importId) {
+        this.importId = importId;
+    }
+
+    public void setImportName(String importName) {
+        this.importName = importName;
+    }
+
+    public void setRowCount(Integer rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public ImportState getStatus() {
         return status;
     }
 
-
+    public void setStatus(ImportState status) {
+        this.status = status;
+    }
 }
