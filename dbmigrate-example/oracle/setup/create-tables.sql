@@ -103,6 +103,8 @@ CREATE TABLE Import_Control (
     import_name VARCHAR2(250) NOT NULL,
     row_count INTEGER,
     error_count INTEGER,
+    description VARCHAR2(500),
+    file_name VARCHAR2(500),
     CONSTRAINT Import_Control_pkey PRIMARY KEY (import_id) );
 
 
