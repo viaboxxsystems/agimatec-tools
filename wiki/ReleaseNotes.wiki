@@ -5,8 +5,9 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 
 = dbimport =
 
-== upcoming 2.1.4 (checkout sources) ==
-  * import native excel spreadsheets (using POI)
+== 2.2 ==
+  * dbimport: import native excel spreadsheets (using POI)
+  * dbimport: minor changes on the API of class ImportController
 
 == 2.1.3 (june 2008) ==
   * import csv, fixed-length, xml files 
