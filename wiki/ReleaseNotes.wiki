@@ -5,7 +5,7 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 
 = dbimport =
 
-== 2.2 ==
+== 2.2 (18th june 2008) ==
   * dbimport: import native excel spreadsheets (using POI)
   * dbimport: minor changes on the API of class ImportController
 
