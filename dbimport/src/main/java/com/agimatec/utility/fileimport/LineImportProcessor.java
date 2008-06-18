@@ -17,6 +17,7 @@ public class LineImportProcessor extends ImporterProcessor {
     protected final LineImporterSpec spec;
     protected LineReader lineReader;
     protected Object headerLine;
+    protected Object currentLine;
     protected Map currentRow;
 
     public LineImportProcessor(LineImporterSpec spec, Importer importer) {
@@ -46,17 +47,17 @@ public class LineImportProcessor extends ImporterProcessor {
                     headerLine = lineReader.readLine();
                     spec.processHeaderLine(this);
                 }
-                Object line = lineReader.readLine();
-                while (line != null && !isCancelled()) {
+                currentLine = lineReader.readLine();
+                while (currentLine != null && !isCancelled()) {
                     rowCount++;
                     if (spec.getHeaderSpec() == LineImporterSpec.Header.INDEX &&
                             spec.getHeaderLineIndex() == rowCount) {
-                        headerLine = line;
+                        headerLine = currentLine;
                         spec.processHeaderLine(this);
                     } else {
-                        importRow(line);
+                        importRow(currentLine);
                     }
-                    line = lineReader.readLine();
+                    currentLine = lineReader.readLine();
                 }
             } finally {
                 lineReader.close();
@@ -120,11 +121,23 @@ public class LineImportProcessor extends ImporterProcessor {
         return headerLine;
     }
 
+    /**
+     * the current row/line itself as it was transferred to a map 
+     * @return
+     */
     public Map getCurrentRow() {
         return currentRow;
     }
 
     public LineReader getLineReader() {
         return lineReader;
+    }
+
+    /**
+     * the current row/line itself as it came from the LineReader
+     * @return
+     */
+    public Object getCurrentLine() {
+        return currentLine;
     }
 }
