@@ -23,6 +23,9 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 
 = annomark =
 
+== 2.2.1-SNAPSHOT (checkout sources) ==
+  * @ToString annotation to generate toString() methods (+examples)
+
 == 2.1.3 (june 2008) ==
   * Generate files based on annotated java classes
   * Generate java, json, properties, sql for Resourcebundles in XML-format
