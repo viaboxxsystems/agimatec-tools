@@ -29,5 +29,18 @@ public class ${class.dtoClassName} implements Serializable
     }
     
 </#list>
+<#if class.findByElementAnnotation("com.agimatec.annotations.ToString")??>
+    @Override
+    public String toString() {
+      return new StringBuilder()
+        .append("{${class.dtoPackageName}.${class.dtoClassName}: ")
+<#list class.dtoFieldAnnotations as each>
+      <#if each.getElement().getAnnotation("com.agimatec.annotations.ToString")??>
+        .append("<#if each_index &gt; 0>,</#if>${each.dtoName}=").append(${each.dtoName})
+      </#if>
+</#list>
+        .append('}').toString();
+    }
+</#if>
 }
 </#if></#list>

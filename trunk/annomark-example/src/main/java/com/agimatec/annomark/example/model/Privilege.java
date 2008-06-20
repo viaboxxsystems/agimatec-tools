@@ -3,6 +3,7 @@ package com.agimatec.annomark.example.model;
 import com.agimatec.annotations.DTO;
 import com.agimatec.annotations.DTOAttribute;
 import com.agimatec.annotations.DTOs;
+import com.agimatec.annotations.ToString;
 
 import javax.persistence.*;
 
@@ -15,9 +16,11 @@ import javax.persistence.*;
 public class Privilege implements java.io.Serializable {
     // Fields    
     @DTOAttribute(type = "Long")
+    @ToString
     private long privilegeId;
     private int version;
     @DTOAttribute
+    @ToString
     private String privilegeName;
     @DTOAttribute(usage = "Edit")
     private String privilegeDescription;

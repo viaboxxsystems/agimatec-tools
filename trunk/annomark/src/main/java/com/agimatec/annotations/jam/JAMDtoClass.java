@@ -27,21 +27,15 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         this.mclass = mclass;
     }
 
-    /**
-     * @return null for default, otherwise the explicitly given name from the annotation
-     */
+    /** @return null for default, otherwise the explicitly given name from the annotation */
     public String getDtoClassName() {
         JAMAnnotation ja = getDtoAnnotation();
         JAMGenInstruction instruct = JAMDtoGenerator.getCurrentInstruction();
-        return stringValue(ja == null ? null : ja.getStringValue("dtoClass"), trimEnding(
-                instruct.getPrefix() + getSimpleName() + instruct.getSuffix()));
+        return stringValue(ja == null ? null : ja.getStringValue("dtoClass"),
+                trimEnding(instruct.getPrefix() + getSimpleName() + instruct.getSuffix()));
     }
 
-    /**
-     * finde erstes annotated element mit method annotation mit angegebenem Typ
-     * @param annotationName
-     * @return
-     */
+    /** find first annotated element with method annotation of given type */
     public JAMDtoFieldAnnotation findByGetterAnnotation(String annotationName) {
         for (JAMDtoFieldAnnotation each : getDtoFieldAnnotations()) {
             JAMDtoMethod m = getMethod(each.getGetterName());
@@ -49,6 +43,20 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
                 JAMAnnotation a = m.getAnnotation(annotationName);
                 if (a != null) return each;
             }
+        }
+        return null;
+    }
+
+    /**
+     * find first annotated element (field or method) that has an annotation
+     * of the given type
+     * @param annotationName
+     * @return
+     */
+    public JAMDtoFieldAnnotation findByElementAnnotation(String annotationName) {
+        for (JAMDtoFieldAnnotation each : getDtoFieldAnnotations()) {
+            JAMAnnotation a = each.getElement().getAnnotation(annotationName);
+            if (a != null) return each;
         }
         return null;
     }
