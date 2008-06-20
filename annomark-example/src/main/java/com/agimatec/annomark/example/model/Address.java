@@ -4,6 +4,7 @@ package com.agimatec.annomark.example.model;
 import com.agimatec.annotations.DTO;
 import com.agimatec.annotations.DTOAttribute;
 import com.agimatec.annotations.DTOs;
+import com.agimatec.annotations.ToString;
 
 import javax.persistence.*;
 
@@ -14,19 +15,24 @@ public class Address implements java.io.Serializable {
     // Fields    
 
     @DTOAttribute(type = "Long")
+    @ToString
     private long addressId;
     private int version;
 
     private CvCountry country;
     /** street */
     @DTOAttribute(property = "street")
+    @ToString
     private String field1;
     @DTOAttribute(usage = "Edit")
+    @ToString
     private String field2;
     @DTOAttribute(usage = "Edit")
+    @ToString
     private String field3;
     /** PLZ */
     @DTOAttribute
+    @ToString
     private String zip;
     @DTOAttribute
     private String city;

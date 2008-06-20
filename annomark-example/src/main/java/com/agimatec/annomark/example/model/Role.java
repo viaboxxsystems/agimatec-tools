@@ -3,6 +3,7 @@ package com.agimatec.annomark.example.model;
 import com.agimatec.annotations.DTO;
 import com.agimatec.annotations.DTOAttribute;
 import com.agimatec.annotations.DTOs;
+import com.agimatec.annotations.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,9 +19,11 @@ public class Role implements java.io.Serializable {
     // Fields
 
     @DTOAttribute(type = "Long")
+    @ToString
     private long roleId;
     private int version;
     @DTOAttribute
+    @ToString
     private String roleName;
     @DTOAttribute(usage="Edit")
     private String roleDescription;
