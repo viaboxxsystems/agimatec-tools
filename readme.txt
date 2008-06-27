@@ -17,10 +17,7 @@ You need to download and install maven2 from: http://maven.apache.org/
 --------------------------------
 Some dependencies might not be available from official maven2-repositories:
   * Dependency: com.sun:tools:jar:1.5.0_12 missing?
-  To install com.sun:tools, copy the tools.jar from your
-  $JAVA_HOME/lib/tools.jar to $LOCAL_REPOSITORY/com/sun/tools/<jdk-version>/tools-<jdk-version>.jar
-  e.g. com/sun/tools/1.5.0_12/tools-1.5.0_12.jar   
-   
+
   Using a different JDK than 1.5.0_12?
   ------------------------------------
   Change      
@@ -28,6 +25,8 @@ Some dependencies might not be available from official maven2-repositories:
         <groupId>com.sun</groupId>
         <artifactId>tools</artifactId>
         <version>1.5.0_12</version>
+        <scope>system</scope>
+        <systemPath>${java.home}/../lib/tools.jar</systemPath>      
       </dependency>
   in agimatec-tools/pom.xml to match the JDK you are using.
   
