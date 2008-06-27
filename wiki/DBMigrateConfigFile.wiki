@@ -64,7 +64,7 @@ File may end with .sql, .xml or .groovy.
     DB_PASSWORD   : if exists, overrule password from JdbcConfig
     DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
     DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
-ACHTUNG: Wenn diese 4 Variablen angegeben werden, so haben sie Vorrang vor den Einstellungen im JdbcConfig file (s.u.)
+Note: These 4 variables overrule the configuration in the JdbcConfig file!
   -->
   <map name="env">
     <String name="DB_USER" value="postgres"/>
