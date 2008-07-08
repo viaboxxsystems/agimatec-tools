@@ -47,10 +47,8 @@ public abstract class JAMTestAnnotatedElement {
     }
 
     public String getComment() {
-        System.out.println("Comment called");
         if (element().getComment() == null) return null;
         String c = element().getComment().getText();
-        System.out.println("C=="+c);
         return c == null || c.length() == 0 ? null : c;
     }
 
@@ -64,13 +62,10 @@ public abstract class JAMTestAnnotatedElement {
      */
     public JAMAnnotation getTestAnnotation() {
         JAMAnnotation ja = getAnnotation(singleAnnotation());
-        System.out.println("1"+ja);
         if (ja == null) {
             ja = getAnnotation(multiAnnotation());
-            System.out.println("2"+ja);
             if (ja != null) {
                 for (JAMAnnotation each : ja.getAnnotationArray()) {
-                    System.out.println("3"+each);
                     if (isCurrentlyActive(each)) {
                         return each;
                     }
