@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.text.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
 
 /**
  * Description: Utility class that helps to convert parameters during
@@ -16,7 +17,7 @@ import java.util.Map;
  * Time: 11:59:08 <br/>
  * Copyright: Agimatec GmbH
  */
-public class SqlUtil {
+public class SqlUtil implements Serializable {
     private static final String[] SEQ =
             {"nextval(''{0}'')", "{0}.NEXTVAL"}; // postgres, oracle
     private static final String[] SEQ_FETCH =
