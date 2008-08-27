@@ -10,6 +10,6 @@ Some of the utility classes are designed for simple usage from within groovy.
 
 
 = Documentation =
-  * [http://www.agimatec.de/agimatec-tools/site/dbimport/apidocs/index.html JavaDoc ]
-  * [http://www.agimatec.de/agimatec-tools/site/dbimport/index.html Maven-Site]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/dbimport/apidocs/index.html JavaDoc ]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/dbimport/index.html Maven-Site]
   * [DBImportExample Examples]
