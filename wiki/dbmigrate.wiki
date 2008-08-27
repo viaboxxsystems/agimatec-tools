@@ -15,8 +15,8 @@ Look into the detailed documentation to learn the configuration and other featur
 
 
 = Documentation =
-  * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/index.html JavaDoc ]
-  * [http://www.agimatec.de/agimatec-tools/site/dbmigrate/index.html Maven-Site]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/dbmigrate/apidocs/index.html JavaDoc ]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/dbmigrate/index.html Maven-Site]
 
 == !AutoMigrationTool ==
 http://agimatec-tools.googlecode.com/svn/wiki/agimatec-tools-b.jpg
