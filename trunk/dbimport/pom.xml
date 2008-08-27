@@ -34,8 +34,8 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>groovy</groupId>
-      <artifactId>groovy-all-1.0-jsr</artifactId>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
     </dependency>
     <!-- required to read excel spreadsheets -->
     <dependency>
