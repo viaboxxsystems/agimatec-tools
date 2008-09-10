@@ -264,7 +264,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
      */
     private List<DBVersionString> readDir(String prefix, String directory)
             throws MalformedURLException, URISyntaxException {
-
+        if(directory == null) return new ArrayList();
         File scriptsDir = new File(directory);
         File[] files = scriptsDir.listFiles();
         List<DBVersionString> order = new ArrayList<DBVersionString>(files.length);

@@ -350,6 +350,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     protected String getScriptsDir() {
         if (scriptsDir == null) {
             FileNode dir = (FileNode) getMigrateConfig().get("Scripts");
+            if(dir == null) return null;
             scriptsDir = dir.getFilePath();
         }
         return scriptsDir;
