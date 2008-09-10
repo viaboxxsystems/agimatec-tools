@@ -152,7 +152,8 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
                 id.setIndexName(indName);
                 id.setUnique(!indSet.getBoolean("NON_UNIQUE"));
                 id.setTableName(indSet.getString("TABLE_NAME"));
-                if (!id.getIndexName().equals(td.getPrimaryKey().getIndexName())) {
+                if (td.getPrimaryKey() == null ||
+                        !id.getIndexName().equals(td.getPrimaryKey().getIndexName())) {
                     td.addIndex(id);
                 }
             }
