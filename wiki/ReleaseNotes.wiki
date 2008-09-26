@@ -5,7 +5,7 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 
 = dbimport =
 
-== 2.2.2
+== 2.2.2 (26.09.2008) ==
   * upgrade from groovy-1.0-jsr-06 to groovy-1.5.6
 
 == 2.2 (18th june 2008) ==
