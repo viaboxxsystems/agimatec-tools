@@ -293,7 +293,7 @@ public class JAMDtoFieldAnnotation {
 
     public boolean isRelationship() {
         JAMDtoMethod meth = element.getDtoClass().getMethod(getGetterName());
-        return getDtoPath() == null && getDtoConverter() == null && (
+        return meth != null && getDtoPath() == null && getDtoConverter() == null && (
                 null != meth.getAnnotation("javax.persistence.OneToMany") ||
                         null != meth.getAnnotation("javax.persistence.ManyToOne") ||
                         null != meth.getAnnotation("javax.persistence.ManyToMany")||
