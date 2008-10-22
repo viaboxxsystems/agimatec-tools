@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * Copyright: Agimatec GmbH
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(value = {ElementType.FIELD})
+@Target(value = {ElementType.FIELD, ElementType.METHOD})
 public @interface Default {
     String value();
 }
