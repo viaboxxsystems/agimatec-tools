@@ -13,6 +13,21 @@ public class DbUnitSetupTool extends AbstractDbTool {
     protected static final Log log = LogFactory.getLog(DbUnitSetupTool.class);
 
     private String deleteDataFile = "delete_data.xml";
+    /**
+     * <pre>
+     * REFRESH: data of existing rows are updated and non-existing row get inserted.
+     * Any rows which exist in the database but not in dataset stay unaffected.
+     * <p/>
+     * INSERT: 	(Default) This operation inserts the dataset contents into the database.
+     * This operation assumes that table data does not exist in the target database and fails if this is not the case.
+     * To prevent problems with foreign keys, tables must be sequenced appropriately in the dataset.
+     * <p/>
+     * UPDATE: This operation updates the database from the dataset contents.
+     * This operation assumes that table data already exists in the target database and
+     * fails if this is not the case.
+     * </pre>
+     */
+    private String operation = "INSERT";
 
     public String getDeleteDataFile() {
         return deleteDataFile;
@@ -20,6 +35,14 @@ public class DbUnitSetupTool extends AbstractDbTool {
 
     public void setDeleteDataFile(String deleteDataFile) {
         this.deleteDataFile = deleteDataFile;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public void execute() throws Exception {
@@ -36,7 +59,16 @@ public class DbUnitSetupTool extends AbstractDbTool {
         }
         if (dataFile != null && dataFile.length() > 0) {
             IDataSet testDataSet = DataSetFactory.createDataSet(dataFile).load();
-            DatabaseOperation.INSERT.execute(connection, testDataSet);
+            if ("INSERT".equals(operation)) {
+                DatabaseOperation.INSERT.execute(connection, testDataSet);
+            } else if ("REFRESH".equals(operation)) {
+                DatabaseOperation.REFRESH.execute(connection, testDataSet);
+            } else if ("UPDATE".equals(operation)) {
+                DatabaseOperation.UPDATE.execute(connection, testDataSet);
+            } else {
+                throw new UnsupportedOperationException(
+                        "DatabaseOperation." + operation + " not supported.");
+            }
         }
     }
 
