@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Copyright: Agimatec GmbH
  */
 public class DbUnitDumpTool extends AbstractDbTool {
-    protected static final Log log = LogFactory.getLog(DbUnitSetupTool.class);
+    protected static final Log log = LogFactory.getLog(DbUnitDumpTool.class);
 
     public void execute() throws SQLException, DatabaseUnitException, IOException,
             ClassNotFoundException {
