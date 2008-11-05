@@ -13,7 +13,7 @@
   <groupId>com.agimatec</groupId>
   <artifactId>annomark</artifactId>
   <packaging>jar</packaging>
-  <version>2.2.3-SNAPSHOT</version>
+  <version>${agimatec-version}</version>
   <name>Codegenerator with Annogen and Freemarker</name>
 
   <distributionManagement>
