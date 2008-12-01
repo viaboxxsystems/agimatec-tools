@@ -21,8 +21,8 @@ _usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false
 || -sim || -sim true: simulation mode ON. no scripts will be executed. the logger only prints the script names that the programm would  execute. This is for testing what will happen. -sim false: simulation mode OFF (default). Caution: this is the real migration mode that could modify the database. || 
 || -conf || default = -conf migration.xml. Name of the main configuration file to use. || 
 || -help || show help only || 
-|| -script || optional, multiple occurrence supported. name of a upgrade-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!||
-|| -op || optional, multiple occurrence supported. the operation in the same syntax as in an upgrade-file. tool will execute the given operation(s) only! || 
+|| -script || optional, multiple occurrence supported. name of a script-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!||
+|| -op || optional, multiple occurrence supported. the operation in the same syntax as in a xml-script. tool will execute the given operation(s) only! || 
 
 == Examples ==
 {{{
