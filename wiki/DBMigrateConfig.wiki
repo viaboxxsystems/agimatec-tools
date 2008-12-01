@@ -25,10 +25,16 @@ _usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false
 || -op || optional, multiple occurrence supported. the operation in the same syntax as in an upgrade-file. tool will execute the given operation(s) only! || 
 
 == Examples ==
+{{{
 java com.agimatec.dbmigrate.!AutoMigrationTool -conf upgrade.xml
+
 java com.agimatec.dbmigrate.!AutoMigrationTool -conf setup.xml
+
 java com.agimatec.dbmigrate.!AutoMigrationTool -conf upgrade.xml -script up-2.1.26.sql -script up-2.1.35_functions.xml
+
 java com.agimatec.dbmigrate.!AutoMigrationTool -conf setup.xml -op execSQLScript plsql-history-session-spec.sql -op execSQLScript plsql-history-session-body.sql
+
+}}}
 
 = Main configuration file =
   * [DBMigrateConfigFile Main configuration file]
