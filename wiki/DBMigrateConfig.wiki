@@ -15,7 +15,7 @@ Some of the classes in dbmigrate have a startable *main()* method. They should p
 Don't forget to create a backup of your database before using the migration tool!
 }}}
 
-_usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false -conf conf/migration.xml_
+_usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false -conf conf/migration.xml_ -script aScript -op operationName operationParameter
 
 || Parameter  || Description || 
 || -sim || -sim true: simulation mode ON. no scripts will be executed. the logger only prints the script names that the programm would  execute. This is for testing what will happen. -sim false: simulation mode OFF (default). Caution: this is the real migration mode that could modify the database. || 
