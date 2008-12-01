@@ -121,9 +121,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         iterateSQLScript(new SQLScriptExecutor(targetDatabase), scriptName, false);
     }
 
-    /**
-     * callback - invoke DatabaseSchemaChecker for invalid triggers, views, ...
-     */
+    /** callback - invoke DatabaseSchemaChecker for invalid triggers, views, ... */
     public void checkObjectsValid(String databaseType) throws Exception {
         DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms(databaseType);
         checker.setDatabase(getTargetDatabase());
@@ -133,6 +131,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     /**
      * callback - invoke DatabaseSchemaChecker for completeness of
      * schema (columns, tables, foreign keys, indices, ...)
+     *
      * @throws Exception
      */
     public void checkSchemaComplete(String dev) throws Exception {
@@ -145,7 +144,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         Iterator<String> it = files.iterator();
 
         List<URL> urls = new ArrayList();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             urls.add(new URL(it.next()));
         }
         checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
@@ -347,10 +346,10 @@ public abstract class BaseMigrationTool implements MigrationTool {
         return getMigrateConfig().getList("Operations/" + name);
     }
 
-    protected String getScriptsDir() {
+    public String getScriptsDir() {
         if (scriptsDir == null) {
             FileNode dir = (FileNode) getMigrateConfig().get("Scripts");
-            if(dir == null) return null;
+            if (dir == null) return null;
             scriptsDir = dir.getFilePath();
         }
         return scriptsDir;
@@ -367,17 +366,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         for (Object each : operations) {
             if (each instanceof TextNode) {
                 TextNode node = (TextNode) each;
-                String methodName = node.getName();
-                String methodParam = node.getValue();
-                print("Next operation: " + methodName + "(\"" + methodParam + "\")");
-                Method method = getClass().getMethod(methodName, String.class);
-                try {
-                    method.invoke(this, methodParam);
-                } catch (InvocationTargetException tex) {
-                    rollback();
-                    log(tex.getTargetException());
-                    throw (Exception) tex.getTargetException();
-                }
+                doMethodOperation(node.getName(), node.getValue());
             } else if (each instanceof ListNode) {
                 MapQuery q = new MapQuery(((ListNode) each).getName());
                 boolean isTrue = q.doesMatch(getEnvironment());
@@ -387,6 +376,18 @@ public abstract class BaseMigrationTool implements MigrationTool {
                     print("END of Condition: (" + q.toString() + ")");
                 }
             }
+        }
+    }
+
+    public void doMethodOperation(String methodName, String methodParam) throws Exception {
+        print("Next operation: " + methodName + "(\"" + methodParam + "\")");
+        Method method = getClass().getMethod(methodName, String.class);
+        try {
+            method.invoke(this, methodParam);
+        } catch (InvocationTargetException tex) {
+            rollback();
+            log(tex.getTargetException());
+            throw (Exception) tex.getTargetException();
         }
     }
 
