@@ -22,4 +22,8 @@ public class OperationAction extends MigrateAction {
     public void doIt() throws Exception {
         tool.doMethodOperation(operation, parameter);
     }
+
+    public String getInfo() {
+        return "Operation {" + operation + " " + parameter + "}";
+    }
 }

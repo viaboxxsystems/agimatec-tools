@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Description: <br/>
+ * Description: put a hint for the default value on a property <br/>
  * User: roman.stumm <br/>
  * Date: 06.12.2007 <br/>
  * Time: 12:08:55 <br/>
