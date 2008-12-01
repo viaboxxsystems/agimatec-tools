@@ -137,6 +137,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         log("------------------------------------");
         prepareDatabase();
         if (actionOverride != null && !actionOverride.isEmpty()) {
+            log("PERFORMING COMMAND LINE ACTIONS ONLY!");
             performActions(actionOverride);
         } else {
             performActions(createActions());
@@ -147,7 +148,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         if (sim) log("SIMULATION ONLY - SEQUENCE FOLLOWS:");
         try {
             if (actionOverride.isEmpty()) {
-                log("THERE ARE NO ACTIONS TO EXECUTE.");
+                log("THERE ARE NO ACTIONS TO PERFORM.");
             } else {
                 int i = 0;
                 for (MigrateAction each : actionOverride) {
