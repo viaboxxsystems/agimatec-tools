@@ -55,14 +55,27 @@ public class AutoMigrationTool extends BaseMigrationTool {
         super();
     }
 
-    public static void main(String[] args) throws Exception {
+    /**
+     * run the tool and exit the JVM afterwards.
+     *
+     * @throws Exception
+     * exit(0) = successful
+     * exit(1) = in case of an exception
+     */
+    public static void main(String[] args) {
         AutoMigrationTool tool = new AutoMigrationTool();
-        if (!tool.parseArgs(args)) return;
         try {
-            tool.setUp();
-            tool.startAutomaticMigration();
-        } finally {
-            tool.tearDown();
+            if (!tool.parseArgs(args)) return;
+            try {
+                tool.setUp();
+                tool.startAutomaticMigration();
+            } finally {
+                tool.tearDown();
+            }
+            System.exit(0);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            System.exit(1);
         }
     }
 

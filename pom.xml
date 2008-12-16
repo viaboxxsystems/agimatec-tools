@@ -5,7 +5,7 @@
   <groupId>com.agimatec</groupId>
   <artifactId>agimatec-tools</artifactId>
   <packaging>pom</packaging>
-  <version>2.2.3</version>
+  <version>2.2.4-SNAPSHOT</version>
   <name>agimatec</name>
   <url>http://www.agimatec.de</url>
   <prerequisites>
@@ -298,6 +298,6 @@
   </reporting>
 
   <properties>
-    <agimatec-version>2.2.3</agimatec-version>
+    <agimatec-version>2.2.4-SNAPSHOT</agimatec-version>
   </properties>
 </project>
