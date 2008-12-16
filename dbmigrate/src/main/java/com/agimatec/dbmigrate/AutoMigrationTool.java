@@ -74,7 +74,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
             }
             System.exit(0);
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            log.fatal(null, ex);
             System.exit(1);
         }
     }
