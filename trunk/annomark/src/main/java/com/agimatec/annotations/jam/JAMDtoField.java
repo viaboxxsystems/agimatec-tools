@@ -71,6 +71,7 @@ public class JAMDtoField extends JAMDtoAnnotatedElement {
         else return current.getType().getQualifiedName();
     }
 
+    @Override
     public String getGenericParameter() {
         Type genericType = null;
         // hack: access type of element for generic collections
