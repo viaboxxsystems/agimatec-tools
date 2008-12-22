@@ -128,4 +128,8 @@ public abstract class JAMDtoAnnotatedElement {
         return null;
     }
 
+    public String getGenericParameter() {
+        throw new UnsupportedOperationException("not yet implemented for this type");
+    }
+
 }

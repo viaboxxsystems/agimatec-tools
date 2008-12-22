@@ -81,13 +81,13 @@ public class JAMDtoFieldAnnotation {
 
         String dtotype = getDtoType();
         if (dtotype == null) {
-            String gp = getField() != null ? getField().getGenericParameter() : null;
+            String gp = getElement().getGenericParameter();
             if (gp != null) {
                 JAMDtoClass jc = JAMDtoGenerator.getJAMClass(gp);
                 String cn;
                 if (jc != null) {
                     cn = optimizeType(
-                            jc.getDtoPackageName() + "." + jc.getDtoClassName());
+                          jc.getDtoPackageName() + "." + jc.getDtoClassName());
                 } else {
                     cn = optimizeType(gp);
                 }
@@ -115,7 +115,7 @@ public class JAMDtoFieldAnnotation {
 
         String dtotype = getDtoType();
         if (dtotype == null) {
-            String gp = getField() != null ? getField().getGenericParameter() : null;
+            String gp = getTargetElement().getGenericParameter();
             if (gp != null) {
                 JAMDtoClass jc = JAMDtoGenerator.getJAMClass(gp);
                 String cn;
@@ -126,7 +126,7 @@ public class JAMDtoFieldAnnotation {
                 }
                 type = cn;
             } else {
-                String dt = element.getType(getDtoPath());
+                String dt = getTargetElement().getType();
                 JAMDtoClass jc = JAMDtoGenerator.getJAMClass(dt);
                 if (jc != null) {
                     type = jc.getDtoPackageName() + "." + jc.getDtoClassName();
@@ -145,35 +145,16 @@ public class JAMDtoFieldAnnotation {
     private String extractGenericParameter(String dtotype) {
         int i1 = dtotype.indexOf('<');
         int i2 = dtotype.lastIndexOf('>');
-        if(i2 > i1) {
-            return dtotype.substring(i1+1, i2);
+        if (i2 > i1) {
+            return dtotype.substring(i1 + 1, i2);
         } else { // ???!!
             return dtotype.substring(i1 + 1);
         }
     }
 
-    public String getDtoHintType() {
-        String dtotype = getDtoType();
-        if (dtotype == null) {
-            String gp = getField() != null ? getField().getGenericParameter() : null;
-            if (gp != null) {
-                JAMDtoClass jc = JAMDtoGenerator.getJAMClass(gp);
-                String cn;
-                if (jc != null) {
-                    cn = jc.getDtoPackageName() + "." + jc.getDtoClassName();
-                } else {
-                    cn = gp;
-                }
-                return cn;
-            }
-        } else if (dtotype.indexOf('<') > 0) {
-            return extractGenericParameter(dtotype);
-        }
-        return null;
-    }
-
     public String getHintType() {
-        String gp = getField() != null ? getField().getGenericParameter() : null;
+        String gp = getTargetElement() != null ?
+              getTargetElement().getGenericParameter() : null;
         if (gp != null) {
             return gp;
         }
@@ -193,14 +174,14 @@ public class JAMDtoFieldAnnotation {
     }
 
     public String getGetterName() {
-        return getGetterName(getElement(), getDtoFieldType());
+        return getGetterName(getElement().getName(), getDtoFieldType());
     }
 
-    public static String getGetterName(JAMDtoAnnotatedElement el, String type) {
+    public static String getGetterName(String name, String type) {
         if (type.equals("boolean")) {
-            return "is" + StringUtils.capitalize(el.getName());
+            return "is" + StringUtils.capitalize(name);
         } else {
-            return "get" + StringUtils.capitalize(el.getName());
+            return "get" + StringUtils.capitalize(name);
         }
     }
 
@@ -208,7 +189,7 @@ public class JAMDtoFieldAnnotation {
     public boolean isNullable() {
         JAMDtoAnnotatedElement[] elements = getTargetElements();
         for (JAMDtoAnnotatedElement each : elements) {
-            String getter = getGetterName(each, each.getType());
+            String getter = getGetterName(each.getName(), each.getType());
             JAMDtoMethod meth = each.getDtoClass().getMethod(getter);
             if (meth == null) return true;
             JAMAnnotation anno = meth.getAnnotation("javax.persistence.Column");
@@ -228,7 +209,7 @@ public class JAMDtoFieldAnnotation {
     public boolean isUnique() {
         JAMDtoAnnotatedElement[] elements = getTargetElements();
         for (JAMDtoAnnotatedElement each : elements) {
-            String getter = getGetterName(each, each.getType());
+            String getter = getGetterName(each.getName(), each.getType());
             JAMDtoMethod meth = each.getDtoClass().getMethod(getter);
             if (meth == null) return false;
             JAMAnnotation anno = meth.getAnnotation("javax.persistence.Column");
@@ -248,7 +229,7 @@ public class JAMDtoFieldAnnotation {
     public Integer getLength() {
         JAMDtoAnnotatedElement field = getTargetElement();
         if (field != null) {
-            String getter = getGetterName(field, field.getType());
+            String getter = getGetterName(field.getName(), field.getType());
             JAMDtoMethod meth = field.getDtoClass().getMethod(getter);
             if (meth == null) return null;
             JAMAnnotation anno = meth.getAnnotation("javax.persistence.Column");
@@ -259,32 +240,35 @@ public class JAMDtoFieldAnnotation {
         return null;
     }
 
+    /** das letzte element im pfad */
     protected JAMDtoAnnotatedElement getTargetElement() {
         JAMDtoAnnotatedElement[] elements = getTargetElements();
         return elements[elements.length - 1];
     }
 
     protected JAMDtoAnnotatedElement[] getTargetElements() {
-        if(targetElements != null) return targetElements;
+        if (targetElements != null) return targetElements;
         List<JAMDtoAnnotatedElement> elements = new ArrayList(2);
         elements.add(element);
         JAMDtoAnnotatedElement field = element;
         String path = getDtoPath();
-        if (path != null) {
-            int idx = path.lastIndexOf('.');
+        while (path != null) {
+            int idx = path.indexOf('.');
             if (idx <= 0) {
                 field = new JAMDtoField(
-                        JAMDtoAnnotatedElement.findField(field.getTypeJClass(), path),
-                        new JAMDtoClass(field.getTypeJClass()));
+                      JAMDtoAnnotatedElement.findField(field.getTypeJClass(), path),
+                      new JAMDtoClass(field.getTypeJClass()));
                 elements.add(field);
+                path = null;
             } else {
-                path = path.substring(0, idx);
+                String next = path.substring(0, idx);
                 JField jf = JAMDtoAnnotatedElement
-                        .findField(field.getDtoClass().getTypeJClass(), path);
+                      .findField(field.getDtoClass().getTypeJClass(), next);
                 if (jf != null) {
                     field = new JAMDtoField(jf, field.getDtoClass());
                     elements.add(field);
                 }
+                path = path.substring(next.length());
             }
         }
         targetElements = elements.toArray(new JAMDtoAnnotatedElement[elements.size()]);
@@ -292,12 +276,19 @@ public class JAMDtoFieldAnnotation {
     }
 
     public boolean isRelationship() {
-        JAMDtoMethod meth = element.getDtoClass().getMethod(getGetterName());
-        return meth != null && getDtoPath() == null && getDtoConverter() == null && (
-                null != meth.getAnnotation("javax.persistence.OneToMany") ||
-                        null != meth.getAnnotation("javax.persistence.ManyToOne") ||
-                        null != meth.getAnnotation("javax.persistence.ManyToMany")||
-                        null != meth.getAnnotation("javax.persistence.OneToOne"));
+        JAMDtoMethod meth;
+        if (getDtoPath() != null) {
+            String aName = getDtoPath().substring(getDtoPath().lastIndexOf('.')+1);
+            meth = getTargetElement().getDtoClass().getMethod(getGetterName(
+                  aName, getTargetElement().getType()));
+        } else {
+            meth = getElement().getDtoClass().getMethod(getGetterName());
+        }
+        return meth != null && getDtoConverter() == null && (
+              null != meth.getAnnotation("javax.persistence.OneToMany") ||
+                    null != meth.getAnnotation("javax.persistence.ManyToOne") ||
+                    null != meth.getAnnotation("javax.persistence.ManyToMany") ||
+                    null != meth.getAnnotation("javax.persistence.OneToOne"));
     }
 
     public String toString() {

@@ -7,6 +7,10 @@ import org.codehaus.jam.JAnnotatedElement;
 import org.codehaus.jam.JClass;
 import org.codehaus.jam.JField;
 import org.codehaus.jam.JMethod;
+import com.sun.javadoc.Type;
+import com.sun.tools.javadoc.FieldDocImpl;
+import com.sun.tools.javadoc.ParameterizedTypeImpl;
+import com.sun.tools.javadoc.MethodDocImpl;
 
 import java.util.StringTokenizer;
 
@@ -66,6 +70,23 @@ public class JAMDtoMethod extends JAMDtoAnnotatedElement {
         }
         if (current == null) return null;
         else return current.getQualifiedName();
+    }
+
+    @Override
+    public String getGenericParameter() {
+        Type genericType = null;
+        // hack: access type of element for generic collections
+        Object artifact = jmethod.getReturnType();
+        if (artifact instanceof MethodDocImpl) {
+            Type type = ((MethodDocImpl) artifact).returnType();
+            if (type instanceof ParameterizedTypeImpl) {
+                Type[] args = ((ParameterizedTypeImpl) type).typeArguments();
+                if (args != null && args.length == 1) {
+                    genericType = args[0];
+                }
+            }
+        }
+        return genericType == null ? null : genericType.toString();
     }
 
     public boolean isEnumType() {

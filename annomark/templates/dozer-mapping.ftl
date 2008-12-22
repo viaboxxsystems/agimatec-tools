@@ -28,9 +28,9 @@
     each.dtoOneWay> type="one-way"</#if><#if
     each.dtoCopyByReference || (each.element.enumType && !each.dtoConverter??)> copy-by-reference="true"</#if>>
         <a<#if each.dtoAddMethod??> set-method="${each.dtoAddMethod}" type="iterate"</#if>>${each.element.name}<#if each.dtoPath??>.${each.dtoPath}</#if></a>
-        <b>${each.dtoName}</b><#if each.hintType?? && each.dtoHintType??>
+        <b>${each.dtoName}</b><#if each.hintType?? && each.dtoBeanType??>
         <a-hint>${each.hintType}</a-hint>
-        <b-hint>${each.dtoHintType}</b-hint></#if>
+        <b-hint>${each.dtoBeanType}</b-hint></#if>
     </field></#if></#list>
   </mapping>
 
