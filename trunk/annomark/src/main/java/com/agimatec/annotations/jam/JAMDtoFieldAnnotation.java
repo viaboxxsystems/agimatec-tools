@@ -75,6 +75,19 @@ public class JAMDtoFieldAnnotation {
         return type == null || type.length() == 0 ? null : type;
     }
 
+    public JAMAnnotation findGetterAnnotation(String annotationName) {
+        if (getElement() instanceof JAMDtoMethod) {
+            return getElement().getAnnotation(annotationName);
+        } else {
+            JAMDtoMethod method = getElement().getDtoClass().findMethod(getGetterName());
+            if (method != null) {
+                return method.getAnnotation(annotationName);
+            }
+        }
+        return null;
+    }
+
+
     /** der element-type des dto-targets, d.h. bei listen der generic-type */
     public String getDtoFieldType() {
         final String type;
@@ -174,7 +187,11 @@ public class JAMDtoFieldAnnotation {
     }
 
     public String getGetterName() {
-        return getGetterName(getElement().getName(), getDtoFieldType());
+        if (getElement() instanceof JAMDtoMethod) {
+            return getElement().getName();
+        } else {
+            return getGetterName(getElement().getName(), getDtoFieldType());
+        }
     }
 
     public static String getGetterName(String name, String type) {
@@ -278,9 +295,9 @@ public class JAMDtoFieldAnnotation {
     public boolean isRelationship() {
         JAMDtoMethod meth;
         if (getDtoPath() != null) {
-            String aName = getDtoPath().substring(getDtoPath().lastIndexOf('.')+1);
-            meth = getTargetElement().getDtoClass().getMethod(getGetterName(
-                  aName, getTargetElement().getType()));
+            String aName = getDtoPath().substring(getDtoPath().lastIndexOf('.') + 1);
+            meth = getTargetElement().getDtoClass()
+                  .getMethod(getGetterName(aName, getTargetElement().getType()));
         } else {
             meth = getElement().getDtoClass().getMethod(getGetterName());
         }
