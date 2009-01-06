@@ -32,7 +32,7 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         JAMAnnotation ja = getDtoAnnotation();
         JAMGenInstruction instruct = JAMDtoGenerator.getCurrentInstruction();
         return stringValue(ja == null ? null : ja.getStringValue("dtoClass"),
-                trimEnding(instruct.getPrefix() + getSimpleName() + instruct.getSuffix()));
+              trimEnding(instruct.getPrefix() + getSimpleName() + instruct.getSuffix()));
     }
 
     /** find first annotated element with method annotation of given type */
@@ -50,8 +50,6 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
     /**
      * find first annotated element (field or method) that has an annotation
      * of the given type
-     * @param annotationName
-     * @return
      */
     public JAMDtoFieldAnnotation findByElementAnnotation(String annotationName) {
         for (JAMDtoFieldAnnotation each : getDtoFieldAnnotations()) {
@@ -185,5 +183,15 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         } while (tokens.hasMoreTokens() && current != null);
         if (current == null) return null;
         else return current.getType().getQualifiedName();
+    }
+
+    public JAMDtoMethod findMethod(String methodName) {
+
+        for (JMethod method : mclass.getMethods()) {
+            if (method.getSimpleName().equals(methodName)) {
+                return new JAMDtoMethod(method, this);
+            }
+        }
+        return null;
     }
 }
