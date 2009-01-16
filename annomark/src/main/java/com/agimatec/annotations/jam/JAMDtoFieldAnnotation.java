@@ -187,11 +187,7 @@ public class JAMDtoFieldAnnotation {
     }
 
     public String getGetterName() {
-        if (getElement() instanceof JAMDtoMethod) {
-            return getElement().getName();
-        } else {
-            return getGetterName(getElement().getName(), getDtoFieldType());
-        }
+        return getGetterName(getElement().getName(), getDtoFieldType());
     }
 
     public static String getGetterName(String name, String type) {
