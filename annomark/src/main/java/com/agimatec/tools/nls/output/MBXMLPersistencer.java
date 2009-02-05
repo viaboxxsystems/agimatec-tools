@@ -5,7 +5,6 @@ import com.agimatec.sql.meta.persistence.ObjectPersistencer;
 import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
-import com.agimatec.tools.nls.model.MBText;
 import com.thoughtworks.xstream.XStream;
 
 import java.io.File;
@@ -31,7 +30,8 @@ public class MBXMLPersistencer implements ObjectPersistencer {
         xstream.processAnnotations(MBBundle.class);
         xstream.processAnnotations(MBBundles.class);
         xstream.processAnnotations(MBEntry.class);
-        xstream.processAnnotations(MBText.class);
+//        xstream.processAnnotations(MBText.class);
+       xstream.registerConverter(new MBTextConverter());
     }
 
     public void save(Object obj, File target) throws IOException {
@@ -50,5 +50,9 @@ public class MBXMLPersistencer implements ObjectPersistencer {
         } finally {
             reader.close();
         }
+    }
+
+    public static XStream getXstream() {
+        return xstream;
     }
 }

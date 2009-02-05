@@ -18,7 +18,7 @@ import java.util.List;
 public class MBEntry {
     @XStreamAsAttribute
     private String key;
-    @XStreamImplicit
+    @XStreamImplicit(itemFieldName = "text")
     private List<MBText> texts = new ArrayList();
 
     public String getKey() {

@@ -25,16 +25,51 @@ public class MessageBundleTaskTest extends TestCase {
         super(name);
     }
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+    public void testMBTextConverter() throws Exception {
+        String xml = "<bundles>\n" +
+              "  <bundle baseName=\"Example\">\n" +
+              "    <entry key=\"key2\">\n" +
+              "      <text locale=\"de\">anderer Wert</text>\n" + "    </entry>\n" +
+              "  </bundle>\n" + "</bundles>";
+        MBBundles bundles0 = (MBBundles) MBXMLPersistencer.getXstream().fromXML(xml);
+        assertEquals("anderer Wert",
+              bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
 
-    public void tearDown() throws Exception {
-        super.tearDown();
+        xml = "<bundles>\n" +
+              "  <bundle baseName=\"Example\">\n" +
+              "    <entry key=\"key2\">\n" +
+              "      <text locale=\"de\">  <value>anderer Wert</value>  </text>\n" +
+              "      <text locale=\"en\"></text>\n" + "    </entry>\n" +
+              "  </bundle>\n" + "</bundles>";
+        bundles0 = (MBBundles) MBXMLPersistencer.getXstream().fromXML(xml);
+        assertEquals("anderer Wert",
+              bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
+
+        MBBundles bundles = createBundles();
+        xml = MBXMLPersistencer.getXstream().toXML(bundles);
+        MBBundles bundles2 = (MBBundles) MBXMLPersistencer.getXstream().fromXML(xml);
+        assertEquals(1, bundles2.getBundles().size());
+        MBBundle bundle = bundles2.getBundles().get(0);
+        assertEquals(2, bundle.getEntries().size());
+        MBEntry entry = bundle.getEntries().get(0);
+        assertEquals("key1", entry.getKey());
+        assertEquals(2, entry.getTexts().size());
+        MBText text = entry.getText("en");
+        assertEquals("An example", text.getValue());
     }
 
     public void testSaveExampleXML() throws Exception
     {
+        MBBundles bundles = createBundles();
+
+        MBXMLPersistencer p = new MBXMLPersistencer();
+        p.save(bundles, new File("target/example.xml"));
+
+        MBJSONPersistencer p2 = new MBJSONPersistencer(true);
+        p2.save(bundles, new File("target/example-json.js"));
+    }
+
+    private MBBundles createBundles() {
         MBBundles bundles = new MBBundles();
         MBBundle bundle = new MBBundle();
         bundle.setBaseName("Example");
@@ -60,17 +95,10 @@ public class MessageBundleTaskTest extends TestCase {
         bundle.getEntries().add(entry);
 
         bundles.getBundles().add(bundle);
-
-        MBXMLPersistencer p = new MBXMLPersistencer();
-        p.save(bundles, new File("target/example.xml"));
-
-        MBJSONPersistencer p2 = new MBJSONPersistencer(true);
-        p2.save(bundles, new File("target/example-json.js"));
+        return bundles;
     }
 
     public void testGenerate() throws Exception {
-
-
         MessageBundleTask task = new MessageBundleTask();
         task.setProject(new Project());
         task.setBundles( "example/example.xml");
