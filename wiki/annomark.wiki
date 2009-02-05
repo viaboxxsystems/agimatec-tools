@@ -45,17 +45,11 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
 <bundles>
   <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
     <entry key="key1">
-      <text locale="de">
-        <value>Beispieltext mit ÄÖÜ</value>
-      </text>
-      <text locale="en">
-        <value>An example</value>
-      </text>
+      <text locale="de">Beispieltext mit ÄÖÜ</text>
+      <text locale="en">An example</text>
     </entry>
     <entry key="key2">
-      <text locale="de">
-        <value>anderer Wert</value>
-      </text>
+      <text locale="de">anderer Wert</text>
     </entry>
   </bundle>
 </bundles>
