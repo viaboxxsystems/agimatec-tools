@@ -1,8 +1,5 @@
 package com.agimatec.tools.nls.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-
 /**
  * Description: <br/>
  * User: roman.stumm <br/>
@@ -10,9 +7,9 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * Time: 15:22:00 <br/>
  * Copyright: Agimatec GmbH
  */
-@XStreamAlias("text")
+//@XStreamAlias("text")
 public class MBText {
-    @XStreamAsAttribute
+//    @XStreamAsAttribute
     private String locale;
     private String value;
 
