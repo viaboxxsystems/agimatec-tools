@@ -18,6 +18,7 @@ import java.util.List;
 public class MBEntry {
     @XStreamAsAttribute
     private String key;
+    private String description;  // comment field
     @XStreamImplicit(itemFieldName = "text")
     private List<MBText> texts = new ArrayList();
 
@@ -27,6 +28,14 @@ public class MBEntry {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<MBText> getTexts() {
