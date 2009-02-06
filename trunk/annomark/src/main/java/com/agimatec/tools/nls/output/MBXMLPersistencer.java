@@ -1,7 +1,6 @@
 package com.agimatec.tools.nls.output;
 
 import com.agimatec.commons.util.FileUtils;
-import com.agimatec.sql.meta.persistence.ObjectPersistencer;
 import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
@@ -19,7 +18,7 @@ import java.io.Writer;
  * Time: 15:25:25 <br/>
  * Copyright: Agimatec GmbH
  */
-public class MBXMLPersistencer implements ObjectPersistencer {
+public class MBXMLPersistencer {
     static final XStream xstream = new XStream();
     
     static {
