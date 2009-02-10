@@ -57,4 +57,13 @@ public class MBBundle {
         this.sqldomain = sqldomain;
     }
 
+    public MBEntry getEntry(String key) {
+        for (MBEntry each : entries) {
+            if ((key == null && each.getKey() == null) ||
+                  (key != null && key.equals(each.getKey()))) {
+                return each;
+            }
+        }
+        return null; // not found
+    }
 }

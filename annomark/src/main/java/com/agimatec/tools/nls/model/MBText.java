@@ -8,10 +8,12 @@ package com.agimatec.tools.nls.model;
  * Copyright: Agimatec GmbH
  */
 //@XStreamAlias("text")
-public class MBText {
+public class MBText implements Comparable {
 //    @XStreamAsAttribute
     private String locale;
     private String value;
+//   @XStreamAsAttribute    
+    private boolean review;
 
     public String getLocale() {
         return locale == null ? "" : locale;
@@ -27,5 +29,24 @@ public class MBText {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean isReview() {
+        return review;
+    }
+
+    public void setReview(boolean review) {
+        this.review = review;
+    }
+
+    public int compareTo(Object o) {
+        MBText other = (MBText) o;
+        if(locale == null) return 0;
+        int dif = locale.compareTo(other.getLocale());
+        if(dif == 0 && value != null) {
+            return value.compareTo(other.getValue());
+        } else {
+            return dif;
+        }
     }
 }

@@ -21,6 +21,9 @@ final class MBTextConverter implements Converter {
         if (text.getLocale() != null) {
             writer.addAttribute("locale", text.getLocale());
         }
+        if(text.isReview()) {
+            writer.addAttribute("review", "true");
+        }
         if (text.getValue() != null) {
             writer.setValue(text.getValue());
         }
@@ -30,6 +33,7 @@ final class MBTextConverter implements Converter {
                             UnmarshallingContext context) {
         MBText text = new MBText();
         text.setLocale(reader.getAttribute("locale"));
+        text.setReview(Boolean.parseBoolean(reader.getAttribute("review")));
         text.setValue(reader.getValue());
         /* BEGIN backward compatibility: <text><value>something</value></text> */
         if(reader.hasMoreChildren()) {
