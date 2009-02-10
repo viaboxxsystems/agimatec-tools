@@ -25,5 +25,14 @@ public class MBBundles {
     public void setBundles(List<MBBundle> bundles) {
         this.bundles = bundles;
     }
-    
+
+    public MBBundle getBundle(String baseName) {
+        for (MBBundle each : bundles) {
+            if ((baseName == null && null == each.getBaseName()) ||
+                  (baseName != null && baseName.equals(each.getBaseName()))) {
+                return each;
+            }
+        }
+        return null;
+    }
 }

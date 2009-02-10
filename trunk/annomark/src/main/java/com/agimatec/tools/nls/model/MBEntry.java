@@ -48,7 +48,7 @@ public class MBEntry {
 
     public MBText getText(String locale) {
         for (MBText text : getTexts()) {
-            if (text.getLocale().equals(locale)) {
+            if (locale != null && locale.equals(text.getLocale())) {
                 return text;
             }
         }
