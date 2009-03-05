@@ -15,7 +15,7 @@ http://agimatec-tools.googlecode.com/svn/wiki/agimatec-tools-c.jpg
 _*Hint:* the entity classes with javax.persistence-annotations can be generated 
 with the CatalogGeneratorTool from your sql schema (template ejb3-prototype.ftl)._
 
-Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . If appreciate your ideas and input to enhance "annomark".
+Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . We appreciate your ideas and input to enhance "annomark".
 
 = Annomark =
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
