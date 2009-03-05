@@ -33,10 +33,12 @@ _*Hints:*_
 
 Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (with maven-antrun-plugin).
 
-  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MessageBundleTask.html  MessageBundleTask]
-  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/Property2XMLConverterTask.html Property2XMLConverterTask]
-  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MergeLocaleTask.html MergeLocaleTask]
-  * [http://www.agimatec.de/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/AddLocaleTask.html AddLocaleTask]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MessageBundleTask.html  MessageBundleTask]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/Property2XMLConverterTask.html Property2XMLConverterTask]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/MergeLocaleTask.html MergeLocaleTask]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/AddLocaleTask.html AddLocaleTask]
+
+
 
 == Example ==
 
