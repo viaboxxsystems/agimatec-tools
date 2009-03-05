@@ -155,7 +155,8 @@ public class FreemarkerFileGenerator {
      */
     public void outputToNull() throws IOException {
         Writer former = Environment.getCurrentEnvironment().getOut();
-        former.flush();
+        former.flush(); // must not close, because the former writer is still
+        // referenced in the stack and used to write pending 'nothings'
         Environment.getCurrentEnvironment().setOut(NullWriter);
     }
 
@@ -168,6 +169,7 @@ public class FreemarkerFileGenerator {
         Environment env = Environment.getCurrentEnvironment();
         Writer former = env.getOut();
         former.flush(); // must not close, because the former writer is still
+        // referenced in the stack and used to write pending 'nothings'
         env.setOut(outWriter);
     }
 
