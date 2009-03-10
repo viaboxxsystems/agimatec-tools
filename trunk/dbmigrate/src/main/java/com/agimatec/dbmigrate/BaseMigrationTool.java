@@ -50,7 +50,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     public BaseMigrationTool() {
     }
 
-    protected void setUp() {
+    public void setUp() {
         MapNode versionMeta = (MapNode) getMigrateConfig().get("version-meta");
         if (versionMeta != null) {
             dbVersionMeta.setTableName(versionMeta.getString("table"));
