@@ -1,7 +1,9 @@
 package com.agimatec.utility.fileimport;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.agimatec.utility.fileimport.spreadsheet.Cell;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Description: subclass that gets the field names from the first header line
@@ -27,13 +29,27 @@ public class LineImporterSpecAutoFields extends LineImporterSpec {
      * separated by the same separator as the data lines.
      */
     @Override
-    public void processHeaderLine(LineImportProcessor processor) throws ImporterException {
-        LineTokenizer tokens = getLineTokenizerFactory().createTokenizer(processor.getHeaderLine());
-        List<String> fieldNames = new ArrayList();
+    public void processHeaderLine(LineImportProcessor processor)
+          throws ImporterException {
+        LineTokenizer tokens =
+              getLineTokenizerFactory().createTokenizer(processor.getHeaderLine());
+        Map<Integer, String> fieldNames = new HashMap();
+        int fieldIdx = -1;
+        int maxFieldIdx = 0;
         while (tokens.hasMoreElements()) {
             final Object val = tokens.nextElement();
-            fieldNames.add(val == null ? null : String.valueOf(val));
+            if (val instanceof Cell) {
+                fieldIdx = ((Cell) val).getCellNum(); // hack: gaps possible
+            } else {
+                fieldIdx++;
+            }
+            fieldNames.put(fieldIdx, val == null ? null : String.valueOf(val));
+            if (fieldIdx > maxFieldIdx) maxFieldIdx = fieldIdx;
         }
-        setFieldNames(fieldNames.toArray(new String[fieldNames.size()]));
+        String[] fieldNamesArr = new String[maxFieldIdx+1];
+        for(int i=0;i<=maxFieldIdx;i++) {
+            fieldNamesArr[i] = fieldNames.get(i);
+        }
+        setFieldNames(fieldNamesArr);
     }
 }

@@ -1,5 +1,7 @@
 package com.agimatec.utility.fileimport;
 
+import com.agimatec.utility.fileimport.spreadsheet.Cell;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
@@ -97,7 +99,7 @@ public class LineImportProcessor extends ImporterProcessor {
         currentRow = new HashMap();
         LineTokenizer parser = spec.getLineTokenizerFactory().createTokenizer(aRecord);
         Object singleValue;
-        int fieldIdx = 0;
+        int fieldIdx = -1;
         while (parser.hasMoreElements()) {
             singleValue = parser.nextElement();
             if (parser.isLineIncomplete()) {
@@ -108,7 +110,12 @@ public class LineImportProcessor extends ImporterProcessor {
                     }
                 } while (parser.isLineIncomplete() && aRecord != null);
             }
-            setFieldValue(fieldIdx++, singleValue);
+            if(singleValue instanceof Cell) {
+                fieldIdx = ((Cell)singleValue).getCellNum();
+            } else {
+                fieldIdx++;
+            }
+            setFieldValue(fieldIdx, singleValue);
         }
         return currentRow;
     }
