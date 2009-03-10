@@ -4,6 +4,7 @@ import com.agimatec.utility.fileimport.ImporterException;
 import com.agimatec.utility.fileimport.LineImportProcessor;
 import com.agimatec.utility.fileimport.LineImporterSpecAutoFields;
 import groovy.lang.Closure;
+import org.codehaus.groovy.runtime.InvokerInvocationException;
 
 /**
  * Description: This subclass makes it easy in a groovy script to
@@ -51,6 +52,14 @@ public class LineImporterSpecGroovy extends LineImporterSpecAutoFields {
 
     @Override
     public void processRow(LineImportProcessor processor) throws ImporterException {
-        rowProcessing.call(processor);
+        try {
+            rowProcessing.call(processor);
+        } catch(InvokerInvocationException ex) {
+            if(ex.getCause() instanceof ImporterException) {
+                throw (ImporterException)ex.getCause();
+            }
+        } catch(RuntimeException ex) {
+            throw ex;
+        }
     }
 }
