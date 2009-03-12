@@ -44,7 +44,11 @@ public class JAMTestMethod extends JAMTestAnnotatedElement {
     }
 
     public String getName() {
-        return StringUtils.uncapitalize(jmethod.getSimpleName().substring(3));
+        int offset = 3;
+        if (getType().equals("boolean") && jmethod.getSimpleName().startsWith("is")) {
+            offset = 2;
+        }
+        return StringUtils.uncapitalize(jmethod.getSimpleName().substring(offset));
     }
 
     public String getType() {
