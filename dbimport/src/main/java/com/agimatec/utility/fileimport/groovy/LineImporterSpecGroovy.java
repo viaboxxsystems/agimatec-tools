@@ -57,9 +57,9 @@ public class LineImporterSpecGroovy extends LineImporterSpecAutoFields {
         } catch(InvokerInvocationException ex) {
             if(ex.getCause() instanceof ImporterException) {
                 throw (ImporterException)ex.getCause();
+            } else {
+                throw ex;
             }
-        } catch(RuntimeException ex) {
-            throw ex;
         }
     }
 }
