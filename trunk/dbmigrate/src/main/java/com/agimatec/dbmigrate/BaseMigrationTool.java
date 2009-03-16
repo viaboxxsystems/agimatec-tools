@@ -60,7 +60,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         terminateTransactions();
         disconnectDatabase();
     }
