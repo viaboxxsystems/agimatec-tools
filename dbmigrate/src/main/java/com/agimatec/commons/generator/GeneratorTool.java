@@ -4,6 +4,7 @@ import freemarker.template.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Description: Abstract superclass for tools that invoke freemarker templates for
@@ -33,16 +34,22 @@ public abstract class GeneratorTool {
         this.settings = settings;
         dbms = settings.getDbms();
         templateEngine = new FreemarkerFileGenerator(
-                new File(settings.getTemplateDir() + "/" + dbms));
+              new File(settings.getTemplateDir() + "/" + dbms));
         templateEngine.putModel("catalog", settings.getCatalog());
         if (getConfig() != null) templateEngine.putModel("config", getConfig());
         templateEngine.putModel("dbms", dbms);
+        if (settings.getProperties() != null && !settings.getProperties().isEmpty()) {
+            for (Map.Entry<String, String> entry : settings.getProperties()
+                  .entrySet()) {
+                templateEngine.putModel(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     protected abstract Object getConfig();
 
     protected abstract void readConfig(File file)
-            throws IOException, ClassNotFoundException;
+          throws IOException, ClassNotFoundException;
 
     protected String getDestFile(String templateBaseName) {
         return templateBaseName + "-" + dbms + ".sql";
@@ -51,7 +58,7 @@ public abstract class GeneratorTool {
     public void runMain(String[] args, GeneratorSettings settings) throws Exception {
         if (!settings.parseArgs(args)) return;
         readConfig(settings.getConfigFile() == null ? null :
-                new File(settings.getConfigFile()));
+              new File(settings.getConfigFile()));
         initialize(settings);
         for (String template : settings.getTemplates()) {
             generate(template);
