@@ -29,6 +29,20 @@ java com.agimatec.dbtransform.CatalogGeneratorTool
   * -outputCatalog File to write output catalog to.
   * -outputPrefix Prefix for the File(s) written by templates.
   * -outputSuffix Suffix for the File(s) written by templates.
+  * +key=value	A property key and value that the template can access with ${key}
+    Example: +tablespace=TEMP      in template: ${tablespace}  
+   You can provide multiple properties to the template this way.
+
+=== Accessing static methods inside the freemarker template  ===
+The template can access a predefined property "statics" to invoke static methods.
+See freemarker documentation for further details.
+
+Example: prints milliseconds into template by invoking System.currentTimeMillis();
+{{{
+${statics["java.lang.System"].currentTimeMillis()}
+}}}
+
+Property statics is BeansWrapper.getDefaultInstance().getStaticModels().
 
 = Example =
 
