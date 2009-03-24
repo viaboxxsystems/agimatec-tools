@@ -1,6 +1,7 @@
 package com.agimatec.commons.generator;
 
 import freemarker.core.Environment;
+import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -38,6 +39,7 @@ public class FreemarkerFileGenerator {
             freemarker.setDirectoryForTemplateLoading(templateDir);
         }
         putModel("generator", this);
+        root.put("statics", BeansWrapper.getDefaultInstance().getStaticModels());
     }
 
     public void setTemplateName(String templateName) {

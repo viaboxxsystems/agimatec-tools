@@ -38,9 +38,13 @@ public class CatalogGeneratorTool extends GeneratorTool {
 
     @Override
     protected String getDestFile(String templateBaseName) {
-        return ((CatalogGeneratorSettings) settings).getOutputPrefix() +
+        return getSettings().getOutputPrefix() +
                 templateBaseName + "-" + dbms +
-                ((CatalogGeneratorSettings) settings).getOutputSuffix();
+                getSettings().getOutputSuffix();
+    }
+
+    private CatalogGeneratorSettings getSettings() {
+        return ((CatalogGeneratorSettings) settings);
     }
 
     protected File getCatalogFile(String destDir, String templateBaseName) {

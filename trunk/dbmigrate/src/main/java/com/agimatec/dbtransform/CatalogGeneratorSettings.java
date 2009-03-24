@@ -36,7 +36,6 @@ public class CatalogGeneratorSettings extends GeneratorSettings {
         return super.parseArgs(args);
     }
 
-
     public String getCatalogFile() {
         return catalogFile;
     }
@@ -65,8 +64,10 @@ public class CatalogGeneratorSettings extends GeneratorSettings {
     protected void printUsage() {
         super.printUsage();
         System.out.println("\t-outputCatalog\t File to write output catalog to.");
-        System.out.println("\t-outputPrefix\t Prefix for the File(s) written by templates.");
-        System.out.println("\t-outputSuffix\t Suffix for the File(s) written by templates.");
+        System.out
+              .println("\t-outputPrefix\t Prefix for the File(s) written by templates.");
+        System.out
+              .println("\t-outputSuffix\t Suffix for the File(s) written by templates.");
     }
 
 }

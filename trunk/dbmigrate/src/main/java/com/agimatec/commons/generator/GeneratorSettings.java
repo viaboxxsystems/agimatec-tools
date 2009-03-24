@@ -7,7 +7,9 @@ import com.agimatec.sql.meta.persistence.XStreamPersistencer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description: abstract superclass for a settings class of tools
@@ -28,6 +30,7 @@ public abstract class GeneratorSettings {
     protected List<String> templates = new ArrayList();
     protected CatalogDescription catalog = null;
     protected boolean noOutputFile = false;
+    private Map<String, String> properties = new HashMap();
 
     public boolean parseArgs(String[] args) throws IOException, ClassNotFoundException {
         for (int i = 0; i < args.length; i++) {
@@ -55,10 +58,22 @@ public abstract class GeneratorSettings {
                 templates.add(args[++i]);
             } else if ("-catalog".equalsIgnoreCase(arg)) {
                 loadCatalog(args[++i]);
+            } else if (arg.length() > 1 && arg.startsWith("+")) {
+                String keyValue = arg.substring(1);
+                int idx = arg.indexOf("=");
+                if (idx > 0) {
+                    String key = keyValue.substring(0, idx-1);
+                    String value = keyValue.substring(idx);
+                    properties.put(key, value);
+                }
             }
         }
         checkValid();
         return true;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
     public boolean isNoOutputFile() {
@@ -113,6 +128,8 @@ public abstract class GeneratorSettings {
                 "\t-ftl\t (required) can appear multiple times. the template base name (without .ftl suffix)");
         System.out.println(
                 "\t-destdir\t (optional) default: target. Directory to write output files to.");
+        System.out.println(
+              "\t+key=value\tA property key and value that the template can access with ${key}");
     }
 
     public String getConfigFile() {
