@@ -49,11 +49,16 @@ public final class ConditionalScriptVisitor extends ScriptVisitorDelegate {
             MapQuery q = new MapQuery(condition);
             expressionStack.push(condition);
             conditionStack.push(Boolean.valueOf(q.doesMatch(getEnvironment())));
-            log.info("FOUND Condition: (" + q.toString() + ") = " + conditionStack.peek());
+            log.info(
+                  "FOUND Condition: (" + q.toString() + ") = " + conditionStack.peek());
         } else if (theComment.indexOf("#endif") >= 0) {
-            log.info("END of Condition: (" + expressionStack.peek() + ")");
-            conditionStack.pop();
-            expressionStack.pop();
+            if (expressionStack.isEmpty()) {
+                log.error(theComment + " ---> #endif without #if!");
+            } else {
+                log.info("END of Condition: (" + expressionStack.peek() + ")");
+                conditionStack.pop();
+                expressionStack.pop();
+            }
         }
     }
 
@@ -96,7 +101,7 @@ public final class ConditionalScriptVisitor extends ScriptVisitorDelegate {
         } else {
             if (log.isInfoEnabled()) {
                 log.info("statement: '" + statement + "' - ignored because: " +
-                        conditionCause());
+                      conditionCause());
             }
             return 0;
         }
