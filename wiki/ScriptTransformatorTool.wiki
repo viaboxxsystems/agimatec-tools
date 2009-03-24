@@ -37,6 +37,21 @@ java com.agimatec.dbtransform.ScriptTransformatorTool
   * -targetDir (mandatory) dir to write output scripts to, e.g. oracle/upgrade
   * -fromDbms  (optional) the source DBMS used to parse the scripts in 'fromDir', default: postgres
   * -overwrite (optional) overwrite target scripts (default: false), true/false  
+  * +key=value	A property key and value that the template can access with ${key}
+    Example: +tablespace=TEMP      in template: ${tablespace}  
+   You can provide multiple properties to the template this way.
+
+=== Accessing static methods inside the freemarker template  ===
+The template can access a predefined property "statics" to invoke static methods.
+See freemarker documentation for further details.
+
+Example: prints milliseconds into template by invoking System.currentTimeMillis();
+{{{
+${statics["java.lang.System"].currentTimeMillis()}
+}}}
+
+Property statics is BeansWrapper.getDefaultInstance().getStaticModels().
+You could use this technique to access System.getProperty().
 
 = Example =
 
