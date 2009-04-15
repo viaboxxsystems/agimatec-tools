@@ -2,6 +2,7 @@ package com.agimatec.sql.script;
 
 import com.agimatec.commons.util.ClassUtils;
 import com.agimatec.commons.util.PropertyReplacer;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,17 +50,17 @@ public class SQLScriptParser {
     private static final String SEMICOLON = ";";
     private static final String SLASH = "/";
     private static final String[] PROCEDURE_OR_TRIGGER = new String[]{"begin", "declare",
-            "cursor"}; // keywords to detect a SQL ended by / only
+          "cursor"}; // keywords to detect a SQL ended by / only
 
     private static final String[] SQL_SEPARATORS;
 
     static {
         String[] seps = new String[]{SEMICOLON, "\r", "\n", LITERAL,
-                COMMENT_MULTILINE_BEGIN, COMMENT_LINE, " ", "\t"};
+              COMMENT_MULTILINE_BEGIN, COMMENT_LINE, " ", "\t"};
         SQL_SEPARATORS = new String[seps.length + PROCEDURE_OR_TRIGGER.length];
         System.arraycopy(seps, 0, SQL_SEPARATORS, 0, seps.length);
         System.arraycopy(PROCEDURE_OR_TRIGGER, 0, SQL_SEPARATORS, seps.length,
-                PROCEDURE_OR_TRIGGER.length);
+              PROCEDURE_OR_TRIGGER.length);
     }
 
     private static final String[] PROCEDURE_SEPARATORS = {"\n", "\r"};
@@ -121,35 +122,6 @@ public class SQLScriptParser {
     }
 
     /**
-     * execute the content of a file as a single SQL statement.
-     * You can use this, when you need not parse the file or when the file cannot be parsed.
-     * Example: use this to execute a PL/SQL package, that is stored in a single file (1 file for the spec,
-     * 1 file for the body).
-     */
-    public void execSQLScript(ScriptVisitor visitor, String scriptName)
-            throws IOException, SQLException {
-        String path = (getScriptDir() != null) ? getScriptDir() + scriptName : scriptName;
-        if (getLog().isInfoEnabled()) {
-            getLog().info("Reading and executing " + path + " ... ");
-        }
-        String statement =
-                org.apache.commons.io.FileUtils.readFileToString(new File(path), null);
-        statement = finish(statement);
-        statement = fixLF(statement);
-        try {
-            int affected = visitor.visitStatement(statement);
-            if (affected > 0) {
-                handleAffectedRow(affected, statement);
-            }
-        } catch (SQLException ex) {
-            handleError(ex, statement);
-        }
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + path);
-        }
-    }
-
-    /**
      * Tested with: Oracle10.2
      * fix \r\n --> \n                (always, otherwise the package will be invalid)
      * remove last / but keep last ; (optional, only if a / was found after a ;)
@@ -173,20 +145,12 @@ public class SQLScriptParser {
      * @throws IOException  - error accessing the script file (e.g. FileNotFound)
      */
     public void iterateSQLScript(ScriptVisitor visitor, String scriptName)
-            throws SQLException, IOException {
-        final Reader input;
-        final String path;
-        if (scriptName.startsWith("cp://")) {
-            URL ress = ClassUtils.getClassLoader().getResource(scriptName.substring(5));
-            path = ress.toExternalForm();
-            input = new InputStreamReader(ress.openStream());
-        } else {
-            path =
-                    (getScriptDir() != null) ? getScriptDir() + scriptName : scriptName;
-            if (getLog().isInfoEnabled()) {
+          throws SQLException, IOException {
+        Object[] readerPath = openReaderPath(scriptName);
+        final Reader input = (Reader) readerPath[0];
+        final String path = (String) readerPath[1];
+        if (getLog().isInfoEnabled()) {
                 getLog().info("Parsing " + path + " ... ");
-            }
-            input = new BufferedReader(new FileReader(new File(path)));
         }
         try {
             iterateSQL(visitor, input);
@@ -199,6 +163,58 @@ public class SQLScriptParser {
     }
 
     /**
+     * execute the content of a file as a single SQL statement.
+     * You can use this, when you need not parse the file or when the file cannot be parsed.
+     * Example: use this to execute a PL/SQL package, that is stored in a single file (1 file for the spec,
+     * 1 file for the body).
+     */
+    public void execSQLScript(ScriptVisitor visitor, String scriptName)
+          throws IOException, SQLException {
+        Object[] readerPath = openReaderPath(scriptName);
+        final Reader input = (Reader) readerPath[0];
+        final String path = (String) readerPath[1];
+        if (getLog().isInfoEnabled()) {
+            getLog().info("Reading and executing " + path + " ... ");
+        }
+        String statement = IOUtils.toString(input);
+        statement = finish(statement);
+        statement = fixLF(statement);
+        try {
+            int affected = visitor.visitStatement(statement);
+            if (affected > 0) {
+                handleAffectedRow(affected, statement);
+            }
+        } catch (SQLException ex) {
+            handleError(ex, statement);
+        }
+        if (getLog().isInfoEnabled()) {
+            getLog().info("DONE with " + path);
+        }
+    }
+
+    /**
+     * when scriptName starts with cp:// read the scriptName as a resource
+     * from the classpath, otherwise access the script as a file by
+     * scriptdir + scriptname.
+     * @param scriptName
+     * @return an array with 2 elements. array[0] = Reader, array[1] = String (Path) 
+     * @throws IOException - file not found
+     */
+    protected Object[] openReaderPath(String scriptName) throws IOException {
+        final Reader input;
+        final String path;
+        if (scriptName.startsWith("cp://")) {
+            URL ress = ClassUtils.getClassLoader().getResource(scriptName.substring(5));
+            path = ress.toExternalForm();
+            input = new InputStreamReader(ress.openStream());
+        } else {
+            path = (getScriptDir() != null) ? getScriptDir() + scriptName : scriptName;
+            input = new BufferedReader(new FileReader(new File(path)));
+        }
+        return new Object[]{input, path};
+    }
+
+    /**
      * parse an visit the statements in the given sql-script file.
      *
      * @param url - a complete URL (absolute URL) where the script is
@@ -206,7 +222,7 @@ public class SQLScriptParser {
      * @throws IOException  - error accessing the script file (e.g. FileNotFound)
      */
     public void iterateSQLScript(ScriptVisitor visitor, URL url)
-            throws SQLException, IOException {
+          throws SQLException, IOException {
         if (getLog().isInfoEnabled()) {
             getLog().info("Parsing " + url + " ... ");
         }
@@ -234,7 +250,7 @@ public class SQLScriptParser {
      * @throws java.sql.SQLException
      */
     public void iterateSQL(ScriptVisitor visitor, String aSqls)
-            throws SQLException, IOException {
+          throws SQLException, IOException {
         Reader input = new StringReader(aSqls);
         iterateSQL(visitor, input);
     }
@@ -251,18 +267,18 @@ public class SQLScriptParser {
      * @throws java.sql.SQLException
      */
     public void iterateSQL(ScriptVisitor visitor, Reader input)
-            throws SQLException, IOException {
+          throws SQLException, IOException {
         parseSQL(new ParseState(visitor), input);
     }
 
     /* other parse loop */
     private void parseSQL(final ParseState state, final Reader input)
-            throws IOException, SQLException {
+          throws IOException, SQLException {
         final WordTokenizer tokens =
-                new WordTokenizer(input, SQL_SEPARATORS, true, false);
+              new WordTokenizer(input, SQL_SEPARATORS, true, false);
         String token = tokens.nextToken();
         int procMode =
-                1; // 1 = sep. before (prepare pro), 2 = "BEGIN" detected afterwards, 0 = other (no proc)
+              1; // 1 = sep. before (prepare pro), 2 = "BEGIN" detected afterwards, 0 = other (no proc)
         while (token != null) {
             if (LITERAL.equals(token)) {
                 procMode = 0;
@@ -292,7 +308,7 @@ public class SQLScriptParser {
                 state.visitSql();
                 procMode = 1;
             } else if (ArrayUtils
-                    .indexOf(PROCEDURE_OR_TRIGGER, token.toLowerCase(), 0) >= 0) {
+                  .indexOf(PROCEDURE_OR_TRIGGER, token.toLowerCase(), 0) >= 0) {
                 state.appendCurrentSql(token);
                 if (procMode == 1) {
                     procMode = 2;
@@ -319,14 +335,14 @@ public class SQLScriptParser {
     }
 
     private void detectProcedure(ParseState state, WordTokenizer tokens)
-            throws SQLException, IOException {
+          throws SQLException, IOException {
         parseProcedure(state, tokens);
         tokens.setSeparators(SQL_SEPARATORS);
     }
 
     /* parse trigger, procedure, function (all that end with / and may contains comments etc) */
     private void parseProcedure(ParseState state, WordTokenizer tokens)
-            throws IOException, SQLException {
+          throws IOException, SQLException {
         tokens.setSeparators(PROCEDURE_SEPARATORS);
         String token = tokens.nextToken();
         while (token != null) {  /* include comments. do not extract them */
@@ -347,11 +363,11 @@ public class SQLScriptParser {
     }
 
     private void parseCommentMultiLine(ParseState state, WordTokenizer parent)
-            throws IOException, SQLException {
-        WordTokenizer tokens = new WordTokenizer(parent,
-                new String[]{COMMENT_MULTILINE_END}, false, true);
+          throws IOException, SQLException {
+        WordTokenizer tokens =
+              new WordTokenizer(parent, new String[]{COMMENT_MULTILINE_END}, false, true);
         state.visitor.visitComment(COMMENT_MULTILINE_BEGIN + finish(tokens.nextToken()) +
-                COMMENT_MULTILINE_END);
+              COMMENT_MULTILINE_END);
         state.needsBlank = true;
         tokens.setReturnTokens(true);
         tokens.nextToken();
@@ -359,9 +375,9 @@ public class SQLScriptParser {
     }
 
     private void parseCommentLine(ParseState state, WordTokenizer parent)
-            throws IOException, SQLException {
+          throws IOException, SQLException {
         WordTokenizer tokens =
-                new WordTokenizer(parent, new String[]{"\n", "\r"}, true, true);
+              new WordTokenizer(parent, new String[]{"\n", "\r"}, true, true);
         state.visitor.visitComment(COMMENT_LINE + finish(tokens.nextToken()));
         state.needsBlank = true;
         parent.continueFrom(tokens);
@@ -373,7 +389,7 @@ public class SQLScriptParser {
      */
     private int parseLiteral(ParseState state, WordTokenizer parent) throws IOException {
         WordTokenizer tokens =
-                new WordTokenizer(parent, new String[]{LITERAL}, true, true);
+              new WordTokenizer(parent, new String[]{LITERAL}, true, true);
         try {
             String token = tokens.nextToken();
             while (token != null) {
@@ -428,7 +444,7 @@ public class SQLScriptParser {
 
         void appendSql(String token) {
             if (needsBlank && sqlBuf.length() > 0 &&
-                    sqlBuf.charAt(sqlBuf.length() - 1) != ' ' && token.charAt(0) != ' ') {
+                  sqlBuf.charAt(sqlBuf.length() - 1) != ' ' && token.charAt(0) != ' ') {
                 sqlBuf.append(' ');
             }
             needsBlank = false;
