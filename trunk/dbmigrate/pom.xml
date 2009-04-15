@@ -61,11 +61,13 @@
     <dependency>
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.dbunit</groupId>
       <artifactId>dbunit</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -77,6 +79,7 @@
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <build>
