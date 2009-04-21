@@ -19,8 +19,9 @@ public class ImportControl implements Serializable {
    protected ImportState status;
    protected Integer rowCount;
    protected Integer errorCount;
-   protected String description;  // optional. description.
+   protected String description;  // optional. description of the import. provided by user.
    protected String fileName; // optional. source file name.
+   protected String errorMessage; // optional. provided by server on failure.
 
     public Timestamp getEndTime() {
         return endTime;
@@ -92,5 +93,14 @@ public class ImportControl implements Serializable {
 
     public void setStatus(ImportState status) {
         this.status = status;
+    }
+
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

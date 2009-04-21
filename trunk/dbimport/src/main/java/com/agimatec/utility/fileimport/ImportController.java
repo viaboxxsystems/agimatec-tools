@@ -26,7 +26,7 @@ public class ImportController {
     protected String selectAll, selectByName, selectById;
     protected String insert;
     protected String lockByName;
-    protected String end;
+    protected String update;
     protected String deleteByName, deleteById;
 
     private void initStatements() {
@@ -44,8 +44,8 @@ public class ImportController {
         insert =
                 "INSERT INTO Import_Control (start_time, end_time, status, import_name, description, file_name, import_id) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        end =
-                "UPDATE Import_Control SET end_time = ?, status = ?, row_count = ?, error_count = ? WHERE import_id = ?";
+        update =
+                "UPDATE Import_Control SET end_time = ?, status = ?, row_count = ?, error_count = ?, error_message = ? WHERE import_id = ?";
         deleteByName = "DELETE FROM Import_Control WHERE Import_Name = ?";
         deleteById = "DELETE FROM Import_Control WHERE Import_Id = ?";
     }
@@ -201,6 +201,27 @@ public class ImportController {
         return imp.getImportId();
     }
 
+    /**
+     * update status, rowCount, errorCount during running import.
+     * @param imp
+     * @throws SQLException
+     */
+    public void update(ImportControl imp) throws SQLException {
+       PreparedStatement updateStmt = connection.prepareStatement(update);
+        try {
+            setUpdateParameters(updateStmt, imp);
+            if (updateStmt.executeUpdate() == 0) {
+                insert(imp);
+                setUpdateParameters(updateStmt, imp);
+                if (imp.rowCount != null || imp.errorCount != null) {
+                    updateStmt.executeUpdate();
+                }
+            }
+        } finally {
+            updateStmt.close();
+        }
+    }
+
     private void insert(ImportControl imp) throws SQLException {
         if (imp.importId == 0) {
             imp.importId = sqlUtil.nextVal(connection, "import_id");
@@ -225,13 +246,13 @@ public class ImportController {
      * @throws SQLException
      */
     public void end(ImportControl imp) throws SQLException {
-        PreparedStatement updateStmt = connection.prepareStatement(end);
+        PreparedStatement updateStmt = connection.prepareStatement(update);
         try {
             imp.endTime = now();
-            setEndParameters(updateStmt, imp);
+            setUpdateParameters(updateStmt, imp);
             if (updateStmt.executeUpdate() == 0) {
                 insert(imp);
-                setEndParameters(updateStmt, imp);
+                setUpdateParameters(updateStmt, imp);
                 if (imp.rowCount != null || imp.errorCount != null) {
                     updateStmt.executeUpdate();
                 }
@@ -263,13 +284,14 @@ public class ImportController {
         end(imp);
     }
 
-    private void setEndParameters(PreparedStatement updateStmt, ImportControl imp)
+    private void setUpdateParameters(PreparedStatement updateStmt, ImportControl imp)
             throws SQLException {
         updateStmt.setTimestamp(1, imp.endTime);
         updateStmt.setString(2, imp.status.name());
         updateStmt.setObject(3, imp.rowCount);
         updateStmt.setObject(4, imp.errorCount);
-        updateStmt.setLong(5, imp.importId);
+        updateStmt.setString(5, imp.errorMessage);
+        updateStmt.setLong(6, imp.importId);
     }
 
     //  (start_time, end_time, status, import_name, description, file_name, import_id)
