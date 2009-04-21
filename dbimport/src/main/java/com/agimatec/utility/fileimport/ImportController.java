@@ -185,13 +185,14 @@ public class ImportController {
      * one for accessing import_control
      * the other to import the data with intermediate commits.)
      *
-     * @return the new import_id
+     * @return the new import
      * @throws SQLException
      */
-    public long join(String importName) throws SQLException {
+    public ImportControl join(String importName) throws SQLException {
         ImportControl imp = new ImportControl();
         imp.importName = importName;
-        return join(imp);
+        join(imp);
+        return imp;
     }
 
     public long join(ImportControl imp) throws SQLException {
@@ -220,6 +221,19 @@ public class ImportController {
         } finally {
             updateStmt.close();
         }
+    }
+
+    /**
+     * update rowCount, errorCount during running import.
+     * @param imp
+     * @param importer
+     * @throws SQLException
+     */
+    public void update(ImportControl imp, Importer importer) throws SQLException {
+        imp.errorMessage = importer.getLastErrorMessage();
+        imp.rowCount = importer.getRowCount();
+        imp.errorCount = importer.getErrorCount();
+        update(imp);
     }
 
     private void insert(ImportControl imp) throws SQLException {
@@ -290,7 +304,12 @@ public class ImportController {
         updateStmt.setString(2, imp.status.name());
         updateStmt.setObject(3, imp.rowCount);
         updateStmt.setObject(4, imp.errorCount);
-        updateStmt.setString(5, imp.errorMessage);
+        String errmsg = imp.errorMessage;
+        if(errmsg != null && errmsg.length()>2000) {
+            // cut message because database limit is 2000
+            errmsg = errmsg.substring(0, 2000);
+        }
+        updateStmt.setString(5, errmsg);
         updateStmt.setLong(6, imp.importId);
     }
 

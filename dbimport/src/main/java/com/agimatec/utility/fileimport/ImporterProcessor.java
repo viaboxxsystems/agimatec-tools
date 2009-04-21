@@ -18,6 +18,7 @@ public abstract class ImporterProcessor {
     protected int errorCount;
     protected int rowCount;
     protected boolean cancelled = false;
+    protected Object lastError;
 
     protected abstract ImporterSpec getSpec();
 
@@ -39,6 +40,14 @@ public abstract class ImporterProcessor {
 
     public int getRowCount() {
         return rowCount;
+    }
+
+    public Object getLastError() {
+        return lastError;
+    }
+
+    public void setLastError(Object lastError) {
+        this.lastError = lastError;
     }
 
     public Writer getErrorWriter() throws IOException {
@@ -83,6 +92,9 @@ public abstract class ImporterProcessor {
     }
 
     protected void handleException(Exception ex) throws ImporterException {
+        if(ex != null) {
+            setLastError(ex);
+        }
         if (ex instanceof ImporterException) {
             if (((ImporterException) ex).isCancelImport()) cancelled = true;
             throw (ImporterException) ex;
@@ -98,6 +110,7 @@ public abstract class ImporterProcessor {
             if (((ImporterException) iex).isCancelImport()) cancelled = true;
         }
         errorCount++;
+        setLastError(iex);
         importer.log("'" + aLine + "' caused exception:");
         importer.log(iex);
         try {
