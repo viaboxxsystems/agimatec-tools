@@ -61,6 +61,7 @@ try {
 = Manage imports in database =
 If you want to use an ImportController, you need to create the import_control table (Postgres-syntax):
 
+{{{
 CREATE TABLE Import_Control (
     import_id BIGINT CONSTRAINT NN_import_id NOT NULL,
     start_time TIMESTAMP CONSTRAINT NN_start_time NOT NULL,
