@@ -17,7 +17,7 @@ def su = SqlUtil.forConnection(jdbcConnection);
 su.defDate('Date', 'yyyy-MM-dd');
 su.defSequence('id', 'SEQ_import');
 ImportController controller = new ImportController(jdbcConnection, su, 'SEQ_import');
-long iid = controller.join('zipcode-import'); // wait for other imports of that kind until finished...
+ImportControl imp = controller.join('zipcode-import'); // wait for other imports of that kind until finished...
 
 def Sql db = new Sql(jdbcConnection);
 
@@ -30,6 +30,7 @@ String postcodeInsert = """
 def spec = new LineImporterSpecGroovy({ processor ->
  def row = processor.currentRow;
  processor.log('row: ' + processor.rowCount + '; insert postcode: ' + row);
+ controller.update(imp, processor.importer); // optional: write status into database
  if(db.executeUpdate (postcodeInsert,
     [row.PostalCode,
     WordUtils.capitalizeFully(row.PostalCodeDescription),
@@ -44,7 +45,7 @@ try {
     FileReader reader = new FileReader("setup/zipcodes.csv");
     importer.importFrom(reader);
 } finally {
-    controller.end(iid, importer);  // mark import as finished
+    controller.end(imp, importer);  // mark import as finished
 }
 
 }}}
@@ -56,7 +57,7 @@ try {
 
 == Notes: ==
   * You can use an instance of class SqlUtil to provide some oracle/postgres independent constructs (e.g. handing of sequences) or datatype conversion (here: date). If you do not use SqlUtil, you can use the plain groovy APIs.
-  * You can drop the creation of ImportController and the finally-block. The ImportController is not required basically. It uses a separate table "import_control" to save the status of running imports and to block other imports until an import of the same name (here: "zipcode-import") has finished.
+  * You can drop the creation of ImportController, the controller.update() call and the finally-block. The ImportController is not required basically. It uses a separate table "import_control" to save the status of running imports and to block other imports until an import of the same name (here: "zipcode-import") has finished.
 
 = Manage imports in database =
 If you want to use an ImportController, you need to create the import_control table (Postgres-syntax):
