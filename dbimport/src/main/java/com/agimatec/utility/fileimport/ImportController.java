@@ -33,19 +33,19 @@ public class ImportController {
         lockByName = "UPDATE Import_Control SET STATUS=STATUS where import_name=?";
 
         selectAll =
-                "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
-                        "FROM Import_Control ORDER BY import_id";
+              "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
+                    "FROM Import_Control ORDER BY import_id";
         selectByName =
-                "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
-                        "FROM Import_Control WHERE import_name = ? ORDER BY import_id";
+              "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
+                    "FROM Import_Control WHERE import_name = ? ORDER BY import_id";
         selectById =
-                "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
-                        "FROM Import_Control WHERE import_id = ?";
+              "SELECT import_id,start_time,end_time,status,row_count,error_count,description,file_name,import_name " +
+                    "FROM Import_Control WHERE import_id = ?";
         insert =
-                "INSERT INTO Import_Control (start_time, end_time, status, import_name, description, file_name, import_id) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+              "INSERT INTO Import_Control (start_time, end_time, status, import_name, description, file_name, import_id) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
         update =
-                "UPDATE Import_Control SET end_time = ?, status = ?, row_count = ?, error_count = ?, error_message = ? WHERE import_id = ?";
+              "UPDATE Import_Control SET end_time = ?, status = ?, row_count = ?, error_count = ?, error_message = ? WHERE import_id = ?";
         deleteByName = "DELETE FROM Import_Control WHERE Import_Name = ?";
         deleteById = "DELETE FROM Import_Control WHERE Import_Id = ?";
     }
@@ -163,7 +163,16 @@ public class ImportController {
         }
     }
 
+    /**
+     * aquire a lock for imports of the given name.
+     * block until lock aquired by database.
+     * @param importName
+     * @return
+     * @throws SQLException
+     */
     public boolean lock(String importName) throws SQLException {
+        if (log.isInfoEnabled())
+            log.info("Aquire lock for import '" + importName + "'...");
         PreparedStatement stmt = connection.prepareStatement(lockByName);
         try {
             stmt.setString(1, importName);
@@ -174,7 +183,8 @@ public class ImportController {
     }
 
     /**
-     * create import in database for the type.
+     * create import in database for the type and call start() after
+     * a lock() has been aquired.
      * update the import_control table for this kind of import
      * to wait until running imports have finished.
      * (wait with database lock. this requires
@@ -183,7 +193,15 @@ public class ImportController {
      * maybe it is neccessary to extend this class with strategies for long-transactions-support,
      * or you need to use two connections:
      * one for accessing import_control
-     * the other to import the data with intermediate commits.)
+     * the other to import the data with intermediate commits.
+     * <p/>
+     * Remember: changes written with insert() or update() are only visible after
+     * the running transaction has been committed.
+     * So you have to decide
+     * a) use autocommit / own short transactions to monitor running imports
+     * or
+     * b) use single transaction to access importcontrol, so lock() works, but
+     * all changes are only visible after import is finished!)
      *
      * @return the new import
      * @throws SQLException
@@ -196,23 +214,22 @@ public class ImportController {
     }
 
     public long join(ImportControl imp) throws SQLException {
-        if (log.isInfoEnabled()) log.info("Starting import '" + imp.importName + "'...");
         lock(imp.importName);
-        insert(imp);
-        return imp.getImportId();
+        return start(imp);
     }
 
     /**
+     * calls start() if not already done so!
      * update status, rowCount, errorCount during running import.
-     * @param imp
+     *
      * @throws SQLException
      */
     public void update(ImportControl imp) throws SQLException {
-       PreparedStatement updateStmt = connection.prepareStatement(update);
+        PreparedStatement updateStmt = connection.prepareStatement(update);
         try {
             setUpdateParameters(updateStmt, imp);
             if (updateStmt.executeUpdate() == 0) {
-                insert(imp);
+                start(imp);
                 setUpdateParameters(updateStmt, imp);
                 if (imp.rowCount != null || imp.errorCount != null) {
                     updateStmt.executeUpdate();
@@ -225,8 +242,7 @@ public class ImportController {
 
     /**
      * update rowCount, errorCount during running import.
-     * @param imp
-     * @param importer
+     *
      * @throws SQLException
      */
     public void update(ImportControl imp, Importer importer) throws SQLException {
@@ -236,21 +252,36 @@ public class ImportController {
         update(imp);
     }
 
-    private void insert(ImportControl imp) throws SQLException {
+    /**
+     * insert the importcontrol row into the database.
+     * set startTime=now() and status=RUNNING with still null.
+     * call this only once per instance!
+     * @param imp
+     * @return
+     * @throws SQLException
+     */
+    public long start(ImportControl imp) throws SQLException {
         if (imp.importId == 0) {
             imp.importId = sqlUtil.nextVal(connection, "import_id");
         }
+        if (log.isInfoEnabled()) log.info(
+              "Starting import '" + imp.importName + "' (" + imp.importId + ")...");
         PreparedStatement insertStmt = null;
         try {
             insertStmt = connection.prepareStatement(insert);
-            imp.startTime = now();
+            if (imp.startTime == null) {
+                imp.startTime = now();
+            }
             imp.endTime = null;
-            imp.status = ImportState.RUNNING;
+            if (imp.status == null) {
+                imp.status = ImportState.RUNNING;
+            }
             setParameters(insertStmt, imp);
             insertStmt.execute();
         } finally {
             if (insertStmt != null) insertStmt.close();
         }
+        return imp.getImportId();
     }
 
     /**
@@ -262,10 +293,12 @@ public class ImportController {
     public void end(ImportControl imp) throws SQLException {
         PreparedStatement updateStmt = connection.prepareStatement(update);
         try {
-            imp.endTime = now();
+            if (imp.endTime == null) {
+                imp.endTime = now();
+            }
             setUpdateParameters(updateStmt, imp);
             if (updateStmt.executeUpdate() == 0) {
-                insert(imp);
+                start(imp);
                 setUpdateParameters(updateStmt, imp);
                 if (imp.rowCount != null || imp.errorCount != null) {
                     updateStmt.executeUpdate();
@@ -288,10 +321,11 @@ public class ImportController {
     }
 
     public void end(ImportControl imp, Importer importer) throws SQLException {
-        ImportState status = importer.isCancelled() ? ImportState.CANCELLED : ImportState.DONE;
-        if (log.isInfoEnabled()) log.info(status + ": Import (" + imp.getImportId() + ") '" +
-                imp.getImportName() + "' has finished " + importer.getRowCount() + " rows with " +
-                importer.getErrorCount() + " errors.");
+        ImportState status =
+              importer.isCancelled() ? ImportState.CANCELLED : ImportState.DONE;
+        if (log.isInfoEnabled()) log.info(status + ": Import (" + imp.getImportId() +
+              ") '" + imp.getImportName() + "' has finished " + importer.getRowCount() +
+              " rows with " + importer.getErrorCount() + " errors.");
         imp.rowCount = importer.getRowCount();
         imp.errorCount = importer.getErrorCount();
         imp.status = status;
@@ -299,13 +333,13 @@ public class ImportController {
     }
 
     private void setUpdateParameters(PreparedStatement updateStmt, ImportControl imp)
-            throws SQLException {
+          throws SQLException {
         updateStmt.setTimestamp(1, imp.endTime);
         updateStmt.setString(2, imp.status.name());
         updateStmt.setObject(3, imp.rowCount);
         updateStmt.setObject(4, imp.errorCount);
         String errmsg = imp.errorMessage;
-        if(errmsg != null && errmsg.length()>2000) {
+        if (errmsg != null && errmsg.length() > 2000) {
             // cut message because database limit is 2000
             errmsg = errmsg.substring(0, 2000);
         }
@@ -314,7 +348,8 @@ public class ImportController {
     }
 
     //  (start_time, end_time, status, import_name, description, file_name, import_id)
-    private void setParameters(PreparedStatement stmt, ImportControl imp) throws SQLException {
+    private void setParameters(PreparedStatement stmt, ImportControl imp)
+          throws SQLException {
         stmt.setTimestamp(1, imp.startTime);
         stmt.setTimestamp(2, imp.endTime);
         if (imp.status != null) {
