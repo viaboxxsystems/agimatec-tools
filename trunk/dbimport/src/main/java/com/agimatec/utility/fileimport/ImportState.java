@@ -8,7 +8,7 @@ package com.agimatec.utility.fileimport;
  * Copyright: Agimatec GmbH
  */
 public enum ImportState {
-    /** import not yet started */
+    /** import not yet started / scheduled / waiting to receive lock */
     IDLE,
     /** import currently running */
     RUNNING,
