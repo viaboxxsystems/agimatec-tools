@@ -156,7 +156,7 @@ public class UpdateBundlesTask extends Task {
                         }
                         MBText toText = toEntry.getText(text.getLocale());
                         if (toText != null) toEntry.getTexts().remove(toText);
-                        toEntry.getTexts().add(toText);
+                        toEntry.getTexts().add(text);
                         Collections.sort(toEntry.getTexts());
                     }
                 }
