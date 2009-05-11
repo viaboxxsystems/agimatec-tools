@@ -31,7 +31,7 @@ public class JAMDtoField extends JAMDtoAnnotatedElement {
         return dtoClass;
     }
 
-    protected JAnnotatedElement element() {
+    public JAnnotatedElement element() {
         return field;
     }
 
@@ -59,23 +59,26 @@ public class JAMDtoField extends JAMDtoAnnotatedElement {
         return field.getType();
     }
 
-    public String getType(String path) {
-        if (path == null || path.length() == 0) return getType();
+    public JField getTypeField(String path) {
+        if (path == null || path.length() == 0) return field;
         StringTokenizer tokens = new StringTokenizer(path, ".");
         JField current = field;
         while (tokens.hasMoreTokens() && current != null) {
             String each = tokens.nextToken();
             current = findField(current, each);
         }
-        if (current == null) return null;
-        else return current.getType().getQualifiedName();
+        return current;
     }
 
     @Override
     public String getGenericParameter() {
+        return getGenericParameter(field);
+    }
+
+    public static String getGenericParameter(JField aField) {
         Type genericType = null;
         // hack: access type of element for generic collections
-        Object artifact = field.getArtifact();
+        Object artifact = aField.getArtifact();
         if (artifact instanceof FieldDocImpl) {
             Type type = ((FieldDocImpl) artifact).type();
             if (type instanceof ParameterizedTypeImpl) {

@@ -2,6 +2,7 @@ package com.agimatec.annotations.jam;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jam.JField;
+import org.codehaus.jam.JMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,33 +88,31 @@ public class JAMDtoFieldAnnotation {
         return null;
     }
 
-
     /** der element-type des dto-targets, d.h. bei listen der generic-type */
     public String getDtoFieldType() {
         final String type;
 
         String dtotype = getDtoType();
         if (dtotype == null) {
-            String gp = getElement().getGenericParameter();
-            if (gp != null) {
-                JAMDtoClass jc = JAMDtoGenerator.getJAMClass(gp);
-                String cn;
-                if (jc != null) {
-                    cn = optimizeType(
-                          jc.getDtoPackageName() + "." + jc.getDtoClassName());
-                } else {
-                    cn = optimizeType(gp);
-                }
-                type = element.getType() + "<" + cn + ">";
+            final String dt, gp;
+            if (getDtoPath() == null) {
+                dt = element.getType();
+                gp = getElement().getGenericParameter();
             } else {
-                String dt = element.getType(getDtoPath());
-                JAMDtoClass jc = JAMDtoGenerator.getJAMClass(dt);
-                if (jc != null) {
-                    type = jc.getDtoPackageName() + "." + jc.getDtoClassName();
+                JField field = element.getTypeField(getDtoPath());
+                if (field == null) { // try method
+                    if (element.element() instanceof JMethod) {
+                        gp = JAMDtoMethod.getGenericParameter((JMethod) element.element());
+                    } else {
+                        gp = null;
+                    }
+                    dt = element.getType();
                 } else {
-                    type = dt;
+                    gp = JAMDtoField.getGenericParameter(field);
+                    dt = field.getType().getQualifiedName();
                 }
             }
+            type = toDtoType(dt, gp);
         } else if (dtotype.indexOf("<") > 0) {
             int i1 = dtotype.indexOf("<");
             return dtotype.substring(0, i1 + 1) + optimizeType(dtotype.substring(i1 + 1));
@@ -123,6 +122,37 @@ public class JAMDtoFieldAnnotation {
         return optimizeType(type);
     }
 
+    /**
+     * @param dt - data type
+     * @param gp - generic parameter or null
+     * @return type in dto for the given type and generic parameter
+     */
+    private String toDtoType(String dt, String gp) {
+        String type;
+        if (gp != null) {
+            JAMDtoClass jc = JAMDtoGenerator.getJAMClass(gp);
+            String cn;
+            if (jc != null) {
+                cn = optimizeType(
+                      jc.getDtoPackageName() + "." + jc.getDtoClassName());
+            } else {
+                cn = optimizeType(gp);
+            }
+            type = dt + "<" + cn + ">";
+        } else {
+            JAMDtoClass jc = JAMDtoGenerator.getJAMClass(dt);
+            if (jc != null) {
+                type = jc.getDtoPackageName() + "." + jc.getDtoClassName();
+            } else {
+                type = dt;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * @return the type of the dto bean (used for relationship beanId="dtoBeanType")
+     */
     public String getDtoBeanType() {
         final String type;
 
@@ -177,9 +207,11 @@ public class JAMDtoFieldAnnotation {
     private String optimizeType(String type) {
         String myPackage = element.getDtoClass().getDtoPackageName() + ".";
         if (type == null) return type;
-        if (type.startsWith("java.lang.")) {
+        if (type.lastIndexOf('.') == "java.lang".length() &&
+              type.startsWith("java.lang.")) {
             return type.substring("java.lang.".length());
-        } else if (type.startsWith(myPackage)) {
+        } else
+        if (type.lastIndexOf('.') == myPackage.length() && type.startsWith(myPackage)) {
             return type.substring(myPackage.length());
         } else {
             return type;
