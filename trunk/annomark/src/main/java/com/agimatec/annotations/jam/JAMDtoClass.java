@@ -161,7 +161,7 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         return getDtoPackageName().replace('.', '/');
     }
 
-    protected JAnnotatedElement element() {
+    public JAnnotatedElement element() {
         return mclass;
     }
 
@@ -173,8 +173,8 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         return DTOs.class.getName();
     }
 
-    public String getType(String path) {
-        if (path == null || path.length() == 0) return getType();
+    public JField getTypeField(String path) {
+        if (path == null || path.length() == 0) return null;
         StringTokenizer tokens = new StringTokenizer(path, ".");
         JField current = null;
         do {
@@ -182,7 +182,7 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
             current = findField(current, each);
         } while (tokens.hasMoreTokens() && current != null);
         if (current == null) return null;
-        else return current.getType().getQualifiedName();
+        else return current;
     }
 
     public JAMDtoMethod findMethod(String methodName) {

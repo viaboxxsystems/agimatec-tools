@@ -40,7 +40,7 @@ public abstract class JAMDtoAnnotatedElement {
         return ja;
     }
 
-    protected abstract JAnnotatedElement element();
+    public abstract JAnnotatedElement element();
 
     protected String stringValue(String v, String defaultValue) {
         return v == null || v.length() == 0 ? defaultValue : v;
@@ -114,7 +114,7 @@ public abstract class JAMDtoAnnotatedElement {
         return element().toString();
     }
 
-    public abstract String getType(String dtoPath);
+    public abstract JField getTypeField(String dtoPath);
 
     protected static JField findField(JField root, String each) {
         return findField(root.getType(), each);

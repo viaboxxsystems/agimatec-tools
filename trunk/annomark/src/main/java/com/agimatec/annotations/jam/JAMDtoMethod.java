@@ -34,7 +34,7 @@ public class JAMDtoMethod extends JAMDtoAnnotatedElement {
     }
 
 
-    protected JAnnotatedElement element() {
+    public JAnnotatedElement element() {
         return jmethod;
     }
 
@@ -62,21 +62,25 @@ public class JAMDtoMethod extends JAMDtoAnnotatedElement {
         return jmethod.getReturnType();
     }
 
-    public String getType(String path) {
-        if (path == null || path.length() == 0) return getType();
+    public JField getTypeField(String path) {
+        if (path == null || path.length() == 0) return null;
         StringTokenizer tokens = new StringTokenizer(path, ".");
         JClass current = jmethod.getReturnType();
+        JField field = null;
         while (tokens.hasMoreTokens() && current != null) {
             String each = tokens.nextToken();
-            JField field = findField(current, each);
+            field = findField(current, each);
             current = (field == null) ? null : field.getType();
         }
-        if (current == null) return null;
-        else return current.getQualifiedName();
+        return field;
     }
 
     @Override
     public String getGenericParameter() {
+        return getGenericParameter(jmethod);
+    }
+
+    public static String getGenericParameter(JMethod jmethod) {
         // hack: access type of element for generic collections
         Type type = ((MethodDocImpl) jmethod.getArtifact()).returnType();
         Type genericType = null;
