@@ -211,7 +211,7 @@ public class JAMDtoFieldAnnotation {
               type.startsWith("java.lang.")) {
             return type.substring("java.lang.".length());
         } else
-        if (type.lastIndexOf('.') == myPackage.length() && type.startsWith(myPackage)) {
+        if (type.lastIndexOf('.') == (myPackage.length()-1) && type.startsWith(myPackage)) {
             return type.substring(myPackage.length());
         } else {
             return type;
