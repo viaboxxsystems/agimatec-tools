@@ -31,14 +31,15 @@ public abstract class BundleWriter {
     enum FileType {
         NO, XML, PROPERTIES,
         JS, JS_PRETTY,
-        JAVA_FULL_ENUM_KEYS, JAVA_ENUM_KEYS, JAVA_FULL, JAVA_SMALL, 
+        JAVA_FULL_ENUM_KEYS, JAVA_ENUM_KEYS, JAVA_FULL, JAVA_SMALL,
         SQL
     }
 
     protected List myUsedLocales;
 
 
-    public BundleWriter(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType) {
+    public BundleWriter(Task task, String configFile, MBBundle currentBundle,
+                        String outputPath, FileType fileType) {
         this.task = task;
         this.configFile = configFile;
         this.currentBundle = currentBundle;
@@ -50,7 +51,7 @@ public abstract class BundleWriter {
         if (!fileType.equals(FileType.NO)) {
             if (!overwrite && !needsNewFiles()) {
                 task.log(suffix() + " file(s) for " + getCurrentBundle().getBaseName() +
-                        " up to date", Project.MSG_VERBOSE);
+                      " up to date", Project.MSG_VERBOSE);
             } else {
                 writeOutputFiles();
             }
@@ -70,9 +71,7 @@ public abstract class BundleWriter {
         this.deleteOldFiles = deleteOldFiles;
     }
 
-    /**
-     * generate the current bundle's property files
-     */
+    /** generate the current bundle's property files */
     protected void writeOutputFiles() throws Exception {
         deleteFiles();
         Iterator locales = getLocalesUsed().iterator();
@@ -104,7 +103,7 @@ public abstract class BundleWriter {
         }
     }
 
-    protected  StringBuilder buildOutputFileNameBase() {
+    protected StringBuilder buildOutputFileNameBase() {
         StringBuilder fileName = new StringBuilder();
         fileName.append(getOutputPath());
         fileName.append("/");
@@ -112,7 +111,7 @@ public abstract class BundleWriter {
         return fileName;
     }
 
-    protected  void deleteFiles(String filePattern) {
+    protected void deleteFiles(String filePattern) {
         Delete delete = (Delete) task.getProject().createTask("delete");
         FileSet fs = new FileSet();
         File file = new File(filePattern);
@@ -123,9 +122,7 @@ public abstract class BundleWriter {
         delete.execute();
     }
 
-    /**
-     * true when generation is neccessary, false when up-to-date
-     */
+    /** true when generation is neccessary, false when up-to-date */
     protected boolean needsNewFiles() throws FileNotFoundException {
         Iterator locales = getLocalesUsed().iterator();
         boolean result = false;
@@ -168,22 +165,22 @@ public abstract class BundleWriter {
 
     protected abstract String suffix();
 
-    /**
-     * the root path to store the files
-     */
+    /** the root path to store the files */
     public String getOutputPath() {
         return outputPath;
     }
 
-    /**
-     * @return a list of String with the locales used in the current bundle
-     */
-    protected  List getLocalesUsed() {
+    /** @return a list of String with the locales used in the current bundle */
+    protected List getLocalesUsed() {
         if (myUsedLocales == null) {
             HashSet locales = new HashSet();
-            for (MBEntry eachEntry : getCurrentBundle().getEntries()) {
-                for (MBText eachText : eachEntry.getTexts()) {
-                    locales.add(eachText.getLocale());
+            if (getCurrentBundle().getEntries() != null) {
+                for (MBEntry eachEntry : getCurrentBundle().getEntries()) {
+                    if (eachEntry.getTexts() != null) {
+                        for (MBText eachText : eachEntry.getTexts()) {
+                            locales.add(eachText.getLocale());
+                        }
+                    }
                 }
             }
             List result = new ArrayList(locales);
@@ -214,8 +211,7 @@ public abstract class BundleWriter {
                 // in debug mode the keys are also displayed as labels
                 if (!debugMode) {
                     value = langText.getValue();
-                }
-                else {
+                } else {
                     value = key;
                 }
                 // Continue text at line breaks followed by whitespaces (indentations due to code formatter etc.)
@@ -223,11 +219,11 @@ public abstract class BundleWriter {
                 while (value != null && (indentIndex = value.indexOf("\n ")) > -1) {
                     int lastBlankIndex = indentIndex + 1;
                     while (lastBlankIndex + 1 < value.length() && Character
-                            .isWhitespace(value.charAt(lastBlankIndex + 1))) {
+                          .isWhitespace(value.charAt(lastBlankIndex + 1))) {
                         lastBlankIndex++;
                     }
                     value = value.substring(0, indentIndex) + ' ' +
-                            value.substring(lastBlankIndex + 1);
+                          value.substring(lastBlankIndex + 1);
                 }
                 task.log("'" + key + "' ==> '" + value + "'", Project.MSG_DEBUG);
                 if (key != null && value != null) {

@@ -39,6 +39,7 @@ public class MBEntry {
     }
 
     public List<MBText> getTexts() {
+        if(texts == null) texts = new ArrayList();
         return texts;
     }
 

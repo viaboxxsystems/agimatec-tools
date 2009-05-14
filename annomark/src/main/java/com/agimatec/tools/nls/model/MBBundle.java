@@ -26,6 +26,7 @@ public class MBBundle {
     private List<MBEntry> entries = new ArrayList();
 
     public List<MBEntry> getEntries() {
+        if(entries == null) entries = new ArrayList();
         return entries;
     }
 
