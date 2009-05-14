@@ -19,6 +19,7 @@ public class MBBundles {
     private List<MBBundle> bundles = new ArrayList();
 
     public List<MBBundle> getBundles() {
+        if(bundles == null) bundles = new ArrayList();
         return bundles;
     }
 
