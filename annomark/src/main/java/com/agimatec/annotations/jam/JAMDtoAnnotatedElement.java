@@ -28,6 +28,8 @@ public abstract class JAMDtoAnnotatedElement {
 
     public abstract JAMDtoClass getDtoClass();
 
+    public abstract boolean isEnumType();
+
     public JAMAnnotation getAnnotation(String anno) {
         JAMAnnotation ja = annotations.get(anno);
         if (ja == null) {
