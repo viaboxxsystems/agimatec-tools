@@ -27,6 +27,10 @@ public class JAMDtoClass extends JAMDtoAnnotatedElement {
         this.mclass = mclass;
     }
 
+    public boolean isEnumType() {
+        return mclass.isEnumType();
+    }
+
     /** @return null for default, otherwise the explicitly given name from the annotation */
     public String getDtoClassName() {
         JAMAnnotation ja = getDtoAnnotation();
