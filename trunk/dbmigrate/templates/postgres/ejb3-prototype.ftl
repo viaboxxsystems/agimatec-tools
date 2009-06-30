@@ -19,7 +19,7 @@ import java.util.*;
  * <#if (ejb3.table.comment)??>${ejb3.table.comment}</#if>
  */
 @Entity
-@Table(name = "${ejb3.table.tableName}"<#if ejb3.multiUniqueConstraints?size != 0> uniqueConstraints = {
+@Table(name = "${ejb3.table.tableName}"<#if ejb3.multiUniqueConstraints?size != 0>, uniqueConstraints = {
 <#list ejb3.multiUniqueConstraints as uniqueCons>
 @UniqueConstraint(columnNames = {<#list uniqueCons as col>"${col}"<#if col_has_next>,</#if></#list>})<#if uniqueCons_has_next>,</#if>
 </#list>}</#if>)
