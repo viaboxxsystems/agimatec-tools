@@ -3,6 +3,7 @@ package com.agimatec.tools.nls.model;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class MBEntry {
     }
 
     public List<MBText> getTexts() {
-        if(texts == null) texts = new ArrayList();
+        if (texts == null) texts = new ArrayList();
         return texts;
     }
 
@@ -54,5 +55,21 @@ public class MBEntry {
             }
         }
         return null;
+    }
+
+    public boolean isReview(String reviewLocale) {
+        if (texts == null || texts.isEmpty()) return true;
+        if (reviewLocale == null) {
+            for (MBText each : texts) {
+                if (each.isReview() ||
+                      (!each.isUseDefault() && StringUtils.isEmpty(each.getValue())))
+                    return true;
+            }
+            return false;
+        } else {
+            MBText text = getText(reviewLocale);
+            return (text == null || text.isReview() ||
+                  (!text.isUseDefault() && StringUtils.isEmpty(text.getValue())));
+        }
     }
 }
