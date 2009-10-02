@@ -14,6 +14,7 @@ public class MBText implements Comparable {
     private String value;
 //   @XStreamAsAttribute    
     private boolean review;
+    private boolean useDefault;
 
     public String getLocale() {
         return locale == null ? "" : locale;
@@ -37,6 +38,14 @@ public class MBText implements Comparable {
 
     public void setReview(boolean review) {
         this.review = review;
+    }
+
+    public boolean isUseDefault() {
+        return useDefault;
+    }
+
+    public void setUseDefault(boolean useDefault) {
+        this.useDefault = useDefault;
     }
 
     public int compareTo(Object o) {
