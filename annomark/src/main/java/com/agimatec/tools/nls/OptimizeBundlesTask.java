@@ -28,7 +28,7 @@ import java.util.Map;
  *      classname="com.agimatec.tools.nls.OptimizeBundlesTask"&gt;
  *   &lt;classpath refid="maven.test.classpath"/&gt;
  * &lt;/taskdef&gt;
- * &lt;copybundles masterFile="allBundles.txt"
+ * &lt;optbundles masterFile="allBundles.txt"
  *   commonBundleFile="Common.xml"
  *   commonBundleBaseName="/Common"
  *   commonEntryKeyPrefix="common"
