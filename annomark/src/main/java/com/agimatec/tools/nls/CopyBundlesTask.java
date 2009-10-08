@@ -23,6 +23,23 @@ import java.util.Map;
  * masterFile = file with file names to copy.
  * dest = target directory or target zip-file to write.
  * <br/>
+ * example:
+ * <pre>
+ * &lt;taskdef name="copybundles"
+ *      classname="com.agimatec.tools.nls.CopyBundlesTask"&gt;
+ *   &lt;classpath refid="maven.test.classpath"/&gt;
+ * &lt;/taskdef&gt;
+ * &lt;copybundles masterFile="allBundles.txt"
+ *          dest="target/bundles.zip"/&gt;
+ *
+ * ------------------------------
+ * file allBundles.txt (example):
+ * common.xml
+ * customer.xml
+ * orders.xml
+ * ------------------------------
+ * </pre>
+ * <br/>
  * User: roman <br/>
  * Date: 09.02.2009 <br/>
  * Time: 16:05:43 <br/>
