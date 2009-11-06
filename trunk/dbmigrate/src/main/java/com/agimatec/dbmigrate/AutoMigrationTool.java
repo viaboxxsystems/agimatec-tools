@@ -183,6 +183,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         if (tempEnv != null) { // merge env
             localEnv = new HashMap(getMigrateEnvironment());
             localEnv.putAll(tempEnv);
+            replaceProperties(localEnv);
         }
     }
 

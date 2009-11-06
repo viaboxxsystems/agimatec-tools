@@ -13,7 +13,7 @@
     <String name="DB_USER" value="dbuser"/>
     <String name="DB_PASSWORD" value="password"/>
     <String name="DB_SCHEMA" value="test"/>
-    <!--<String name="DB_URL" value="jdbc:postgresql://localhost:5432/test"/>-->
+    <String name="DB_URL" value="jdbc:postgresql://localhost:5432/${DB_SCHEMA}"/>
   </map>
 
   <!-- Scripts = the source path for scripts to scan for -->

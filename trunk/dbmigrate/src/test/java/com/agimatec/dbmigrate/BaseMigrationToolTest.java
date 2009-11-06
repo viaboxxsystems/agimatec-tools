@@ -1,5 +1,6 @@
 package com.agimatec.dbmigrate;
 
+import com.agimatec.commons.config.ConfigManager;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -45,6 +46,11 @@ public class BaseMigrationToolTest extends TestCase {
         assertEquals("splitMethodArgs", result[1]);
         assertEquals("test1", ((List)result[2]).get(0));
         assertEquals("test2", ((List)result[2]).get(1));
+    }
+
+    public void testReplacePropertiesInEnvironment() {
+        ConfigManager.getDefault().setConfigRootPath("cp://");
+        assertEquals("jdbc:postgresql://localhost:5432/test", tool.getEnvironment().get("DB_URL"));
     }
 
     public static Test suite() {
