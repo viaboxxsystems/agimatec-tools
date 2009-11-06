@@ -2,6 +2,8 @@ package com.agimatec.dbmigrate;
 
 import com.agimatec.commons.beans.MapQuery;
 import com.agimatec.commons.config.*;
+import com.agimatec.commons.util.FileUtils;
+import com.agimatec.commons.util.PropertyReplacer;
 import com.agimatec.database.DbUnitDumpTool;
 import com.agimatec.database.DbUnitSetupTool;
 import com.agimatec.dbmigrate.groovy.GroovyScriptTool;
@@ -20,9 +22,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -78,7 +82,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     public void version(String dbVersion) throws SQLException {
         UpdateVersionScriptVisitor
-                .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
+              .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
     }
 
     /**
@@ -140,6 +144,11 @@ public abstract class BaseMigrationTool implements MigrationTool {
         String configKey = t.nextToken();
         DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms(databaseType);
         checker.setDatabase(getTargetDatabase());
+        List<URL> urls = getURLsFromEnv(configKey);
+        checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
+    }
+
+    private List<URL> getURLsFromEnv(String configKey) throws MalformedURLException {
         List files = (List) getEnvironment().get(configKey);
         Iterator<String> it = files.iterator();
 
@@ -147,7 +156,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         while (it.hasNext()) {
             urls.add(new URL(it.next()));
         }
-        checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
+        return urls;
     }
 
     /**
@@ -170,6 +179,28 @@ public abstract class BaseMigrationTool implements MigrationTool {
             tool.setDataFile(parts[0]);
         }
         tool.execute();
+    }
+
+    /**
+     * copy the files from source to target
+     *
+     * @param configKey - key in the env, value is list of source_1, target_1, ... URLs
+     * @throws IOException
+     */
+    public void copyFiles(String configKey) throws IOException {
+        List<URL> urls = getURLsFromEnv(configKey);
+        Iterator<URL> it = urls.iterator();
+        while (it.hasNext()) {
+            URL source = it.next();
+            URL target = it.next();
+            File ftarget = FileUtils.toFile(target);
+            log("Copy " + source + " --> " + ftarget);
+            try {
+                FileUtils.copyURLToFile(source, ftarget);
+            } catch (FileNotFoundException ex) {
+                log.warn("Cannot copy: " + source + " --> " + ftarget, ex);
+            }
+        }
     }
 
     /**
@@ -206,7 +237,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     protected void invokeClassMethod(boolean isStatic, String classMethod)
-            throws Exception {
+          throws Exception {
         Object[] args = splitMethodArgs(classMethod);
         Class clazz = Class.forName((String) args[0]);
         Method m;
@@ -232,8 +263,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
      * @throws ResourceException
      * @throws ScriptException
      */
-    public void doGroovyScript(String scriptInvocation)
-            throws Exception {
+    public void doGroovyScript(String scriptInvocation) throws Exception {
         GroovyScriptTool tool = new GroovyScriptTool();
         invokeBeanCallbacks(tool);
         List<String> params = splitParams(scriptInvocation);
@@ -252,7 +282,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     protected Method findMethod(Class clazz, String methodName, int paramCount) {
         for (Method m : clazz.getMethods()) {
             if (m.getName().equals(methodName) &&
-                    m.getParameterTypes().length == paramCount) {
+                  m.getParameterTypes().length == paramCount) {
                 return m;
             }
         }
@@ -275,7 +305,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         List<String> params = null;
         if (pos > 0) {
             StringTokenizer paramTokens =
-                    new StringTokenizer(methodName.substring(pos + 1), "(,)");
+                  new StringTokenizer(methodName.substring(pos + 1), "(,)");
             params = new ArrayList();
             while (paramTokens.hasMoreTokens()) {
                 params.add(paramTokens.nextToken());
@@ -287,16 +317,17 @@ public abstract class BaseMigrationTool implements MigrationTool {
     /** iterate sql script. */
     protected void iterateSQLScript(ScriptVisitor visitor, String scriptName,
                                     boolean failOnError)
-            throws IOException, SQLException {
+          throws IOException, SQLException {
         SQLScriptParser parser = new SQLScriptParser(getScriptsDir(), getLog());
-        parser.setEnvironment(getEnvironment());
+        Map env;
+        parser.setEnvironment(env = getEnvironment());
         parser.setFailOnError(failOnError); // if error occurs, do NOT continue!
 
         visitor = new ReconnectScriptVisitor(targetDatabase, visitor);
         visitor = new SubscriptCapableVisitor(visitor, parser);
         visitor = new UpdateVersionScriptVisitor(targetDatabase, visitor, dbVersionMeta);
         visitor = new ConditionalScriptVisitor(visitor,
-                getEnvironment()); // must be outer visitor to prevent execution in case of false-conditions
+              env); // must be outer visitor to prevent execution in case of false-conditions
 
         parser.iterateSQLScript(visitor, scriptName);
     }
@@ -310,19 +341,62 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     public Map getEnvironment() {
         Map m = getMigrateConfig().getMap("env");
+        final Map env;
         if (m == null) {
             Map p = new Properties(System.getProperties());
             getMigrateConfig().put("env", p);
-            return p;
+            env = p;
         } else if (m instanceof Properties) {
-            return m;
+            env = m;
         } else {
             Properties p = new Properties();
             p.putAll(System.getProperties());
             p.putAll(m);
             getMigrateConfig().put("env", p);
-            return p;
+            env = p;
         }
+        replaceProperties(env);
+        return env;
+    }
+
+    protected void replaceProperties(Map env) {
+        replaceInMap(new PropertyReplacer(env), env);
+    }
+
+    private void replaceInMap(PropertyReplacer replacer, Map map) {
+        for (Object entry : map.entrySet()) {
+            Object value = ((Map.Entry) entry).getValue();
+            value = replaceValue(replacer, value);
+            if (value != null) {
+                ((Map.Entry) entry).setValue(value);
+            }
+        }
+    }
+
+    private void replaceInList(PropertyReplacer replacer, List list) {
+        int idx = 0;
+        for (Object each : list) {
+            each = replaceValue(replacer, each);
+            if (each != null) {
+                list.set(idx, each);
+            }
+            idx++;
+        }
+    }
+
+    private Object replaceValue(PropertyReplacer replacer, Object value) {
+        if (value instanceof String) {
+            return replacer.replaceProperties((String) value);
+        } else if (value instanceof Map) {
+            replaceInMap(replacer, (Map) value);
+        } else if (value instanceof List) {
+            replaceInList(replacer, (List) value);
+        } else if (value instanceof ListNode) {
+            replaceInList(replacer, ((ListNode)value).getList());
+        } else if (value instanceof MapNode) {
+            replaceInMap(replacer, ((MapNode)value).getMap());
+        }
+        return null;
     }
 
     public JdbcDatabase getTargetDatabase() {
@@ -331,7 +405,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     public Config getMigrateConfig() {
         return ConfigManager.getDefault()
-                .getConfig("migration", getMigrateConfigFileName());
+              .getConfig("migration", getMigrateConfigFileName());
     }
 
     private String getMigrateConfigFileName() {
@@ -379,7 +453,8 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-    public void doMethodOperation(String methodName, String methodParam) throws Exception {
+    public void doMethodOperation(String methodName, String methodParam)
+          throws Exception {
         print("Next operation: " + methodName + "(\"" + methodParam + "\")");
         Method method = getClass().getMethod(methodName, String.class);
         try {
@@ -408,21 +483,22 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     /** ensure that the env-variables are used immediately to connect the database! */
     protected void applyEnvironment(JdbcConfig jdbcConfig) {
-        Object v = getEnvironment().get("DB_USER");
+        Map env = getEnvironment();
+        Object v = env.get("DB_USER");
         if (v != null) {
             jdbcConfig.getProperties().put("user", v);
         }
-        v = getEnvironment().get("DB_PASSWORD");
+        v = env.get("DB_PASSWORD");
         if (v != null) {
             jdbcConfig.getProperties().put("password", v);
         }
-        v = getEnvironment().get("DB_SCHEMA");
+        v = env.get("DB_SCHEMA");
         if (v != null) {
             String urlConnect = ReconnectScriptVisitor
-                    .replaceJdbcSchemaName(jdbcConfig.getConnect(), (String) v);
+                  .replaceJdbcSchemaName(jdbcConfig.getConnect(), (String) v);
             jdbcConfig.setConnect(urlConnect);
         }
-        v = getEnvironment().get("DB_URL");
+        v = env.get("DB_URL");
         if (v != null) {
             jdbcConfig.setConnect((String) v);
         }
@@ -501,7 +577,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     /** overwrite in subclasses */
     protected boolean acceptDirectoryForSQLParser(File aDirectory) {
         return (!aDirectory.getName().equalsIgnoreCase("packages") &&
-                !aDirectory.getName().equalsIgnoreCase("triggers"));
+              !aDirectory.getName().equalsIgnoreCase("triggers"));
     }
 
     /**
