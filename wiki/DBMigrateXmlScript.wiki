@@ -71,6 +71,34 @@ The script gets some default Bindings (variables):
 || params || all parameters as a list of Strings ||
 || tool || the current instance of MigrationTool (allows access to environment and jdbcConnection) ||
 
+  * copyFiles 
+Copy one or multiple files (URLs) from a source to a target location.
+The parameter is the name of the list in the environment with source-target file names.
+
+Example: copy file:sourceDir/fileA.txt to targetDir/fileA.txt
+{{{
+  <map name="env">
+
+    <ArrayList name="files-to-copy">
+
+      <String value="file:sourceDir/fileA.txt"/>
+
+      <String value="file:targetDir/fileA.txt/>
+
+    </ArrayList>
+
+  </map>
+
+
+
+  <list name="Operations">
+
+    <text name="copyFiles" value="files-to-copy"/>
+  </list>
+}}}
+
+You can use ${property} in file names. You can rename a file copied.
+
 === Examples ===
 a) no parameter
 {{{
