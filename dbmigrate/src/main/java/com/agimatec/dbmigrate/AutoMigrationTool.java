@@ -99,7 +99,10 @@ public class AutoMigrationTool extends BaseMigrationTool {
                 return false;
             } else if ("-script".equalsIgnoreCase(each)) {
                 i++;
-                addActionOverride(ScriptAction.create(this, args[i]));
+                ScriptAction action = ScriptAction.create(this, args[i]);
+                if(action != null) {
+                    addActionOverride(action);
+                }
             } else if ("-op".equalsIgnoreCase(each)) {
                 String op = args[++i];
                 String param = "";
@@ -293,7 +296,11 @@ public class AutoMigrationTool extends BaseMigrationTool {
     private List<MigrateAction> createActions(List<DBVersionString> files) {
         List<MigrateAction> actions = new LinkedList();
         for (DBVersionString file : files) {
-            actions.add(ScriptAction.create(this, file.getFileName(), file.getFileType()));
+            ScriptAction action =
+                  ScriptAction.create(this, file.getFileName(), file.getFileType());
+            if(action != null) {
+                actions.add(action);
+            }
         }
         return actions;
     }
