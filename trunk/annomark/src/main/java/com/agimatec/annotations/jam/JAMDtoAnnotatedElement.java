@@ -113,7 +113,8 @@ public abstract class JAMDtoAnnotatedElement {
     }
 
     public String toString() {
-        return element().toString();
+        if(element() == null) return super.toString();
+        else return element().toString();
     }
 
     public abstract JField getTypeField(String dtoPath);
