@@ -299,7 +299,7 @@ public class JAMDtoFieldAnnotation {
         String path = getDtoPath();
         while (path != null) {
             int idx = path.indexOf('.');
-            if (idx <= 0) {
+            if (idx < 0) {
                 field = new JAMDtoField(
                       JAMDtoAnnotatedElement.findField(field.getTypeJClass(), path),
                       new JAMDtoClass(field.getTypeJClass()));
@@ -308,12 +308,12 @@ public class JAMDtoFieldAnnotation {
             } else {
                 String next = path.substring(0, idx);
                 JField jf = JAMDtoAnnotatedElement
-                      .findField(field.getDtoClass().getTypeJClass(), next);
+                      .findField(field.getTypeJClass(), next);
                 if (jf != null) {
                     field = new JAMDtoField(jf, field.getDtoClass());
                     elements.add(field);
                 }
-                path = path.substring(next.length());
+                path = path.substring(next.length()+1);
             }
         }
         targetElements = elements.toArray(new JAMDtoAnnotatedElement[elements.size()]);

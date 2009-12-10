@@ -9,16 +9,16 @@ import java.util.*;
  * <pre>Example:
  * MapQuery q = new MapQuery();
  * q.parse("platform=TEST");
- * <p/>
+ * <br/>
  * Map map = new HashMap();
  * map.put("platform", "TEST");
  * map.put("env", "test");
- * <p/>
+ * <br/>
  * assertTrue(q.doesMatch(map));
- * <p/>
+ * <br/>
  * map.put("platform", "TEST2");
  * assertTrue(!q.doesMatch(map));
- * <p/>
+ * <br/>
  * q.parse("platform = TEST2 & env=test ");
  * assertTrue(q.doesMatch(map));
  * </pre>

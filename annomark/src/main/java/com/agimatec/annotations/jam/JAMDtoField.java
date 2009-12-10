@@ -5,6 +5,8 @@ import com.agimatec.annotations.DTOAttributes;
 import com.sun.javadoc.Type;
 import com.sun.tools.javadoc.FieldDocImpl;
 import com.sun.tools.javadoc.ParameterizedTypeImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jam.JAnnotatedElement;
 import org.codehaus.jam.JClass;
 import org.codehaus.jam.JField;
@@ -19,12 +21,17 @@ import java.util.StringTokenizer;
  * Copyright: Agimatec GmbH
  */
 public class JAMDtoField extends JAMDtoAnnotatedElement {
+    private static final Log log = LogFactory.getLog(JAMDtoField.class);
     private final JField field;
     private final JAMDtoClass dtoClass;
 
     public JAMDtoField(JField field, JAMDtoClass dtoClass) {
         this.field = field;
         this.dtoClass = dtoClass;
+        if (field == null) {
+            //noinspection ThrowableInstanceNeverThrown
+            log.error("no underlying field found: " + this, new NullPointerException());
+        }
     }
 
     public JAMDtoClass getDtoClass() {
@@ -78,6 +85,7 @@ public class JAMDtoField extends JAMDtoAnnotatedElement {
     public static String getGenericParameter(JField aField) {
         Type genericType = null;
         // hack: access type of element for generic collections
+        if(aField == null) return null;
         Object artifact = aField.getArtifact();
         if (artifact instanceof FieldDocImpl) {
             Type type = ((FieldDocImpl) artifact).type();
