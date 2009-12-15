@@ -150,10 +150,10 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     public void startAutomaticMigration() throws Exception {
-        log("------------------------------------");
+        log("----------------- start migration -----------------");
         prepareDatabase();
         if (actionOverride != null && !actionOverride.isEmpty()) {
-            log("PERFORMING COMMAND LINE ACTIONS ONLY!");
+            print("PERFORMING COMMAND LINE ACTIONS ONLY!");
             performActions(actionOverride);
         } else {
             performActions(createActions());
@@ -161,15 +161,15 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     private void performActions(List<MigrateAction> actionOverride) throws Exception {
-        if (sim) log("SIMULATION ONLY - SEQUENCE FOLLOWS:");
+        if (sim) print("SIMULATION ONLY - SEQUENCE FOLLOWS:");
         try {
             if (actionOverride.isEmpty()) {
-                log("THERE ARE NO ACTIONS TO PERFORM.");
+                print("THERE ARE NO ACTIONS TO PERFORM.");
             } else {
                 int i = 0;
                 for (MigrateAction each : actionOverride) {
                     i++;
-                    log("ACTION " + i + " (of " + actionOverride.size() + ") = " +
+                    print("ACTION " + i + " (of " + actionOverride.size() + ") = " +
                             each.getInfo());
                     each.doIt();
                 }
@@ -209,7 +209,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         if (ver == null || ver.length() == 0) {
             return null;
         } else {
-            log("Using to-version: " + ver);
+            print("Using to-version: " + ver);
             return DBVersionString.fromString(ver);
         }
     }
@@ -219,10 +219,10 @@ public class AutoMigrationTool extends BaseMigrationTool {
         DBVersionString version;
         if (ver == null || ver.length() == 0) {
             version = readVersion();
-            log("Current database version: " + version);
+            print("Current database version: " + version);
         } else {
             version = DBVersionString.fromString(ver);
-            log("Using from-version: " + version);
+            print("Using from-version: " + version);
         }
         return version;
     }

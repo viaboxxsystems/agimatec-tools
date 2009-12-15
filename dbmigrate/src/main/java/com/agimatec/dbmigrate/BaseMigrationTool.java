@@ -478,7 +478,6 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     protected JdbcDatabase createDatabase(JdbcConfig databaseConfig) {
         JdbcDatabase aDatabase = JdbcDatabaseFactory.createInstance(databaseConfig);
-        print("successful!");
         return aDatabase;
     }
 
