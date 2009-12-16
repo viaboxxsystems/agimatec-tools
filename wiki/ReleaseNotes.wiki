@@ -10,22 +10,23 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 doctype for dozer5.0 fixed
 3rd party libs upgraded 
 
-annomark: minor bug fixes
-	fixed method getDtoFieldType() for nested path with generic type
-	+ OptmizeBundesTask
-	+ NLS-Entry useDefault
-	enum-support improved 	
+annomark:
+  * minor bug fixes
+  * fixed method getDtoFieldType() for nested path with generic type
+  * OptmizeBundesTask
+  * NLS-Entry useDefault
+  * enum-support improved 	
 
 dbmigrate:
-	+ copyFiles operation 
- 	property replacement in environment improved (in nested collections)
-	fixed NullPointerException in performActions() when script type is unknown
-	fixed EmptyStackException when #if #endif inconsistently used	
+  * copyFiles operation
+  * property replacement in environment improved (in nested collections)
+  * fixed NullPointerException in performActions() when script type is unknown
+  * fixed EmptyStackException when #if #endif inconsistently used	
 
 dbimport:
-	API changes at ImportController.join() returns ImportControl instead of long
-	+ ImportControl[ler].description
-	+ ImportControl[ler].errorMessage
+  * API changes at ImportController.join() returns ImportControl instead of long
+  * ImportControl[ler].description
+  * ImportControl[ler].errorMessage
 
 == 2.2.5 (24.03.2009) ==
   * fixed bug importing spreadsheet with missing cells (using cellNum from cell)
