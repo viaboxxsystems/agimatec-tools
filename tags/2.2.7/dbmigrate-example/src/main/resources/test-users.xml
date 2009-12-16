@@ -1,0 +1,21 @@
+<users>
+  <user>
+    <id>user1</id>
+    <pin>0000</pin>
+    <firstname>Peter</firstname>
+    <gender>Mr</gender>
+    <status>OK</status>
+    <role>1</role>
+    <address1>Elmstreet 1</address1>
+    <city>Gotham City</city>
+    <country>DE</country>
+  </user>
+  <user>
+    <id>user2</id>
+    <pin>0000</pin>
+    <firstname>Clara</firstname>
+    <gender>Mrs</gender>
+    <status>OK</status>
+    <role>1</role>
+  </user>
+</users>
