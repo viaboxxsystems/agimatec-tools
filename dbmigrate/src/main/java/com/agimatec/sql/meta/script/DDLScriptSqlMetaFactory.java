@@ -468,7 +468,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             }
         }
         if (found == 0) {
-            log.warn("UNKNOWN: " + statement);
+            if(log.isInfoEnabled()) log.info("UNKNOWN: " + statement);
         }
         return 0;
     }
