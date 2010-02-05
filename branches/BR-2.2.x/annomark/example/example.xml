@@ -1,0 +1,18 @@
+<bundles>
+  <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
+    <entry key="key1">
+      <description>Some comment about the entry...</description>
+      <text locale="de">
+        <value>Beispieltext mit ÄÖÜ</value>
+      </text>
+      <text locale="en">
+        <value>An example</value>
+      </text>
+    </entry>
+    <entry key="key2">
+      <text locale="de">
+        <value>anderer Wert</value>
+      </text>
+    </entry>
+  </bundle>
+</bundles>
