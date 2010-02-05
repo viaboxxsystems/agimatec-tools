@@ -1,7 +1,7 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
 import com.agimatec.utility.fileimport.LineTokenizer;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 
 import java.util.Iterator;
 
@@ -13,7 +13,7 @@ import java.util.Iterator;
  * Copyright: Agimatec GmbH
  */
 public class ExcelRowTokenizer implements LineTokenizer<ExcelRow, ExcelCell> {
-    private Iterator<Cell> cellIterator;
+    private Iterator<HSSFCell> cellIterator;
 //    private final ExcelRow row;
 
     public ExcelRowTokenizer(ExcelRow aLine) {

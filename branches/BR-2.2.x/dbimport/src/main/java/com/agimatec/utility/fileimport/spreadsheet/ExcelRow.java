@@ -1,6 +1,6 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 
 /**
  * Description: Abstraction for a single excel-spreadsheet row<br/>
@@ -10,13 +10,13 @@ import org.apache.poi.ss.usermodel.Row;
  * Copyright: Agimatec GmbH
  */
 public class ExcelRow implements IRow {
-    final Row row;
+    final HSSFRow row;
 
-    public ExcelRow(Row hssfRow) {
+    public ExcelRow(HSSFRow hssfRow) {
         row = hssfRow;
     }
 
-    public Row getRow() {
+    public HSSFRow getRow() {
         return row;
     }
 
