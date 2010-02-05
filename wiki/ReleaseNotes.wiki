@@ -24,20 +24,6 @@ https://agimatec-tools.googlecode.com/svn/branches/BR-2.2.x
 doctype for dozer5.0 fixed
 3rd party libs upgraded 
 
-annomark:
-  * minor bug fixes
-  * fixed method getDtoFieldType() for nested path with generic type
-  * OptmizeBundesTask
-  * NLS-Entry useDefault
-  * enum-support improved 	
-
-dbmigrate:
-  * copyFiles operation
-  * property replacement in environment improved (in nested collections)
-  * fixed NullPointerException in performActions() when script type is unknown
-  * fixed EmptyStackException when #if #endif inconsistently used	
-
-dbimport:
   * API changes at ImportController.join() returns ImportControl instead of long
   * ImportControl(ler).description
   * ImportControl(ler).errorMessage
@@ -60,6 +46,15 @@ dbimport:
 
 = dbmigrate =
 
+== 2.2.7 (16.12.2009) ==
+doctype for dozer5.0 fixed
+3rd party libs upgraded 
+
+  * copyFiles operation
+  * property replacement in environment improved (in nested collections)
+  * fixed NullPointerException in performActions() when script type is unknown
+  * fixed EmptyStackException when #if #endif inconsistently used
+
 == 2.2.5 (24.03.2009) ==
   * new features for templates (accessing static methods, provide custom properties)
 
@@ -72,6 +67,16 @@ dbimport:
   * sql, groovy, xml scripts
 
 = annomark =
+
+== 2.2.7 (16.12.2009) ==
+doctype for dozer5.0 fixed
+3rd party libs upgraded 
+
+  * minor bug fixes
+  * fixed method getDtoFieldType() for nested path with generic type
+  * OptmizeBundesTask
+  * NLS-Entry useDefault
+  * enum-support improved 	
 
 == 2.2.5 (24.03.2009) ==
   * bug fixed: DTO-annotated boolean getter methods starting with "is"
