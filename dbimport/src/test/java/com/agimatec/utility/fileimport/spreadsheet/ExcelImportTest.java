@@ -6,6 +6,9 @@ import com.agimatec.utility.fileimport.LineImporterSpecAutoFields;
 import junit.framework.TestCase;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
 
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -65,11 +68,11 @@ public class ExcelImportTest extends TestCase {
         HSSFWorkbook wb = new HSSFWorkbook(fs);
         HSSFSheet sheet = wb.getSheetAt(0);
         int rowIdx = 0;
-        for (Iterator<HSSFRow> rit = (Iterator<HSSFRow>) sheet.rowIterator(); rit.hasNext();) {
-            HSSFRow row = rit.next();
+        for (Iterator<Row> rit = (Iterator<Row>) sheet.rowIterator(); rit.hasNext();) {
+            Row row = rit.next();
             int columnIdx = 0;
-            for (Iterator<HSSFCell> cit = (Iterator<HSSFCell>) row.cellIterator(); cit.hasNext();) {
-                HSSFCell cell = cit.next();
+            for (Iterator<Cell> cit = (Iterator<Cell>) row.cellIterator(); cit.hasNext();) {
+                Cell cell = cit.next();
                 // Do something here
                 if(rowIdx == 1 || rowIdx == 2 || rowIdx == 3) {
                     scanColorMapping(cell);
@@ -82,12 +85,12 @@ public class ExcelImportTest extends TestCase {
         }
     }
 
-    private void scanColorMapping(HSSFCell cell) {
+    private void scanColorMapping(Cell cell) {
         String val = getStringValue(cell);
         if(val == null) return;
         if(colorMapping.containsKey(val)) {
             if(colorMapping.get(val) == null) {
-                HSSFCellStyle style = cell.getCellStyle();
+                CellStyle style = cell.getCellStyle();
                 short color = style.getFillForegroundColor();
                 colorMapping.put(val, color);
                 System.out.println(val + " ==> FFC " + style.getFillForegroundColor()) ;
@@ -95,7 +98,7 @@ public class ExcelImportTest extends TestCase {
         }
     }
 
-    private String getStringValue(HSSFCell cell) {
+    private String getStringValue(Cell cell) {
         String strValue;
         switch(cell.getCellType()) {
             case HSSFCell.CELL_TYPE_NUMERIC:

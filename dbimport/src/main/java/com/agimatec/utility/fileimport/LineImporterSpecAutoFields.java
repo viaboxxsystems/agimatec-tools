@@ -1,6 +1,6 @@
 package com.agimatec.utility.fileimport;
 
-import com.agimatec.utility.fileimport.spreadsheet.Cell;
+import com.agimatec.utility.fileimport.spreadsheet.ICell;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +38,8 @@ public class LineImporterSpecAutoFields extends LineImporterSpec {
         int maxFieldIdx = 0;
         while (tokens.hasMoreElements()) {
             final Object val = tokens.nextElement();
-            if (val instanceof Cell) {
-                fieldIdx = ((Cell) val).getCellNum(); // hack: gaps possible
+            if (val instanceof ICell) {
+                fieldIdx = ((ICell) val).getColumnIndex(); // hack: gaps possible
             } else {
                 fieldIdx++;
             }

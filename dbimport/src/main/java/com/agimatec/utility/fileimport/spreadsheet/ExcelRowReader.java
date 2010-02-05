@@ -1,10 +1,10 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
 import com.agimatec.utility.fileimport.LineReader;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Row;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +23,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
     private POIFSFileSystem fileSystem;
     private HSSFWorkbook workbook;
     private HSSFSheet sheet;
-    private Iterator<HSSFRow> rowIterator;
+    private Iterator<Row> rowIterator;
     private InputStream stream;
 
     public int getSheetIndex() {
@@ -83,11 +83,11 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         this.fileSystem = fileSystem;
     }
 
-    public Iterator<HSSFRow> getRowIterator() {
+    public Iterator<Row> getRowIterator() {
         return rowIterator;
     }
 
-    public void setRowIterator(Iterator<HSSFRow> rowIterator) {
+    public void setRowIterator(Iterator<Row> rowIterator) {
         this.rowIterator = rowIterator;
     }
 
