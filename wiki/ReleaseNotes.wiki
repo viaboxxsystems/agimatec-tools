@@ -5,6 +5,20 @@ You can view the complete history of changes on the "Source" tab under "Changes"
 
 = dbimport =
 
+== 2.3.1 (Febr. 2010) ==
+The 2.3.x versions of agimatec-tools support org.apache.poi version 3.6.
+If you need dbimport with this pos version, checkout the trunk from svn or load one of the 2.3.x jars of dbimport.
+SVN URL of trunk:
+https://agimatec-tools.googlecode.com/svn/trunk
+
+
+== 2.2.8 (versions 2.2.x, Febr. 2010) ==
+All 2.2.x versions of agimatec-tools support org.apache.poi version 3.1-beta2.
+If you need dbimport with this poi version, checkout the branch and build the project or load one of 2.2.x jars of dbimport.
+SVN URL of branch: 
+https://agimatec-tools.googlecode.com/svn/branches/BR-2.2.x
+
+
 == 2.2.7 (16.12.2009) ==
 
 doctype for dozer5.0 fixed
