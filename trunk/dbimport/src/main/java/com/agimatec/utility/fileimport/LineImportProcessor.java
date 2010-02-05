@@ -1,6 +1,6 @@
 package com.agimatec.utility.fileimport;
 
-import com.agimatec.utility.fileimport.spreadsheet.Cell;
+import com.agimatec.utility.fileimport.spreadsheet.ICell;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -110,8 +110,8 @@ public class LineImportProcessor extends ImporterProcessor {
                     }
                 } while (parser.isLineIncomplete() && aRecord != null);
             }
-            if(singleValue instanceof Cell) {
-                fieldIdx = ((Cell)singleValue).getCellNum();
+            if(singleValue instanceof ICell) {
+                fieldIdx = ((ICell)singleValue).getColumnIndex();
             } else {
                 fieldIdx++;
             }

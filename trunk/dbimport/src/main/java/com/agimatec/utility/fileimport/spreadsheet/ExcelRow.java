@@ -1,6 +1,6 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.Row;
 
 /**
  * Description: Abstraction for a single excel-spreadsheet row<br/>
@@ -9,14 +9,14 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
  * Time: 17:50:21 <br/>
  * Copyright: Agimatec GmbH
  */
-public class ExcelRow implements Row {
-    final HSSFRow row;
+public class ExcelRow implements IRow {
+    final Row row;
 
-    public ExcelRow(HSSFRow hssfRow) {
+    public ExcelRow(Row hssfRow) {
         row = hssfRow;
     }
 
-    public HSSFRow getRow() {
+    public Row getRow() {
         return row;
     }
 
@@ -32,7 +32,7 @@ public class ExcelRow implements Row {
         return row.getLastCellNum();
     }
 
-    public Cell getCell(int num) {
+    public ICell getCell(int num) {
         return new ExcelCell(row.getCell(num));
     }
 }

@@ -1,9 +1,10 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFComment;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Comment;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -16,12 +17,12 @@ import java.util.Date;
  * Time: 17:21:33 <br/>
  * Copyright: Agimatec GmbH
  */
-public class ExcelCell implements Cell {
+public class ExcelCell implements ICell {
     private final DecimalFormat plainNumericFormat = new DecimalFormat("#.#");
-    private final HSSFCell cell;
-    private HSSFCellStyle style;
+    private final Cell cell;
+    private CellStyle style;
 
-    public ExcelCell(HSSFCell hssfCell) {
+    public ExcelCell(Cell hssfCell) {
         cell = hssfCell;
         plainNumericFormat.setGroupingUsed(false);
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -96,19 +97,19 @@ public class ExcelCell implements Cell {
     }
 */
 
-    public HSSFCellStyle getStyle() {
+    public CellStyle getStyle() {
         if (style == null) {
             style = cell.getCellStyle();
         }
         return style;
     }
 
-    public HSSFCell getCell() {
+    public Cell getCell() {
         return cell;
     }
 
     public String getComment() {
-        HSSFComment comment = cell.getCellComment();
+        Comment comment = cell.getCellComment();
         if (comment != null) {
             return comment.getString().getString();
         } else {
@@ -116,7 +117,7 @@ public class ExcelCell implements Cell {
         }
     }
 
-    public int getCellNum() {
-        return (int) cell.getCellNum();
+    public int getColumnIndex() {
+        return cell.getColumnIndex();
     }
 }
