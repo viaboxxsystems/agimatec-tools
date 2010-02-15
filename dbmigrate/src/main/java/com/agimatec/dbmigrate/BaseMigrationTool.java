@@ -198,7 +198,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
             try {
                 FileUtils.copyURLToFile(source, ftarget);
             } catch (FileNotFoundException ex) {
-                log.warn("Cannot copy: " + source + " --> " + ftarget, ex);
+                log.info("file to backup-copy not found, source: " + source + " target: " + ftarget);
                 if(ftarget.exists()) ftarget.delete(); // delete target when source not exists
             }
         }
