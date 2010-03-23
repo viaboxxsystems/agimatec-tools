@@ -223,27 +223,8 @@ public abstract class DatabaseSchemaChecker {
         if (xmlIndexDescription.getIndexName() == null || xmlIndexDescription
                 .getIndexName()
                 .equalsIgnoreCase(databaseIndexDescription.getIndexName())) {
-            boolean columnsOK = xmlIndexDescription.getColumnSize() ==
-                    databaseIndexDescription.getColumnSize();
-            if (columnsOK) {
-                for (int i = 0; i < xmlIndexDescription.getColumnSize(); i++) {
-                    String xmlColumn = xmlIndexDescription.getColumn(i);
-                    String dbColumn = databaseIndexDescription.getColumn(i);
-                    if (xmlColumn.equalsIgnoreCase(dbColumn)) {
-                        assertTrue("Table: " + xmlIndexDescription.getTableName() +
-                                "... Wrong Orderdirection! Column:" +
-                                xmlIndexDescription.getColumn(i) +
-                                " expected OrderDirection: " +
-                                xmlIndexDescription.getOrderDirection(i) +
-                                " databaseOrderDirection: " +
-                                databaseIndexDescription.getOrderDirection(i),
-                                xmlIndexDescription.getOrderDirection(i) ==
-                                        databaseIndexDescription.getOrderDirection(i));
-                    } else {
-                        columnsOK = false;
-                    }
-                }
-            }
+          boolean columnsOK = indexColumnsEqual(xmlIndexDescription,
+              databaseIndexDescription);
             if (!columnsOK) {
                 assertTrue("Index: " + xmlIndexDescription.getIndexName() +
                         "... Column differ! expected: " +
@@ -258,11 +239,47 @@ public abstract class DatabaseSchemaChecker {
         }
     }
 
-    protected void compareIndexDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
+  private boolean indexColumnsEqual(IndexDescription xmlIndexDescription, IndexDescription databaseIndexDescription) {
+    boolean columnsOK = xmlIndexDescription.getColumnSize() ==
+            databaseIndexDescription.getColumnSize();
+    if (columnsOK) {
+        for (int i = 0; i < xmlIndexDescription.getColumnSize(); i++) {
+            String xmlColumn = xmlIndexDescription.getColumn(i);
+            String dbColumn = databaseIndexDescription.getColumn(i);
+            if (xmlColumn.equalsIgnoreCase(dbColumn)) {
+                assertTrue("Table: " + xmlIndexDescription.getTableName() +
+                        "... Wrong Orderdirection! Column:" +
+                        xmlIndexDescription.getColumn(i) +
+                        " expected OrderDirection: " +
+                        xmlIndexDescription.getOrderDirection(i) +
+                        " databaseOrderDirection: " +
+                        databaseIndexDescription.getOrderDirection(i),
+                        xmlIndexDescription.getOrderDirection(i) ==
+                                databaseIndexDescription.getOrderDirection(i));
+            } else {
+                columnsOK = false;
+            }
+        }
+    }
+    return columnsOK;
+  }
+
+  protected void compareIndexDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
         for (int i = 0; i < xmlTableDescription.getIndexSize(); i++) {
             IndexDescription xmlIndexDescription = xmlTableDescription.getIndex(i);
-            IndexDescription databaseIndexDescription =
+            IndexDescription databaseIndexDescription = null;
+            if(xmlIndexDescription.getIndexName() != null) {
+             databaseIndexDescription =
                     databaseTableDescription.getIndex(xmlIndexDescription.getIndexName());
+            } else {
+              for(IndexDescription each : databaseTableDescription.getIndices()) {
+                if(indexColumnsEqual(xmlIndexDescription, each)) {
+                  databaseIndexDescription = each;
+                  break;
+                }
+              }
+              if(databaseIndexDescription==null) databaseIndexDescription = databaseTableDescription.getPrimaryKey();
+            }
             compareSingleIndexDescription(xmlIndexDescription, databaseIndexDescription);
         }
     }
@@ -274,7 +291,7 @@ public abstract class DatabaseSchemaChecker {
             ColumnDescription databaseColumnDescription = databaseTableDescription
                     .getColumn(xmlColumnDescription.getColumnName());
             assertTrue(xmlTableDescription + "." + xmlColumnDescription + " not in database.",
-                    databaseColumnDescription != null);          
+                    databaseColumnDescription != null);
             if (databaseColumnDescription != null) {
                 assertTrue("Table: " + tableName + ", ColumnName: " +
                         xmlColumnDescription.getColumnName() +
@@ -347,11 +364,13 @@ public abstract class DatabaseSchemaChecker {
                             xmlForeignKeyDescription.getConstraintName() +
                             "... Column not found! Expected Column: " + xmlColumn,
                             databaseForeignKeyDescription.getColumn(xmlColumn) != -1);
-                    assertTrue("Table: " + tableName + ", ConstraintName: " +
+                    if(xmlRefColumn != null) {
+                      assertTrue("Table: " + tableName + ", ConstraintName: " +
                             xmlForeignKeyDescription.getConstraintName() +
                             "... ReferencedColumn not found! Expected Column: " +
                             xmlRefColumn, databaseForeignKeyDescription
                             .getRefColumn(xmlRefColumn) != -1);
+                    }
                 }
             } else assertTrue("Table: " + tableName +
                     "... ConstraintName not found! Expected ConstraintName: " +

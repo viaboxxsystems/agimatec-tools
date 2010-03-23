@@ -383,6 +383,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                     index.setTableName(td.getTableName());
                     index.addColumn(strip(theColDef.getString("columndefinition/column")));
                     index.setUnique(true);
+//                    index.setIndexName(td.getTableName() + "_" + index.getColumn(0) + "_key");  // default for Postgres
                     td.addIndex(index);
                 }
             }
