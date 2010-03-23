@@ -115,6 +115,10 @@ public class PostgresDDLExpressions extends DDLExpressions {
             cd.setTypeName("VARCHAR");
         } else if (cd.getTypeName().equalsIgnoreCase("BOOL")) {
             cd.setTypeName("BOOLEAN");
+        } else if(cd.getTypeName().equalsIgnoreCase("int4")) {
+            cd.setTypeName("INTEGER");
+        } else if(cd.getTypeName().equalsIgnoreCase("int8")) {
+            cd.setTypeName("BIGINT");
         }
 
     }
