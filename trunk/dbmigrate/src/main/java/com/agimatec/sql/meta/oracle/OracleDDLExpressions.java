@@ -33,25 +33,25 @@ public class OracleDDLExpressions extends DDLExpressions {
             // ALTER TABLE Customer ADD (CONSTRAINT "Customer_Company" FOREIGN KEY ("COMPANYID") REFERENCES CLIENTORGUNIT ("OBJECTIDENTIFIER"))
             "{table-add-foreign-key ALTER TABLE ${table} ADD  " +
                     "{constraint CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
                     "[ON DELETE ${onDeleteRule}]" +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }", // ilb
             //"CREATE SEQUENCE SEQ_NLSBundle START WITH 1 INCREMENT BY 1 NOMAXVALUE NOMINVALUE NOCYCLE NOORDER CACHE 100"
-            "{create-sequence CREATE SEQUENCE ${sequence} START WITH ${start} INCREMENT BY ${increment} " +
+            "{create-sequence CREATE SEQUENCE ${sequence} [{attributes START WITH ${start} INCREMENT BY ${increment} " +
                     "[${nomaxvalue(NOMAXVALUE)}] [${nominvalue(NOMINVALUE)}] [${nocycle(NOCYCLE)}] " +
-                    "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}", // ilb
+                    "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}", // ilb
             //"CREATE TABLE Rate (PRICE NUMBER(9,2) NOT NULL, PRICE2 NUMBER(2), PRICE3 INTEGER, PRICE4 CHAR)"
             "{dezign-create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                     "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'] " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')' }] " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{columndefinition ${column} ${typeName} [${varying(VARYING)}]" +
                     "[{precision '(' {numbers ${value}...','} [CHAR]')'}] " +
                     "[{default DEFAULT ${defaultValue}}] " +
                     "[{constraint CONSTRAINT ${constraintName}}] " +
-                    "[${mandatory(NOT NULL)}]}] " + "...','} ')'}",
+                    "[${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]}] " + "...','} ')'}",
             "{create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                                 "[{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' " +
                                 "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
@@ -59,7 +59,7 @@ public class OracleDDLExpressions extends DDLExpressions {
                                 "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
                                 "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                                 "[{columndefinition ${column} ${typeName} " +
-                                "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${mandatory(NOT NULL)}]}] " +
+                                "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]}] " +
                                 "...','} ')'}",
             // "ALTER TABLE NLSTEXT ADD (CONSTRAINT "NLSTEXT_PK" PRIMARY KEY (BUNDLEID, LOCALE, KEY) USING INDEX TABLESPACE "DB_INDEX")"
             "{table-add-primary-key ALTER TABLE ${table} ADD '(' " +

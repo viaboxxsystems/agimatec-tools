@@ -276,12 +276,12 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             fk.setTableSpace(strip(values.getString("tableSpace/tableSpace")));
             fk.setOnDeleteRule(values.getString("constraint/onDeleteRule"));
             List columns = values.getList("constraint/columns");
-            List refcolumns = values.getList("constraint/refcolumns");
+            List refcolumns = values.getList("constraint/refcolumns/refcolumns");
             for (int i = 0; i < columns.size(); i++) {
                 Map eachCol = (Map) columns.get(i);
-                Map refCol = (Map) refcolumns.get(i);
+                Map refCol = (refcolumns != null) ?  (Map)refcolumns.get(i) : null;
                 fk.addColumnPair(strip((String) eachCol.get("column")),
-                        strip((String) refCol.get("column")));
+                        refCol != null ? strip((String) refCol.get("column")) : null);
             }
             TableDescription td = getTable(catalog, fk.getTableName());
             td.addForeignKey(fk);
@@ -294,13 +294,15 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         public void process(MapNode values, CatalogDescription catalog) {
             SequenceDescription sd = new SequenceDescription();
             sd.setSequenceName(strip(values.getString("sequence")));
-            sd.setCache(getInt(values, "cache/value"));
-            sd.setCycle(!getBool(values, "nocycle"));
-            sd.setIncrement(getInt(values, "increment"));
-            sd.setStart(getInt(values, "start"));
+            sd.setCache(getInt(values, "attributes/cache/value"));
+            sd.setCycle(!getBool(values, "attributes/nocycle"));
+            sd.setIncrement(getInt(values, "attributes/increment"));
+            if(sd.getIncrement() == 0) sd.setIncrement(1);
+            sd.setStart(getInt(values, "attributes/start"));
+            if(sd.getStart() == 0) sd.setStart(1);
             //sd.setMaxValue();
             //sd.setMinValue();
-            sd.setOrder(!getBool(values, "noorder"));
+            sd.setOrder(!getBool(values, "attributes/noorder"));
             catalog.addSequence(sd);
         }
     }
@@ -334,12 +336,12 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             fk.setTableSpace(
                     strip(aColDef.getString("foreignKey/tableSpace/tableSpace")));
             List columns = aColDef.getList("foreignKey/columns");
-            List refcolumns = aColDef.getList("foreignKey/refcolumns");
+            List refcolumns = aColDef.getList("foreignKey/refcolumns/refcolumns");
             for (int j = 0; j < columns.size(); j++) {
                 Map eachCol = (Map) columns.get(j);
-                Map refCol = (Map) refcolumns.get(j);
+                Map refCol = (refcolumns != null) ?  (Map)refcolumns.get(j) : null;
                 fk.addColumnPair(strip((String) eachCol.get("column")),
-                        strip((String) refCol.get("column")));
+                        refCol != null ? strip((String) refCol.get("column")) : null);
             }
             aTd.addForeignKey(fk);
         }
@@ -374,6 +376,14 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 MapNode theColDef = new MapNode((Map) element);
                 if (theColDef.getMap().containsKey("tableConstraint")) {
                     buildTableConstraint(theColDef, td);
+                }
+                if(theColDef.getString("columndefinition/isUnique") != null) {
+                    // unique column
+                    IndexDescription index = new IndexDescription();
+                    index.setTableName(td.getTableName());
+                    index.addColumn(strip(theColDef.getString("columndefinition/column")));
+                    index.setUnique(true);
+                    td.addIndex(index);
                 }
             }
         }

@@ -25,13 +25,13 @@ public class PostgresDDLExpressions extends DDLExpressions {
             // ALTER TABLE Address ADD CONSTRAINT CV_Country_Address_FK_1 FOREIGN KEY (country) REFERENCES CV_Country (country_id);
             "{table-add-foreign-key ALTER TABLE ${table} ADD " +
                     "{constraint CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
                     "[ON DELETE ${onDeleteRule}]" +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }", // ilb
             //"CREATE SEQUENCE SEQ_NLSBundle INCREMENT 1 START 1 NOMAXVALUE NOMINVALUE NOCYCLE NOORDER CACHE 100"
-            "{create-sequence CREATE SEQUENCE ${sequence} INCREMENT [BY] ${increment} START [WITH] ${start} " +
+            "{create-sequence CREATE SEQUENCE ${sequence} [{attributes INCREMENT [BY] ${increment} START [WITH] ${start} " +
                     "[${nomaxvalue(NOMAXVALUE)}] [${nominvalue(NOMINVALUE)}] [${nocycle(NOCYCLE)}] " +
-                    "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}", // ilb
+                    "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}", // ilb
             //"CREATE TABLE Rate (PRICE NUMBER(9,2) NOT NULL, PRICE2 NUMBER(2), PRICE3 INTEGER, PRICE4 CHAR)"
             "{dezign-create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                     "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'] " +
@@ -43,15 +43,15 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "[{precision '(' {numbers ${value}...','} [CHAR]')'}] " +
                     "[{default DEFAULT ${defaultValue}}] " +
                     "[{constraint CONSTRAINT ${constraintName}}] " +
-                    "[${mandatory(NOT NULL)}]}] " + "...','} ')'}",
+                    "[${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]}] " + "...','} ')'}",
             "{create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                     "[{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{columndefinition ${column} ${typeName} " +
-                    "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${mandatory(NOT NULL)}]}] " +
+                    "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]}] " +
                     "...','} ')'}",
             // "ALTER TABLE NLSTEXT ADD CONSTRAINT "NLSTEXT_PK" PRIMARY KEY (BUNDLEID, LOCALE, KEY) USING INDEX TABLESPACE "DB_INDEX""
             "{table-add-primary-key ALTER TABLE ${table} ADD " +
@@ -76,7 +76,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "}]" +
 
                     "[{add-foreign-key ADD CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
                     "[ON DELETE ${onDeleteRule}]" +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
 
@@ -96,7 +96,8 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "...','}}",
             // DROP TRIGGER TR_I_User_Core ON User_Core
             "{drop-trigger DROP TRIGGER ${trigger} ON ${table}}",
-            "{drop-table DROP TABLE ${table}}"};
+            "{drop-table DROP TABLE ${table}}",
+            "{drop-sequence DROP SEQUENCE ${sequence}}"};
 
     public static final ExtractExpr[] expressions;
 
