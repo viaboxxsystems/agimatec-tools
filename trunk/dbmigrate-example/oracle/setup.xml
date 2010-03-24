@@ -8,6 +8,7 @@
     DB_PASSWORD   : if exists, overrule password from JdbcConfig
     DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
     DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
+    DB_DRIVER        : if exists, overrule jdbcDriver from JdbcConfig
   -->
   <map name="env">
     <!-- schema namen -->
