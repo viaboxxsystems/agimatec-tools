@@ -46,6 +46,9 @@ doctype for dozer5.0 fixed
 
 = dbmigrate =
 
+== 2.3.1 ==
+  * New grails plugin to integrate dbmigrate into a grails project: http://code.google.com/p/viaboxx-dbmigrate/. 
+
 == 2.2.7 (16.12.2009) ==
 doctype for dozer5.0 fixed
 3rd party libs upgraded 
