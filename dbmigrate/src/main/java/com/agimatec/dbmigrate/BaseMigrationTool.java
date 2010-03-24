@@ -468,6 +468,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     public void connectTargetDatabase() {
+      if(targetDatabase == null) {
         String dbFile = getJdbcConfigFile();
         JdbcConfig databaseConfig = new JdbcConfig();
         if(dbFile != null) {
@@ -476,6 +477,11 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
         applyEnvironment(databaseConfig);
         targetDatabase = createDatabase(databaseConfig);
+
+        if (getTargetDatabase() != null) {
+            getTargetDatabase().begin();
+        }
+      }
     }
 
     protected JdbcDatabase createDatabase(JdbcConfig databaseConfig) {
@@ -512,9 +518,6 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     protected void prepareDatabase() throws Exception {
         connectTargetDatabase();
-        if (getTargetDatabase() != null) {
-            getTargetDatabase().begin();
-        }
     }
 
     protected void commit() {
