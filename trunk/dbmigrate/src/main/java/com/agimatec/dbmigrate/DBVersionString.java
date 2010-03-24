@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Roman Stumm
  */
-final class DBVersionString implements Comparable {
+public final class DBVersionString implements Comparable {
     private static final Log log = LogFactory.getLog(DBVersionString.class);
 
     private final String fileName;
@@ -83,11 +83,13 @@ final class DBVersionString implements Comparable {
         }
         int idx1 = v.indexOf('.');
         int idx2 = v.indexOf('.', idx1 + 1);
-        int control = v.indexOf('_');
+        int control = v.indexOf('-');
+        if(control == -1) control = v.indexOf('_');
         if (control != -1 && control < idx2) {
             idx2 = -1;
         }
-        int idx3 = v.indexOf('_', idx2 + 1);
+        int idx3 = v.indexOf('-', idx2 + 1);
+        if (idx3 == -1) idx3 = v.indexOf('_', idx2 + 1);
         if (idx2 != -1) {
             if (idx3 == -1) idx3 = v.indexOf('.', idx2 + 1);
         }

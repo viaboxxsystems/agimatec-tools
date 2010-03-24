@@ -467,11 +467,13 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-    protected void connectTargetDatabase() {
+    public void connectTargetDatabase() {
         String dbFile = getJdbcConfigFile();
-        print("connect to jdbc using " + dbFile + "...");
         JdbcConfig databaseConfig = new JdbcConfig();
-        databaseConfig.read(dbFile);
+        if(dbFile != null) {
+          print("connect to jdbc using " + dbFile + "...");
+          databaseConfig.read(dbFile);
+        }
         applyEnvironment(databaseConfig);
         targetDatabase = createDatabase(databaseConfig);
     }
@@ -501,6 +503,10 @@ public abstract class BaseMigrationTool implements MigrationTool {
         v = env.get("DB_URL");
         if (v != null) {
             jdbcConfig.setConnect((String) v);
+        }
+        v = env.get("DB_DRIVER");
+        if (v != null) {
+            jdbcConfig.setDriver((String) v);
         }
     }
 
@@ -555,7 +561,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-    protected void terminateTransactions() throws Exception {
+    public void terminateTransactions() throws Exception {
         if (this.targetDatabase != null) {
             if (getTargetDatabase().isTransaction()) {
                 try {
@@ -567,7 +573,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-    protected void disconnectDatabase() throws Exception {
+    public void disconnectDatabase() throws Exception {
         if (targetDatabase != null) {
             targetDatabase.close();
             targetDatabase = null;

@@ -46,4 +46,12 @@ public class JdbcConfig {
     public void setConnect(String urlConnect) {
         properties.setProperty(JDBC_URL, urlConnect);
     }
+
+    public String getDriver() {
+      return properties.getProperty(JDBC_DRIVER);
+    }
+  
+    public void setDriver(String dr) {
+      properties.setProperty(JDBC_DRIVER, dr);
+    }
 }
