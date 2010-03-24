@@ -204,7 +204,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         }
     }
 
-    private DBVersionString getToVersion() {
+    public DBVersionString getToVersion() {
         String ver = getMigrateConfig().getString("to-version");
         if (ver == null || ver.length() == 0) {
             return null;
@@ -214,7 +214,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         }
     }
 
-    private DBVersionString getFromVersion() throws SQLException {
+    public DBVersionString getFromVersion() throws SQLException {
         String ver = getMigrateConfig().getString("from-version");
         DBVersionString version;
         if (ver == null || ver.length() == 0) {
@@ -253,7 +253,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
      *
      * @throws SQLException
      */
-    private DBVersionString readVersion() throws SQLException {
+    public DBVersionString readVersion() throws SQLException {
         String version = null;
         try {
             SQLCursor rs = sqlSelect(dbVersionMeta.toSQLSelectVersion());
