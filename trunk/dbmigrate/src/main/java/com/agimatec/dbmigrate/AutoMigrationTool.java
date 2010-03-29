@@ -281,8 +281,10 @@ public class AutoMigrationTool extends BaseMigrationTool {
       List<DBVersionString> before = readDir(null, dir);
       actions = createActions(before);
       actions.add(0, new ChangeDirCommand(this, dir));
-      actions.add(new ChangeDirCommand(this, getScriptsDir()));
-      actions.addAll(createActions(files));
+      if(getScriptsDir() != null || !files.isEmpty()) {
+        actions.add(new ChangeDirCommand(this, getScriptsDir()));
+        actions.addAll(createActions(files));
+      }
     } else {
       actions = createActions(files);
     }
