@@ -46,8 +46,9 @@ doctype for dozer5.0 fixed
 
 = dbmigrate =
 
-== upcoming 2.3.1 (24th march 2010) ==
+== 2.3.1 (29th march 2010) ==
   * New grails plugin to integrate dbmigrate into a grails project: http://code.google.com/p/viaboxx-dbmigrate/. 
+  * dbmigrate works also when all scripts and configs are packaged in a jar or war archive (former releases only supported file: access. this release supports classpath access with the cp: protocol)
 
 == 2.2.7 (16.12.2009) ==
 doctype for dozer5.0 fixed
