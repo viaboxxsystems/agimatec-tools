@@ -12,8 +12,7 @@ import org.xml.sax.XMLReader;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Provides central access to configuration files.
@@ -44,7 +43,7 @@ import java.util.Map;
  */
 public class ConfigManager implements Serializable {
     private static final Log myLogger = LogFactory.getLog(ConfigManager.class);
-    protected static final String C_ProtocolClassPath = "cp://";
+    public static final String C_ProtocolClassPath = "cp://";
     protected static ConfigManager singleton = new ConfigManager("configmanager.ini");
 
     private static final String DEFAULT_CONFIGROOT_PATH = "file:";
@@ -157,6 +156,23 @@ public class ConfigManager implements Serializable {
             return new URL("file:"+path);
         } else {
             return new URL(path);
+        }
+    }
+
+    public static List<URL> toURLs(String path) throws IOException {
+        if (path.startsWith(C_ProtocolClassPath)) {
+            final String theResPath = path.substring(C_ProtocolClassPath.length());
+          Enumeration<URL> en = ClassUtils.getClassLoader().getResources(theResPath);
+          List<URL> urls = new ArrayList();
+          while(en.hasMoreElements()) {
+            URL next = en.nextElement();
+            urls.add(next);
+          }
+          return urls;
+        } else {
+            List<URL> urls = new ArrayList(1);
+            urls.add(toURL(path));
+            return urls;
         }
     }
 

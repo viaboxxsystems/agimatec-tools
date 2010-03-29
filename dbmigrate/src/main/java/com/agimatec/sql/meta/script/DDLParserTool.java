@@ -1,5 +1,6 @@
 package com.agimatec.sql.meta.script;
 
+import com.agimatec.commons.config.ConfigManager;
 import com.agimatec.sql.meta.persistence.ObjectPersistencer;
 import com.agimatec.sql.meta.persistence.SerializerPersistencer;
 import com.agimatec.sql.meta.persistence.XStreamPersistencer;
@@ -35,7 +36,7 @@ public class DDLParserTool {
         DDLScriptSqlMetaFactory factory =
                 new DDLScriptSqlMetaFactory(expressions);
         for (String script : scriptsToParse) {
-            factory.fillCatalog(new URL(script));
+            factory.fillCatalog(ConfigManager.toURL(script));
         }
         ObjectPersistencer persistencer;
         if (catalog.toLowerCase().endsWith(".xml")) {

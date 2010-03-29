@@ -154,7 +154,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
         List<URL> urls = new ArrayList();
         while (it.hasNext()) {
-            urls.add(new URL(it.next()));
+            urls.add(ConfigManager.toURL(it.next()));
         }
         return urls;
     }
