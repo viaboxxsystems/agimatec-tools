@@ -39,7 +39,7 @@ public class ResourceUtils {
    * @since 1.6.8
    */
   public static List<String> readLines(URL url) throws IOException {
-    return readLines(newReader(url), url);
+    return readLines(newReader(url));
   }
 
   /**
@@ -51,9 +51,9 @@ public class ResourceUtils {
    * @throws IOException if an IOException occurs.
    * @since 1.0
    */
-  public static List<String> readLines(BufferedReader reader, URL url) throws IOException {
+  public static List<String> readLines(BufferedReader reader) throws IOException {
     List<String> lines = new ArrayList();
-    eachLine(reader, lines, url);
+    eachLine(reader, lines);
     return lines;
   }
 
@@ -66,50 +66,28 @@ public class ResourceUtils {
    * @throws IOException           if an I/O error occurs while creating the input stream
    * @since 1.5.5
    */
-  public static BufferedReader newReader(URL url) throws IOException {
+  private static BufferedReader newReader(URL url) throws IOException {
     return newReader(url.openConnection().getInputStream());
   }
 
   /**
    * Creates a reader for this input stream.
    *
-   * @param self an input stream
+   * @param stream an input stream
    * @return a reader
    * @since 1.0
    */
-  public static BufferedReader newReader(InputStream self) {
-    return new BufferedReader(new InputStreamReader(self));
+  private static BufferedReader newReader(InputStream stream) {
+    return new BufferedReader(new InputStreamReader(stream));
   }
 
   /**
-   * Iterates through the given reader line by line.  Each line is passed to the
-   * given 1 or 2 arg closure. If the closure has two arguments, the line count is passed
-   * as the second argument. The Reader is closed before this method returns.
-   *
-   * @param self a Reader, closed after the method returns
-   * @return the last value returned by the closure
-   * @throws IOException if an IOException occurs.
-   * @since 1.5.6
-   */
-  public static Object eachLine(BufferedReader self, List<String> lines, URL url) throws IOException {
-    return eachLine(self, 1, lines, url);
-  }
-
-  /**
-   * Iterates through the given reader line by line.  Each line is passed to the
-   * given 1 or 2 arg closure. If the closure has two arguments, the line count is passed
-   * as the second argument. The Reader is closed before this method returns.
-   *
+   * Iterates through the given reader line by line.
    * @param br        a Reader, closed after the method returns
-   * @param firstLine the line number value used for the first line (default is 1, set to 0 to start counting from 0)
-   * @return the last value returned by the closure
    * @throws IOException if an IOException occurs.
    * @since 1.5.7
    */
-  public static Object eachLine(BufferedReader br, int firstLine, List<String> lines, URL url) throws IOException {
-    int count = firstLine;
-    Object result = null;
-
+  private static void eachLine(BufferedReader br, List<String> lines) throws IOException {
     try {
       while (true) {
         String line = br.readLine();
@@ -117,10 +95,8 @@ public class ResourceUtils {
           break;
         } else {
           lines.add(line);
-          count++;
         }
       }
-      return result;
     } finally {
       br.close();
     }

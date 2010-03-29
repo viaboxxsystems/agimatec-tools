@@ -15,7 +15,7 @@ import java.util.List;
 public class ResourceUtilsTest extends TestCase {
 
   public void testURLUtils() throws IOException {
-    List<String> list = ResourceUtils.readLines("com/");
+    List<String> list = ResourceUtils.readLines("com/agimatec/commons/util");
     for (String name : list) {
       System.out.println(name);
     }
