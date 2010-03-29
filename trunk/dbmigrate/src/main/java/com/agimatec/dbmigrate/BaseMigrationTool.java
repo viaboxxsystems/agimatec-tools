@@ -16,8 +16,6 @@ import com.agimatec.sql.meta.checking.DatabaseSchemaChecker;
 import com.agimatec.sql.script.SQLScriptExecutor;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -261,8 +259,6 @@ public abstract class BaseMigrationTool implements MigrationTool {
      * callback - invoke a groovy script
      *
      * @throws IOException
-     * @throws ResourceException
-     * @throws ScriptException
      */
     public void doGroovyScript(String scriptInvocation) throws Exception {
         GroovyScriptTool tool = new GroovyScriptTool();
