@@ -1,5 +1,6 @@
 package com.agimatec.sql.meta.script;
 
+import com.agimatec.commons.config.ConfigManager;
 import com.agimatec.sql.meta.persistence.ObjectPersistencer;
 import com.agimatec.sql.meta.persistence.SerializerPersistencer;
 import com.agimatec.sql.meta.persistence.XStreamPersistencer;
@@ -34,7 +35,7 @@ public class DDLScriptSqlMetaFactoryTest extends TestCase {
             throws Exception {
         DDLScriptSqlMetaFactory factory = new DDLScriptSqlMetaFactory(
                 DDLExpressions.forDbms("postgres"));
-        URL script = new URL("file:src/test/resources/create-tables-example-script.sql");
+        URL script = ConfigManager.toURL("file:src/test/resources/create-tables-example-script.sql");
         factory.fillCatalog(script);
         assertNotNull(factory.getCatalog());
 

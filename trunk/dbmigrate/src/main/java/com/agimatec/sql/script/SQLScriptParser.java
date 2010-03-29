@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import com.agimatec.commons.config.*;
 
 import java.io.*;
 import java.net.URL;
@@ -194,7 +195,7 @@ public class SQLScriptParser {
 
     /**
      * when scriptName starts with cp:// read the scriptName as a resource
-     * from the classpath, otherwise access the script as a file by
+     * from the classpath, otherwise access the script as a file or cp:// resource by
      * scriptdir + scriptname.
      * @param scriptName
      * @return an array with 2 elements. array[0] = Reader, array[1] = String (Path) 
@@ -202,14 +203,15 @@ public class SQLScriptParser {
      */
     protected Object[] openReaderPath(String scriptName) throws IOException {
         final Reader input;
-        final String path;
-        if (scriptName.startsWith("cp://")) {
+        String path;
+        if (scriptName.startsWith(ConfigManager.C_ProtocolClassPath)) {
             URL ress = ClassUtils.getClassLoader().getResource(scriptName.substring(5));
             path = ress.toExternalForm();
-            input = new InputStreamReader(ress.openStream());
+            input = new BufferedReader(new InputStreamReader(ress.openStream()));
         } else {
             path = (getScriptDir() != null) ? getScriptDir() + scriptName : scriptName;
-            input = new BufferedReader(new FileReader(new File(path)));
+            URL ress = ConfigManager.toURL(path);
+            input = new BufferedReader(new InputStreamReader(ress.openStream()));
         }
         return new Object[]{input, path};
     }
