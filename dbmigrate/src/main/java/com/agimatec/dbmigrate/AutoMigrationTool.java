@@ -10,7 +10,6 @@ import com.agimatec.dbmigrate.action.OperationAction;
 import com.agimatec.dbmigrate.action.ScriptAction;
 import com.agimatec.dbmigrate.util.SQLCursor;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
