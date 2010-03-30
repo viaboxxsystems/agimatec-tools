@@ -73,6 +73,11 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
     <!--<String name="DB_URL" value="jdbc:postgresql://localhost:5432/test"/>-->
   </map>
 
+
+  <!-- Optional. File prefix of script files to execute automatically.
+       Filename: prefix version _ rest . ending -->
+  <String name="script-prefix" value="up-"/>
+
  <!-- Optional. Scripts-Before-All = the source path for scripts to execute
       (before the sequence of migration scripts is executed) -->
   <file name="Scripts-Before-All" dir="upgrade/before-all" file=""/>
