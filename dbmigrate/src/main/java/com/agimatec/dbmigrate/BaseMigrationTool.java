@@ -282,7 +282,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
    * @throws IOException
    */
   public void doGroovyScript(String scriptInvocation) throws Exception {
-    GroovyScriptTool tool = new GroovyScriptTool();
+    GroovyScriptTool tool = new GroovyScriptTool(getScriptsDir());
     invokeBeanCallbacks(tool);
     List<String> params = splitParams(scriptInvocation);
     int idx = scriptInvocation.indexOf("(");
