@@ -104,6 +104,8 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
         <String name="version" value="version" />
         <String name="since" value="since"/>
         <Boolean name="insert-only" value="false"/>
+        <Boolean name="auto-create" value="true"/>
+        <Boolean name="auto-version" value="false"/>
   </map>-->
 
 </config>
