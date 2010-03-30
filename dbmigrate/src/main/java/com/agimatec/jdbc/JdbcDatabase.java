@@ -11,23 +11,25 @@ import java.util.Properties;
  * Copyright: Agimatec GmbH
  */
 public interface JdbcDatabase {
-    Connection getConnection();
+  Connection getConnection();
 
-    String getDriverClassName();
+  void setConnection(Connection connection);
 
-    void begin();
+  String getDriverClassName();
 
-    boolean isTransaction();
+  void begin();
 
-    void rollback();
+  boolean isTransaction();
 
-    void commit();
+  void rollback();
 
-    Properties getProperties();
+  void commit();
 
-    String getConnectionString();
+  Properties getProperties();
 
-    void close();
+  String getConnectionString();
 
-    void init(String driver, String url, Properties props);
+  void close();
+
+  void init(String driver, String url, Properties props);
 }

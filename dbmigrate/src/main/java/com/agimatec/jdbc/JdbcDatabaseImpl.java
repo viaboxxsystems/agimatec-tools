@@ -16,103 +16,108 @@ import java.util.Properties;
  * Copyright: Agimatec GmbH
  */
 class JdbcDatabaseImpl implements JdbcDatabase {
-    protected static final Log log = LogFactory.getLog(JdbcDatabaseImpl.class);
+  protected static final Log log = LogFactory.getLog(JdbcDatabaseImpl.class);
 
-    private Connection connection;
-    private final Properties properties;
-    private boolean transaction = false;
+  private Connection connection;
+  private final Properties properties;
+  private boolean transaction = false;
 
-    public JdbcDatabaseImpl(Properties aProperties) {
-        properties = new Properties();
-        properties.putAll(aProperties);
+  public JdbcDatabaseImpl(Properties aProperties) {
+    properties = new Properties();
+    properties.putAll(aProperties);
+  }
+
+  public Connection getConnection() {
+    return connection;
+  }
+
+  public String getDriverClassName() {
+    return properties.getProperty(JdbcConfig.JDBC_DRIVER);
+  }
+
+  public void begin() {
+    if (isTransaction()) {
+      throw new JdbcException("transaction already started");
+    } else {
+      if (connection == null) connect();
+      transaction = true;
     }
+  }
 
-    public Connection getConnection() {
-        return connection;
-    }
+  public void setConnection(Connection connection) {
+    this.connection = connection;
+    transaction = connection != null;
+  }
 
-    public String getDriverClassName() {
-        return properties.getProperty(JdbcConfig.JDBC_DRIVER);
-    }
-
-    public void begin() {
-        if (isTransaction()) {
-            throw new JdbcException("transaction already started");
-        } else {
-            if (connection == null) connect();
-            transaction = true;
-        }
-    }
-
-    private void connect() {
-        try {
-            if (log.isInfoEnabled()) {
-                log.info("JdbcDriver: " + getDriverClassName() + "; JdbcConnect: " +
-                        getConnectionString() + "; properties: " + properties);
-            }
-            if (getDriverClassName() != null) Class.forName(getDriverClassName());
-            connection = DriverManager.getConnection(getConnectionString(), properties);
+  private void connect() {
+    try {
+      if (log.isInfoEnabled()) {
+        log.info("JdbcDriver: " + getDriverClassName() + "; JdbcConnect: " +
+            getConnectionString() + "; properties: " + properties);
+      }
+      if (getDriverClassName() != null) Class.forName(getDriverClassName());
+      connection = DriverManager.getConnection(getConnectionString(), properties);
 //            connection.setAutoCommit(false);
-        } catch (Exception e) {
-            throw new JdbcException(e);
-        }
+    } catch (Exception e) {
+      throw new JdbcException(e);
     }
+  }
 
-    public boolean isTransaction() {
-        return connection != null && transaction;
-    }
+  public boolean isTransaction() {
+    return connection != null && transaction;
+  }
 
-    public void rollback() {
-        if (isTransaction()) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                throw new JdbcException(e);
-            } finally {
-                transaction = false;
-            }
-        } else {
-            throw new JdbcException("cannot rollback - transaction not started");
-        }
+  public void rollback() {
+    if (isTransaction()) {
+      try {
+        connection.rollback();
+      } catch (SQLException e) {
+        throw new JdbcException(e);
+      } finally {
+        transaction = false;
+      }
+    } else {
+      throw new JdbcException("cannot rollback - transaction not started");
     }
+  }
 
-    public void commit() {
-        if (isTransaction()) {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                throw new JdbcException(e);
-            } finally {
-                transaction = false;
-            }
-        } else {
-            throw new JdbcException("cannot commit - transaction not started");
-        }
+  public void commit() {
+    if (isTransaction()) {
+      try {
+        connection.commit();
+      } catch (SQLException e) {
+        throw new JdbcException(e);
+      } finally {
+        transaction = false;
+      }
+    } else {
+      throw new JdbcException("cannot commit - transaction not started");
     }
+  }
 
-    public Properties getProperties() {
-        return properties;
-    }
+  public Properties getProperties() {
+    return properties;
+  }
 
-    public String getConnectionString() {
-        return properties.getProperty(JdbcConfig.JDBC_URL);
-    }
+  public String getConnectionString() {
+    return properties.getProperty(JdbcConfig.JDBC_URL);
+  }
 
-    public void close() {
-        if (connection != null) {
-            Connection tc = connection;
-            connection = null;
-            try {
-                tc.close();
-            } catch (SQLException e) {
-                throw new JdbcException(e);
-            }
-        }
+  public void close() {
+    if (connection != null) {
+      Connection tc = connection;
+      connection = null;
+      try {
+        tc.close();
+      } catch (SQLException e) {
+        throw new JdbcException(e);
+      }
     }
+  }
 
-    public void init(String driver, String url, Properties props) {
-        if (driver != null) properties.setProperty(JdbcConfig.JDBC_DRIVER, driver);
-        if (url != null) properties.setProperty(JdbcConfig.JDBC_URL, url);
-        properties.putAll(props);
-    }
+  public void init(String driver, String url, Properties props) {
+    if (driver != null) properties.setProperty(JdbcConfig.JDBC_DRIVER, driver);
+    if (url != null) properties.setProperty(JdbcConfig.JDBC_URL, url);
+    properties.putAll(props);
+  }
 }
