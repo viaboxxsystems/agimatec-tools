@@ -36,9 +36,14 @@ import java.util.*;
  * 11- supports subscripts (@scriptname.sql; syntax)
  * 12 - supports db_version upgrade with setVersion(dbversion)-method
  *      or -- @version(dbversion) script-directive
+ * 13 - runs all scripts as files or as classpath resource
+ * 14 - (optional) automatically create db_version table
+ * 15 - (optional) automatically set version in db_version table after script execution
+ * 16 - can be integrated into grails project (see plugin viaboxx-dbmigrate)
+ * 17 - runs sql, xml or groovy script (auto-detect by file suffix)
  * </pre>
  * Author: Roman Stumm
- * Date: 04.04.2007
+ * Date: 2007, 2008, 2009, 2010
  * <pre>
  * final String sim = System.getProperty(SYSTEM_PROPERTY_SIM);
  * sim = "true"|"yes" :: simlation, echo execution sequence into log, but do not invoke any script
@@ -151,7 +156,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
 
   public void startAutomaticMigration() throws Exception {
     log("----------------- start migration -----------------");
-    prepareDatabase();
+    connectTargetDatabase();
     if (actionOverride != null && !actionOverride.isEmpty()) {
       print("PERFORMING COMMAND LINE ACTIONS ONLY!");
       performActions(actionOverride);
@@ -160,7 +165,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
   }
 
-  private void performActions(List<MigrateAction> actionOverride) throws Exception {
+  public void performActions(List<MigrateAction> actionOverride) throws Exception {
     if (sim) print("SIMULATION ONLY - SEQUENCE FOLLOWS:");
     try {
       if (actionOverride.isEmpty()) {
@@ -256,7 +261,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
   public DBVersionString readVersion() throws SQLException {
     String version = null;
     try {
-      SQLCursor rs = sqlSelect(dbVersionMeta.toSQLSelectVersion());
+      SQLCursor rs = sqlSelect(getDbVersionMeta().toSQLSelectVersion());
       try {
         while (rs.next()) {
           version = rs.getString(1);
@@ -265,46 +270,86 @@ public class AutoMigrationTool extends BaseMigrationTool {
         rs.close();
       }
     } catch (SQLException ex) { // we assume: no table DB_VERSION in database
-      log.warn("cannot read " + dbVersionMeta.getQualifiedVersionColumn(), ex);
+      log.warn("cannot read " + getDbVersionMeta().getQualifiedVersionColumn() + " because " + ex.getMessage());
     }
     return version == null ? null : DBVersionString.fromString(version);
   }
 
   private List<MigrateAction> createActions()
       throws SQLException, IOException {
+    String upDir = getScriptsDir();
     List<DBVersionString> files =
-        filterVersions(getFromVersion(), readDir("up-", getScriptsDir()));
+        filterVersions(getFromVersion(), readDir(getScriptPrefix(), upDir));
     List<MigrateAction> actions;
-    String dir = getBeforeAllScriptsDir();
-    if (dir != null) {
-      List<DBVersionString> before = readDir(null, dir);
+    String beforeDir = getBeforeAllScriptsDir();
+    if (beforeDir != null) {
+      List<DBVersionString> before = readDir(null, beforeDir);
       actions = createActions(before);
-      actions.add(0, new ChangeDirCommand(this, dir));
-      if(getScriptsDir() != null || !files.isEmpty()) {
-        actions.add(new ChangeDirCommand(this, getScriptsDir()));
-        actions.addAll(createActions(files));
+      actions.add(0, new ChangeDirCommand(this, beforeDir));
+      if (upDir != null || !files.isEmpty()) {
+        actions.add(new ChangeDirCommand(this, upDir));
+        actions.addAll(createActions(files, getDbVersionMeta().isAutoVersion()));
       }
     } else {
       actions = createActions(files);
     }
-    dir = getAfterAllScriptsDir();
+    addActionsAfterAll(getAfterAllScriptsDir(), actions);
+    return actions;
+  }
+
+  public void addActionsAfterAll(String dir, List<MigrateAction> actions) throws IOException {
     if (dir != null) {
       actions.add(new ChangeDirCommand(this, dir));
       actions.addAll(createActions(readDir(null, dir)));
     }
+  }
+
+  /**
+   * create some up- actions of a custom script dir dependent on current version
+   * @param scriptDir
+   * @param enableAutoVersion
+   * @return
+   * @throws SQLException
+   * @throws IOException
+   */
+  public List<MigrateAction> createUpgradeActions(String scriptDir, boolean enableAutoVersion)
+      throws SQLException, IOException {
+    List<DBVersionString> files =
+        filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
+    List<MigrateAction> actions = new ArrayList();
+    if (scriptDir != null || !files.isEmpty()) {
+      actions.add(new ChangeDirCommand(this, scriptDir));
+      actions.addAll(createActions(files, enableAutoVersion && getDbVersionMeta().isAutoVersion()));
+    }
     return actions;
   }
 
-  private List<MigrateAction> createActions(List<DBVersionString> files) {
+  public String getScriptPrefix() {
+    String prefix = getMigrateConfig().getString("Scripts-Prefix");
+    if (prefix == null) {
+      return "up-";
+    } else {
+      return prefix;
+    }
+  }
+
+  private List<MigrateAction> createActions(List<DBVersionString> files, boolean autoVersion) {
     List<MigrateAction> actions = new LinkedList();
     for (DBVersionString file : files) {
       ScriptAction action =
           ScriptAction.create(this, file.getFileName(), file.getFileType());
       if (action != null) {
         actions.add(action);
+        if (autoVersion) {
+          actions.add(new OperationAction(this, "version", file.getVersion()));
+        }
       }
     }
     return actions;
+  }
+
+  private List<MigrateAction> createActions(List<DBVersionString> files) {
+    return createActions(files, false);
   }
 
   /**
@@ -327,31 +372,39 @@ public class AutoMigrationTool extends BaseMigrationTool {
 
   private Collection<String> readResources(String directory) throws IOException {
     Collection<String> resources = new ArrayList();
-    for(URL each : ConfigManager.toURLs(directory)) {
+    for (URL each : ConfigManager.toURLs(directory)) {
       resources.addAll(ResourceUtils.readLines(each));
     }
-//    if (directory.startsWith(ConfigManager.C_ProtocolClassPath)) {
-//      resources = ResourceUtils.readLines(directory.substring(ConfigManager.C_ProtocolClassPath.length()));
-//    } else if(directory.startsWith("file:")) {
-//      resources = ResourceUtils.readLines(ConfigManager.toURL(directory));
-//    } else {
-//      resources = new ArrayList<String>();
-//      File scriptsDir = new File(directory);
-//      for(File each : scriptsDir.listFiles()) {
-//        resources.add(each.getName());
-//      }
-//    }
     return resources;
   }
 
-  protected String getBeforeAllScriptsDir() {
+  public String getBeforeAllScriptsDir() {
     FileNode dir = (FileNode) getMigrateConfig().get("Scripts-Before-All");
     return (dir == null) ? null : dir.getFilePath();
   }
 
-  protected String getAfterAllScriptsDir() {
+  public String getAfterAllScriptsDir() {
     FileNode dir = (FileNode) getMigrateConfig().get("Scripts-After-All");
     return (dir == null) ? null : dir.getFilePath();
   }
 
+  public Map getLocalEnv() {
+    return localEnv;
+  }
+
+  public List<MigrateAction> getActionOverride() {
+    return actionOverride;
+  }
+
+  public void setActionOverride(List<MigrateAction> actionOverride) {
+    this.actionOverride = actionOverride;
+  }
+
+  public void setSim(boolean sim) {
+    this.sim = sim;
+  }
+
+  public void setLocalEnv(Map localEnv) {
+    this.localEnv = localEnv;
+  }
 }
