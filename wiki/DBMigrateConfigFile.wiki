@@ -76,7 +76,7 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
 
   <!-- Optional. File prefix of script files to execute automatically.
        Filename: prefix version _ rest . ending -->
-  <String name="Scripts-prefix" value="up-"/>
+  <String name="Scripts-Prefix" value="up-"/>
 
  <!-- Optional. Scripts-Before-All = the source path for scripts to execute
       (before the sequence of migration scripts is executed) -->
