@@ -51,7 +51,7 @@ public final class DBVersionString implements Comparable {
     try {
       return new DBVersionString(prefix, v);
     } catch (Exception e) {
-      log.error("error creating instance for " + v, e);
+      log.warn("error creating instance for " + v + " because " + e.getMessage());
       return null;
     }
   }
