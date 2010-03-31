@@ -96,7 +96,7 @@
             </goals>
             <configuration>
               <includeArtifactIds>commons-logging,commons-lang,log4j,commons-io</includeArtifactIds>
-              <stripVersion>true</stripVersion>
+              <stripVersion>false</stripVersion>
               <outputDirectory>target/dep-libs/minimal</outputDirectory>
               <includeScope>compile</includeScope>
               <useRepositoryLayout>false</useRepositoryLayout>             
@@ -109,7 +109,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <stripVersion>true</stripVersion>
+              <stripVersion>false</stripVersion>
               <outputDirectory>target/dep-libs/all</outputDirectory>
               <includeScope>compile</includeScope>
               <useRepositoryLayout>false</useRepositoryLayout>
