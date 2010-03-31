@@ -47,6 +47,9 @@ public class DBVersionStringTest extends TestCase {
         assertEquals(0, v.getIncrement());
         assertEquals("_test_more.sql", v.getRest());
         assertEquals("sql", v.getFileType());
+
+        assertEquals(null, DBVersionString.fromString("notAVersion.sql"));
+        assertEquals(null, DBVersionString.fromString(""));
     }
 
     public void testFromString() throws Exception {
