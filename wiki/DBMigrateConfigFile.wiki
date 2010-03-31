@@ -46,7 +46,7 @@ Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 {{{
       <text name="from-version" value="2.0.12"/>
 }}}
-      if not given, start version will be read from the database table DB_VERSION (must exist)
+      if not given, start version will be read from the database table DB_VERSION 
     * Optional: target-version
 {{{
       <text name="to-version" value="2.0.15"/>
