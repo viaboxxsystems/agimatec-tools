@@ -29,14 +29,15 @@ This configuration is responsible for:
 }}}
 
 
-*Important:* Scripts that should be executed automatically must start with prefix "up-".
+*Important:* Scripts that should be executed automatically must start with prefix "up-". You can configure another prefix as well. (described below)
 
-Next part of the file name is a version identifier, which determines the sequence of execution.
+Next part of the file name is a version identifier, which determines the sequence of execution. The version consists of up to 3 numbers, separated by . _ or -.
 
 File may end with .sql, .xml or .groovy.
 
 .xml files can be used to invoke java classes or to describe conditional migration steps. ([DBMigrateXmlScript XML-scripts])
 
+Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
     * Mandatory: file with database configuration configuration. ([DBMigrateJdbcConfig JdbcConfig]):
       <file name="JdbcConfig" file="postgres-test.properties"/>
