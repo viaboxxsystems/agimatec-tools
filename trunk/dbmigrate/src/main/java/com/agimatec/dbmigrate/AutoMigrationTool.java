@@ -284,14 +284,14 @@ public class AutoMigrationTool extends BaseMigrationTool {
     String beforeDir = getBeforeAllScriptsDir();
     if (beforeDir != null) {
       List<DBVersionString> before = readDir(null, beforeDir);
-      actions = createActions(before);
+      actions = createActions(before, false);
       actions.add(0, new ChangeDirCommand(this, beforeDir));
       if (upDir != null || !files.isEmpty()) {
         actions.add(new ChangeDirCommand(this, upDir));
         actions.addAll(createActions(files, getDbVersionMeta().isAutoVersion()));
       }
     } else {
-      actions = createActions(files);
+      actions = createActions(files, getDbVersionMeta().isAutoVersion());
     }
     addActionsAfterAll(getAfterAllScriptsDir(), actions);
     return actions;
@@ -300,7 +300,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
   public void addActionsAfterAll(String dir, List<MigrateAction> actions) throws IOException {
     if (dir != null) {
       actions.add(new ChangeDirCommand(this, dir));
-      actions.addAll(createActions(readDir(null, dir)));
+      actions.addAll(createActions(readDir(null, dir), false));
     }
   }
 
@@ -346,10 +346,6 @@ public class AutoMigrationTool extends BaseMigrationTool {
       }
     }
     return actions;
-  }
-
-  private List<MigrateAction> createActions(List<DBVersionString> files) {
-    return createActions(files, false);
   }
 
   /**
