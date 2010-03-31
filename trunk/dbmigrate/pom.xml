@@ -85,6 +85,39 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-min</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>commons-logging,commons-lang,log4j,commons-io</includeArtifactIds>
+              <stripVersion>true</stripVersion>
+              <outputDirectory>target/dep-libs/minimal</outputDirectory>
+              <includeScope>compile</includeScope>
+              <useRepositoryLayout>false</useRepositoryLayout>             
+            </configuration>
+          </execution>
+        <execution>
+            <id>copy-all</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <stripVersion>true</stripVersion>
+              <outputDirectory>target/dep-libs/all</outputDirectory>
+              <includeScope>compile</includeScope>
+              <useRepositoryLayout>false</useRepositoryLayout>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
@@ -92,7 +125,7 @@
             <phase>package</phase>
             <configuration>
               <tasks>
-                <zip destfile="target/dbmigrate-dist-${agimatec-version}.zip">
+                <zip destfile="${dist-dir}.zip">
                   <fileset dir=".">
                     <include name="pom.xml"/>
                     <include name="templates/**"/>
@@ -113,5 +146,11 @@
       </plugin>
     </plugins>
   </build>
+
+  <properties>
+    <!-- target directory for distribution -->
+    <dist-dir>target/dbmigrate-dist-${agimatec-version}</dist-dir>
+  </properties>
+
 
 </project>
