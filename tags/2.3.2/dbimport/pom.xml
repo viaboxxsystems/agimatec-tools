@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>com.agimatec</groupId>
+    <artifactId>agimatec-tools</artifactId>
+    <version>2.3.2</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.agimatec</groupId>
+  <artifactId>dbimport</artifactId>
+  <packaging>jar</packaging>
+  <version>${agimatec-version}</version>
+  <name>Fileimport tools</name>
+  <url>http://www.agimatec.de</url>
+
+  <distributionManagement>
+    <site>
+      <id>${agimatec-site-id}</id>
+      <url>${agimatec-site-url}/agimatec-tools/site/dbimport</url>
+    </site>
+  </distributionManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+    </dependency>
+    <!-- required to read excel spreadsheets -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+</project>
