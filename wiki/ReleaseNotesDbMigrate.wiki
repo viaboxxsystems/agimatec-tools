@@ -1,0 +1,32 @@
+= dbmigrate =
+
+== 2.3.2 (31th march 2010) == 
+Fixes and improvements for grails-support
+  * Fixes for running groovy scripts (using Context classloader, script dir)
+  * Version format now flexible (1.0.0 or 1-0-0 or 1_0_0 => all the same)
+  * Script-Prefix configuration parameter
+  * auto-version configuration parameter: set current version during migration automatically
+  * auto-create configuration parameter: create db_version table automatically
+  * New grails plugin to integrate dbmigrate into a grails project: http://code.google.com/p/viaboxx-dbmigrate/. 
+  * dbmigrate works also when all scripts and configs are packaged in a jar or war archive (former releases only supported file: access. this release supports classpath access with the cp: protocol)
+  * many dependencies now optional (because of version conflicts with grails)
+
+== 2.2.7 (16.12.2009) ==
+doctype for dozer5.0 fixed
+3rd party libs upgraded 
+
+  * copyFiles operation
+  * property replacement in environment improved (in nested collections)
+  * fixed NullPointerException in performActions() when script type is unknown
+  * fixed EmptyStackException when #if #endif inconsistently used
+
+== 2.2.5 (24.03.2009) ==
+  * new features for templates (accessing static methods, provide custom properties)
+
+== 2.2.2 ===
+  * reading triggers from database catalog in a better way
+
+== 2.1.3 (june 2008) ==
+  * explicitly supports oracle, postgres
+  * migrate/setup/alter database
+  * sql, groovy, xml scripts
