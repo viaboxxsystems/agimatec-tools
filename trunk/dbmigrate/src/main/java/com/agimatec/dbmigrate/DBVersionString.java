@@ -1,7 +1,10 @@
 package com.agimatec.dbmigrate;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.StringTokenizer;
 
 /**
  * <b>Description:</b>  Class to parse a file name with dbversion at beginning of the name <br>
@@ -73,70 +76,60 @@ public final class DBVersionString implements Comparable {
    */
   protected DBVersionString(String prefix, String v) {
     fileName = v;
-    hoellischMiesesParsen(prefix, v);
+    parse(prefix, v);
   }
 
-  // Kotz, kotz, kotz, ... Hacking nach alter Schule! :-(
+  private static final String SEPS = ".-_";
 
-  private void hoellischMiesesParsen(String prefix, String v) {
+  private void parse(String prefix, String v) {
+    major = 0;
+    minor = 0;
+    increment = 0;
     if (prefix != null) { // skip prefix, if any
       v = v.substring(prefix.length());
     }
-    int idx1 = v.indexOf('.');
-    int idx2 = v.indexOf('.', idx1 + 1);
-    int control = v.indexOf('-');
-    if (control == -1) control = v.indexOf('_');
-    if (control != -1 && control < idx2) {
-      idx2 = -1;
-    }
-    int idx3 = v.indexOf('-', idx2 + 1);
-    if (idx3 == -1) idx3 = v.indexOf('_', idx2 + 1);
-    if (idx2 != -1) {
-      if (idx3 == -1) idx3 = v.indexOf('.', idx2 + 1);
-    }
-    if (idx1 > control && control > 0) idx1 = control;
-    major = Integer.parseInt(v.substring(0, idx1));
-    if (idx2 != -1) {
-      minor = Integer.parseInt(v.substring(idx1 + 1, idx2));
-    } else {
-      if (idx3 == -1) {
-        try {
-          minor = Integer.parseInt(v.substring(idx1 + 1));
-        } catch (NumberFormatException ex) {
-          minor = 0;
-          idx2 = -2;
-        }
-      } else if (idx1 + 1 < idx3) {
-        try {
-          minor = Integer.parseInt(v.substring(idx1 + 1, idx3));
-        } catch (NumberFormatException ex) {
-          minor = 0;
-        }
-      }
-    }
-    if (idx3 != -1 && idx2 > -1) {
-      increment = Integer.parseInt(v.substring(idx2 + 1, idx3));
-      rest = v.substring(idx3);
-    } else if (idx3 != -1 && idx2 < 0) {
-      increment = 0;
-      rest = v.substring(idx3);
-    } else if (idx2 > -1) {
-      try {
-        increment = Integer.parseInt(v.substring(idx2 + 1));
-        rest = "";
-      } catch (NumberFormatException ex) {
-        increment = 0;
-        rest = v.substring(idx2);
-      }
 
-    } else {
-      increment = 0;
-      if (idx2 != -1) {
-        rest = v.substring(idx1);
-      } else {
-        rest = "";
+    StringTokenizer tokens = new StringTokenizer(v, SEPS, true);
+    String t = nextNonSep(tokens);
+    if (t != null && StringUtils.isNumeric(t)) {
+      major = Integer.parseInt(t);
+      t = nextNonSep(tokens);
+      if (t != null && StringUtils.isNumeric(t)) {
+        minor = Integer.parseInt(t);
+        t = nextNonSep(tokens);
+        if (t != null && StringUtils.isNumeric(t)) {
+          increment = Integer.parseInt(t);
+          t = null;
+          lastSep = null;
+        }
       }
+    } else {
+      throw new NumberFormatException("'" + v + "' is not in the valid format for a version");
     }
+
+    if (tokens.hasMoreTokens() || t != null) {
+      StringBuilder buf = new StringBuilder();
+      if (lastSep != null) buf.append(lastSep);
+      if (t != null) buf.append(t);
+      while (tokens.hasMoreTokens()) {
+        buf.append(tokens.nextToken());
+      }
+      rest = buf.toString();
+    } else {
+      rest = "";
+    }
+  }
+
+  private String lastSep;
+
+  private String nextNonSep(StringTokenizer tokens) {
+    lastSep = null;
+    while (tokens.hasMoreTokens()) {
+      String t = tokens.nextToken();
+      if (!SEPS.contains(t)) return t;
+      lastSep = t;
+    }
+    return null;
   }
 
   public String toString() {
