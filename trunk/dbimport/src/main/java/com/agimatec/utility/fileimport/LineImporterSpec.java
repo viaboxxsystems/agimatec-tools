@@ -1,5 +1,7 @@
 package com.agimatec.utility.fileimport;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 
 /**
@@ -10,6 +12,7 @@ import java.io.*;
  * Copyright: Agimatec GmbH
  */
 public class LineImporterSpec implements ImporterSpec {
+    protected static final Logger log = Logger.getLogger(LineImporterSpec.class);
     private Header headerSpec = Header.NONE;
     private LineTokenizerFactory lineTokenizerFactory;
     private String[] fieldNames;
@@ -66,12 +69,12 @@ public class LineImporterSpec implements ImporterSpec {
      * transfered.
      */
     public void processRow(LineImportProcessor processor) throws ImporterException {
-        System.out.println("row: " + processor.getRowCount() + " = " + processor.getCurrentRow());
+        log.info("row: " + processor.getRowCount() + " = " + processor.getCurrentRow());
     }
 
     /** overwrite this method to get the behavior after the header line has been read */
     public void processHeaderLine(LineImportProcessor processor) throws ImporterException {
-        System.out.println("header: " + processor.getRowCount() + " = " + processor.getHeaderLine());
+        log.info("header: " + processor.getRowCount() + " = " + processor.getHeaderLine());
     }
 
     public void setHeaderLineIndex(int index) {
