@@ -120,10 +120,26 @@ def spec = new XmlSlurperSpec(
 
 = Import .xls (excel 97 format) file =
 
+== Example 1 (Java) ==
 {{{
   LineImporterSpecAutoFields spec = new LineImporterSpecAutoFields();
   spec.setHeaderSpec(LineImporterSpec.Header.INDEX);
   spec.setHeaderLineIndex(5); // determine field names from row #5
+
+  spec.setLineTokenizerFactory(new ExcelRowTokenizerFactory());
+
+  Importer importer = new Importer(spec);
+  importer.importFrom(new FileInputStream("Spreadsheet.xls"));
+
+}}}
+
+== Example 2 (Groovy) ==
+{{{
+  LineImporterSpecGroovy spec = new LineImporterSpecGroovy( { processor ->
+    def cell = processor.currentRow['the_header_column_name_here'];
+    def value = cell.value; // or: cell.stringValue
+  );
+  spec.setHeaderSpec(LineImporterSpec.Header.FIRST); // determine field names from row #1
 
   spec.setLineTokenizerFactory(new ExcelRowTokenizerFactory());
 
