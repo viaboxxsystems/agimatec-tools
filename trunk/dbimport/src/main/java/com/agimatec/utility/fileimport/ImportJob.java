@@ -24,7 +24,7 @@ import java.sql.SQLException;
  * @see ImporterSpec
  */
 public class ImportJob {
-  private static final int MAX_LENGTH = 1000;
+  public static int MAX_LENGTH = 1000;
 
   protected static final String C_ProtocolClassPath = "cp://"; // avoid dependency to dbmigrate
 
