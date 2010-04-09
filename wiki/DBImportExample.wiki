@@ -122,7 +122,12 @@ def spec = new XmlSlurperSpec(
 
 == Example 1 (Java) ==
 {{{
-  LineImporterSpecAutoFields spec = new LineImporterSpecAutoFields();
+  LineImporterSpecAutoFields spec = new LineImporterSpecAutoFields() {
+    public void processRow(LineImportProcessor processor) throws ImporterException {
+      ICell cell = (ICell)processor.getCurrentRow().get("the_header_column_name_here");
+      Object value = cell.getValue();
+    }
+  };
   spec.setHeaderSpec(LineImporterSpec.Header.INDEX);
   spec.setHeaderLineIndex(5); // determine field names from row #5
 
