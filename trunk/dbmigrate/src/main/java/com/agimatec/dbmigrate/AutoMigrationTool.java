@@ -369,6 +369,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
   private Collection<String> readResources(String directory) throws IOException {
     Collection<String> resources = new ArrayList();
     for (URL each : ConfigManager.toURLs(directory)) {
+      log.debug("directory " + directory + " -> reading: " + each);
       resources.addAll(ResourceUtils.readLines(each));
     }
     return resources;
