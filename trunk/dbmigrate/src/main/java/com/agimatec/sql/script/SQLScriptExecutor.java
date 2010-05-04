@@ -1,6 +1,7 @@
 package com.agimatec.sql.script;
 
 import com.agimatec.jdbc.JdbcDatabase;
+import com.agimatec.jdbc.JdbcException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,6 +24,9 @@ public class SQLScriptExecutor implements ScriptVisitor {
 
     public int visitStatement(String statement) throws SQLException {
         mySQLLogger.info(statement);
+        if(getConnection() == null) {
+          throw new JdbcException("cannot exec: " + statement + ", because 'not connected to database'");
+        }
         Statement stmt = getConnection().createStatement();
         try {
             return stmt.executeUpdate(statement);

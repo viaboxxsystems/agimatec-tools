@@ -73,15 +73,12 @@ public class ReconnectScriptVisitor extends ScriptVisitorDelegate {
         } else {
             url = null;
         }
-        boolean transactionExists = store.isTransaction();
-        if (transactionExists) {
+        if (store.isTransaction()) {
             store.commit();
         }
         store.close();
         store.init(driver, url, props);
-        if (transactionExists) {
-            store.begin();
-        }
+        store.begin();
     }
 
     public static String replaceJdbcSchemaName(String jdbcUrl, String schemaname) {
