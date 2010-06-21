@@ -37,7 +37,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'] " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} '(' {refcolumns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{columndefinition ${column} ${typeName} [${varying(VARYING)}]" +
                     "[{precision '(' {numbers ${value}...','} [CHAR]')'}] " +
