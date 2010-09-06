@@ -1,5 +1,6 @@
 package com.agimatec.utility.fileimport;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,7 +8,6 @@ import java.sql.Statement;
 import java.text.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.Serializable;
 
 /**
  * Description: Utility class that helps to convert parameters during
@@ -19,11 +19,12 @@ import java.io.Serializable;
  */
 public class SqlUtil implements Serializable {
     private static final String[] SEQ =
-            {"nextval(''{0}'')", "{0}.NEXTVAL"}; // postgres, oracle
+            {"nextval(''{0}'')", "{0}.NEXTVAL", "NEXT VALUE FOR {0}"}; // postgres, oracle, hsqldb
     private static final String[] SEQ_FETCH =
-            {"SELECT {0}", "SELECT {0} FROM DUAL"}; // postgres, oracle
+            {"SELECT {0}", "SELECT {0} FROM DUAL", "SELECT {0}"}; // postgres, oracle, hsqldb
     private static final int POSTGRES = 0;
     private static final int ORACLE = 1;
+    private static final int HSQLDB = 2;
     private final int dbms; // POSTGRES, ORACLE
 
     /** Ermittele die Datenbank anhand der MetaData der Connection */
@@ -46,6 +47,10 @@ public class SqlUtil implements Serializable {
         return dbms == POSTGRES;
     }
 
+    public boolean isHSQLDB() {
+        return dbms == HSQLDB;
+    }
+
     /** create an instance for postgres syntax (affects sequences) */
     public static SqlUtil forPostgres() {
         return new SqlUtil(POSTGRES);
@@ -54,6 +59,11 @@ public class SqlUtil implements Serializable {
     /** create an instance for oracle syntax (affects sequences) */
     public static SqlUtil forOracle() {
         return new SqlUtil(ORACLE);
+    }
+
+    /** create an instance for HSQLDB syntax (affects sequences) */
+    public static SqlUtil forHSQLDB() {
+        return new SqlUtil(HSQLDB);
     }
 
     public static SqlUtil getDefault() {
