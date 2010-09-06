@@ -72,9 +72,32 @@ public class ImportJob {
    * start the import, close all resources afterwards
    */
   public void importFromURL(ImporterSpec spec) throws Exception {
+    importFromReader(spec, "UTF-8");
+  }
+
+  /**
+   * API -
+   * start the import, close all resources afterwards
+   */
+  public void importFromStream(ImporterSpec spec) throws Exception {
     openURL(spec);
     try {
-      importer.importFrom(new InputStreamReader(readStream, Charset.forName("UTF-8")));
+      importer.importFrom(readStream);
+    } catch (Exception ex) {
+      handleException(ex);
+    } finally {
+      close();
+    }
+  }
+
+  /**
+   * API -
+   * start the import, close all resources afterwards
+   */
+  public void importFromReader(ImporterSpec spec, String charset) throws Exception {
+    openURL(spec);
+    try {
+      importer.importFrom(new InputStreamReader(readStream, Charset.forName(charset)));
     } catch (Exception ex) {
       handleException(ex);
     } finally {
