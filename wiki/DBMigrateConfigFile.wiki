@@ -87,9 +87,10 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
   <!-- Scripts = the source path for scripts to scan for -->
   <file name="Scripts" dir="test-scripts" file="" relative="false"/>
 
-  <!-- Optional = the *additional* URLs/Paths where to search for groovy scripts (to be called explicitly with doGroovyScript) -->
+  <!-- Optional = the *additional* URLs/Paths where to search for groovy scripts (to be called explicitly with doGroovyScript). 
+      can be file or String or text nodes -->
     <list name="GroovyScripts">
-        <file dir="cp://scripts1/" file=""/>
+        <String dir="cp://scripts1/"/>
         <file dir="cp://scripts2/" file=""/>        
     </list>
 
