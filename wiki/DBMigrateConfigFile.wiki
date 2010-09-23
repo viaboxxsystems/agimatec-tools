@@ -87,6 +87,12 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
   <!-- Scripts = the source path for scripts to scan for -->
   <file name="Scripts" dir="test-scripts" file="" relative="false"/>
 
+  <!-- Optional = the *additional* URLs/Paths where to search for groovy scripts (to be called explicitly with doGroovyScript) -->
+    <list name="GroovyScripts">
+        <file name="Scripts" dir="cp://scripts1/" file=""/>
+        <file name="Scripts" dir="cp://scripts2/" file=""/>        
+    </list>
+
   <!-- Optional. Scripts-After-All = the source path for scripts to execute
       (after the sequence of migration scripts has been executed) -->
   <file name="Scripts-After-All" dir="upgrade/after-all" file=""/>
