@@ -411,6 +411,8 @@ public abstract class BaseMigrationTool implements MigrationTool {
   private Object replaceValue(PropertyReplacer replacer, Object value) {
     if (value instanceof String) {
       return replacer.replaceProperties((String) value);
+    } if (value instanceof TextNode) {
+      return replacer.replaceProperties(((TextNode) value).getValue());
     } else if (value instanceof Map) {
       replaceInMap(replacer, (Map) value);
     } else if (value instanceof List) {
