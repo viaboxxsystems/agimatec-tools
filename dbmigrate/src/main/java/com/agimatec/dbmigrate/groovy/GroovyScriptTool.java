@@ -20,28 +20,47 @@ import java.net.URL;
  * Copyright: Agimatec GmbH
  */
 public class GroovyScriptTool implements MigrationToolAware {
-  private GroovyScriptEngine scriptEngine;
-  private Binding binding;
+    private GroovyScriptEngine scriptEngine;
+    private Binding binding = new Binding();
 
-  public GroovyScriptTool(String rootDir) throws IOException {
-    scriptEngine = new GroovyScriptEngine(new URL[]{
-        ConfigManager.toURL(rootDir)}, ClassUtils.getClassLoader());
-    binding = new Binding();
-  }
+    public GroovyScriptTool(String rootDir) throws IOException {
+        if (rootDir == null) {
+            scriptEngine = new GroovyScriptEngine(new URL[]{
+                    ConfigManager.toURL("cp://")}, ClassUtils.getClassLoader());
+        } else {
+            scriptEngine = new GroovyScriptEngine(new URL[]{
+                    ConfigManager.toURL(rootDir)}, ClassUtils.getClassLoader());
+        }
+    }
 
-  public void start(String groovyScript) throws ScriptException, ResourceException {
-    scriptEngine.run(groovyScript, binding);
-  }
+    public GroovyScriptTool(String[] rootDirs) throws IOException {
+        if (rootDirs != null) {
+            URL[] urls = new URL[rootDirs.length];
+            int i = 0;
+            for (String each : rootDirs) {
+                urls[i] = ConfigManager.toURL(each);
+                i++;
+            }
+            scriptEngine = new GroovyScriptEngine(urls, ClassUtils.getClassLoader());
+        } else {
+            scriptEngine = new GroovyScriptEngine(new URL[]{
+                    ConfigManager.toURL("cp://")}, ClassUtils.getClassLoader());
+        }
+    }
 
-  public void setMigrationTool(MigrationTool tool) {
-    binding.setVariable("tool", tool);
-  }
+    public void start(String groovyScript) throws ScriptException, ResourceException {
+        scriptEngine.run(groovyScript, binding);
+    }
 
-  public Binding getBinding() {
-    return binding;
-  }
+    public void setMigrationTool(MigrationTool tool) {
+        binding.setVariable("tool", tool);
+    }
 
-  public GroovyScriptEngine getScriptEngine() {
-    return scriptEngine;
-  }
+    public Binding getBinding() {
+        return binding;
+    }
+
+    public GroovyScriptEngine getScriptEngine() {
+        return scriptEngine;
+    }
 }

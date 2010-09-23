@@ -282,7 +282,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
    * @throws IOException
    */
   public void doGroovyScript(String scriptInvocation) throws Exception {
-    GroovyScriptTool tool = new GroovyScriptTool(getScriptsDir());
+    GroovyScriptTool tool = new GroovyScriptTool(getGroovyScriptsDirs());
     invokeBeanCallbacks(tool);
     List<String> params = splitParams(scriptInvocation);
     int idx = scriptInvocation.indexOf("(");
@@ -452,6 +452,28 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
     return scriptsDir;
   }
+
+    public String[] getGroovyScriptsDirs() {
+        if (getMigrateConfig().getList("GroovyScripts") != null) {
+            List list = getMigrateConfig().getList("GroovyScripts");
+            List<String> urls = new ArrayList<String>(list.size() + 1);
+            if (getScriptsDir() != null) {
+                urls.add(getScriptsDir());
+            }
+            for (Object each : list) {
+                if (each instanceof FileNode) {
+                    urls.add (((FileNode) each).getFilePath());
+                } else {
+                    urls.add (String.valueOf(each));
+                }
+            }
+            return urls.toArray(new String[urls.size()]);
+        } else if (getScriptsDir() == null) {
+            return null;
+        } else {
+            return new String[]{getScriptsDir()};
+        }
+    }
 
   public void setScriptsDir(String scriptsDir) {
     this.scriptsDir = scriptsDir;
