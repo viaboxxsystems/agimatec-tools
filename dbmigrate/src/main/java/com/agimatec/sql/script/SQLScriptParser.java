@@ -1,12 +1,13 @@
 package com.agimatec.sql.script;
 
+import com.agimatec.commons.config.ConfigManager;
 import com.agimatec.commons.util.ClassUtils;
 import com.agimatec.commons.util.PropertyReplacer;
+import com.agimatec.jdbc.JdbcException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import com.agimatec.commons.config.*;
 
 import java.io.*;
 import java.net.URL;
@@ -98,7 +99,14 @@ public class SQLScriptParser {
     }
 
     protected void handleError(SQLException ex, String command) throws SQLException {
-        getLog().error("EXCEPTION: " + ex.getMessage());
+        getLog().error("SQL-EXCEPTION: " + ex.getMessage());
+        if (myFailOnError) {
+            throw ex;
+        }
+    }
+    
+    protected void handleError(JdbcException ex, String command) throws JdbcException {
+        getLog().error("JDBC-EXCEPTION: " + ex.getMessage());
         if (myFailOnError) {
             throw ex;
         }
@@ -187,6 +195,8 @@ public class SQLScriptParser {
             }
         } catch (SQLException ex) {
             handleError(ex, statement);
+        } catch(JdbcException ex) {
+           handleError(ex, statement);
         }
         if (getLog().isInfoEnabled()) {
             getLog().info("DONE with " + path);
@@ -198,7 +208,7 @@ public class SQLScriptParser {
      * from the classpath, otherwise access the script as a file or cp:// resource by
      * scriptdir + scriptname.
      * @param scriptName
-     * @return an array with 2 elements. array[0] = Reader, array[1] = String (Path) 
+     * @return an array with 2 elements. array[0] = Reader, array[1] = String (Path)
      * @throws IOException - file not found
      */
     protected Object[] openReaderPath(String scriptName) throws IOException {
