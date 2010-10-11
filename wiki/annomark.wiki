@@ -39,6 +39,7 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/AddLocaleTask.html AddLocaleTask]
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/UpdateBundlesTask.html UpdateBundlesTask]
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/OptimizeBundlesTask.html OptimizeBundlesTask]
+  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/com/agimatec/tools/nls/CopyBundlesTask.html CopyBundlesTask]
 
 == Example ==
 
