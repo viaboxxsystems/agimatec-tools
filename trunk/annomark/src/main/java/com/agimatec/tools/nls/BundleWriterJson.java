@@ -29,6 +29,7 @@ public class BundleWriterJson extends BundleWriter {
 
     protected void writeOutputFilePerLocale(String locale) throws Exception {
         String jsfile = getFileName(locale);
+        mkdirs(jsfile);
         task.log("writing json file " + jsfile, Project.MSG_INFO);
         Properties merged = null;
         List<Locale> locales;

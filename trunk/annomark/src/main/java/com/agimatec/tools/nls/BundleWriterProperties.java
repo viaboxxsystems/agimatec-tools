@@ -36,6 +36,7 @@ public class BundleWriterProperties extends BundleWriter {
             throws IOException {
         String propfile = getFileName(locale);
         task.log("writing resource file " + propfile, Project.MSG_INFO);
+        mkdirs(propfile);
         FileOutputStream stream = new FileOutputStream(propfile);
         try {
             String header = getPropertiesHeader(locale);

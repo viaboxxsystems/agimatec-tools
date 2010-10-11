@@ -27,6 +27,8 @@ public abstract class BundleWriter {
     protected final FileType fileType;
     protected boolean overwrite = false, deleteOldFiles = true;
     private boolean debugMode;
+    protected boolean directoryLocale = false;
+    // => true: output format de/path/bundle.properties, false: path/bundle_de.properties
 
     enum FileType {
         NO, XML, PROPERTIES,
@@ -51,7 +53,7 @@ public abstract class BundleWriter {
         if (!fileType.equals(FileType.NO)) {
             if (!overwrite && !needsNewFiles()) {
                 task.log(suffix() + " file(s) for " + getCurrentBundle().getBaseName() +
-                      " up to date", Project.MSG_VERBOSE);
+                        " up to date", Project.MSG_VERBOSE);
             } else {
                 writeOutputFiles();
             }
@@ -71,11 +73,28 @@ public abstract class BundleWriter {
         this.deleteOldFiles = deleteOldFiles;
     }
 
-    /** generate the current bundle's property files */
+    public boolean isDirectoryLocale() {
+        return directoryLocale;
+    }
+
+    public void setDirectoryLocale(boolean directoryLocale) {
+        this.directoryLocale = directoryLocale;
+    }
+
+    protected boolean mkdirs(String file) {
+        File dir = new File(file).getParentFile();
+        if (dir != null && !dir.exists()) {
+            return dir.mkdirs();
+        }
+        return true;
+    }
+
+    /**
+     * generate the current bundle's property files
+     */
     protected void writeOutputFiles() throws Exception {
         deleteFiles();
         Iterator locales = getLocalesUsed().iterator();
-        new File(getOutputPathName()).mkdirs();
         while (locales.hasNext()) {
             String locale = (String) locales.next();
             writeOutputFilePerLocale(locale);
@@ -111,6 +130,18 @@ public abstract class BundleWriter {
         return fileName;
     }
 
+    protected StringBuilder buildOutputFileNameBase(String locale) {
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(getOutputPath());
+        if (locale != null && locale.length() > 0) {
+            fileName.append("/");
+            fileName.append(locale);
+        }
+        fileName.append("/");
+        fileName.append(getCurrentBundle().getBaseName());
+        return fileName;
+    }
+
     protected void deleteFiles(String filePattern) {
         Delete delete = (Delete) task.getProject().createTask("delete");
         FileSet fs = new FileSet();
@@ -118,11 +149,14 @@ public abstract class BundleWriter {
         fs.setDir(file.getParentFile());
         fs.setIncludes(file.getName());
         fs.setProject(task.getProject());
+        delete.setFailOnError(false);
         delete.addFileset(fs);
         delete.execute();
     }
 
-    /** true when generation is neccessary, false when up-to-date */
+    /**
+     * true when generation is neccessary, false when up-to-date
+     */
     protected boolean needsNewFiles() throws FileNotFoundException {
         Iterator locales = getLocalesUsed().iterator();
         boolean result = false;
@@ -154,6 +188,15 @@ public abstract class BundleWriter {
     }
 
     protected String getFileName(String locale) {
+        if (directoryLocale) {
+            return getFileNameFlex(locale);
+        } else {
+            return getFileNameJava(locale);
+        }
+    }
+
+
+    protected String getFileNameJava(String locale) {
         StringBuilder fileName = buildOutputFileNameBase();
         if (locale != null && locale.length() > 0) {
             fileName.append("_");
@@ -163,14 +206,24 @@ public abstract class BundleWriter {
         return fileName.toString();
     }
 
+    protected String getFileNameFlex(String locale) {
+        StringBuilder fileName = buildOutputFileNameBase(locale);
+        fileName.append(suffix());
+        return fileName.toString();
+    }
+
     protected abstract String suffix();
 
-    /** the root path to store the files */
+    /**
+     * the root path to store the files
+     */
     public String getOutputPath() {
         return outputPath;
     }
 
-    /** @return a list of String with the locales used in the current bundle */
+    /**
+     * @return a list of String with the locales used in the current bundle
+     */
     protected List getLocalesUsed() {
         if (myUsedLocales == null) {
             HashSet locales = new HashSet();
@@ -219,11 +272,11 @@ public abstract class BundleWriter {
                 while (value != null && (indentIndex = value.indexOf("\n ")) > -1) {
                     int lastBlankIndex = indentIndex + 1;
                     while (lastBlankIndex + 1 < value.length() && Character
-                          .isWhitespace(value.charAt(lastBlankIndex + 1))) {
+                            .isWhitespace(value.charAt(lastBlankIndex + 1))) {
                         lastBlankIndex++;
                     }
                     value = value.substring(0, indentIndex) + ' ' +
-                          value.substring(lastBlankIndex + 1);
+                            value.substring(lastBlankIndex + 1);
                 }
                 task.log("'" + key + "' ==> '" + value + "'", Project.MSG_DEBUG);
                 if (key != null && value != null) {

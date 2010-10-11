@@ -42,7 +42,7 @@ public class BundleWriterJavaInterface extends BundleWriter {
         // now write the interface
         String iffile = getInterfaceFileName();
         task.log("writing interface to: " + iffile, Project.MSG_INFO);
-        new File(getInterfacePathName()).mkdirs();
+        mkdirs(iffile);
         Writer out = FileUtils.openFileWriterUTF8(new File(iffile));
         PrintWriter pw = new PrintWriter(out);
         try {
