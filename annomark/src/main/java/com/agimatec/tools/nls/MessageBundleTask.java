@@ -40,6 +40,8 @@ import java.util.StringTokenizer;
  * jsonPath = to write .js to
  * jsonFile = null or the hard-coded json file name
  * sqlScriptDir = to write .sql to
+ * directoryLocale=true: output format is "de_DE/path/bundle.properties"  (Flex style)
+ * directoryLocale=false: output format is "path/bundle_de_DE.properties" (default, java style)
  * <p/>
  * </pre>
  * Example:
@@ -72,6 +74,7 @@ public class MessageBundleTask extends Task {
     private String writeJson = "false";
     private String writeInterface = "false";
     private boolean debugMode = false;
+    private boolean directoryLocale = false;
 
     private MBBundles parsedBundles;
     private String xmlConfigBundle;
@@ -82,6 +85,14 @@ public class MessageBundleTask extends Task {
 
     public void setJsonPath(String jsonPath) {
         this.jsonPath = getProject().resolveFile(jsonPath).getPath();
+    }
+
+    public boolean isDirectoryLocale() {
+        return directoryLocale;
+    }
+
+    public void setDirectoryLocale(boolean directoryLocale) {
+        this.directoryLocale = directoryLocale;
     }
 
     /**
@@ -235,6 +246,7 @@ public class MessageBundleTask extends Task {
     }
 
     private void executeBundleWriter(BundleWriter writer) throws Exception {
+        writer.setDirectoryLocale(directoryLocale);
         writer.setOverwrite(overwrite);
         writer.setDeleteOldFiles(deleteOldFiles);
         writer.setDebugMode(debugMode);
