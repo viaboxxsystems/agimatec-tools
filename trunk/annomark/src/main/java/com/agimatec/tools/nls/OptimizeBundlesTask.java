@@ -10,6 +10,7 @@ import org.apache.tools.ant.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -39,6 +40,8 @@ import java.util.Map;
  * customer.firstName => common.firstName
  * <p/>
  * Removes the specific text from the bundles, where the common text is equal.
+ * If "commonEntryKeyPrefix" not set, replace equal keys in bundles.
+ * If "deleteEmptyEntries" is true, remove text and entries without equal translations in bundles.
  * <p/>
  * ------------------------------
  * file allBundles.txt (example):
@@ -59,10 +62,19 @@ public class OptimizeBundlesTask extends Task {
 
     private File masterFile;
 
+    private boolean deleteEmptyEntries = false;
     private String commonBundleFile = DEFAULT_COMMON_BUNDLE_FILE;
     private String commonBundleBaseName =
             DEFAULT_COMMON_BASE_NAME; // <bundle baseName=""/>
     private String commonEntryKeyPrefix = null; // no prefix
+
+    public boolean isDeleteEmptyEntries() {
+        return deleteEmptyEntries;
+    }
+
+    public void setDeleteEmptyEntries(boolean deleteEmptyEntries) {
+        this.deleteEmptyEntries = deleteEmptyEntries;
+    }
 
     public File getMasterFile() {
         return masterFile;
@@ -136,12 +148,35 @@ public class OptimizeBundlesTask extends Task {
                     }
                 }
                 if (modified) {
+                    if(isDeleteEmptyEntries()) {
+                        truncateBundles(bundles);
+                    }
                     this.log("SAVING modified file: " + source);
                     persistencer.save(bundles, source);
                 }
             }
         } catch (Exception ex) {
             throw new BuildException(ex);
+        }
+    }
+
+    private void truncateBundles(MBBundles bundles) {
+        for(MBBundle bundle : bundles.getBundles()) {
+            for (Iterator<MBEntry> iterator1 = bundle.getEntries().iterator(); iterator1.hasNext();) {
+                MBEntry entry = iterator1.next();
+                boolean isEntryEmpty = true;
+                for (Iterator<MBText> iterator = entry.getTexts().iterator(); iterator.hasNext();) {
+                    MBText text = iterator.next();
+                    if (text.getValue() == null || text.getValue().length() == 0) {
+                        iterator.remove();
+                        this.log("Removed empty text " + entry.getKey() + ", locale: " + text.getLocale());
+                    }
+                }
+                if (entry.getTexts().isEmpty()) {
+                    iterator1.remove();
+                      this.log("Removed empty entry " + entry.getKey());
+                }
+            }
         }
     }
 
