@@ -56,14 +56,13 @@ import java.util.Map;
 public class OptimizeBundlesTask extends Task {
     private static final String DEFAULT_COMMON_BUNDLE_FILE = "Common.xml";
     private static final String DEFAULT_COMMON_BASE_NAME = "/Common";
-    private static final String DEFAULT_COMMON_ENTRY_PREFIX = "common";
 
     private File masterFile;
 
     private String commonBundleFile = DEFAULT_COMMON_BUNDLE_FILE;
     private String commonBundleBaseName =
-          DEFAULT_COMMON_BASE_NAME; // <bundle baseName=""/>
-    private String commonEntryKeyPrefix = DEFAULT_COMMON_ENTRY_PREFIX;
+            DEFAULT_COMMON_BASE_NAME; // <bundle baseName=""/>
+    private String commonEntryKeyPrefix = null; // no prefix
 
     public File getMasterFile() {
         return masterFile;
@@ -102,7 +101,7 @@ public class OptimizeBundlesTask extends Task {
         if (masterFile == null) throw new BuildException("masterFile required");
         try {
             Map<String, File> mappings =
-                  CopyBundlesTask.readControlFileMapping(masterFile);
+                    CopyBundlesTask.readControlFileMapping(masterFile);
             MBBundle commonBundle = loadCommonBundle(mappings);
             MBXMLPersistencer persistencer = new MBXMLPersistencer();
             boolean modified;
@@ -113,7 +112,7 @@ public class OptimizeBundlesTask extends Task {
                 modified = false;
                 for (MBBundle bundle : bundles.getBundles()) {
                     if (fileentry.getKey().equals(getCommonBundleFile()) &&
-                          bundle.getBaseName().equals(getCommonBundleBaseName()))
+                            bundle.getBaseName().equals(getCommonBundleBaseName()))
                         continue;
                     for (MBEntry entry : bundle.getEntries()) {
                         MBEntry commonEntry = findDefaultEntry(entry, commonBundle);
@@ -122,12 +121,12 @@ public class OptimizeBundlesTask extends Task {
                                 MBText text = mbText;
                                 MBText commonText = commonEntry.getText(text.getLocale());
                                 if (text.getValue() != null &&
-                                      text.getValue().length() > 0 &&
-                                      commonText != null &&
-                                      commonText.getValue() != null &&
-                                      commonText.getValue().equals(text.getValue())) {
+                                        text.getValue().length() > 0 &&
+                                        commonText != null &&
+                                        commonText.getValue() != null &&
+                                        commonText.getValue().equals(text.getValue())) {
                                     this.log("Using default at " + source + ": " + entry.getKey() +
-                                          "[" + text.getLocale() + "]");
+                                            "[" + text.getLocale() + "]");
                                     modified = true;
                                     text.setValue(null);
                                     text.setUseDefault(true);
@@ -150,16 +149,20 @@ public class OptimizeBundlesTask extends Task {
         MBEntry commonEntry = null;
         if (nlsEntry.getKey() == null) return null;
         String nlsKey = nlsEntry.getKey();
-        int idx = nlsKey.lastIndexOf('.');
-        if (idx >= 0) { // no prefix
-            String commonKey = getCommonEntryKeyPrefix() + nlsKey.substring(idx);
-            commonEntry = commonBundle.getEntry(commonKey);
+        if (commonEntryKeyPrefix == null) {
+            commonEntry = commonBundle.getEntry(nlsKey);
+        } else {
+            int idx = nlsKey.lastIndexOf('.');
+            if (idx >= 0) { // no prefix
+                String commonKey = getCommonEntryKeyPrefix() + nlsKey.substring(idx);
+                commonEntry = commonBundle.getEntry(commonKey);
+            }
         }
         return commonEntry;
     }
 
     private MBBundle loadCommonBundle(Map<String, File> mappings)
-          throws IOException, ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
         MBXMLPersistencer persistencer = new MBXMLPersistencer();
         File commonFile = mappings.get(getCommonBundleFile());
         if (commonFile == null)
@@ -168,7 +171,7 @@ public class OptimizeBundlesTask extends Task {
         MBBundles commonBundles = (MBBundles) persistencer.load(commonFile);
         MBBundle commonBundle = commonBundles.getBundle(getCommonBundleBaseName());
         if (commonBundle == null) throw new BuildException(
-              getCommonBundleBaseName() + " not found in " + commonFile);
+                getCommonBundleBaseName() + " not found in " + commonFile);
         return commonBundle;
     }
 }
