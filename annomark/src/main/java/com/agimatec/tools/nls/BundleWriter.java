@@ -27,14 +27,20 @@ public abstract class BundleWriter {
     protected final FileType fileType;
     protected boolean overwrite = false, deleteOldFiles = true;
     private boolean debugMode;
-    protected boolean directoryLocale = false;
+    protected boolean flexLayout = false;
     // => true: output format de/path/bundle.properties, false: path/bundle_de.properties
 
     enum FileType {
         NO, XML, PROPERTIES,
         JS, JS_PRETTY,
-        JAVA_FULL_ENUM_KEYS, JAVA_ENUM_KEYS, JAVA_FULL, JAVA_SMALL,
-        SQL
+        JAVA_FULL_ENUM_KEYS,
+        JAVA_ENUM_KEYS,
+        JAVA_FULL,
+        JAVA_SMALL,
+        SQL,
+        // Adobe ActionScript
+        FLEX_FULL,
+        FLEX_SMALL
     }
 
     protected List myUsedLocales;
@@ -73,12 +79,12 @@ public abstract class BundleWriter {
         this.deleteOldFiles = deleteOldFiles;
     }
 
-    public boolean isDirectoryLocale() {
-        return directoryLocale;
+    public boolean isFlexLayout() {
+        return flexLayout;
     }
 
-    public void setDirectoryLocale(boolean directoryLocale) {
-        this.directoryLocale = directoryLocale;
+    public void setFlexLayout(boolean flexLayout) {
+        this.flexLayout = flexLayout;
     }
 
     protected boolean mkdirs(String file) {
@@ -188,7 +194,7 @@ public abstract class BundleWriter {
     }
 
     protected String getFileName(String locale) {
-        if (directoryLocale) {
+        if (flexLayout) {
             return getFileNameFlex(locale);
         } else {
             return getFileNameJava(locale);
