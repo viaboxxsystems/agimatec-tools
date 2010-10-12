@@ -17,7 +17,7 @@ public class ClassUtils {
         final ClassLoader cl = Thread.currentThread().getContextClassLoader();
         // if Reflection.getCallerClass(3) is not the correct stuff, just drop it.
 //        return cl == null ? Reflection.getCallerClass(3).getClassLoader() : cl;
-        return cl == null ? ClassUtils.getClassLoader() : cl;
+        return cl == null ? ClassUtils.class.getClassLoader() : cl;
     }
 
     /**
