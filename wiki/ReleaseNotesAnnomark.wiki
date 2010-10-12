@@ -1,5 +1,9 @@
-
 = annomark =
+
+== 2.3.3 ==
+  * NLSTools support for Adobe Flex (generate Flex class, support Flex directory format)
+  * MessageBundleTask: new option writeInterface "Flex" and "smallFlex"
+  * OptimizeBundlesTask: new option "deleteEmptyEntries", "commonEntryKeyPrefix" may be null
 
 == 2.2.7 (16.12.2009) ==
 doctype for dozer5.0 fixed
