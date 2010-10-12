@@ -19,6 +19,8 @@ Create your own templates, e.g. for struts-validation from your Form-Classes, fo
 
 = Annomark =
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
+  * [http://code.google.com/p/agimatec-tools/svn/trunk/javadoc/annomark/index.html JavaDoc]
+
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/index.html Maven-Site]
   * [AnnomarkExample Getting started example]
 
