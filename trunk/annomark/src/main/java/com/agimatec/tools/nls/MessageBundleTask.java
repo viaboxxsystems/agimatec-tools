@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
  * <pre>
  * writeProperties = true (=.properties), false, xml (=.xml)
  * writeJson = true (=compressed .js file), false, pretty (formatted .js file)
- * writeInterface = true (keys + bundle name), false, small (bundle name only),
+ * writeInterface = true (keys + bundle name), false, small_enum, small (bundle name only), Flex (ActionScript class), smallFlex (bundle name only)
  *  enum (keys + bundle name + enum of all keys), small_enum (bundle name + enum of all keys)
  * <p/>
  * This utility can generate:
@@ -40,8 +40,8 @@ import java.util.StringTokenizer;
  * jsonPath = to write .js to
  * jsonFile = null or the hard-coded json file name
  * sqlScriptDir = to write .sql to
- * directoryLocale=true: output format is "de_DE/path/bundle.properties"  (Flex style)
- * directoryLocale=false: output format is "path/bundle_de_DE.properties" (default, java style)
+ * flexLayout=true: output format is "de_DE/path/bundle.properties"  (Adobe Flex directory format)
+ * flexLayout=false: output format is "path/bundle_de_DE.properties" (default, java style)
  * <p/>
  * </pre>
  * Example:
@@ -49,7 +49,7 @@ import java.util.StringTokenizer;
  * &lt;taskdef name="msgbundle" classname="com.agimatec.tools.nls.MessageBundleTask">
  * &lt;classpath refid="maven.test.classpath"/>
  * &lt;/taskdef>
- *
+ * <p/>
  * &lt;msgbundle overwrite="true" bundles="src/main/bundles/Customer.xml;../utilities/base/src/main/bundles/Common.xml"
  * writeProperties="true"
  * writeJson="true"
@@ -74,7 +74,7 @@ public class MessageBundleTask extends Task {
     private String writeJson = "false";
     private String writeInterface = "false";
     private boolean debugMode = false;
-    private boolean directoryLocale = false;
+    private boolean flexLayout = false;
 
     private MBBundles parsedBundles;
     private String xmlConfigBundle;
@@ -87,12 +87,12 @@ public class MessageBundleTask extends Task {
         this.jsonPath = getProject().resolveFile(jsonPath).getPath();
     }
 
-    public boolean isDirectoryLocale() {
-        return directoryLocale;
+    public boolean isFlexLayout() {
+        return flexLayout;
     }
 
-    public void setDirectoryLocale(boolean directoryLocale) {
-        this.directoryLocale = directoryLocale;
+    public void setFlexLayout(boolean flexLayout) {
+        this.flexLayout = flexLayout;
     }
 
     /**
@@ -120,7 +120,9 @@ public class MessageBundleTask extends Task {
         this.writeJson = writeJson;
     }
 
-    /** true when the interface file shall be generated */
+    /**
+     * true, false, small, Flex, smallFlex when the interface file shall be generated
+     */
     public String getWriteInterface() {
         return writeInterface;
     }
@@ -129,7 +131,9 @@ public class MessageBundleTask extends Task {
         writeInterface = aWriteInterface;
     }
 
-    /** true when the files shall be generated, even if they are up-to-date */
+    /**
+     * true when the files shall be generated, even if they are up-to-date
+     */
     public boolean isOverwrite() {
         return overwrite;
     }
@@ -138,7 +142,9 @@ public class MessageBundleTask extends Task {
         overwrite = aOverwrite;
     }
 
-    /** true when the label shall be the same as the key */
+    /**
+     * true when the label shall be the same as the key
+     */
     public boolean isDebugMode() {
         return debugMode;
     }
@@ -147,7 +153,9 @@ public class MessageBundleTask extends Task {
         this.debugMode = debugMode;
     }
 
-    /** the path+name of the xml files (; separated) */
+    /**
+     * the path+name of the xml files (; separated)
+     */
     public String getBundles() {
         return bundles;
     }
@@ -160,7 +168,9 @@ public class MessageBundleTask extends Task {
         sourcePath = getProject().resolveFile(aSourcePath).getPath();
     }
 
-    /** the root path to store the property files */
+    /**
+     * the root path to store the property files
+     */
     public String getPropertyPath() {
         return propertyPath;
     }
@@ -204,6 +214,16 @@ public class MessageBundleTask extends Task {
             fileType = BundleWriter.FileType.JAVA_ENUM_KEYS;
         } else if (getWriteInterface().equalsIgnoreCase("enum")) {
             fileType = BundleWriter.FileType.JAVA_FULL_ENUM_KEYS;
+        } else if (getWriteInterface().equalsIgnoreCase("Flex")) {
+            executeBundleWriter(
+                    new BundleWriterFlexClass(this, getXMLConfigBundle(), o, sourcePath,
+                            BundleWriter.FileType.FLEX_FULL));
+            return;
+        } else if (getWriteInterface().equalsIgnoreCase("smallFlex")) {
+            executeBundleWriter(
+                    new BundleWriterFlexClass(this, getXMLConfigBundle(), o, sourcePath,
+                            BundleWriter.FileType.FLEX_SMALL));
+            return;
         } else {
             fileType = BundleWriter.FileType.JAVA_FULL;
         }
@@ -246,14 +266,16 @@ public class MessageBundleTask extends Task {
     }
 
     private void executeBundleWriter(BundleWriter writer) throws Exception {
-        writer.setDirectoryLocale(directoryLocale);
+        writer.setFlexLayout(flexLayout);
         writer.setOverwrite(overwrite);
         writer.setDeleteOldFiles(deleteOldFiles);
         writer.setDebugMode(debugMode);
         writer.execute();
     }
 
-    /** read/parse XML file */
+    /**
+     * read/parse XML file
+     */
     protected MBBundles loadBundles() throws Exception {
         if (parsedBundles == null) {
             StringTokenizer tokens = new StringTokenizer(getBundles(), ";");
