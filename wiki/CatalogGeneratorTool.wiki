@@ -59,7 +59,7 @@ java com.agimatec.dbtransform.CatalogGeneratorTool
 
 == db-conversion.xml ==
 
-for details see class [http://www.agimatec.de/agimatec-tools/site/dbmigrate/apidocs/com/agimatec/dbtransform/package-summary.html CatalogConversion]
+for details see class [http://agimatec-tools.googlecode.com/svn/trunk/javadoc/dbmigrate/com/agimatec/dbtransform/package-summary.html CatalogConversion]
 
 {{{
 <conversion>
