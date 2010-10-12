@@ -18,7 +18,6 @@ with the CatalogGeneratorTool from your sql schema (template ejb3-prototype.ftl)
 Create your own templates, e.g. for struts-validation from your Form-Classes, for WSDL from your classes, GUI layouts, documentation, Interfaces, business-rules and constraints . We appreciate your ideas and input to enhance "annomark".
 
 = Annomark =
-  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/apidocs/index.html JavaDoc ]
   * [http://code.google.com/p/agimatec-tools/svn/trunk/javadoc/annomark/index.html JavaDoc]
 
   * [http://www.agimatec.de/documentation/public/agimatec-tools/site/annomark/index.html Maven-Site]
