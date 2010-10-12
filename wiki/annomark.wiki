@@ -26,3 +26,6 @@ _*Hints:*_
   * _you need annogen-0.1.1. If you cannot find it on official annogen-sides, refer to the download-section of agimatec-tools._
   * _There might be logged errors and warnings when using annogen. It works nevertheless._
   * _annogen-0.1.1 cannot parse static imports. Avoid them when you want your classes processed._
+
+
+In the annomark.jar are some ant-Tasks. Documentation here: [NLSTools]
