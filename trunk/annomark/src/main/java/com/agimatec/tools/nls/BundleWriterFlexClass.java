@@ -17,9 +17,9 @@ import java.util.Iterator;
 /**
  * Description: <br/>
  * User: roman.stumm <br/>
- * Date: 15.06.2007 <br/>
+ * Date: 12.10.2010 <br/>
  * Time: 12:14:13 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: viaboxx GmbH
  */
 public class BundleWriterFlexClass extends BundleWriter {
     public BundleWriterFlexClass(Task task, String configFile, MBBundle currentBundle, String outputPath,
