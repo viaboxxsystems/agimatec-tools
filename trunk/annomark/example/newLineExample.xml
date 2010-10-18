@@ -1,0 +1,9 @@
+<bundles>
+  <bundle baseName="NewLineExample" interfaceName="com.agimatec.I_NewLineExample">>
+    <entry key="key">
+      <text locale="en">
+        <value>something worth\ntwo lines</value>
+      </text>
+    </entry>
+  </bundle>
+</bundles>
