@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -21,8 +22,8 @@ import java.util.Iterator;
  * Copyright: Agimatec GmbH
  */
 public class BundleWriterSql extends BundleWriter {
-    public BundleWriterSql(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType) {
-        super(task, configFile, currentBundle, outputPath, fileType);
+    public BundleWriterSql(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType, Set<String> allowedLocales) {
+        super(task, configFile, currentBundle, outputPath, fileType, allowedLocales);
     }
 
     private File getSQLFile() {

@@ -22,8 +22,8 @@ public class BundleWriterJson extends BundleWriter {
 
     public BundleWriterJson(Task task, String configFile,
                             MBBundle currentBundle, String outputPath, String outputFile, 
-                            FileType fileType) {
-        super(task, configFile, currentBundle, outputPath, fileType);
+                            FileType fileType, Set<String> allowedLocales) {
+        super(task, configFile, currentBundle, outputPath, fileType, allowedLocales);
         this.outputFile = outputFile;
     }
 

@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -24,8 +25,8 @@ import java.util.List;
  * Copyright: Agimatec GmbH
  */
 public class BundleWriterJavaInterface extends BundleWriter {
-    public BundleWriterJavaInterface(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType) {
-        super(task, configFile, currentBundle, outputPath, fileType);
+    public BundleWriterJavaInterface(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType, Set<String> allowedLocales) {
+        super(task, configFile, currentBundle, outputPath, fileType, allowedLocales);
     }
 
 

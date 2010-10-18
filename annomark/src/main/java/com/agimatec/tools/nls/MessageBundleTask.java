@@ -10,7 +10,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import java.io.File;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * <p>Description: Generates the interface with message constants and property files
@@ -46,6 +46,7 @@ import java.util.StringTokenizer;
  * flexLayout=false: output format is "path/bundle_de_DE.properties" (default, java style)
  * preserveNewlines=true: newlines will *not* be escaped when writing properties files
  * preserveNewlines=false: (default) newlines will be escaped when writing properties files
+ * allowedLocales: ';'-separated list of locales that should be written, all other locales will NOT be written, if empty, all locales are written.
  * <p/>
  * </pre>
  * Example:
@@ -83,6 +84,8 @@ public class MessageBundleTask extends Task {
 
     private MBBundles parsedBundles;
     private String xmlConfigBundle;
+
+    private Set<String> allowedLocales; 
 
     public String getJsonPath() {
         return jsonPath;
@@ -206,7 +209,7 @@ public class MessageBundleTask extends Task {
             fileType = BundleWriter.FileType.SQL;
         }
         executeBundleWriter(
-                new BundleWriterSql(this, getXMLConfigBundle(), o, getSqlScriptDir(), fileType));
+                new BundleWriterSql(this, getXMLConfigBundle(), o, getSqlScriptDir(), fileType, allowedLocales));
     }
 
     private void handleInterface(MBBundle o) throws Exception {
@@ -222,18 +225,18 @@ public class MessageBundleTask extends Task {
         } else if (getWriteInterface().equalsIgnoreCase("Flex")) {
             executeBundleWriter(
                     new BundleWriterFlexClass(this, getXMLConfigBundle(), o, sourcePath,
-                            BundleWriter.FileType.FLEX_FULL));
+                            BundleWriter.FileType.FLEX_FULL, allowedLocales));
             return;
         } else if (getWriteInterface().equalsIgnoreCase("smallFlex")) {
             executeBundleWriter(
                     new BundleWriterFlexClass(this, getXMLConfigBundle(), o, sourcePath,
-                            BundleWriter.FileType.FLEX_SMALL));
+                            BundleWriter.FileType.FLEX_SMALL, allowedLocales));
             return;
         } else {
             fileType = BundleWriter.FileType.JAVA_FULL;
         }
         executeBundleWriter(
-                new BundleWriterJavaInterface(this, getXMLConfigBundle(), o, sourcePath, fileType));
+                new BundleWriterJavaInterface(this, getXMLConfigBundle(), o, sourcePath, fileType, allowedLocales));
     }
 
     private void handleProperties(MBBundle o) throws Exception {
@@ -246,7 +249,7 @@ public class MessageBundleTask extends Task {
             fileType = BundleWriter.FileType.PROPERTIES;
         }
         executeBundleWriter(new BundleWriterProperties(this, getXMLConfigBundle(), o,
-                getPropertyPath(), fileType));
+                getPropertyPath(), fileType, allowedLocales));
     }
 
     private void handleJson(MBBundle o) throws Exception {
@@ -259,7 +262,7 @@ public class MessageBundleTask extends Task {
             fileType = BundleWriter.FileType.JS;
         }
         executeBundleWriter(new BundleWriterJson(this, getXMLConfigBundle(), o, getJsonPath(),
-                getJsonFile(), fileType));
+                getJsonFile(), fileType, allowedLocales));
     }
 
     public String getJsonFile() {
@@ -338,5 +341,10 @@ public class MessageBundleTask extends Task {
 
     public void setPreserveNewlines(boolean preserveNewlines) {
         this.preserveNewlines = preserveNewlines;
+    }
+
+    public void setAllowedLocales(String allowedLocales){
+        this.allowedLocales = new HashSet<String>((Arrays.asList(allowedLocales.split(";"))));
+
     }
 }

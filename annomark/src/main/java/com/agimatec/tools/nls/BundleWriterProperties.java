@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -17,8 +18,8 @@ import java.util.Properties;
  * Copyright: Agimatec GmbH
  */
 public class BundleWriterProperties extends BundleWriter {
-    public BundleWriterProperties(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType) {
-        super(task, configFile, currentBundle, outputPath, fileType);
+    public BundleWriterProperties(Task task, String configFile, MBBundle currentBundle, String outputPath, FileType fileType, Set<String> allowedLocales) {
+        super(task, configFile, currentBundle, outputPath, fileType,allowedLocales);
     }
 
     protected String suffix() {

@@ -132,6 +132,27 @@ public class MessageBundleTaskTest extends TestCase {
         assertFalse(result.contains("\\\\n"));
     }
 
+    public void testThatOnlyAllowedLocalesAreWrittenWhenFilterIsSet(){
+        MessageBundleTask task = setupTaskForBundles("example/multiLocaleExample.xml");
+        task.setAllowedLocales("en;de");
+        task.execute();
+
+        for(String locale: new String[]{"fi","es"}){
+            File outFile= new File("target/out-properties/MultiLocaleExample_"+locale+".properties");
+            assertFalse("Locale '"+locale+"' should NOT have been written", outFile.exists());
+        }
+
+        for(String locale: new String[]{"de","en"}){
+            File outFile= new File("target/out-properties/MultiLocaleExample_"+locale+".properties");
+            assertTrue("Locale '"+locale+"' should have been written", outFile.exists());
+        }
+        
+
+        task.execute();
+
+
+    }
+
     private MessageBundleTask setupTaskForBundles(String bundles) {
         MessageBundleTask task = new MessageBundleTask();
         task.setProject(new Project());
@@ -146,6 +167,8 @@ public class MessageBundleTaskTest extends TestCase {
         task.setWriteInterface("true");
         return task;
     }
+
+
 
     public static Test suite() {
         return new TestSuite(MessageBundleTaskTest.class);

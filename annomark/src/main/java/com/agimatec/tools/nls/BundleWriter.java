@@ -29,6 +29,7 @@ public abstract class BundleWriter {
     private boolean debugMode;
     protected boolean flexLayout = false;
     // => true: output format de/path/bundle.properties, false: path/bundle_de.properties
+    protected Set<String> allowedLocales;
 
     enum FileType {
         NO, XML, PROPERTIES,
@@ -47,12 +48,13 @@ public abstract class BundleWriter {
 
 
     public BundleWriter(Task task, String configFile, MBBundle currentBundle,
-                        String outputPath, FileType fileType) {
+                        String outputPath, FileType fileType, Set<String> allowedLocales) {
         this.task = task;
         this.configFile = configFile;
         this.currentBundle = currentBundle;
         this.outputPath = outputPath;
         this.fileType = fileType;
+        this.allowedLocales = (allowedLocales == null) ? new HashSet<String>(): allowedLocales;
     }
 
     public void execute() throws Exception {
@@ -103,7 +105,9 @@ public abstract class BundleWriter {
         Iterator locales = getLocalesUsed().iterator();
         while (locales.hasNext()) {
             String locale = (String) locales.next();
-            writeOutputFilePerLocale(locale);
+            if(allowedLocales.isEmpty() || allowedLocales.contains(locale)){
+                writeOutputFilePerLocale(locale);
+            }
         }
     }
 
