@@ -11,14 +11,17 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.tools.ant.Project;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * MessageBundleTask Tester.
  *
  * @author ${USER}
- * @since <pre>06/14/2007</pre>
  * @version 1.0
+ * @since <pre>06/14/2007</pre>
  */
 public class MessageBundleTaskTest extends TestCase {
     public MessageBundleTaskTest(String name) {
@@ -27,23 +30,23 @@ public class MessageBundleTaskTest extends TestCase {
 
     public void testMBTextConverter() throws Exception {
         String xml = "<bundles>\n" +
-              "  <bundle baseName=\"Example\">\n" +
-              "    <entry key=\"key2\">\n" +
-              "      <text locale=\"de\">anderer Wert</text>\n" + "    </entry>\n" +
-              "  </bundle>\n" + "</bundles>";
+                "  <bundle baseName=\"Example\">\n" +
+                "    <entry key=\"key2\">\n" +
+                "      <text locale=\"de\">anderer Wert</text>\n" + "    </entry>\n" +
+                "  </bundle>\n" + "</bundles>";
         MBBundles bundles0 = (MBBundles) MBXMLPersistencer.getXstream().fromXML(xml);
         assertEquals("anderer Wert",
-              bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
+                bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
 
         xml = "<bundles>\n" +
-              "  <bundle baseName=\"Example\">\n" +
-              "    <entry key=\"key2\">\n" +
-              "      <text locale=\"de\">  <value>anderer Wert</value>  </text>\n" +
-              "      <text locale=\"en\"></text>\n" + "    </entry>\n" +
-              "  </bundle>\n" + "</bundles>";
+                "  <bundle baseName=\"Example\">\n" +
+                "    <entry key=\"key2\">\n" +
+                "      <text locale=\"de\">  <value>anderer Wert</value>  </text>\n" +
+                "      <text locale=\"en\"></text>\n" + "    </entry>\n" +
+                "  </bundle>\n" + "</bundles>";
         bundles0 = (MBBundles) MBXMLPersistencer.getXstream().fromXML(xml);
         assertEquals("anderer Wert",
-              bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
+                bundles0.getBundles().get(0).getEntries().get(0).getText("de").getValue());
 
         MBBundles bundles = createBundles();
         xml = MBXMLPersistencer.getXstream().toXML(bundles);
@@ -58,8 +61,7 @@ public class MessageBundleTaskTest extends TestCase {
         assertEquals("An example", text.getValue());
     }
 
-    public void testSaveExampleXML() throws Exception
-    {
+    public void testSaveExampleXML() throws Exception {
         MBBundles bundles = createBundles();
 
         MBXMLPersistencer p = new MBXMLPersistencer();
@@ -101,7 +103,7 @@ public class MessageBundleTaskTest extends TestCase {
     public void testGenerate() throws Exception {
         MessageBundleTask task = new MessageBundleTask();
         task.setProject(new Project());
-        task.setBundles( "example/example.xml");
+        task.setBundles("example/example.xml");
         task.setOverwrite(true);
         task.setDeleteOldFiles(false);
         task.setPropertyPath("target/out-properties");
@@ -113,7 +115,54 @@ public class MessageBundleTaskTest extends TestCase {
         task.execute();
     }
 
+    public void testThatNewlinesAreEscapedByDefault() throws Exception {
+        MessageBundleTask task = setupTaskForBundles("example/newLineExample.xml");
+        task.execute();
+
+        String result = readFileAsString("target/out-properties/NewLineExample_en.properties");
+        assertTrue(result.contains("\\\\n"));
+    }
+
+    public void testThatNewlinesAreEscapedWhenConfigured() throws Exception {
+        MessageBundleTask task = setupTaskForBundles("example/newLineExample.xml");
+        task.setPreserveNewlines(true);
+        task.execute();
+
+        String result = readFileAsString("target/out-properties/NewLineExample_en.properties");
+        assertFalse(result.contains("\\\\n"));
+    }
+
+    private MessageBundleTask setupTaskForBundles(String bundles) {
+        MessageBundleTask task = new MessageBundleTask();
+        task.setProject(new Project());
+        task.setBundles(bundles);
+        task.setOverwrite(true);
+        task.setDeleteOldFiles(false);
+        task.setPropertyPath("target/out-properties");
+        task.setJsonPath("target/out-json");
+        task.setSourcePath("target/out-src");
+        task.setWriteProperties("true");
+        task.setWriteJson("true");
+        task.setWriteInterface("true");
+        return task;
+    }
+
     public static Test suite() {
         return new TestSuite(MessageBundleTaskTest.class);
+    }
+
+    private static String readFileAsString(String filePath) throws java.io.IOException {
+        byte[] buffer = new byte[(int) new File(filePath).length()];
+        BufferedInputStream f = null;
+        try {
+            f = new BufferedInputStream(new FileInputStream(filePath));
+            f.read(buffer);
+        } finally {
+            if (f != null) try {
+                f.close();
+            } catch (IOException ignored) {
+            }
+        }
+        return new String(buffer);
     }
 }

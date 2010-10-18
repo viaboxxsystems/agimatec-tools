@@ -2,6 +2,8 @@ package com.agimatec.tools.nls;
 
 import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
+import com.agimatec.tools.nls.model.MBEntry;
+import com.agimatec.tools.nls.model.MBText;
 import com.agimatec.tools.nls.output.MBXMLPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -42,6 +44,8 @@ import java.util.StringTokenizer;
  * sqlScriptDir = to write .sql to
  * flexLayout=true: output format is "de_DE/path/bundle.properties"  (Adobe Flex directory format)
  * flexLayout=false: output format is "path/bundle_de_DE.properties" (default, java style)
+ * preserveNewlines=true: newlines will *not* be escaped when writing properties files
+ * preserveNewlines=false: (default) newlines will be escaped when writing properties files
  * <p/>
  * </pre>
  * Example:
@@ -75,6 +79,7 @@ public class MessageBundleTask extends Task {
     private String writeInterface = "false";
     private boolean debugMode = false;
     private boolean flexLayout = false;
+    private boolean preserveNewlines = false;
 
     private MBBundles parsedBundles;
     private String xmlConfigBundle;
@@ -290,6 +295,16 @@ public class MessageBundleTask extends Task {
                 } else {
                     mergeBundles(loadedBundles);
                 }
+                if (preserveNewlines) {
+                    for (MBBundle bundle : parsedBundles.getBundles()) {
+                        for (MBEntry mbEntry : bundle.getEntries()) {
+                            for (MBText mbText : mbEntry.getTexts()) {
+                                mbText.setValue(mbText.getValue().replace("\\n", "\n"));
+                            }
+                        }
+                    }
+                }
+
             }
         }
         return parsedBundles;
@@ -315,5 +330,13 @@ public class MessageBundleTask extends Task {
 
     public void setSqlScriptDir(String aSqlScriptDir) {
         sqlScriptDir = getProject().resolveFile(aSqlScriptDir).getPath();
+    }
+
+    public boolean isPreserveNewlines() {
+        return preserveNewlines;
+    }
+
+    public void setPreserveNewlines(boolean preserveNewlines) {
+        this.preserveNewlines = preserveNewlines;
     }
 }
