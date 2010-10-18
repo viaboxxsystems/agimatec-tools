@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Description: <br/>
@@ -23,8 +24,8 @@ import java.util.Iterator;
  */
 public class BundleWriterFlexClass extends BundleWriter {
     public BundleWriterFlexClass(Task task, String configFile, MBBundle currentBundle, String outputPath,
-                                 FileType fileType) {
-        super(task, configFile, currentBundle, outputPath, fileType);
+                                 FileType fileType, Set<String> allowedLocales) {
+        super(task, configFile, currentBundle, outputPath, fileType, allowedLocales);
     }
 
 
