@@ -221,6 +221,9 @@ public class SQLScriptParser {
         } else {
             path = (getScriptDir() != null) ? getScriptDir() + scriptName : scriptName;
             URL ress = ConfigManager.toURL(path);
+            if(ress == null) {
+                throw new FileNotFoundException(path);
+            }
             input = new BufferedReader(new InputStreamReader(ress.openStream()));
         }
         return new Object[]{input, path};
