@@ -35,7 +35,7 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
                 }
             } catch (Exception e) {
                 log.error("error executing subscript: " + statement.substring(1), e);
-                throw new SQLException(e.getMessage());
+                throw new SQLException(e.getMessage(), e);
             }
             return 0;
         } else
