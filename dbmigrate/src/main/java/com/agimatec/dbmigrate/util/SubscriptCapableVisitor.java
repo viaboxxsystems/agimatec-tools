@@ -5,7 +5,6 @@ import com.agimatec.sql.script.ScriptVisitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.StringTokenizer;
 
@@ -34,7 +33,7 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
                 } else {
                     parser.iterateSQLScript(this, statement.substring(1));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("error executing subscript: " + statement.substring(1), e);
                 throw new SQLException(e.getMessage());
             }

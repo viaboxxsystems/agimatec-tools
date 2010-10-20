@@ -46,7 +46,7 @@ import java.util.*;
  * Date: 2007, 2008, 2009, 2010
  * <pre>
  * final String sim = System.getProperty(SYSTEM_PROPERTY_SIM);
- * sim = "true"|"yes" :: simlation, echo execution sequence into log, but do not invoke any script
+ * sim = "true"|"yes" :: simulation, echo execution sequence into log, but do not invoke any script
  * otherwise (=default) :: execute scripts/java in sequence
  * </pre>
  */
