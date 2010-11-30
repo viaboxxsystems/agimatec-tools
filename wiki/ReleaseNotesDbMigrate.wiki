@@ -1,5 +1,8 @@
 = dbmigrate =
 
+== 2.3.3 (current trunk, upcoming next release) ==
+  * System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!) 
+
 == 2.3.2 (31th march 2010) == 
 Fixes and improvements for grails-support
   * Fixes for running groovy scripts (using Context classloader, script dir)
