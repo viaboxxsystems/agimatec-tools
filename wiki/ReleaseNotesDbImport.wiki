@@ -5,6 +5,7 @@ ADDED:
   * new class 'ImportJob' simplifies API of dbimport
 CHANGED:
   * log4j upgrade from 1.2.14 to 1.2.16
+  * upgrade to poi3.7 (only maven dependency changed, no API changes)
 FIXED:
   * Excel-support: bug fixes reading value from formular cells
 
