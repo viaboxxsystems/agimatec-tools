@@ -1,7 +1,25 @@
 = dbmigrate =
 
 == 2.3.3 (current trunk, upcoming next release) ==
+ADDED:
+  * HSQLDB support
+
+CHANGES:
+  * reconnect if initial connection failed
+  * log4j upgrade from 1.2.14 to 1.2.16
   * System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!) 
+  * System Properties overrule configured environment entries
+  * ReconnectScriptVisitor logs reconnect error as DEBUG instead of ERROR
+FIXED: 
+  * groovy dependencies optional (causing unwanted problems with grails)
+  * SQLScriptParser now also handles JdbcExceptions with FAIL_ON_ERROR=false
+  * better exception handling when subscript URL not found
+  * Supporting additional script dirs for Groovy Scripts (issue #4 fixed)
+{{{
+<list name="GroovyScripts">
+  <file dir="cp://dbmigrate/scripts/" relative="false" file=""/>
+</list>
+}}}
 
 == 2.3.2 (31th march 2010) == 
 Fixes and improvements for grails-support
