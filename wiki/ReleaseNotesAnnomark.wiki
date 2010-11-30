@@ -1,6 +1,6 @@
 = annomark =
 
-== 2.3.3 ==
+== 2.3.3 (upcoming, current trunk) ==
   * NLSTools support for Adobe Flex (generate Flex class, support Flex directory format)
   * MessageBundleTask: new option writeInterface "Flex" and "smallFlex"
   * OptimizeBundlesTask: new option "deleteEmptyEntries", "commonEntryKeyPrefix" may be null
