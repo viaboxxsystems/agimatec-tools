@@ -11,6 +11,7 @@ CHANGES:
   * System Properties overrule configured environment entries
   * ReconnectScriptVisitor logs reconnect error as DEBUG instead of ERROR
 FIXED: 
+  * bug parsing foreign key (postgres) fixed
   * groovy dependencies optional (causing unwanted problems with grails)
   * SQLScriptParser now also handles JdbcExceptions with FAIL_ON_ERROR=false
   * better exception handling when subscript URL not found
