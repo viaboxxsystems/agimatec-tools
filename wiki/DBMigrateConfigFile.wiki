@@ -18,7 +18,7 @@ This configuration is responsible for:
 }}}
       Predefined are: DB_USER, DB_PASSWORD, DB_SCHEMA, DB_URL, DB_DRIVER. (described below)
     * Optional: System-properties usable in SQL-Scripts 
-      All JVM-Systemproperties are accessible as environment variables. Values in "env" map overwrite their system property.
+      All JVM-Systemproperties are accessible as environment variables. System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!)
     * Mandatory: Directory, in which the upgrade scripts are:
 {{{
       <file name="Scripts" dir="test-scripts" file="" relative="false"/>
