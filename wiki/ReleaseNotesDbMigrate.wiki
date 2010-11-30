@@ -21,6 +21,7 @@ FIXED:
   <file dir="cp://dbmigrate/scripts/" relative="false" file=""/>
 </list>
 }}}
+  * replace propierties in TextNode also
 
 == 2.3.2 (31th march 2010) == 
 Fixes and improvements for grails-support
