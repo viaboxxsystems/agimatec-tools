@@ -7,8 +7,7 @@ ADDED:
 CHANGES:
   * reconnect if initial connection failed
   * log4j upgrade from 1.2.14 to 1.2.16
-  * System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!) 
-  * System Properties overrule configured environment entries
+  * System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!). System Properties now overrule configured environment entries
   * ReconnectScriptVisitor logs reconnect error as DEBUG instead of ERROR
 FIXED: 
   * bug parsing foreign key (postgres) fixed
