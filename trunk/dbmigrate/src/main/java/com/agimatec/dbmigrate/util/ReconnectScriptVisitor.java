@@ -33,7 +33,7 @@ public class ReconnectScriptVisitor extends ScriptVisitorDelegate {
 
                 return 0;
             } catch (JdbcException ex) {
-                log.error("error during reconnect()", ex);
+                log.debug("error during reconnect()", ex);
                 throw new SQLException(ex.getMessage());
             }
         } else {
