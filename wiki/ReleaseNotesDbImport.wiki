@@ -5,7 +5,8 @@ ADDED:
   * new class 'ImportJob' simplifies API of dbimport
 CHANGED:
   * log4j upgrade from 1.2.14 to 1.2.16
-
+FIXED:
+  * Excel-support: bug fixes reading value from formular cells
 
 == 2.3.1 (Febr. 2010) ==
 The 2.3.x versions of agimatec-tools support org.apache.poi version 3.6.
