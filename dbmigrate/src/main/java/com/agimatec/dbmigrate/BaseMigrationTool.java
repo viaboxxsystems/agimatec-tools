@@ -357,7 +357,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
   }
 
   /**
-   * a map for environment properties (defaults are JVM System-Properties)
+   * a map for environment properties (JVM System-Properties overwrite these properties)
    * (to be used to conditional execution of statements in
    * SQL scripts)
    *
@@ -374,8 +374,8 @@ public abstract class BaseMigrationTool implements MigrationTool {
       env = m;
     } else {
       Properties p = new Properties();
-      p.putAll(System.getProperties());
       p.putAll(m);
+      p.putAll(System.getProperties());
       getMigrateConfig().put("env", p);
       env = p;
     }

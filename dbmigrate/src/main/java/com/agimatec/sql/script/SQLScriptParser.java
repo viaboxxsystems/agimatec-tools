@@ -499,6 +499,8 @@ public class SQLScriptParser {
                     execSQL(sql);
                 } catch (SQLException ex) {
                     handleError(ex, sql);
+                } catch(JdbcException ex) {
+                   handleError(ex, sql);
                 }
                 newBuf();
                 result = true;
@@ -520,11 +522,13 @@ public class SQLScriptParser {
                 }
             } catch (SQLException ex) {
                 handleError(ex, sql);
+            } catch(JdbcException ex) {
+               handleError(ex, sql);
             }
             newBuf();
         }
 
-        private void execSQL(String sql) throws SQLException {
+        private void execSQL(String sql) throws SQLException, JdbcException {
             if (sql.length() == 0) {
                 return;
             }
