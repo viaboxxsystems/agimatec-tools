@@ -4,12 +4,11 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -115,12 +114,12 @@ public class OptimizeBundlesTask extends Task {
             Map<String, File> mappings =
                     CopyBundlesTask.readControlFileMapping(masterFile);
             MBBundle commonBundle = loadCommonBundle(mappings);
-            MBXMLPersistencer persistencer = new MBXMLPersistencer();
             boolean modified;
 
             for (Map.Entry<String, File> fileentry : mappings.entrySet()) {
                 File source = fileentry.getValue();
-                MBBundles bundles = (MBBundles) persistencer.load(source);
+                MBPersistencer persistencer = MBPersistencer.forFile(source);                
+                MBBundles bundles = persistencer.load(source);
                 modified = false;
                 for (MBBundle bundle : bundles.getBundles()) {
                     if (fileentry.getKey().equals(getCommonBundleFile()) &&
@@ -197,13 +196,12 @@ public class OptimizeBundlesTask extends Task {
     }
 
     private MBBundle loadCommonBundle(Map<String, File> mappings)
-            throws IOException, ClassNotFoundException {
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
+            throws Exception {
         File commonFile = mappings.get(getCommonBundleFile());
         if (commonFile == null)
             throw new BuildException(getCommonBundleFile() + " not found in " + mappings);
 
-        MBBundles commonBundles = (MBBundles) persistencer.load(commonFile);
+        MBBundles commonBundles = MBPersistencer.loadFile(commonFile);
         MBBundle commonBundle = commonBundles.getBundle(getCommonBundleBaseName());
         if (commonBundle == null) throw new BuildException(
                 getCommonBundleBaseName() + " not found in " + commonFile);

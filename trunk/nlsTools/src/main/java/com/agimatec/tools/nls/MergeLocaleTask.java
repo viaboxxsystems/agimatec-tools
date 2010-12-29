@@ -1,12 +1,12 @@
 package com.agimatec.tools.nls;
 
-import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBBundle;
+import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
-import org.apache.tools.ant.Project;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import java.io.File;
@@ -88,15 +88,14 @@ public class MergeLocaleTask extends Task {
     public void execute() {
         MBBundles loadedBundles;
         MBBundles translatedBundles;
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
 
         // try to load the bundles of the file
         try {
-            log("Reading XML from " + fromXML, Project.MSG_INFO);
-            loadedBundles = (MBBundles) persistencer.load(new File(fromXML));
+            log("Reading Bundles from " + fromXML, Project.MSG_INFO);
+            loadedBundles = MBPersistencer.loadFile(new File(fromXML));
 
-            log("Reading XML from " + xmlWithNewLocale, Project.MSG_INFO);
-            translatedBundles = (MBBundles) persistencer.load(new File(xmlWithNewLocale));
+            log("Reading Bundles from " + xmlWithNewLocale, Project.MSG_INFO);
+            translatedBundles = MBPersistencer.loadFile(new File(xmlWithNewLocale));
 
             // if bundles exist
             if (loadedBundles != null) {
@@ -132,8 +131,8 @@ public class MergeLocaleTask extends Task {
             }
 
             // write the combined locales into a file
-            persistencer.save(loadedBundles, new File(toXML));
-            log("Writing to XML file " + toXML, Project.MSG_INFO);
+            MBPersistencer.saveFile(loadedBundles, new File(toXML));
+            log("Writing to bundles to file " + toXML, Project.MSG_INFO);
         } catch (Exception e) {
             throw new BuildException(e);
         }

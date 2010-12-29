@@ -2,194 +2,176 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
+    <parent>
+        <groupId>com.agimatec</groupId>
+        <artifactId>agimatec-tools</artifactId>
+        <version>2.4.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>com.agimatec</groupId>
-    <artifactId>agimatec-tools</artifactId>
-    <version>2.3.3-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <artifactId>annomark</artifactId>
+    <packaging>jar</packaging>
+    <version>${agimatec-version}</version>
+    <name>Codegenerator with Annogen and Freemarker</name>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.agimatec</groupId>
-  <artifactId>annomark</artifactId>
-  <packaging>jar</packaging>
-  <version>${agimatec-version}</version>
-  <name>Codegenerator with Annogen and Freemarker</name>
+    <distributionManagement>
+        <site>
+            <id>${agimatec-site-id}</id>
+            <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
+        </site>
+    </distributionManagement>
+    
+    <dependencies>
 
-  <distributionManagement>
-    <site>
-      <id>${agimatec-site-id}</id>
-      <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
-    </site>
-  </distributionManagement>
-  <profiles>
-    <!-- This profile is needed to make building on mac os x possible-->
-    <profile>
-      <id>mac os x tool path</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>java.vendor</name>
-          <value>Apple Inc.</value>
-        </property>
-      </activation>
-      <dependencies>
         <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-          <version>${java.version}</version>
-          <scope>system</scope>
-          <systemPath>
-            /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
-          </systemPath>
+            <groupId>com.agimatec</groupId>              
+            <artifactId>dbmigrate</artifactId>
         </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
-  <dependencies>
-    <dependency>
-      <groupId>com.agimatec</groupId>
-      <artifactId>dbmigrate</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-      <optional>true</optional>
-    </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId>
-    </dependency>
+        <dependency>
+          <groupId>org.freemarker</groupId>
+          <artifactId>freemarker</artifactId>
+          <optional>true</optional>
+        </dependency>
 
-    <dependency>
-      <groupId>groovy</groupId>
-      <artifactId>gram</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>groovy</groupId>
-          <artifactId>groovy-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <optional>true</optional>
+        </dependency>
 
-    <dependency>
-      <groupId>annogen</groupId>
-      <artifactId>annogen</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>groovy</groupId>
+            <artifactId>gram</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-    <dependency>
-      <groupId>com.sun</groupId>
-      <artifactId>tools</artifactId>
-      <scope>system</scope>
-      <systemPath>${java.home}/../lib/tools.jar</systemPath>
-    </dependency>
+        <dependency>
+            <groupId>annogen</groupId>
+            <artifactId>annogen</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.freemarker</groupId>
-      <artifactId>freemarker</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
 
-    <!-- required for MessageBundleTask to write JSON files only and to test -->
-    <dependency>
-      <groupId>com.sdicons.jsontools</groupId>
-      <artifactId>jsontools-core</artifactId>
-      <optional>true</optional>
-    </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
 
-  </dependencies>
+        <!-- required for MessageBundleTask to write JSON files only and to test -->
+        <dependency>
+            <groupId>com.sdicons.jsontools</groupId>
+            <artifactId>jsontools-core</artifactId>
+            <optional>true</optional>
+        </dependency>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>Generate database history scripts</id>
-            <phase>verify</phase>
-            <configuration>
-              <tasks>
+    </dependencies>
 
-                <!--  <java classname="org.codehaus.gram.Gram" fork="true">
-                                  <classpath refid="maven.test.classpath"/>
-                                  <jvmarg value="-Xdebug"/>
-                                  <jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"/>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Generate database history scripts</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <tasks>
 
-                                  <arg value="src/main/java"/>
-                                  <arg value="src/main/groovy/JAMLauncher.groovy"/>
-                                </java>
-                -->
-                <!--
-                   <taskdef name="msgbundle"
-                             classname="com.agimatec.tools.nls.MessageBundleTask">
-                      <classpath refid="maven.test.classpath"/>
-                    </taskdef>
+                                <!--  <java classname="org.codehaus.gram.Gram" fork="true">
+                                                  <classpath refid="maven.test.classpath"/>
+                                                  <jvmarg value="-Xdebug"/>
+                                                  <jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"/>
 
-                    <msgbundle overwrite="true" bundles="example/example.xml"
-                               sourcePath="target/out-src2"
-                               writeInterface="small_enum"
-                               writeProperties="xml"
-                               writeJson="pretty"
-                               jsonPath="target/out-json2"
-                               propertyPath="target/out-properties"/>
+                                                  <arg value="src/main/java"/>
+                                                  <arg value="src/main/groovy/JAMLauncher.groovy"/>
+                                                </java>
+                                -->
+                                <!--
+                                           <taskdef name="msgbundle"
+                                                     classname="com.agimatec.tools.nls.MessageBundleTask">
+                                              <classpath refid="maven.test.classpath"/>
+                                            </taskdef>
 
-                     <taskdef name="prop2xml"
-                             classname="com.agimatec.tools.nls.Property2XMLConverterTask">
-                      <classpath refid="maven.test.classpath"/>
-                    </taskdef>
+                                            <msgbundle overwrite="true" bundles="example/example.xml"
+                                                       sourcePath="target/out-src2"
+                                                       writeInterface="small_enum"
+                                                       writeProperties="xml"
+                                                       writeJson="pretty"
+                                                       jsonPath="target/out-json2"
+                                                       propertyPath="target/out-properties"/>
 
-                    <prop2xml
-                         fromProperty="target/out-properties/Example"
-                         locales="de;en"
-                         toXML="target/example-reverse.xml"/>
-        -->
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>create dist.zip with source, binary and templates</id>
-            <phase>package</phase>
-            <configuration>
-              <tasks>
-                <zip destfile="target/annomark-dist-${agimatec-version}.zip">
-                  <fileset dir=".">
-                    <include name="pom.xml"/>
-                    <include name="templates/**"/>
-                    <include name="src/**"/>
-                    <exclude name="src/test/**"/>
-                  </fileset>
-                  <fileset dir="target">
-                    <include name="annomark-${agimatec-version}.jar"/>
-                  </fileset>
-                </zip>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+                                             <taskdef name="prop2xml"
+                                                     classname="com.agimatec.tools.nls.Property2XMLConverterTask">
+                                              <classpath refid="maven.test.classpath"/>
+                                            </taskdef>
+
+                                            <prop2xml
+                                                 fromProperty="target/out-properties/Example"
+                                                 locales="de;en"
+                                                 toXML="target/example-reverse.xml"/>
+                                -->
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create dist.zip with source, binary and templates</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <zip destfile="target/annomark-dist-${agimatec-version}.zip">
+                                    <fileset dir=".">
+                                        <include name="pom.xml"/>
+                                        <include name="templates/**"/>
+                                        <include name="src/**"/>
+                                        <exclude name="src/test/**"/>
+                                    </fileset>
+                                    <fileset dir="target">
+                                        <include name="annomark-${agimatec-version}.jar"/>
+                                    </fileset>
+                                </zip>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

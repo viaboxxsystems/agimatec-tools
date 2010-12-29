@@ -4,8 +4,9 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
-import org.apache.tools.ant.*;
+import com.agimatec.tools.nls.output.MBPersistencer;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 
 import java.io.File;
 
@@ -30,9 +31,8 @@ public class FillLocaleTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
         try {
-            MBBundles bundles = (MBBundles) persistencer.load(localeXML);
+            MBBundles bundles = MBPersistencer.loadFile(localeXML);
             for (MBBundle bundle : bundles.getBundles()) {
                 for (MBEntry entry : bundle.getEntries()) {
                     if(fillOnlyKeysStartingWith!=null){
@@ -53,7 +53,7 @@ public class FillLocaleTask extends Task {
                     }
                 }
             }
-            persistencer.save(bundles, targetXML);
+            MBPersistencer.saveFile(bundles, targetXML);
         } catch (Exception e) {
             throw new BuildException(e);
         }

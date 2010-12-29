@@ -4,13 +4,16 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * <p>Description: Generates the interface with message constants and property files
@@ -36,7 +39,7 @@ import java.util.*;
  * debugMode = (default false) ignores translations and sets the key as label
  * <p/>
  * Configuration:
- * bundles = the XML-bundles input file(s), separated by ;
+ * bundles = the XML (or Excel)-bundles input file(s), separated by ;
  * sourcePath = to write .java interface to
  * propertyPath = to write .properties/.xml to
  * jsonPath = to write .js to
@@ -289,9 +292,8 @@ public class MessageBundleTask extends Task {
             StringTokenizer tokens = new StringTokenizer(getBundles(), ";");
             while (tokens.hasMoreTokens()) {
                 String bundlesFileName = getProject().resolveFile(tokens.nextToken()).getPath();
-                log("Reading XML from " + bundlesFileName, Project.MSG_INFO);
-                MBBundles loadedBundles =
-                        (MBBundles) new MBXMLPersistencer().load(new File(bundlesFileName));
+                log("Reading bundles from " + bundlesFileName, Project.MSG_INFO);
+                MBBundles loadedBundles = MBPersistencer.loadFile(new File(bundlesFileName));
                 if (parsedBundles == null) {
                     parsedBundles = loadedBundles;
                     xmlConfigBundle = bundlesFileName;
@@ -318,7 +320,7 @@ public class MessageBundleTask extends Task {
     }
 
     private void mergeBundles(MBBundles loadedBundles) {
-        log("Merge XML bundles ...", Project.MSG_VERBOSE);
+        log("Merge bundles ...", Project.MSG_VERBOSE);
         for (MBBundle bundle : loadedBundles.getBundles()) {
             // Enhancement NYI - duplettencheck
             for (MBBundle parsedBundle : parsedBundles.getBundles()) {

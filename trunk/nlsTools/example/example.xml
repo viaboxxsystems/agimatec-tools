@@ -1,11 +1,12 @@
 <bundles>
-  <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
-    <entry key="key1">
-      <text locale="de">Beispieltext mit √Ñ√ñ√ú</text>
-      <text locale="en">An example</text>
-    </entry>
-    <entry key="key2">
-      <text locale="de">anderer Wert</text>
-    </entry>
-  </bundle>
+    <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
+        <entry key="key1">
+            <text locale="de">Beispieltext mit √Ñ√ñ√ú</text>
+            <text locale="en" review="true">An example</text>
+        </entry>
+        <entry key="key2">
+            <description>another key</description>
+            <text locale="de" review="true">anderer Wert</text>
+        </entry>
+    </bundle>
 </bundles>

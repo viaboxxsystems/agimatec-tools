@@ -49,7 +49,7 @@ public class BundleWriterJson extends BundleWriter {
         }
         MBJSONPersistencer writer =
                 new MBJSONPersistencer(fileType == FileType.JS_PRETTY);
-        writer.save(merged, new File(jsfile));
+        writer.saveObject(merged, new File(jsfile));
     }
 
     @Override

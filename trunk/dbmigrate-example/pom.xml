@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.agimatec</groupId>
     <artifactId>agimatec-tools</artifactId>
-    <version>2.3.3-SNAPSHOT</version>
+    <version>2.4.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -159,7 +159,7 @@
     <!-- target directory for distribution -->
     <dist-dir>target/dist</dist-dir>
     <!-- target database version -->
-    <database-version>2.3.3-SNAPSHOT</database-version>
+    <database-version>2.3.0</database-version>
     <!-- set to true when dbtool should not run in phase 'install' -->
     <dbtool-run>false</dbtool-run>
     <!-- set to the name of the configuration to run dbtool with -->

@@ -2,7 +2,6 @@ package com.agimatec.dbmigrate;
 
 import com.agimatec.commons.beans.MapQuery;
 import com.agimatec.commons.config.*;
-import com.agimatec.commons.util.FileUtils;
 import com.agimatec.commons.util.PropertyReplacer;
 import com.agimatec.database.DbUnitDumpTool;
 import com.agimatec.database.DbUnitSetupTool;
@@ -16,6 +15,7 @@ import com.agimatec.sql.meta.checking.DatabaseSchemaChecker;
 import com.agimatec.sql.script.SQLScriptExecutor;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -3,7 +3,7 @@ package com.agimatec.tools.nls;
 import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -17,6 +17,10 @@ import java.util.List;
  * Compares new (e.g. changed by customer) and old (e.g. stuff without customer changes) locale files and
  * lists keys and bundles that are missing in the new translation.
  *
+ * <br/>NEW (29.12.2010):<br/>
+ *  * Can handle XML and Excel files.
+ *
+ * <br/>
  * Sample usage:
  * &lt;compareLocales
  *     originalXML=&quot;original/main-default.xml&quot;
@@ -29,13 +33,12 @@ public class CompareLocalesTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
         MBBundles originalBundles, newBundles;
         List<String> missingKeys = new ArrayList<String>();
         List<String> missingBundles = new ArrayList<String>();
         try {
-            originalBundles = (MBBundles) persistencer.load(originalXML);
-            newBundles = (MBBundles) persistencer.load(newXML);
+            originalBundles = MBPersistencer.loadFile(originalXML);
+            newBundles = MBPersistencer.loadFile(newXML);
             for (MBBundle originalBundle : originalBundles.getBundles()) {
                 MBBundle newBundle = newBundles.getBundle(originalBundle.getBaseName());
                 if (newBundle == null) {
