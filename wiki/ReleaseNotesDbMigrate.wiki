@@ -1,6 +1,10 @@
 = dbmigrate =
 
-== 2.3.3 (current trunk, upcoming next release) ==
+
+== 2.4.0 (29.12.2010) ==
+ * FileUtils removed from dbmigrate (moved to nlsTools)
+
+== 2.3.3 ==
 ADDED:
   * HSQLDB support
 
