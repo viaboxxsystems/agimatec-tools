@@ -106,15 +106,6 @@
                         <configuration>
                             <tasks>
 
-                                <!--  <java classname="org.codehaus.gram.Gram" fork="true">
-                                                  <classpath refid="maven.test.classpath"/>
-                                                  <jvmarg value="-Xdebug"/>
-                                                  <jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"/>
-
-                                                  <arg value="src/main/java"/>
-                                                  <arg value="src/main/groovy/JAMLauncher.groovy"/>
-                                                </java>
-                                -->
                                 <!--
                                            <taskdef name="msgbundle"
                                                      classname="com.agimatec.tools.nls.MessageBundleTask">
@@ -139,27 +130,6 @@
                                                  locales="de;en"
                                                  toXML="target/example-reverse.xml"/>
                                 -->
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>create dist.zip with source, binary and templates</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <tasks>
-                                <zip destfile="target/annomark-dist-${agimatec-version}.zip">
-                                    <fileset dir=".">
-                                        <include name="pom.xml"/>
-                                        <include name="src/**"/>
-                                        <exclude name="src/test/**"/>
-                                    </fileset>
-                                    <fileset dir="target">
-                                        <include name="annomark-${agimatec-version}.jar"/>
-                                    </fileset>
-                                </zip>
                             </tasks>
                         </configuration>
                         <goals>
