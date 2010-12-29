@@ -1,8 +1,8 @@
 #summary NLS Tools - ant tasks for managing resource bundles
 
-= Other Tools contained in annomark.jar =
+Tools (ant tasks) for I18n managing.
 
-== NLS (manage resource bundles) == 
+= NLS (manage resource bundles) = 
 
 Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (with maven-antrun-plugin).
 
