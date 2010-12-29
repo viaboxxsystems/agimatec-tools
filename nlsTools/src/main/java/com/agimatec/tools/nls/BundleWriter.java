@@ -44,7 +44,7 @@ public abstract class BundleWriter {
         FLEX_SMALL
     }
 
-    protected List myUsedLocales;
+    protected List<String> myUsedLocales;
 
 
     public BundleWriter(Task task, String configFile, MBBundle currentBundle,
@@ -234,9 +234,9 @@ public abstract class BundleWriter {
     /**
      * @return a list of String with the locales used in the current bundle
      */
-    protected List getLocalesUsed() {
+    protected List<String> getLocalesUsed() {
         if (myUsedLocales == null) {
-            HashSet locales = new HashSet();
+            HashSet<String> locales = new HashSet<String> ();
             if (getCurrentBundle().getEntries() != null) {
                 for (MBEntry eachEntry : getCurrentBundle().getEntries()) {
                     if (eachEntry.getTexts() != null) {
@@ -246,7 +246,7 @@ public abstract class BundleWriter {
                     }
                 }
             }
-            List result = new ArrayList(locales);
+            List<String>  result = new ArrayList<String>(locales);
             Collections.sort(result);
             myUsedLocales = result;
         }

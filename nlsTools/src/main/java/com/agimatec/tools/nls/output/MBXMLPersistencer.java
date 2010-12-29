@@ -18,7 +18,7 @@ import java.io.Writer;
  * Time: 15:25:25 <br/>
  * Copyright: Agimatec GmbH
  */
-public class MBXMLPersistencer {
+public class MBXMLPersistencer extends MBPersistencer {
     static final XStream xstream = new XStream();
     
     static {
@@ -33,7 +33,7 @@ public class MBXMLPersistencer {
        xstream.registerConverter(new MBTextConverter());
     }
 
-    public void save(Object obj, File target) throws IOException {
+    public void save(MBBundles obj, File target) throws IOException {
         Writer out = FileUtils.openFileWriterUTF8(target);
         try {
             xstream.toXML(obj, out);
@@ -42,10 +42,10 @@ public class MBXMLPersistencer {
         }
     }
 
-    public Object load(File source) throws IOException, ClassNotFoundException {
+    public MBBundles load(File source) throws IOException, ClassNotFoundException {
         Reader reader = FileUtils.openFileReaderUTF8(source);
         try {
-            return xstream.fromXML(reader);
+            return (MBBundles) xstream.fromXML(reader);
         } finally {
             reader.close();
         }

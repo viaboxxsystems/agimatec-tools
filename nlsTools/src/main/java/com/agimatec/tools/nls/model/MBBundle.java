@@ -26,7 +26,7 @@ public class MBBundle {
     private List<MBEntry> entries = new ArrayList();
 
     public List<MBEntry> getEntries() {
-        if(entries == null) entries = new ArrayList();
+        if (entries == null) entries = new ArrayList();
         return entries;
     }
 
@@ -61,10 +61,26 @@ public class MBBundle {
     public MBEntry getEntry(String key) {
         for (MBEntry each : entries) {
             if ((key == null && each.getKey() == null) ||
-                  (key != null && key.equals(each.getKey()))) {
+                    (key != null && key.equals(each.getKey()))) {
                 return each;
             }
         }
         return null; // not found
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MBBundle mbBundle = (MBBundle) o;
+
+        return !(baseName != null ? !baseName.equals(mbBundle.baseName) : mbBundle.baseName != null) &&
+                !(entries != null ? !entries.equals(mbBundle.entries) : mbBundle.entries != null) &&
+                !(interfaceName != null ? !interfaceName.equals(mbBundle.interfaceName) :
+                        mbBundle.interfaceName != null) &&
+                !(sqldomain != null ? !sqldomain.equals(mbBundle.sqldomain) : mbBundle.sqldomain != null);
+
+    }
+
 }

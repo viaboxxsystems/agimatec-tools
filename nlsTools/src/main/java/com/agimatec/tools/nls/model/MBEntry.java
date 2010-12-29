@@ -62,14 +62,24 @@ public class MBEntry {
         if (reviewLocale == null) {
             for (MBText each : texts) {
                 if (each.isReview() ||
-                      (!each.isUseDefault() && StringUtils.isEmpty(each.getValue())))
+                        (!each.isUseDefault() && StringUtils.isEmpty(each.getValue())))
                     return true;
             }
             return false;
         } else {
             MBText text = getText(reviewLocale);
             return (text == null || text.isReview() ||
-                  (!text.isUseDefault() && StringUtils.isEmpty(text.getValue())));
+                    (!text.isUseDefault() && StringUtils.isEmpty(text.getValue())));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MBEntry mbEntry = (MBEntry) o;
+        return !(description != null ? !description.equals(mbEntry.description) : mbEntry.description != null) &&
+                !(key != null ? !key.equals(mbEntry.key) : mbEntry.key != null) &&
+                !(texts != null ? !texts.equals(mbEntry.texts) : mbEntry.texts != null);
     }
 }

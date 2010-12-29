@@ -4,7 +4,7 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -13,7 +13,9 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 /**
- * Takes an XML bundle and adds new entries for the specified locales
+ * Takes an XML bundle and adds new entries for the specified locales.
+ * <br/>NEW (29.12.2010):<br/>
+ *  * Can handle XML and Excel files.<br/>
  * @author Simon Tiffert
  */
 public class AddLocaleTask extends Task {
@@ -57,12 +59,11 @@ public class AddLocaleTask extends Task {
 
     public void execute() {
         MBBundles loadedBundles;
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
-
+        log("Reading Bundles from " + fromXML, Project.MSG_INFO);
         // try to load the bundles of the file
         try {
-            log("Reading XML from " + fromXML, Project.MSG_INFO);
-            loadedBundles = (MBBundles) persistencer.load(new File(fromXML));
+            MBPersistencer persistencer = MBPersistencer.forFile(fromXML);    
+            loadedBundles = persistencer.load(new File(fromXML));
 
             // if bundles exist
             if (loadedBundles != null) {

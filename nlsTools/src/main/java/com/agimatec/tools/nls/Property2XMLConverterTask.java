@@ -4,7 +4,7 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -134,8 +134,7 @@ public class Property2XMLConverterTask extends Task {
                     }
                 }
             }
-            MBXMLPersistencer p = new MBXMLPersistencer();
-            p.save(bundles, new File(getToXML()));
+            MBPersistencer.saveFile(bundles, new File(getToXML()));
         } catch (Exception e) {
             e.printStackTrace();
             throw new BuildException(e);

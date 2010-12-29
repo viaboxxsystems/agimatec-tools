@@ -4,7 +4,7 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -36,10 +36,9 @@ public class LocaleSanityCheckerTask extends Task {
         if(locale == null){
             throw new BuildException("locale parameter is needed!");
         }
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
         MBBundles originalBundles;
         try {
-            originalBundles = (MBBundles) persistencer.load(localeXML);
+            originalBundles = MBPersistencer.loadFile(localeXML);
             for (MBBundle bundle : originalBundles.getBundles()) {
                 for (MBEntry entry : bundle.getEntries()) {
                     MBText text = entry.getText(locale);

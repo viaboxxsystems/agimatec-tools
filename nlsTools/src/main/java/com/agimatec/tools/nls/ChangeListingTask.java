@@ -4,7 +4,7 @@ import com.agimatec.tools.nls.model.MBBundle;
 import com.agimatec.tools.nls.model.MBBundles;
 import com.agimatec.tools.nls.model.MBEntry;
 import com.agimatec.tools.nls.model.MBText;
-import com.agimatec.tools.nls.output.MBXMLPersistencer;
+import com.agimatec.tools.nls.output.MBPersistencer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- *
+ * <br/>NEW (29.12.2010):<br/>
+ *  * Can handle XML and Excel files.<br/>
  */
 public class ChangeListingTask extends Task {
 
@@ -26,15 +27,14 @@ public class ChangeListingTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        MBXMLPersistencer persistencer = new MBXMLPersistencer();
         List<String> diffs = new ArrayList<String>();
         try {
             StringTokenizer locales = new StringTokenizer(checkedLocales, ";");
             while (locales.hasMoreTokens()) {
                 String locale = locales.nextToken();
                 log("Checking locale:"+locale);
-                MBBundles originalBundles = (MBBundles) persistencer.load(originalXML);
-                MBBundles newBundles = (MBBundles) persistencer.load(newXML);
+                MBBundles originalBundles = MBPersistencer.loadFile(originalXML);
+                MBBundles newBundles = MBPersistencer.loadFile(newXML);
                 for (MBBundle originalBundle : originalBundles.getBundles()) {
                     for (MBEntry originalEntry : originalBundle.getEntries()) {
                         MBText newText = LocalesHelper.findMBTextForLocale(originalEntry.getKey(), locale, newBundles);

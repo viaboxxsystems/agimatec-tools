@@ -50,12 +50,24 @@ public class MBText implements Comparable {
 
     public int compareTo(Object o) {
         MBText other = (MBText) o;
-        if(locale == null) return 0;
+        if (locale == null) return 0;
         int dif = locale.compareTo(other.getLocale());
-        if(dif == 0 && value != null) {
+        if (dif == 0 && value != null) {
             return value.compareTo(other.getValue());
         } else {
             return dif;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MBText mbText = (MBText) o;
+
+        return review == mbText.review && useDefault == mbText.useDefault &&
+                !(locale != null ? !locale.equals(mbText.locale) : mbText.locale != null) &&
+                !(value != null ? !value.equals(mbText.value) : mbText.value != null);
     }
 }

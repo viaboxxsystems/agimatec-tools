@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
  *
  * @author Roman Stumm
  */
-public final class FileUtils extends org.apache.commons.io.FileUtils {
+public final class FileUtils {
 
     public static Writer openFileWriterUTF8(File file) throws FileNotFoundException {
         return openFileWriter(file, "UTF-8");
