@@ -22,11 +22,12 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
 <bundles>
   <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
     <entry key="key1">
+      <description>a description for the entry</description>
       <text locale="de">Beispieltext mit ÄÖÜ</text>
       <text locale="en">An example</text>
     </entry>
     <entry key="key2">
-      <text locale="de">anderer Wert</text>
+      <text locale="de" review="true">anderer Wert</text>
     </entry>
   </bundle>
 </bundles>
