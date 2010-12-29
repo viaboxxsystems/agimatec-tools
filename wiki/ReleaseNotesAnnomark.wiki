@@ -1,6 +1,9 @@
 = annomark =
 
-== 2.3.3 (upcoming, current trunk) ==
+== 2.4.0 (2912.2010) ==
+  * NLSTools moved to a separate subproject with own jar nlsTools.jar
+
+== 2.3.3  ==
   * NLSTools support for Adobe Flex (generate Flex class, support Flex directory format)
   * MessageBundleTask: new option writeInterface "Flex" and "smallFlex"
   * OptimizeBundlesTask: new option "deleteEmptyEntries", "commonEntryKeyPrefix" may be null
