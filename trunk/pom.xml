@@ -253,7 +253,7 @@
     <module>dbimport</module>
     <module>dbmigrate</module>
     <module>annomark</module>
-
+    <module>nlsTools</module>
     <module>annomark-example</module>
     <module>dbmigrate-example</module>
   </modules>
