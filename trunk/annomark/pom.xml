@@ -22,11 +22,11 @@
             <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
         </site>
     </distributionManagement>
-    
+
     <dependencies>
 
         <dependency>
-            <groupId>com.agimatec</groupId>              
+            <groupId>com.agimatec</groupId>
             <artifactId>dbmigrate</artifactId>
         </dependency>
 
@@ -36,9 +36,9 @@
         </dependency>
 
         <dependency>
-          <groupId>org.freemarker</groupId>
-          <artifactId>freemarker</artifactId>
-          <optional>true</optional>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -93,6 +93,12 @@
             <groupId>com.sdicons.jsontools</groupId>
             <artifactId>jsontools-core</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
 
     </dependencies>
@@ -173,5 +179,28 @@
             </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <!-- This profile is needed to make building on mac os x possible-->
+        <profile>
+            <id>mac os x tool path</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Apple Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>${java.version}</version>
+                    <scope>system</scope>
+                    <systemPath>
+                        /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
+                    </systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
