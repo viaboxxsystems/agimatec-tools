@@ -17,6 +17,7 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
 == Example ==
 
 === Resource Bundle as XML ===
+
 {{{
 <bundles>
   <bundle baseName="Example" interfaceName="com.agimatec.I_Example">
@@ -31,8 +32,16 @@ Some [http://ant.apache.org/ ant]-tasks. You can use them with ant or maven2 (wi
 </bundles>
 }}}
 
-=== Resource Bundle as Excel spreadsheet ==>
+=== Resource Bundle as Excel spreadsheet ===
+For each bundle, create a new page in the excel file, like this:
+
 http://agimatec-tools.googlecode.com/svn/wiki/excelExample.png
+
+You find some examples under http://agimatec-tools.googlecode.com/svn/trunk/nlsTools/example/excelExample.xls
+
+You can use the .xls file instead of the .xml file in all ant-tasks instead.
+You can let translator users work on the excel files.
+Red colored labels are marked as "to be reviewed", when converting between excel and xml format.
 
 === Usage ===
 
