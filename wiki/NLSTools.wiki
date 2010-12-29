@@ -1,6 +1,6 @@
 #summary NLS Tools - ant tasks for managing resource bundles
 
-Tools (ant tasks) for I18n managing.
+Tools (ant tasks) for I18n management of different locales and their translations.
 
 = NLS (manage resource bundles) = 
 
