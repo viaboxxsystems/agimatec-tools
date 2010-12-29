@@ -21,11 +21,12 @@ public abstract class MBPersistencer {
     }
 
     public static MBPersistencer forFile(File aFile) {
-        if (aFile.getName().endsWith(".xls")) {
+        String name = aFile.getName().toLowerCase();
+        if (name.endsWith(".xls")) {
             return new MBExcelPersistencer();
-        } else if (aFile.getName().endsWith(".xml")) {
+        } else if (name.endsWith(".xml")) {
             return new MBXMLPersistencer();
-        } else if (aFile.getName().endsWith(".js")) {
+        } else if (name.endsWith(".js")) {
             return new MBJSONPersistencer(true);
         } else {
             throw new IllegalArgumentException("File type not supported: " + aFile);
