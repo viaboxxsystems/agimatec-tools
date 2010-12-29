@@ -8,7 +8,7 @@ agimatec-tools contains 3 frameworks, more or less independent of each other:
   * [dbimport DBImport], if you need to import files (excel, csv, fixed-length, xml) into a jdbc-database.
   * [dbmigrate DBMigrate], if you need a framework for database migration or other tools contained in dbmigrate (e.g. sql script execution, schema transformation, code generation sql->java) (see [DBMigrateWhy Why use dbmigrate and who can use it])
   * [annomark Annomark], if you want to generate source code or other files (properties, xml) driven by annotations
-  * [NLSTools], if you want to manage resource bundles with XML, generate properties for Java and Adobe Flex, SQL, merge etc.
+  * [NLSTools], if you want to manage resource bundles with XML/excel, generate properties for Java and Adobe Flex, SQL, merge etc.
 
 You can 
   * use dbimport without any other agimatec framework.
