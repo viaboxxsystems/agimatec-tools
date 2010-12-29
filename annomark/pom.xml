@@ -88,12 +88,6 @@
             <artifactId>freemarker</artifactId>
         </dependency>
 
-        <!-- required for MessageBundleTask to write JSON files only and to test -->
-        <dependency>
-            <groupId>com.sdicons.jsontools</groupId>
-            <artifactId>jsontools-core</artifactId>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>com.sun</groupId>
             <artifactId>tools</artifactId>
@@ -123,31 +117,7 @@
                                                   <arg value="src/main/groovy/JAMLauncher.groovy"/>
                                                 </java>
                                 -->
-                                <!--
-                                           <taskdef name="msgbundle"
-                                                     classname="com.agimatec.tools.nls.MessageBundleTask">
-                                              <classpath refid="maven.test.classpath"/>
-                                            </taskdef>
-
-                                            <msgbundle overwrite="true" bundles="example/example.xml"
-                                                       sourcePath="target/out-src2"
-                                                       writeInterface="small_enum"
-                                                       writeProperties="xml"
-                                                       writeJson="pretty"
-                                                       jsonPath="target/out-json2"
-                                                       propertyPath="target/out-properties"/>
-
-                                             <taskdef name="prop2xml"
-                                                     classname="com.agimatec.tools.nls.Property2XMLConverterTask">
-                                              <classpath refid="maven.test.classpath"/>
-                                            </taskdef>
-
-                                            <prop2xml
-                                                 fromProperty="target/out-properties/Example"
-                                                 locales="de;en"
-                                                 toXML="target/example-reverse.xml"/>
-                                -->
-                            </tasks>
+                                                           </tasks>
                         </configuration>
                         <goals>
                             <goal>run</goal>
