@@ -1,6 +1,6 @@
 #summary NLS Tools - ant tasks for managing resource bundles
 
-= NLSTools have been moved to their own page and will be maintained at [http://code.google.com/p/nlstools/ nlstools] == 
+= NLSTools have been moved to their own project and will be maintained at [http://code.google.com/p/nlstools/ nlstools] == 
   * [http://code.google.com/p/nlstools/ current site for nlstools]
 
 = Old documentation =
