@@ -1,5 +1,10 @@
 #summary NLS Tools - ant tasks for managing resource bundles
 
+= NLSTools have been moved to their own page and will be maintained at [http://code.google.com/p/nlstools/ nlstools] == 
+  * [http://code.google.com/p/nlstools/ current site for nlstools]
+
+= Old documentation =
+
 Tools (ant tasks) for I18n management of different locales and their translations.
 
 = NLS (manage resource bundles) = 
