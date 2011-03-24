@@ -133,4 +133,4 @@ configure where/how to store the database version in the database.
   * since = optional column. set to "" if you do not need it. stores timestamp of last update/insert of the version (timestamp of migration), default = since
   * insert-only = boolean, default = false. if true, tool inserts new version into db_version (so that you get a version journal)
   * auto-create = boolean, default = true. if true, create db_version table if it does not exist
-  * auto-version = boolean, default = false. insert/update the value in db_version after execution of an upgrade script automatically. false: you need to set the version in the script explicitly
+  * auto-version = boolean, default = false. insert/update the value in db_version after execution of an upgrade script automatically. true: you need to set the version in the script explicitly
