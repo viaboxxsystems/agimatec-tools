@@ -1,7 +1,7 @@
 #summary sql script features
 
 dbmigrate tool can execute "standard" sql-scripts. Triggers and PL/SQL-blocks are also supported.
-The tool can substitute enviornment variable and supports conditional execution of statements.
+The tool can substitute enviornment variables and supports conditional execution of statements.
 
 *Known limitations*
   * Problems with Oracle-packages. You can execute packages by invocation from within a xml configuration file. (see [DBMigrateXmlScript XML scripts])
