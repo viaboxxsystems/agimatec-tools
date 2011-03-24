@@ -39,7 +39,7 @@ File may end with .sql, .xml or .groovy.
 
 Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
-    * Mandatory: file with database configuration configuration. ([DBMigrateJdbcConfig JdbcConfig]):
+    * Mandatory: file with database configuration. ([DBMigrateJdbcConfig JdbcConfig]):
       <file name="JdbcConfig" file="postgres-test.properties"/>
       
     * Optional: start-version
