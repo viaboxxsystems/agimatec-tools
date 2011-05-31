@@ -1,5 +1,8 @@
 = dbimport =
 
+== 2.4.0 ==
+no changes, maven version adjusted
+
 == 2.3.3 (upcoming, current trunk) ==
 ADDED:
   * new class 'ImportJob' simplifies API of dbimport
