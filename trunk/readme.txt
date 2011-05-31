@@ -8,7 +8,7 @@ The project agimatec-tools is a bundle that contains some frameworks used for:
 How to compile the project
 ==========================
 Requirements:
-0. Sources require java1.5 or higher. (Tested with JDK 1.5.0._12)
+0. Sources require java1.5 or higher. (Tested with JDK 1.6.0_24)
 1. Maven2 required
 1a. The project is built with maven2.0.9. 
 You need to download and install maven2 from: http://maven.apache.org/
