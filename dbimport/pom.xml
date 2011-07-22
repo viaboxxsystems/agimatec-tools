@@ -19,13 +19,13 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
-    </licenses><!--
+    </licenses>
   <distributionManagement>
     <site>
       <id>${agimatec-site-id}</id>
       <url>${agimatec-site-url}/agimatec-tools/site/dbimport</url>
     </site>
-  </distributionManagement>-->
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
