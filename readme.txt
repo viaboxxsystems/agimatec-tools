@@ -1,9 +1,14 @@
-agimatec-tools by agimatec GmbH
-=======================================
+agimatec-tools
+==============
 The project agimatec-tools is a bundle that contains some frameworks used for:
 - file generation (source code, configuration)
 - database migration (with sql- and groovy-scripts, xml-configuration, schema sanity check etc.)
 - database import (csv-, fixedlength-, xml-format)
+
+History
+-------
+1. first open-source release by Roman Stumm, agimatec GmbH, Bonn
+2. currently maintained by Roman Stumm, Viaboxx GmbH, Kšnigswinter
 
 How to compile the project
 ==========================
@@ -59,6 +64,11 @@ mvn idea:idea
 (optional) deploy maven-site and javadoc:
 ------------------------------
 [ Note:
+Follow the instructions on
+ * https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
+to deploy on Sonatype OSS Maven Repository.
+
+Old style (when distribution-management in pom.xml is enabled)
   You must set the properties ${agimatec-site-id} and ${agimatec-site-url} to
   adequate values. You can do that by adding them to your maven settings.xml. This is the place
   where the server credenticals for uploads are kept. ]
@@ -78,8 +88,8 @@ Feedback, questions, contribution
 ** Your feedback is welcome! **
 
 http://code.google.com/p/agimatec-tools/
-http://www.agimatec.de
-http://www.agimatec.de/blog
+http://www.viaboxxsystems.de
+http://www.viaboxxsystems.de/blog
 
 Roman Stumm, Viaboxx GmbH, 2008-2011
 email: roman.stumm@viaboxx.de
