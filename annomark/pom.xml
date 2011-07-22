@@ -3,18 +3,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>com.agimatec</groupId>
+        <groupId>de.viaboxx</groupId>
         <artifactId>agimatec-tools</artifactId>
-        <version>2.4.0</version>
+        <version>2.5.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.agimatec</groupId>
+    <groupId>de.viaboxx</groupId>
     <artifactId>annomark</artifactId>
     <packaging>jar</packaging>
-    <version>${agimatec-version}</version>
+    <version>2.5.0-SNAPSHOT</version>
     <name>Codegenerator with Annogen and Freemarker</name>
+    <url>http://code.google.com/p/agimatec-tools/</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <distributionManagement>
         <site>
@@ -26,7 +34,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.agimatec</groupId>
+            <groupId>de.viaboxx</groupId>
             <artifactId>dbmigrate</artifactId>
         </dependency>
 
@@ -117,7 +125,7 @@
                                                   <arg value="src/main/groovy/JAMLauncher.groovy"/>
                                                 </java>
                                 -->
-                                                           </tasks>
+                            </tasks>
                         </configuration>
                         <goals>
                             <goal>run</goal>
