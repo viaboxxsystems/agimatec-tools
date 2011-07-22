@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>de.viaboxx</groupId>
         <artifactId>agimatec-tools</artifactId>
-        <version>2.5.0-SNAPSHOT</version>
+        <version>2.5.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -13,7 +11,7 @@
     <groupId>de.viaboxx</groupId>
     <artifactId>annomark-example</artifactId>
     <packaging>jar</packaging>
-    <version>2.5.0-SNAPSHOT</version>
+    <version>2.5.0</version>
     <name>Example project to demonstrate annotation driven code generation with annomark</name>
     <url>http://code.google.com/p/agimatec-tools/</url>
     <dependencies>
@@ -103,16 +101,12 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
-                                <java classname="org.codehaus.gram.Gram" fork="true"
-                                      failonerror="true">
-                                    <classpath refid="maven.test.classpath"/>
-                                    <!--<jvmarg value="-Xdebug"/>
-                                <jvmarg
-                                    value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"/>-->
-                                    <arg
-                                            value="${basedir}/src/main/java/com/agimatec"/>
-                                    <arg
-                                            value="src/main/groovy/JAMLauncher.groovy"/>
+                                <java classname="org.codehaus.gram.Gram" fork="true" failonerror="true">
+                                    <classpath refid="maven.test.classpath" />
+                                    <!--<jvmarg value="-Xdebug" />
+                                <jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n" />-->
+                                    <arg value="${basedir}/src/main/java/com/agimatec" />
+                                    <arg value="src/main/groovy/JAMLauncher.groovy" />
                                 </java>
                             </tasks>
                         </configuration>
@@ -128,10 +122,10 @@
                             <tasks>
                                 <zip destfile="target/annomark-example-project-${agimatec-version}.zip">
                                     <fileset dir=".">
-                                        <include name="pom.xml"/>
-                                        <include name="src/**"/>
-                                        <include name="target/generated/**"/>
-                                        <include name="target/*.jar"/>
+                                        <include name="pom.xml" />
+                                        <include name="src/**" />
+                                        <include name="target/generated/**" />
+                                        <include name="target/*.jar" />
                                     </fileset>
                                 </zip>
                             </tasks>
