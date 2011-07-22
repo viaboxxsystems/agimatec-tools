@@ -23,6 +23,3 @@ You can
 [BuildAgimatecTools How to build agimatec-tools]
 
 http://agimatec-tools.googlecode.com/svn/wiki/agimatec-tools-small.jpg
-
-= Maven-Site = 
-  * [http://www.agimatec.de/documentation/public/agimatec-tools/site/index.html Maven-Site]
