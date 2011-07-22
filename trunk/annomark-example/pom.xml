@@ -141,7 +141,7 @@
     </build>
     <profiles>
         <!-- This profile is needed to make building on mac os x possible-->
-       <!-- <profile>
+        <profile>
             <id>mac os x tool path</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -161,6 +161,6 @@
                     </systemPath>
                 </dependency>
             </dependencies>
-        </profile>-->
+        </profile>
     </profiles>
 </project>
