@@ -218,13 +218,13 @@
                 <artifactId>annogen</artifactId>
                 <version>0.1.1</version>
             </dependency>
-            <dependency>
+           <!-- <dependency>
                 <groupId>com.sun</groupId>
                 <artifactId>tools</artifactId>
                 <version>${java.version}</version>
                 <scope>system</scope>
                 <systemPath>${java.home}/../lib/tools.jar</systemPath>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
