@@ -218,7 +218,7 @@
                 <artifactId>annogen</artifactId>
                 <version>0.1.1</version>
             </dependency>
-           <!-- <dependency>
+<!--            <dependency>
                 <groupId>com.sun</groupId>
                 <artifactId>tools</artifactId>
                 <version>${java.version}</version>
@@ -321,6 +321,6 @@
     </reporting>
 
     <properties>
-        <agimatec-version>2.5.0</agimatec-version>
+        <agimatec-version>2.5.1-SNAPSHOT</agimatec-version>
     </properties>
 </project>
