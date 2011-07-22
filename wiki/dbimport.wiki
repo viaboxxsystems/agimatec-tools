@@ -8,6 +8,14 @@ An importer can be implemented without any additional configuration. You just im
 
 Some of the utility classes are designed for simple usage from within groovy.
 
+== Reference dbimport in maven pom.xml ==
+{{{
+  <dependency>
+    <groupId>de.viaboxx</groupId>
+    <artifactId>dbimport</artifactId>
+    <version>2.5.0</version>
+  </dependency>
+}}}
 
 = Documentation =
   * [http://agimatec-tools.googlecode.com/svn/trunk/javadoc/dbimport/index.html JavaDoc ]
