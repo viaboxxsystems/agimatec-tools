@@ -21,13 +21,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
+<!--
     <distributionManagement>
         <site>
             <id>${agimatec-site-id}</id>
             <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
         </site>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <dependencies>
 
