@@ -20,9 +20,6 @@ Example pom.xml:
     <packaging>jar</packaging>
     <name>Integrate dbmigrate into a maven pom</name>
 
-    <properties>
-        <jaxb2-basics-version>0.6.2</jaxb2-basics-version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>postgresql</groupId>
