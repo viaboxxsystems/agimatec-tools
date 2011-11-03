@@ -43,3 +43,5 @@ java com.agimatec.dbmigrate.AutoMigrationTool -conf setup.xml -op execSQLScript 
   * [DBMigrateSqlScript SQL scripts]
   * [DBMigrateXmlScript XML scripts]
   * [DBMigrateGroovyScript groovy scripts]
+  * [DBMigrateMaven maven integration]
+  * [DBMigrateSpring spring integration]
