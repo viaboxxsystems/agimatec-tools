@@ -1,0 +1,120 @@
+#summary Invoking dbmigrate from a maven pom.xml
+
+= Introduction =
+
+You can invoke dbmigrate with the maven-exec-plugin from within a pom.xml
+
+
+= Details =
+
+Example pom.xml:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.viaboxx.dbmigrate</groupId>
+    <artifactId>example</artifactId>
+    <packaging>jar</packaging>
+    <name>Integrate dbmigrate into a maven pom</name>
+
+    <properties>
+        <jaxb2-basics-version>0.6.2</jaxb2-basics-version>
+    </properties>
+    <dependencies>
+          <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.4-702.jdbc4</version>
+        </dependency>
+
+		<dependency>
+            <groupId>de.viaboxx</groupId>
+            <artifactId>dbmigrate</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <!--
+                The Profile "reset-db" is used on continues-integration builds
+                to:
+                - drop the schema and create all tables to have a clean and up-to-date
+                  database for integration tests.
+                  
+                It demonstrates one possible integration of dbmigrate with the "java" goal
+            -->
+            <id>reset-db</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+
+                            <execution>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>com.agimatec.dbmigrate.AutoMigrationTool</mainClass>
+                                    <arguments>
+                                        <argument>-conf</argument>
+                                        <argument>etc/dbmigrate/db-reset.xml</argument>
+                                        <argument>-exit</argument>
+                                        <argument>false</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                       </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!--
+                The Profile "develop-db" is used when a developer wants to
+                - create the database/role/user/schema the first time or after a schema-change
+                
+                It demonstrates one possible integration of dbmigrate with the "exec" goal
+            -->
+            <id>develop-db</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>com.agimatec.dbmigrate.AutoMigrationTool</argument>
+                                        <argument>-conf</argument>
+                                        <argument>etc/dbmigrate/db-setup.xml</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
+
+}}}
