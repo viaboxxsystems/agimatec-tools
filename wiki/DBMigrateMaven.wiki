@@ -24,13 +24,13 @@ Example pom.xml:
         <jaxb2-basics-version>0.6.2</jaxb2-basics-version>
     </properties>
     <dependencies>
-          <dependency>
+        <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>8.4-702.jdbc4</version>
         </dependency>
 
-		<dependency>
+	<dependency>
             <groupId>de.viaboxx</groupId>
             <artifactId>dbmigrate</artifactId>
             <version>2.5.0</version>
