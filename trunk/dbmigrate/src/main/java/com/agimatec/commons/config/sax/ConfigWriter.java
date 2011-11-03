@@ -44,7 +44,12 @@ public class ConfigWriter extends ConfigContentHandler {
         } else {
             handler = (NodeHandler) typeHandlerMap.get(node.getClass());
         }
-        if (handler == null) throw new SAXException("unknown type " + node);
-        handler.writeConfig(this, node, parentNode, pw, indent);
+        if (handler == null) {
+            pw.write("<!-- unknown type " + (node != null ? node.getClass() : ""));
+            pw.write(String.valueOf(node));
+            pw.write(" -->");
+        } else {
+            handler.writeConfig(this, node, parentNode, pw, indent);
+        }
     }
 }

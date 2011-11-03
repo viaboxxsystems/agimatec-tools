@@ -51,357 +51,360 @@ import java.util.*;
  * </pre>
  */
 public class AutoMigrationTool extends BaseMigrationTool {
-  // the local environment entries of a automatically found .xml config
-  private Map localEnv = null;
-  private boolean sim;
-  private List<MigrateAction> actionOverride;
+    // the local environment entries of a automatically found .xml config
+    private Map localEnv = null;
+    private boolean sim = false;
+    private boolean exitJVM = true;
+    private List<MigrateAction> actionOverride;
 
-  public AutoMigrationTool() {
-    super();
-  }
-
-  /**
-   * run the tool and exit the JVM afterwards.
-   *
-   * @throws Exception exit(0) = successful
-   *                   exit(1) = in case of an exception
-   */
-  public static void main(String[] args) {
-    AutoMigrationTool tool = new AutoMigrationTool();
-    try {
-      if (!tool.parseArgs(args)) return;
-      try {
-        tool.setUp();
-        tool.startAutomaticMigration();
-      } finally {
-        tool.tearDown();
-      }
-      System.exit(0);
-    } catch (Throwable ex) {
-      log.fatal(null, ex);
-      System.exit(1);
+    public AutoMigrationTool() {
+        super();
     }
-  }
 
-  public boolean isSim() {
-    return sim;
-  }
-
-  private boolean parseArgs(String[] args) {
-
-    String sim = "false";
-    for (int i = 0; i < args.length; i++) {
-      String each = args[i];
-      if ("-sim".equalsIgnoreCase(each)) {
-        i++;    // skip next param
-        sim = args[i];
-      } else if ("-conf".equalsIgnoreCase(each)) {
-        i++;    // skip next param
-        setMigrateConfigFileName(args[i]);
-      } else if ("-help".equalsIgnoreCase(each)) {
-        printUsage();
-        return false;
-      } else if ("-script".equalsIgnoreCase(each)) {
-        i++;
-        ScriptAction action = ScriptAction.create(this, args[i]);
-        if (action != null) {
-          addActionOverride(action);
+    /**
+     * run the tool and exit the JVM afterwards.
+     *
+     * @throws Exception exit(0) = successful
+     *                   exit(1) = in case of an exception
+     */
+    public static void main(String[] args) {
+        AutoMigrationTool tool = new AutoMigrationTool();
+        try {
+            if (!tool.parseArgs(args)) return;
+            try {
+                tool.setUp();
+                tool.startAutomaticMigration();
+            } finally {
+                tool.tearDown();
+            }
+            if (tool.exitJVM) System.exit(0);
+        } catch (Throwable ex) {
+            log.fatal(null, ex);
+            if (tool.exitJVM) System.exit(1);
         }
-      } else if ("-op".equalsIgnoreCase(each)) {
-        String op = args[++i];
-        String param = "";
-        i++;
-        if (i < args.length) {
-          param = args[i];
+    }
+
+    public boolean isSim() {
+        return sim;
+    }
+
+    private boolean parseArgs(String[] args) {
+
+        for (int i = 0; i < args.length; i++) {
+            String each = args[i];
+            if ("-exit".equalsIgnoreCase(each)) {
+                i++;    // skip next param
+                exitJVM = "true".equalsIgnoreCase(args[i]) || "yes".equalsIgnoreCase(args[i]);
+            } else if ("-sim".equalsIgnoreCase(each)) {
+                i++;    // skip next param
+                sim = "true".equalsIgnoreCase(args[i]) || "yes".equalsIgnoreCase(args[i]);
+            } else if ("-conf".equalsIgnoreCase(each)) {
+                i++;    // skip next param
+                setMigrateConfigFileName(args[i]);
+            } else if ("-help".equalsIgnoreCase(each)) {
+                printUsage();
+                return false;
+            } else if ("-script".equalsIgnoreCase(each)) {
+                i++;
+                ScriptAction action = ScriptAction.create(this, args[i]);
+                if (action != null) {
+                    addActionOverride(action);
+                }
+            } else if ("-op".equalsIgnoreCase(each)) {
+                String op = args[++i];
+                String param = "";
+                i++;
+                if (i < args.length) {
+                    param = args[i];
+                }
+                addActionOverride(new OperationAction(this, op, param));
+            }
         }
-        addActionOverride(new OperationAction(this, op, param));
-      }
+        return true;
     }
-    this.sim = "true".equalsIgnoreCase(sim) || "yes".equalsIgnoreCase(sim);
-    return true;
-  }
 
-  private void addActionOverride(MigrateAction operationAction) {
-    if (actionOverride == null) actionOverride = new LinkedList();
-    actionOverride.add(operationAction);
-  }
-
-  private void printUsage() {
-    System.out.println("usage: java " + getClass().getName() +
-        " -sim false -conf migration.xml -script aScript -op operationName operationParameter ");
-    System.out.println("Options:\n\t-help \t (optional) print this help");
-    System.out.println(
-        "\t-sim \t (optional) true|yes=simulation only, default is false");
-    System.out.println(
-        "\t-conf \t (optional) name of migration.xml configuration file, default is migration.xml");
-    System.out.println(
-        "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!");
-    System.out.println(
-        "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an upgrade-file. tool will execute the given operation(s) only!");
-  }
-
-  // overwritten to provide the enviroment (or local env) to the script executor
-
-  public Map getEnvironment() {
-    if (localEnv == null) {
-      return super.getEnvironment();
-    } else {
-      return localEnv;
+    private void addActionOverride(MigrateAction operationAction) {
+        if (actionOverride == null) actionOverride = new LinkedList();
+        actionOverride.add(operationAction);
     }
-  }
 
-  protected Map getMigrateEnvironment() {
-    return super.getEnvironment();
-  }
-
-  public void startAutomaticMigration() throws Exception {
-    log("----------------- start migration -----------------");
-    connectTargetDatabase();
-    if (actionOverride != null && !actionOverride.isEmpty()) {
-      print("PERFORMING COMMAND LINE ACTIONS ONLY!");
-      performActions(actionOverride);
-    } else {
-      performActions(createActions());
+    private void printUsage() {
+        System.out.println("usage: java " + getClass().getName() +
+                " -sim false -conf migration.xml -script aScript -op operationName operationParameter ");
+        System.out.println("Options:\n\t-help \t (optional) print this help");
+        System.out.println(
+                "\t-sim \t (optional) true|yes=simulation only, default is false");
+        System.out.println(
+                "\t-conf \t (optional) name of migration.xml configuration file, default is migration.xml");
+        System.out.println(
+                "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!");
+        System.out.println(
+                "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an upgrade-file. tool will execute the given operation(s) only!");
     }
-  }
 
-  public void performActions(List<MigrateAction> actionOverride) throws Exception {
-    if (sim) print("SIMULATION ONLY - SEQUENCE FOLLOWS:");
-    try {
-      if (actionOverride.isEmpty()) {
-        print("THERE ARE NO ACTIONS TO PERFORM.");
-      } else {
-        int i = 0;
-        for (MigrateAction each : actionOverride) {
-          i++;
-          print("ACTION " + i + " (of " + actionOverride.size() + ") = " +
-              each.getInfo());
-          each.doIt();
+    // overwritten to provide the enviroment (or local env) to the script executor
+
+    public Map getEnvironment() {
+        if (localEnv == null) {
+            return super.getEnvironment();
+        } else {
+            return localEnv;
         }
-      }
-    } catch (Exception ex) {
-      rollback();
-      log(ex);
-      throw ex;
     }
-  }
 
-  protected void prepareLocalEnvironment(Config cfg) {
-    Map tempEnv = cfg.getMap("env");
-    if (tempEnv != null) { // merge env
-      localEnv = new HashMap(getMigrateEnvironment());
-      localEnv.putAll(tempEnv);
-      replaceProperties(localEnv);
+    protected Map getMigrateEnvironment() {
+        return super.getEnvironment();
     }
-  }
 
-  public void doXmlScript(String filePath) throws Exception {
-    if (!sim) {
-      Config cfg = ConfigManager.getDefault()
-          .readConfig(filePath, false);
-      try {
-        prepareLocalEnvironment(cfg);
-        perform(cfg.getList("Operations"));
-      } finally {
-        localEnv =
-            null;    // remove localEnv after exec. of config
-      }
-    }
-  }
-
-  public DBVersionString getToVersion() {
-    String ver = getMigrateConfig().getString("to-version");
-    if (ver == null || ver.length() == 0) {
-      return null;
-    } else {
-      print("Using to-version: " + ver);
-      return DBVersionString.fromString(ver);
-    }
-  }
-
-  public DBVersionString getFromVersion() throws SQLException {
-    String ver = getMigrateConfig().getString("from-version");
-    DBVersionString version;
-    if (ver == null || ver.length() == 0) {
-      version = readVersion();
-      print("Current database version: " + version);
-    } else {
-      version = DBVersionString.fromString(ver);
-      print("Using from-version: " + version);
-    }
-    return version;
-  }
-
-  /**
-   * remove all entries from the list that are not relevant
-   * for direct execution from the given dbVersion
-   *
-   * @param version - the current database version
-   */
-  private List<DBVersionString> filterVersions(DBVersionString version,
-                                               List<DBVersionString> versionFiles) {
-    Iterator<DBVersionString> iter = versionFiles.iterator();
-    DBVersionString toversion = getToVersion();
-    while (iter.hasNext()) {
-      DBVersionString each = iter.next();
-      if (!each.isLater(version)) {
-        iter.remove();
-      } else if (toversion != null && each.isLater(toversion)) {
-        iter.remove();
-      }
-    }
-    return versionFiles;
-  }
-
-  /**
-   * read the version from the database
-   *
-   * @throws SQLException
-   */
-  public DBVersionString readVersion() throws SQLException {
-    String version = null;
-    try {
-      SQLCursor rs = sqlSelect(getDbVersionMeta().toSQLSelectVersion());
-      try {
-        while (rs.next()) {
-          version = rs.getString(1);
+    public void startAutomaticMigration() throws Exception {
+        log("----------------- start migration -----------------");
+        connectTargetDatabase();
+        if (actionOverride != null && !actionOverride.isEmpty()) {
+            print("PERFORMING COMMAND LINE ACTIONS ONLY!");
+            performActions(actionOverride);
+        } else {
+            performActions(createActions());
         }
-      } finally {
-        rs.close();
-      }
-    } catch (SQLException ex) { // we assume: no table DB_VERSION in database
-      log.warn("cannot read " + getDbVersionMeta().getQualifiedVersionColumn() + " because " + ex.getMessage());
     }
-    return version == null ? null : DBVersionString.fromString(version);
-  }
 
-  private List<MigrateAction> createActions()
-      throws SQLException, IOException {
-    String upDir = getScriptsDir();
-    List<DBVersionString> files =
-        filterVersions(getFromVersion(), readDir(getScriptPrefix(), upDir));
-    List<MigrateAction> actions;
-    String beforeDir = getBeforeAllScriptsDir();
-    if (beforeDir != null) {
-      List<DBVersionString> before = readDir(null, beforeDir);
-      actions = createActions(before, false);
-      actions.add(0, new ChangeDirCommand(this, beforeDir));
-      if (upDir != null || !files.isEmpty()) {
-        actions.add(new ChangeDirCommand(this, upDir));
-        actions.addAll(createActions(files, getDbVersionMeta().isAutoVersion()));
-      }
-    } else {
-      actions = createActions(files, getDbVersionMeta().isAutoVersion());
-    }
-    addActionsAfterAll(getAfterAllScriptsDir(), actions);
-    return actions;
-  }
-
-  public void addActionsAfterAll(String dir, List<MigrateAction> actions) throws IOException {
-    if (dir != null) {
-      actions.add(new ChangeDirCommand(this, dir));
-      actions.addAll(createActions(readDir(null, dir), false));
-    }
-  }
-
-  /**
-   * create some up- actions of a custom script dir dependent on current version
-   * @param scriptDir
-   * @param enableAutoVersion
-   * @return
-   * @throws SQLException
-   * @throws IOException
-   */
-  public List<MigrateAction> createUpgradeActions(String scriptDir, boolean enableAutoVersion)
-      throws SQLException, IOException {
-    List<DBVersionString> files =
-        filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
-    List<MigrateAction> actions = new ArrayList();
-    if (scriptDir != null || !files.isEmpty()) {
-      actions.add(new ChangeDirCommand(this, scriptDir));
-      actions.addAll(createActions(files, enableAutoVersion && getDbVersionMeta().isAutoVersion()));
-    }
-    return actions;
-  }
-
-  public String getScriptPrefix() {
-    String prefix = getMigrateConfig().getString("Scripts-Prefix");
-    if (prefix == null) {
-      return "up-";
-    } else {
-      return prefix;
-    }
-  }
-
-  private List<MigrateAction> createActions(List<DBVersionString> files, boolean autoVersion) {
-    List<MigrateAction> actions = new LinkedList();
-    for (DBVersionString file : files) {
-      ScriptAction action =
-          ScriptAction.create(this, file.getFileName(), file.getFileType());
-      if (action != null) {
-        actions.add(action);
-        if (autoVersion) {
-          actions.add(new OperationAction(this, "version", file.getVersion()));
+    public void performActions(List<MigrateAction> actionOverride) throws Exception {
+        if (sim) print("SIMULATION ONLY - SEQUENCE FOLLOWS:");
+        try {
+            if (actionOverride.isEmpty()) {
+                print("THERE ARE NO ACTIONS TO PERFORM.");
+            } else {
+                int i = 0;
+                for (MigrateAction each : actionOverride) {
+                    i++;
+                    print("ACTION " + i + " (of " + actionOverride.size() + ") = " +
+                            each.getInfo());
+                    each.doIt();
+                }
+            }
+        } catch (Exception ex) {
+            rollback();
+            log(ex);
+            throw ex;
         }
-      }
     }
-    return actions;
-  }
 
-  /**
-   * read possible scripts and configs
-   *
-   * @return them in a sorted order, sorted by execution sequence
-   */
-  private List<DBVersionString> readDir(String prefix, String directory)
-      throws IOException {
-    if (directory == null) return new ArrayList();
-    Collection<String> resources = readResources(directory);
-    List<DBVersionString> order = new ArrayList<DBVersionString>(resources.size());
-    for (String each : resources) {
-      DBVersionString ver = DBVersionString.fromString(prefix, each);
-      if (ver != null) order.add(ver);
+    protected void prepareLocalEnvironment(Config cfg) {
+        Map tempEnv = cfg.getMap("env");
+        if (tempEnv != null) { // merge env
+            localEnv = new HashMap(getMigrateEnvironment());
+            localEnv.putAll(tempEnv);
+            replaceProperties(localEnv);
+        }
     }
-    Collections.sort(order);
-    return order;
-  }
 
-  private Collection<String> readResources(String directory) throws IOException {
-    Collection<String> resources = new ArrayList();
-    for (URL each : ConfigManager.toURLs(directory)) {
-      log.debug("directory " + directory + " -> reading: " + each);
-      resources.addAll(ResourceUtils.readLines(each));
+    public void doXmlScript(String filePath) throws Exception {
+        if (!sim) {
+            Config cfg = ConfigManager.getDefault()
+                    .readConfig(filePath, false);
+            try {
+                prepareLocalEnvironment(cfg);
+                perform(cfg.getList("Operations"));
+            } finally {
+                localEnv =
+                        null;    // remove localEnv after exec. of config
+            }
+        }
     }
-    return resources;
-  }
 
-  public String getBeforeAllScriptsDir() {
-    FileNode dir = (FileNode) getMigrateConfig().get("Scripts-Before-All");
-    return (dir == null) ? null : dir.getFilePath();
-  }
+    public DBVersionString getToVersion() {
+        String ver = getMigrateConfig().getString("to-version");
+        if (ver == null || ver.length() == 0) {
+            return null;
+        } else {
+            print("Using to-version: " + ver);
+            return DBVersionString.fromString(ver);
+        }
+    }
 
-  public String getAfterAllScriptsDir() {
-    FileNode dir = (FileNode) getMigrateConfig().get("Scripts-After-All");
-    return (dir == null) ? null : dir.getFilePath();
-  }
+    public DBVersionString getFromVersion() throws SQLException {
+        String ver = getMigrateConfig().getString("from-version");
+        DBVersionString version;
+        if (ver == null || ver.length() == 0) {
+            version = readVersion();
+            print("Current database version: " + version);
+        } else {
+            version = DBVersionString.fromString(ver);
+            print("Using from-version: " + version);
+        }
+        return version;
+    }
 
-  public Map getLocalEnv() {
-    return localEnv;
-  }
+    /**
+     * remove all entries from the list that are not relevant
+     * for direct execution from the given dbVersion
+     *
+     * @param version - the current database version
+     */
+    private List<DBVersionString> filterVersions(DBVersionString version,
+                                                 List<DBVersionString> versionFiles) {
+        Iterator<DBVersionString> iter = versionFiles.iterator();
+        DBVersionString toversion = getToVersion();
+        while (iter.hasNext()) {
+            DBVersionString each = iter.next();
+            if (!each.isLater(version)) {
+                iter.remove();
+            } else if (toversion != null && each.isLater(toversion)) {
+                iter.remove();
+            }
+        }
+        return versionFiles;
+    }
 
-  public List<MigrateAction> getActionOverride() {
-    return actionOverride;
-  }
+    /**
+     * read the version from the database
+     *
+     * @throws SQLException
+     */
+    public DBVersionString readVersion() throws SQLException {
+        String version = null;
+        try {
+            SQLCursor rs = sqlSelect(getDbVersionMeta().toSQLSelectVersion());
+            try {
+                while (rs.next()) {
+                    version = rs.getString(1);
+                }
+            } finally {
+                rs.close();
+            }
+        } catch (SQLException ex) { // we assume: no table DB_VERSION in database
+            log.warn("cannot read " + getDbVersionMeta().getQualifiedVersionColumn() + " because " + ex.getMessage());
+        }
+        return version == null ? null : DBVersionString.fromString(version);
+    }
 
-  public void setActionOverride(List<MigrateAction> actionOverride) {
-    this.actionOverride = actionOverride;
-  }
+    private List<MigrateAction> createActions()
+            throws SQLException, IOException {
+        String upDir = getScriptsDir();
+        List<DBVersionString> files =
+                filterVersions(getFromVersion(), readDir(getScriptPrefix(), upDir));
+        List<MigrateAction> actions;
+        String beforeDir = getBeforeAllScriptsDir();
+        if (beforeDir != null) {
+            List<DBVersionString> before = readDir(null, beforeDir);
+            actions = createActions(before, false);
+            actions.add(0, new ChangeDirCommand(this, beforeDir));
+            if (upDir != null || !files.isEmpty()) {
+                actions.add(new ChangeDirCommand(this, upDir));
+                actions.addAll(createActions(files, getDbVersionMeta().isAutoVersion()));
+            }
+        } else {
+            actions = createActions(files, getDbVersionMeta().isAutoVersion());
+        }
+        addActionsAfterAll(getAfterAllScriptsDir(), actions);
+        return actions;
+    }
 
-  public void setSim(boolean sim) {
-    this.sim = sim;
-  }
+    public void addActionsAfterAll(String dir, List<MigrateAction> actions) throws IOException {
+        if (dir != null) {
+            actions.add(new ChangeDirCommand(this, dir));
+            actions.addAll(createActions(readDir(null, dir), false));
+        }
+    }
 
-  public void setLocalEnv(Map localEnv) {
-    this.localEnv = localEnv;
-  }
+    /**
+     * create some up- actions of a custom script dir dependent on current version
+     *
+     * @param scriptDir
+     * @param enableAutoVersion
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public List<MigrateAction> createUpgradeActions(String scriptDir, boolean enableAutoVersion)
+            throws SQLException, IOException {
+        List<DBVersionString> files =
+                filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
+        List<MigrateAction> actions = new ArrayList();
+        if (scriptDir != null || !files.isEmpty()) {
+            actions.add(new ChangeDirCommand(this, scriptDir));
+            actions.addAll(createActions(files, enableAutoVersion && getDbVersionMeta().isAutoVersion()));
+        }
+        return actions;
+    }
+
+    public String getScriptPrefix() {
+        String prefix = getMigrateConfig().getString("Scripts-Prefix");
+        if (prefix == null) {
+            return "up-";
+        } else {
+            return prefix;
+        }
+    }
+
+    private List<MigrateAction> createActions(List<DBVersionString> files, boolean autoVersion) {
+        List<MigrateAction> actions = new LinkedList();
+        for (DBVersionString file : files) {
+            ScriptAction action =
+                    ScriptAction.create(this, file.getFileName(), file.getFileType());
+            if (action != null) {
+                actions.add(action);
+                if (autoVersion) {
+                    actions.add(new OperationAction(this, "version", file.getVersion()));
+                }
+            }
+        }
+        return actions;
+    }
+
+    /**
+     * read possible scripts and configs
+     *
+     * @return them in a sorted order, sorted by execution sequence
+     */
+    private List<DBVersionString> readDir(String prefix, String directory)
+            throws IOException {
+        if (directory == null) return new ArrayList();
+        Collection<String> resources = readResources(directory);
+        List<DBVersionString> order = new ArrayList<DBVersionString>(resources.size());
+        for (String each : resources) {
+            DBVersionString ver = DBVersionString.fromString(prefix, each);
+            if (ver != null) order.add(ver);
+        }
+        Collections.sort(order);
+        return order;
+    }
+
+    private Collection<String> readResources(String directory) throws IOException {
+        Collection<String> resources = new ArrayList();
+        for (URL each : ConfigManager.toURLs(directory)) {
+            log.debug("directory " + directory + " -> reading: " + each);
+            resources.addAll(ResourceUtils.readLines(each));
+        }
+        return resources;
+    }
+
+    public String getBeforeAllScriptsDir() {
+        FileNode dir = (FileNode) getMigrateConfig().get("Scripts-Before-All");
+        return (dir == null) ? null : dir.getFilePath();
+    }
+
+    public String getAfterAllScriptsDir() {
+        FileNode dir = (FileNode) getMigrateConfig().get("Scripts-After-All");
+        return (dir == null) ? null : dir.getFilePath();
+    }
+
+    public Map getLocalEnv() {
+        return localEnv;
+    }
+
+    public List<MigrateAction> getActionOverride() {
+        return actionOverride;
+    }
+
+    public void setActionOverride(List<MigrateAction> actionOverride) {
+        this.actionOverride = actionOverride;
+    }
+
+    public void setSim(boolean sim) {
+        this.sim = sim;
+    }
+
+    public void setLocalEnv(Map localEnv) {
+        this.localEnv = localEnv;
+    }
 }

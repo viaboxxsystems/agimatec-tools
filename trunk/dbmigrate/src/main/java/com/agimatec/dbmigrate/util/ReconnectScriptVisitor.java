@@ -82,7 +82,7 @@ public class ReconnectScriptVisitor extends ScriptVisitorDelegate {
     }
 
     public static String replaceJdbcSchemaName(String jdbcUrl, String schemaname) {
-        if (jdbcUrl.endsWith("/")) {
+        if (jdbcUrl == null || jdbcUrl.endsWith("/")) {
             return jdbcUrl + schemaname;
         } else {
             return jdbcUrl.substring(0, jdbcUrl.lastIndexOf('/') + 1) + schemaname;
