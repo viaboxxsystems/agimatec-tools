@@ -79,7 +79,7 @@ Example pom.xml:
                 The Profile "develop-db" is used when a developer wants to
                 - create the database/role/user/schema the first time or after a schema-change
                 
-                It demonstrates one possible integration of dbmigrate with the "exec" goal
+                It demonstrates one possible integration of dbmigrate with the "exec" goal and another configuration.
             -->
             <id>develop-db</id>
             <build>
