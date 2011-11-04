@@ -7,7 +7,7 @@ You can invoke dbmigrate during startup of your application (e.g. a web-app) and
 
 = Details =
 
-The class de.viaboxx.dbmigrate.spring.DBMigrateBean offers spring integration.
+The class *de.viaboxx.dbmigrate.spring.DBMigrateBean* offers spring integration.
 
 
 After spring has configured the bean, it invokes the AutoMigrationTool that does the job. If it fails, the propagated exception causes spring to fail which stops your app service.
