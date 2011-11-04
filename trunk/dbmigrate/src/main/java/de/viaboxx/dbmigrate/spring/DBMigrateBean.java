@@ -79,6 +79,11 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
         getTool().getEnvironment().put("to-version", version);
     }
 
+    @SuppressWarnings({"unchecked"})
+    public void setFromVersion(String version) {
+        getTool().getEnvironment().put("from-version", version);
+    }
+
     public void setEnvironment(Map<String, Object> env) {
         for (Map.Entry<String, Object> entry : env.entrySet()) {
             if (null == System.getProperty(entry.getKey())) { // do not overwrite System properties
