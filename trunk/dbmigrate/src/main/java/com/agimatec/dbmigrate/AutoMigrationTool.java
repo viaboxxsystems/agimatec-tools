@@ -373,7 +373,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         Collection<String> resources = new ArrayList();
         for (URL each : ConfigManager.toURLs(directory)) {
             log.debug("directory " + directory + " -> reading: " + each);
-            resources.addAll(ResourceUtils.readLines(each));
+            resources.addAll(ResourceUtils.getURLResources(each));
         }
         return resources;
     }
