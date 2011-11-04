@@ -174,7 +174,7 @@ Example for db-setup.xml configuration file
 
 }}}
 
-example for the setup script 0.0.1_setup.sql in resource directory "setup" to create a new database and setup its schema:
+example for the setup script 0.0.1_setup.sql in resource directory "database/setup" to create a new database and setup its schema:
 {{{
 -- SQL SCRIPT FOR dbmigrate TO CREATE DATABASE AND SETUP ROLES, USERS, SCHEMA 
 
@@ -197,5 +197,5 @@ SET FAIL_ON_ERROR=true;
 
 }}}
 
-
- 
+   * create-role.sql, create-database.sql, drop-schema.sql and schema.sql
+  are standard sql scripts (manually written or created by hibernate/any persistence framework) to create the user, database and tables. In this example the scripts are located in the parent directory "database" 
