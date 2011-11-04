@@ -3,7 +3,8 @@ package com.agimatec.commons.util;
 import junit.framework.TestCase;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.URISyntaxException;
+import java.util.Collection;
 
 /**
  * Description: <br>
@@ -14,11 +15,22 @@ import java.util.List;
  */
 public class ResourceUtilsTest extends TestCase {
 
-  public void testURLUtils() throws IOException {
-    List<String> list = ResourceUtils.readLines("com/agimatec/commons/util");
-    for (String name : list) {
-      System.out.println(name);
+    public void testURLUtils() throws IOException, URISyntaxException {
+        System.out.println(getName() + " >> ");
+        Collection<String> list = ResourceUtils.getResources("com/agimatec/commons/util");
+        for (String name : list) {
+            System.out.println(name);
+        }
     }
-  }
+
+    public void test3() throws Exception {
+        System.out.println(getName() + " >> ");
+        Collection<String> list = ResourceUtils.getResources("java/util");
+        for (String name : list) {
+            System.out.println(name);
+        }
+    }
+
+
 
 }

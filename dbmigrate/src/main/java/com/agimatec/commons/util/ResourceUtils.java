@@ -1,14 +1,13 @@
 package com.agimatec.commons.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Description: <br>
@@ -18,219 +17,121 @@ import java.util.List;
  * viaboxx GmbH, 2010
  */
 public class ResourceUtils {
-
-  public static List<String> readLines(String path) throws IOException {
-    ClassLoader cl = ClassUtils.class.getClassLoader();
-    List<String> lines = new ArrayList();
-    Enumeration<URL> e = cl.getResources(path);
-    while (e.hasMoreElements()) {
-      URL each = e.nextElement();
-      lines.addAll(readLines(each));
+    /**
+     * Reads the URL contents into a list, with one element for each line.
+     *
+     * @param url a URL
+     * @return a List of lines
+     * @throws IOException if an IOException occurs.
+     * @since 1.6.8
+     */
+    public static List<String> readLines(URL url) throws IOException {
+        return readLines(newReader(url));
     }
-    return lines;
-  }
 
-  /**
-   * Reads the URL contents into a list, with one element for each line.
-   *
-   * @param url a URL
-   * @return a List of lines
-   * @throws IOException if an IOException occurs.
-   * @since 1.6.8
-   */
-  public static List<String> readLines(URL url) throws IOException {
-    return readLines(newReader(url));
-  }
+    /**
+     * Reads the reader into a list of Strings, with one entry for each line.
+     * The reader is closed before this method returns.
+     *
+     * @param reader a Reader
+     * @return a List of lines
+     * @throws IOException if an IOException occurs.
+     * @since 1.0
+     */
+    public static List<String> readLines(BufferedReader reader) throws IOException {
+        List<String> lines = new ArrayList();
+        eachLine(reader, lines);
+        return lines;
+    }
 
-  /**
-   * Reads the reader into a list of Strings, with one entry for each line.
-   * The reader is closed before this method returns.
-   *
-   * @param reader a Reader
-   * @return a List of lines
-   * @throws IOException if an IOException occurs.
-   * @since 1.0
-   */
-  public static List<String> readLines(BufferedReader reader) throws IOException {
-    List<String> lines = new ArrayList();
-    eachLine(reader, lines);
-    return lines;
-  }
+    /**
+     * Creates a buffered reader for this URL.
+     *
+     * @param url a URL
+     * @return a BufferedReader for the URL
+     * @throws MalformedURLException is thrown if the URL is not well formed
+     * @throws IOException           if an I/O error occurs while creating the input stream
+     * @since 1.5.5
+     */
+    private static BufferedReader newReader(URL url) throws IOException {
+        return newReader(url.openConnection().getInputStream());
+    }
 
-  /**
-   * Creates a buffered reader for this URL.
-   *
-   * @param url a URL
-   * @return a BufferedReader for the URL
-   * @throws MalformedURLException is thrown if the URL is not well formed
-   * @throws IOException           if an I/O error occurs while creating the input stream
-   * @since 1.5.5
-   */
-  private static BufferedReader newReader(URL url) throws IOException {
-    return newReader(url.openConnection().getInputStream());
-  }
+    /**
+     * Creates a reader for this input stream.
+     *
+     * @param stream an input stream
+     * @return a reader
+     * @since 1.0
+     */
+    private static BufferedReader newReader(InputStream stream) {
+        return new BufferedReader(new InputStreamReader(stream));
+    }
 
-  /**
-   * Creates a reader for this input stream.
-   *
-   * @param stream an input stream
-   * @return a reader
-   * @since 1.0
-   */
-  private static BufferedReader newReader(InputStream stream) {
-    return new BufferedReader(new InputStreamReader(stream));
-  }
-
-  /**
-   * Iterates through the given reader line by line.
-   * @param br        a Reader, closed after the method returns
-   * @throws IOException if an IOException occurs.
-   * @since 1.5.7
-   */
-  private static void eachLine(BufferedReader br, List<String> lines) throws IOException {
-    try {
-      while (true) {
-        String line = br.readLine();
-        if (line == null) {
-          break;
-        } else {
-          lines.add(line);
+    /**
+     * Iterates through the given reader line by line.
+     *
+     * @param br a Reader, closed after the method returns
+     * @throws IOException if an IOException occurs.
+     * @since 1.5.7
+     */
+    private static void eachLine(BufferedReader br, List<String> lines) throws IOException {
+        try {
+            while (true) {
+                String line = br.readLine();
+                if (line == null) {
+                    break;
+                } else {
+                    lines.add(line);
+                }
+            }
+        } finally {
+            br.close();
         }
-      }
-    } finally {
-      br.close();
     }
-  }
-  ///////////////////
 
-//  /**
-//   * List directory contents for a resource folder. Not recursive.
-//   * This is basically a brute-force implementation.
-//   * Works for regular files and also JARs.
-//   *
-//   * @param clazz Any java class that lives in the same place as the resources you want.
-//   * @param path  Should end with "/", but not start with one.
-//   * @return Just the name of each member item, not the full paths.
-//   * @throws URISyntaxException
-//   * @throws IOException
-//   * @author Greg Briggs
-//   */
-//  String[] getResourceListing(Class clazz, String path) throws URISyntaxException, IOException {
-//    URL dirURL = clazz.getClassLoader().getResource(path);
-//    if (dirURL != null && dirURL.getProtocol().equals("file")) {
-//      /* A file path: easy enough */
-//      return new File(dirURL.toURI()).list();
-//    }
-//
-//    if (dirURL == null) {
-//      /*
-//      * In case of a jar file, we can't actually find a directory.
-//      * Have to assume the same jar as clazz.
-//      */
-//      String me = clazz.getName().replace(".", "/") + ".class";
-//      dirURL = clazz.getClassLoader().getResource(me);
-//    }
-//
-//    if (dirURL.getProtocol().equals("jar")) {
-//      /* A JAR path */
-//      String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
-//      JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
-//      Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-//      Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
-//      while (entries.hasMoreElements()) {
-//        String name = entries.nextElement().getName();
-//        if (name.startsWith(path)) { //filter according to the path
-//          String entry = name.substring(path.length());
-//          int checkSubdir = entry.indexOf("/");
-//          if (checkSubdir >= 0) {
-//            // if it is a subdirectory, we just return the directory name
-//            entry = entry.substring(0, checkSubdir);
-//          }
-//          result.add(entry);
-//        }
-//      }
-//      return result.toArray(new String[result.size()]);
-//    }
-//
-//    throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);
-//  }
-//
-//  ///////////////
-//
-//  /**
-//   * for all elements of java.class.path get a Collection of resources
-//   * Pattern pattern = Pattern.compile(".*"); gets all resources
-//   *
-//   * @param pattern the pattern to match
-//   * @return the resources in the order they are found
-//   */
-//  public static Collection<String> getResources(Pattern pattern) {
-//    ArrayList<String> retval = new ArrayList<String>();
-//    String classPath = System.getProperty("java.class.path", ".");
-//    String[] classPathElements = classPath.split(":");
-//    for (String element : classPathElements) {
-//      retval.addAll(getResources(element, pattern));
-//    }
-//    return retval;
-//  }
-//
-//  private static Collection<String> getResources(String element, Pattern pattern) {
-//    ArrayList<String> retval = new ArrayList<String>();
-//    File file = new File(element);
-//    if (file.isDirectory()) {
-//      retval.addAll(getResourcesFromDirectory(file, pattern));
-//    } else {
-//      retval.addAll(getResourcesFromJarFile(file, pattern));
-//    }
-//    return retval;
-//  }
-//
-//  private static Collection<String> getResourcesFromJarFile(File file, Pattern pattern) {
-//    ArrayList<String> retval = new ArrayList<String>();
-//    ZipFile zf;
-//    try {
-//      zf = new ZipFile(file);
-//    } catch (ZipException e) {
-//      throw new Error(e);
-//    } catch (IOException e) {
-//      throw new Error(e);
-//    }
-//    Enumeration e = zf.entries();
-//    while (e.hasMoreElements()) {
-//      ZipEntry ze = (ZipEntry) e.nextElement();
-//      String fileName = ze.getName();
-//      boolean accept = pattern.matcher(fileName).matches();
-//      if (accept) {
-//        retval.add(fileName);
-//      }
-//    }
-//    try {
-//      zf.close();
-//    } catch (IOException e1) {
-//      throw new Error(e1);
-//    }
-//    return retval;
-//  }
-//
-//  private static Collection<String> getResourcesFromDirectory(File directory, Pattern pattern) {
-//    ArrayList<String> retval = new ArrayList<String>();
-//    File[] fileList = directory.listFiles();
-//    for (File file : fileList) {
-//      if (file.isDirectory()) {
-//        retval.addAll(getResourcesFromDirectory(file, pattern));
-//      } else {
-//        try {
-//          String fileName = file.getCanonicalPath();
-//          boolean accept = pattern.matcher(fileName).matches();
-//          if (accept) {
-//            retval.add(fileName);
-//          }
-//        } catch (IOException e) {
-//          throw new Error(e);
-//        }
-//      }
-//    }
-//    return retval;
-//  }
+    public static Collection<String> getResources(String resourceDir) throws IOException {
+        Enumeration<URL> enums = Thread.currentThread().getContextClassLoader().getResources(resourceDir);
+        Set<String> all = new HashSet<String>();
+        while (enums.hasMoreElements()) {
+            URL url = enums.nextElement();
+            all.addAll(getURLResources(url));
+        }
+        return all;
+    }
+
+    /**
+     * Reads the URL contents into a list, can read jars (jar:file:path!package) and directories (file:path/package)
+     *
+     * @param dirURL a URL (a jar or file)
+     * @return a List or Set of lines
+     * @throws IOException if an IOException occurs.
+     */
+    public static Collection<String> getURLResources(URL dirURL) throws IOException {
+        if (dirURL.getProtocol().equals("file")) {
+            /* A file path: easy enough */
+            return Arrays.asList(new File(dirURL.getPath()).list());
+        } else if (dirURL.getProtocol().equals("jar")) {
+            /* A JAR path */
+            String urlPath = dirURL.getPath();
+            int idx2 = urlPath.indexOf("!");
+            String jarPath = urlPath.substring(5, idx2); //strip out only the JAR file
+            String resourceDir = urlPath.substring(idx2 + 2, urlPath.length()) + "/";
+            JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+            Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+            Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
+            while (entries.hasMoreElements()) {
+                String name = entries.nextElement().getName();
+                if (name.length() > resourceDir.length() &&
+                        name.startsWith(resourceDir)) { //filter according to the path
+                    result.add(new File(name).getName());
+                }
+            }
+            return result;
+        } else {
+            return readLines(dirURL);
+        }
+    }
+
 
 }
