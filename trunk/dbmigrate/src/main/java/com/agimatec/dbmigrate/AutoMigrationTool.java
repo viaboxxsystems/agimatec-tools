@@ -52,7 +52,7 @@ import java.util.*;
  */
 public class AutoMigrationTool extends BaseMigrationTool {
     // the local environment entries of a automatically found .xml config
-    private Map localEnv = null;
+    private Map<Object, Object> localEnv = null;
     private boolean sim = false;
     private boolean exitJVM = true;
     private List<MigrateAction> actionOverride;
@@ -124,7 +124,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     private void addActionOverride(MigrateAction operationAction) {
-        if (actionOverride == null) actionOverride = new LinkedList();
+        if (actionOverride == null) actionOverride = new LinkedList<MigrateAction>();
         actionOverride.add(operationAction);
     }
 
@@ -152,7 +152,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         }
     }
 
-    protected Map getMigrateEnvironment() {
+    protected Map<?, ?> getMigrateEnvironment() {
         return super.getEnvironment();
     }
 
@@ -189,9 +189,9 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     protected void prepareLocalEnvironment(Config cfg) {
-        Map tempEnv = cfg.getMap("env");
+        Map<?, ?> tempEnv = cfg.getMap("env");
         if (tempEnv != null) { // merge env
-            localEnv = new HashMap(getMigrateEnvironment());
+            localEnv = new HashMap<Object, Object>(getMigrateEnvironment());
             localEnv.putAll(tempEnv);
             replaceProperties(localEnv);
         }
@@ -239,6 +239,8 @@ public class AutoMigrationTool extends BaseMigrationTool {
      * for direct execution from the given dbVersion
      *
      * @param version - the current database version
+     * @param versionFiles - target list
+     * @return relevant versions, filtered target list 'versionFiles'
      */
     private List<DBVersionString> filterVersions(DBVersionString version,
                                                  List<DBVersionString> versionFiles) {
@@ -258,7 +260,8 @@ public class AutoMigrationTool extends BaseMigrationTool {
     /**
      * read the version from the database
      *
-     * @throws SQLException
+     * @throws SQLException - in case of database error
+     * @return null or the version saved in database table db_version
      */
     public DBVersionString readVersion() throws SQLException {
         String version = null;
@@ -319,7 +322,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
             throws SQLException, IOException {
         List<DBVersionString> files =
                 filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
-        List<MigrateAction> actions = new ArrayList();
+        List<MigrateAction> actions = new ArrayList<MigrateAction>();
         if (scriptDir != null || !files.isEmpty()) {
             actions.add(new ChangeDirCommand(this, scriptDir));
             actions.addAll(createActions(files, enableAutoVersion && getDbVersionMeta().isAutoVersion()));
@@ -337,7 +340,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     private List<MigrateAction> createActions(List<DBVersionString> files, boolean autoVersion) {
-        List<MigrateAction> actions = new LinkedList();
+        List<MigrateAction> actions = new LinkedList<MigrateAction>();
         for (DBVersionString file : files) {
             ScriptAction action =
                     ScriptAction.create(this, file.getFileName(), file.getFileType());
@@ -354,11 +357,14 @@ public class AutoMigrationTool extends BaseMigrationTool {
     /**
      * read possible scripts and configs
      *
+     * @param prefix    - files prefix
+     * @param directory - target dir
      * @return them in a sorted order, sorted by execution sequence
+     * @throws java.io.IOException
      */
     private List<DBVersionString> readDir(String prefix, String directory)
             throws IOException {
-        if (directory == null) return new ArrayList();
+        if (directory == null) return new ArrayList<DBVersionString>();
         Collection<String> resources = readResources(directory);
         List<DBVersionString> order = new ArrayList<DBVersionString>(resources.size());
         for (String each : resources) {
@@ -370,7 +376,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     private Collection<String> readResources(String directory) throws IOException {
-        Collection<String> resources = new ArrayList();
+        Set<String> resources = new HashSet<String>();
         for (URL each : ConfigManager.toURLs(directory)) {
             log.debug("directory " + directory + " -> reading: " + each);
             resources.addAll(ResourceUtils.getURLResources(each));
@@ -388,7 +394,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         return (dir == null) ? null : dir.getFilePath();
     }
 
-    public Map getLocalEnv() {
+    public Map<Object, Object> getLocalEnv() {
         return localEnv;
     }
 
@@ -404,7 +410,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         this.sim = sim;
     }
 
-    public void setLocalEnv(Map localEnv) {
+    public void setLocalEnv(Map<Object, Object> localEnv) {
         this.localEnv = localEnv;
     }
 }

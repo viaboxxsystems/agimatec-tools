@@ -30,20 +30,21 @@ import java.util.Map;
 public class DBMigrateBean implements InitializingBean, BeanNameAware {
     private final AutoMigrationTool tool = new AutoMigrationTool();
 
-    private String beanName;
+    protected String beanName;
 
-    private DBCPAdapter dataSourceConfigurator;
+    protected DBCPAdapter dataSourceConfigurator;
 
     /**
      * disable running the tool
      */
     private boolean disabled = false;
+    private boolean stopOnException = true;
 
     /**
      * @param fileName - default is "migration.xml", see BaseMigrationTool#migrateConfigFileName
      */
-    public void setMigrateConfigFileName(String fileName) {
-        tool.setMigrateConfigFileName(fileName);
+    public void setConfigFile(String fileName) {
+        getTool().setMigrateConfigFileName(fileName);
     }
 
     public boolean isDisabled() {
@@ -54,11 +55,19 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
         this.disabled = disabled;
     }
 
+    public boolean isStopOnException() {
+        return stopOnException;
+    }
+
+    public void setStopOnException(boolean stopOnException) {
+        this.stopOnException = stopOnException;
+    }
+
     /**
      * @param sim - default is 'false'
      */
     public void setSimulation(boolean sim) {
-        tool.setSim(sim);
+        getTool().setSim(sim);
     }
 
     public void setConfigRootUrl(String configRoot) {
@@ -67,14 +76,14 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
 
     @SuppressWarnings({"unchecked"})
     public void setToVersion(String version) {
-        tool.getEnvironment().put("to-version", version);
+        getTool().getEnvironment().put("to-version", version);
     }
 
     public void setEnvironment(Map<String, Object> env) {
         for (Map.Entry<String, Object> entry : env.entrySet()) {
             if (null == System.getProperty(entry.getKey())) { // do not overwrite System properties
                 //noinspection unchecked
-                tool.getEnvironment().put(entry.getKey(), entry.getValue());
+                getTool().getEnvironment().put(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -99,28 +108,29 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
      */
     public void afterPropertiesSet() throws Exception {
         if (isDisabled()) {
-            tool.getLog().info(beanName + " - execution disabled!");
+            getTool().getLog().info(beanName + " - execution disabled!");
             return; // do nothing
         }
         try {
-            tool.getLog().info(beanName + " - initializing");
+            getTool().getLog().info(beanName + " - initializing");
             configure();
-            tool.setUp();
-            tool.startAutomaticMigration();
-            tool.getLog().info(beanName + " - run successfully");
+            getTool().setUp();
+            getTool().startAutomaticMigration();
+            getTool().getLog().info(beanName + " - successful");
         } catch (Exception ex) {
-            tool.getLog().error(beanName + " - run with exception", ex);
+            getTool().getLog().error(beanName + " - failed", ex);
+            if (isStopOnException()) throw ex; // propagate to stop spring from starting
         } finally {
-            tool.tearDown();
-            tool.getLog().info(beanName + " - terminated");
+            getTool().tearDown();
+            getTool().getLog().info(beanName + " - finished");
         }
     }
 
     @SuppressWarnings({"unchecked"})
     private void configure() {
-        if (dataSourceConfigurator != null) dataSourceConfigurator.configure(tool);
-        if (tool.getMigrateConfig().get("Scripts-Prefix") == null) {
-            tool.getMigrateConfig()
+        if (dataSourceConfigurator != null) dataSourceConfigurator.configure(getTool());
+        if (getTool().getMigrateConfig().get("Scripts-Prefix") == null) {
+            getTool().getMigrateConfig()
                     .put("Scripts-Prefix", "up_"); // change default so that groovy scripts have compatible names
         }
     }
@@ -148,4 +158,5 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
             dataSourceConfigurator.setDataSource(dataSource);
         }
     }
+
 }
