@@ -1,6 +1,5 @@
 package de.viaboxx.dbmigrate.spring;
 
-import com.agimatec.commons.config.ConfigManager;
 import com.agimatec.dbmigrate.AutoMigrationTool;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
@@ -71,7 +70,7 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
     }
 
     public void setConfigRootUrl(String configRoot) {
-        ConfigManager.getDefault().setConfigRootPath(configRoot);
+        getTool().setConfigRootUrl(configRoot);
     }
 
     @SuppressWarnings({"unchecked"})

@@ -55,6 +55,10 @@ public abstract class BaseMigrationTool implements MigrationTool {
         setupVersionMeta();
     }
 
+    public void setConfigRootUrl(String configRoot) {
+        ConfigManager.getDefault().setConfigRootPath(configRoot);
+    }
+
     protected void setupVersionMeta() {
         MapNode versionMeta = (MapNode) getMigrateConfig().get("version-meta");
         if (versionMeta != null) {
@@ -431,35 +435,40 @@ public abstract class BaseMigrationTool implements MigrationTool {
         return null;
     }
 
-  public JdbcDatabase getTargetDatabase() {
-    return targetDatabase;
-  }
-
-  public Config getMigrateConfig() {
-    return ConfigManager.getDefault()
-        .getConfig("migration", getMigrateConfigFileName());
-  }
-
-  private String getMigrateConfigFileName() {
-    return migrateConfigFileName;
-  }
-
-  public void setMigrateConfigFileName(String migrateConfigFileName) {
-    this.migrateConfigFileName = migrateConfigFileName;
-  }
-
-  protected List getOperations(String name) {
-    return getMigrateConfig().getList("Operations/" + name);
-  }
-
-  public String getScriptsDir() {
-    if (scriptsDir == null) {
-      FileNode dir = (FileNode) getMigrateConfig().get("Scripts");
-      if (dir == null) return null;
-      scriptsDir = dir.getFilePath();
+    public JdbcDatabase getTargetDatabase() {
+        return targetDatabase;
     }
-    return scriptsDir;
-  }
+
+    public Config getMigrateConfig() {
+        Config migCfg = ConfigManager.getDefault()
+                .getConfig("migration", getMigrateConfigFileName());
+        if (migCfg == null) {
+           migCfg = new Config();
+           ConfigManager.getDefault().cacheConfig(migCfg, "migration");
+        }
+        return migCfg;
+    }
+
+    private String getMigrateConfigFileName() {
+        return migrateConfigFileName;
+    }
+
+    public void setMigrateConfigFileName(String migrateConfigFileName) {
+        this.migrateConfigFileName = migrateConfigFileName;
+    }
+
+    protected List getOperations(String name) {
+        return getMigrateConfig().getList("Operations/" + name);
+    }
+
+    public String getScriptsDir() {
+        if (scriptsDir == null) {
+            FileNode dir = (FileNode) getMigrateConfig().get("Scripts");
+            if (dir == null) return null;
+            scriptsDir = dir.getFilePath();
+        }
+        return scriptsDir;
+    }
 
     public String[] getGroovyScriptsDirs() {
         if (getMigrateConfig().getList("GroovyScripts") != null) {
@@ -470,9 +479,9 @@ public abstract class BaseMigrationTool implements MigrationTool {
             }
             for (Object each : list) {
                 if (each instanceof FileNode) {
-                    urls.add (((FileNode) each).getFilePath());
+                    urls.add(((FileNode) each).getFilePath());
                 } else {
-                    urls.add (String.valueOf(each));
+                    urls.add(String.valueOf(each));
                 }
             }
             return urls.toArray(new String[urls.size()]);
@@ -483,29 +492,29 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
-  public void setScriptsDir(String scriptsDir) {
-    this.scriptsDir = scriptsDir;
-  }
+    public void setScriptsDir(String scriptsDir) {
+        this.scriptsDir = scriptsDir;
+    }
 
-  protected void perform(List operations) throws Exception {
-    if (operations == null) {
-      return;
-    }
-    for (Object each : operations) {
-      if (each instanceof TextNode) {
-        TextNode node = (TextNode) each;
-        doMethodOperation(node.getName(), node.getValue());
-      } else if (each instanceof ListNode) {
-        MapQuery q = new MapQuery(((ListNode) each).getName());
-        boolean isTrue = q.doesMatch(getEnvironment());
-        print("FOUND Condition: (" + q.toString() + ") = " + isTrue);
-        if (isTrue) {
-          perform(((ListNode) each).getList()); // recursion!
-          print("END of Condition: (" + q.toString() + ")");
+    protected void perform(List operations) throws Exception {
+        if (operations == null) {
+            return;
         }
-      }
+        for (Object each : operations) {
+            if (each instanceof TextNode) {
+                TextNode node = (TextNode) each;
+                doMethodOperation(node.getName(), node.getValue());
+            } else if (each instanceof ListNode) {
+                MapQuery q = new MapQuery(((ListNode) each).getName());
+                boolean isTrue = q.doesMatch(getEnvironment());
+                print("FOUND Condition: (" + q.toString() + ") = " + isTrue);
+                if (isTrue) {
+                    perform(((ListNode) each).getList()); // recursion!
+                    print("END of Condition: (" + q.toString() + ")");
+                }
+            }
+        }
     }
-  }
 
     public void doMethodOperation(String methodName, String methodParam)
             throws Exception {
@@ -603,69 +612,69 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     public void rollback() throws Exception {
         try {
-      log("** rollback **");
-      if (getTargetDatabase() == null) {
-        return;
-      }
-      if (getTargetDatabase().isTransaction()) {
-        getTargetDatabase().rollback();
-      }
-    } catch (Exception ex) {
-      getLog().error(null, ex);
-    }
-  }
-
-  public void terminateTransactions() throws Exception {
-    if (this.targetDatabase != null) {
-      if (getTargetDatabase().isTransaction()) {
-        try {
-          getTargetDatabase().commit();
+            log("** rollback **");
+            if (getTargetDatabase() == null) {
+                return;
+            }
+            if (getTargetDatabase().isTransaction()) {
+                getTargetDatabase().rollback();
+            }
         } catch (Exception ex) {
             getLog().error(null, ex);
         }
-      }
     }
-  }
 
-  public void disconnectDatabase() throws Exception {
-    if (targetDatabase != null) {
-      targetDatabase.close();
-      targetDatabase = null;
+    public void terminateTransactions() throws Exception {
+        if (this.targetDatabase != null) {
+            if (getTargetDatabase().isTransaction()) {
+                try {
+                    getTargetDatabase().commit();
+                } catch (Exception ex) {
+                    getLog().error(null, ex);
+                }
+            }
+        }
     }
-  }
 
-  /**
-   * overwrite in subclasses
-   */
-  protected boolean acceptDirectoryForSQLParser(File aDirectory) {
-    return (!aDirectory.getName().equalsIgnoreCase("packages") &&
-        !aDirectory.getName().equalsIgnoreCase("triggers"));
-  }
-
-  /**
-   * utility method to exec a JDBC SELECT statement directly
-   *
-   * @throws SQLException
-   */
-  protected SQLCursor sqlSelect(String sql) throws SQLException {
-    Connection conn = getTargetDatabase().getConnection();
-    Statement stmt = conn.createStatement();
-    return new SQLCursor(stmt, stmt.executeQuery(sql));
-  }
-
-  protected int sqlExec(String sql) throws SQLException {
-    Connection conn = getTargetDatabase().getConnection();
-    Statement stmt = conn.createStatement();
-    int rowsAffected = -1;
-    try {
-      rowsAffected = stmt.executeUpdate(sql);
-    } finally {
-      stmt.close();
+    public void disconnectDatabase() throws Exception {
+        if (targetDatabase != null) {
+            targetDatabase.close();
+            targetDatabase = null;
+        }
     }
-    return rowsAffected;
-  }
 
-  public void setTargetDatabase(JdbcDatabase targetDatabase) {
-    this.targetDatabase = targetDatabase;
-  }
+    /**
+     * overwrite in subclasses
+     */
+    protected boolean acceptDirectoryForSQLParser(File aDirectory) {
+        return (!aDirectory.getName().equalsIgnoreCase("packages") &&
+                !aDirectory.getName().equalsIgnoreCase("triggers"));
+    }
+
+    /**
+     * utility method to exec a JDBC SELECT statement directly
+     *
+     * @throws SQLException
+     */
+    protected SQLCursor sqlSelect(String sql) throws SQLException {
+        Connection conn = getTargetDatabase().getConnection();
+        Statement stmt = conn.createStatement();
+        return new SQLCursor(stmt, stmt.executeQuery(sql));
+    }
+
+    protected int sqlExec(String sql) throws SQLException {
+        Connection conn = getTargetDatabase().getConnection();
+        Statement stmt = conn.createStatement();
+        int rowsAffected = -1;
+        try {
+            rowsAffected = stmt.executeUpdate(sql);
+        } finally {
+            stmt.close();
+        }
+        return rowsAffected;
+    }
+
+    public void setTargetDatabase(JdbcDatabase targetDatabase) {
+        this.targetDatabase = targetDatabase;
+    }
 }
