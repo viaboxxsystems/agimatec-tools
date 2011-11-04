@@ -1,5 +1,10 @@
 = dbmigrate =
 
+== 2.5.1 (Nov 2011) ==
+  * [DBMigrateSpring Spring Integration] (e.g. using dbmigrate in tomcat or jetty)
+  * [DBMigrateMaven Maven Integration] (invoking dbmigrate from a maven pom.xml)
+  * Improved reading resources (upgrade-scripts etc.) from jar: or directory (file:) 
+
 == 2.5.0 (July 2011) ==
   * Changed artifactId from com.agimatec to de.viaboxx
   * Published artifacts to maven central. 
