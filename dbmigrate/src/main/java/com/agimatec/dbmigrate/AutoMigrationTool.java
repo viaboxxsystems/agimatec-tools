@@ -43,7 +43,7 @@ import java.util.*;
  * 17 - runs sql, xml or groovy script (auto-detect by file suffix)
  * </pre>
  * Author: Roman Stumm
- * Date: 2007, 2008, 2009, 2010
+ * Date: 2007, 2008, 2009, 2010, 2011
  * <pre>
  * final String sim = System.getProperty(SYSTEM_PROPERTY_SIM);
  * sim = "true"|"yes" :: simulation, echo execution sequence into log, but do not invoke any script
@@ -101,6 +101,9 @@ public class AutoMigrationTool extends BaseMigrationTool {
             } else if ("-conf".equalsIgnoreCase(each)) {
                 i++;    // skip next param
                 setMigrateConfigFileName(args[i]);
+            } else if ("-base".equalsIgnoreCase(args[i])) {
+                i++;
+                setConfigRootUrl(args[i]);
             } else if ("-help".equalsIgnoreCase(each)) {
                 printUsage();
                 return false;
@@ -120,6 +123,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
                 addActionOverride(new OperationAction(this, op, param));
             }
         }
+
         return true;
     }
 
@@ -130,16 +134,24 @@ public class AutoMigrationTool extends BaseMigrationTool {
 
     private void printUsage() {
         System.out.println("usage: java " + getClass().getName() +
-                " -sim false -conf migration.xml -script aScript -op operationName operationParameter ");
+                " -sim false -exit true -root url -conf migration.xml -script aScript -op operationName " +
+                "operationParameter ");
         System.out.println("Options:\n\t-help \t (optional) print this help");
         System.out.println(
                 "\t-sim \t (optional) true|yes=simulation only, default is false");
         System.out.println(
                 "\t-conf \t (optional) name of migration.xml configuration file, default is migration.xml");
         System.out.println(
-                "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!");
+                "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml)" +
+                        " with operations. tool will execute the given file(s) only!");
         System.out.println(
-                "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an upgrade-file. tool will execute the given operation(s) only!");
+                "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an" +
+                        " upgrade-file. tool will execute the given operation(s) only!");
+        System.out.println(
+                "\t-exit \t (optional) true|yes to exit JVM after main(), otherwise no System.exit() will be invoked");
+        System.out.println(
+                "\t-base \t (optional) set the config base URL of the resource or directory, defaults to the path " +
+                        "given in resource 'configmanager.ini' or file: if none available");
     }
 
     // overwritten to provide the enviroment (or local env) to the script executor
@@ -238,7 +250,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
      * remove all entries from the list that are not relevant
      * for direct execution from the given dbVersion
      *
-     * @param version - the current database version
+     * @param version      - the current database version
      * @param versionFiles - target list
      * @return relevant versions, filtered target list 'versionFiles'
      */
@@ -260,8 +272,8 @@ public class AutoMigrationTool extends BaseMigrationTool {
     /**
      * read the version from the database
      *
-     * @throws SQLException - in case of database error
      * @return null or the version saved in database table db_version
+     * @throws SQLException - in case of database error
      */
     public DBVersionString readVersion() throws SQLException {
         String version = null;
