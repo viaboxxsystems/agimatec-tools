@@ -1,0 +1,65 @@
+#summary Invoking dbmigrate during application start via spring configuration
+
+= Introduction =
+
+You can invoke dbmigrate during startup of your application (e.g. a web-app) and configure it with the spring framework.
+
+
+= Details =
+
+The class de.viaboxx.dbmigrate.spring.DBMigrateBean offers spring integration.
+
+Add spring-dependencies to your project (e.g. maven pom.xml):
+
+{{{
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>3.0.5.RELEASE</version>
+        </dependency>
+}}}
+
+  * dependency to commons-dbcp is optional. Use it if you want to configure the connection to the database for dbmigrate with a apache.commons.dbcp BasicDataSource
+  
+Example for a spring-configuration with dbmigrate:
+{{{
+    
+    <bean id="dbmigrate" class="de.viaboxx.dbmigrate.spring.DBMigrateBean">
+        <property name="configRootUrl" value="cp://dbmigrate/"/>
+        <property name="configFile" value="db-upgrade.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="disabled" value="false"/>
+        <property name="stopOnException" value="true"/> 
+    </bean>     
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="${database-url}"/>
+        <property name="username" value="${database-user}"/>
+        <property name="password" value="${database-password}"/>
+        <property name="defaultAutoCommit" value="false"/>
+    </bean>
+
+}}}
+
+  * You can name the bean "dbmigrate" or however you like. 
+  * You can even configure multiple DBMigrateBeans to migrate different databases.
+  * Example assumes that configFile is located in classpath resource folder "dbmigrate"
+
+=== Properties of DBMigrateBean ===
+for more details, see source code
+  * disabled = disable running the migration tool (false by default)
+  * stopOnException = throw exception to let spring fail when an exception occurs during dbmigrate (true by default
+  * configFile = the xml configration for migration (default migration.xml)
+  * simulation = true/false to switch simulation mode (see -sim switch), default is false
+  * configRootUrl = set the URL as root for all paths of dbmigrate (default is file: e.g. the current directory)
+  * toVersion = if you want to set the migration to-version (optional)
+  * fromVersion = if you wan to set the migration from-version (optional)
+  * environment = a map of key-values for the "env" section of the migration configuration
+  * migrateConfig = a map of key-values for the migration configration (if you do not want a xml configuration at all)
+  * dataSource = a DataSource to configure the db-connection, alternatively you can configure it with DB_USER, DB_PASSWORD, DB_URL and DB_DRIVER (see config documentation). Currently only org.apache.commons.dbcp.BasicDataSource or subclasses are supported.
