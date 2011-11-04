@@ -62,4 +62,4 @@ for more details, see source code
   * fromVersion = if you wan to set the migration from-version (optional)
   * environment = a map of key-values for the "env" section of the migration configuration
   * migrateConfig = a map of key-values for the migration configration (if you do not want a xml configuration at all)
-  * dataSource = a DataSource to configure the db-connection, alternatively you can configure it with DB_USER, DB_PASSWORD, DB_URL and DB_DRIVER (see config documentation). Currently only org.apache.commons.dbcp.BasicDataSource or subclasses are supported.
+  * dataSource = a DataSource to configure the db-connection, alternatively you can configure it with env entries DB_USER, DB_PASSWORD, DB_URL and DB_DRIVER (see config documentation). Currently only org.apache.commons.dbcp.BasicDataSource or subclasses are supported.
