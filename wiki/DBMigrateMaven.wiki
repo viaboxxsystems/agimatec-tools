@@ -20,6 +20,13 @@ Example pom.xml:
     <packaging>jar</packaging>
     <name>Integrate dbmigrate into a maven pom</name>
 
+    <!-- 
+         you can pass the property to dbmigrate to 
+         determine the db_version after a new setup of the database 
+     -->
+    <properties>
+        <database-version>1.0.1</database-version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>postgresql</groupId>
@@ -60,7 +67,12 @@ Example pom.xml:
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>com.agimatec.dbmigrate.AutoMigrationTool</mainClass>
+                                   <systemProperties>
+                                        <systemProperty>
+                                            <key>to-version</key>
+                                            <value>${database-version}</value>
+                                        </systemProperty>
+                                    </systemProperties> <mainClass>com.agimatec.dbmigrate.AutoMigrationTool</mainClass>
                                     <arguments>
                                         <argument>-conf</argument>
                                         <argument>etc/dbmigrate/db-reset.xml</argument>
@@ -95,6 +107,12 @@ Example pom.xml:
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <systemProperties>
+                                        <systemProperty>
+                                            <key>to-version</key>
+                                            <value>${database-version}</value>
+                                        </systemProperty>
+                                    </systemProperties>
                                     <executable>java</executable>
                                     <arguments>
                                         <argument>-classpath</argument>
