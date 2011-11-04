@@ -3,7 +3,8 @@
 = Introduction =
 
 You can invoke dbmigrate with the maven-exec-plugin from within a pom.xml
-
+This can be an alternative for the maven-sql-plugin to setup a new database (-Pdevelop-db) or to execute some scripts (-Preset-db) with maven.
+The example shows the invocation bound to a maven lifecycle phase (process-test-resources).
 
 = Details =
 
@@ -133,3 +134,68 @@ Example pom.xml:
 </project>
 
 }}}
+
+
+  * the to-version system property will be used by dbmigrate to set the version in the database after the scripts have been executed
+
+Example for db-setup.xml configuration file
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+
+    <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
+     Predefined keys:
+      DB_USER       : if exists, overrule user from JdbcConfig
+      DB_PASSWORD   : if exists, overrule password from JdbcConfig
+      DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
+      DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
+      DB_DRIVER        : if exists, overrule jdbcDriver from JdbcConfig
+    -->
+    <map name="env">
+        <String name="DB_USER" value="postgres"/>
+        <String name="DB_PASSWORD" value="syspassword"/>
+        <String name="DB_NAME" value="mydatabase"/>
+
+        <String name="DB_USER_MYDB" value="mydb"/>
+        <String name="DB_PASSWORD_MYDB" value="mypassword"/>
+        <String name="DB_DRIVER" value="org.postgresql.Driver"/>
+        <String name="DB_URL" value="jdbc:postgresql://localhost:5432/postgres"/>
+    </map>
+
+    <!-- Scripts = the source path for scripts to scan for -->
+    <file name="Scripts-Before-All" dir="cp://database/setup" file=""/>
+    <file name="Scripts-After-All" dir="cp://dbmigrate/verify" file=""/>
+
+    <map name="version-meta">
+        <Boolean name="auto-version" value="false"/>
+    </map>
+</config>
+
+}}}
+
+example for the setup script 0.0.1_setup.sql in resource directory "setup" to create a new database and setup its schema:
+{{{
+-- SQL SCRIPT FOR dbmigrate TO CREATE DATABASE AND SETUP ROLES, USERS, SCHEMA 
+
+SET FAIL_ON_ERROR=false;
+
+@../create-role.sql;
+
+CONNECT ${DB_USER_MYDB}/${DB_PASSWORD_MYDB};
+
+@../create-database.sql;
+
+CONNECT ${DB_USER_MYDB}/${DB_PASSWORD_MYDB}@${DB_NAME};
+
+@../drop-schema.sql;
+
+SET FAIL_ON_ERROR=true;
+@../schema.sql;
+
+-- #version(${to-version});
+
+}}}
+
+
+ 
