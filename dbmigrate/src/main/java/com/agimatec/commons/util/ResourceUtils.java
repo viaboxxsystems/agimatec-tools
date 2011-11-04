@@ -116,7 +116,8 @@ public class ResourceUtils {
             String urlPath = dirURL.getPath();
             int idx2 = urlPath.indexOf("!");
             String jarPath = urlPath.substring(5, idx2); //strip out only the JAR file
-            String resourceDir = urlPath.substring(idx2 + 2, urlPath.length()) + "/";
+            String resourceDir = urlPath.substring(idx2 + 2, urlPath.length());
+            if(!resourceDir.endsWith("/")) resourceDir = resourceDir + "/";
             JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
             Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
             Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
