@@ -321,6 +321,6 @@
     </reporting>
 
     <properties>
-        <agimatec-version>2.5.2-SNAPSHOT</agimatec-version>
+        <agimatec-version>2.5.2</agimatec-version>
     </properties>
 </project>
