@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+
+    <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
+     Predefined keys:
+      DB_USER       : if exists, overrule user from JdbcConfig
+      DB_PASSWORD   : if exists, overrule password from JdbcConfig
+      DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
+      DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
+      DB_DRIVER        : if exists, overrule jdbcDriver from JdbcConfig
+    -->
+    <map name="env">
+        <!-- schema namen -->
+        <String name="DB_testdb" value="@testdb.jdbcUser@"/>
+        <String name="DB_system" value="@system.jdbcUser@"/>
+
+        <String name="DB_testdb_PASSWORD" value="@testdb.jdbcPassword@"/>
+        <String name="DB_system_PASSWORD" value="@system.jdbcPassword@"/>
+
+        <String name="database-version" value="@database-version@"/>
+        <Boolean name="testdata_enabled" value="@DBTOOL.testdata_enabled@"/>
+
+        <!-- some example variables (for use inside .sql scripts etc.) -->
+        <String name="TRUE" value="1"/>
+        <String name="FALSE" value="0"/>
+        <String name="DBMS" value="oracle"/>
+    </map>
+
+    <!-- Scripts = the source path for scripts to scan for -->
+    <file name="Scripts" dir="setup" file=""/>
+
+    <!-- Optional = the *additional* URLs/Paths where to search for groovy scripts (to be called explicitly with doGroovyScript)
+        can be file or String or text nodes -->
+    <list name="GroovyScripts">
+        <String dir="cp://scripts1/"/>
+        <file dir="cp://scripts2/" file=""/>        
+    </list>
+
+
+    <file name="JdbcConfig" file="setup/conf/oracle.properties"/>
+
+</config>
