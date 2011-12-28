@@ -8,7 +8,7 @@ The project agimatec-tools is a bundle that contains some frameworks used for:
 History
 -------
 1. first open-source release by Roman Stumm, agimatec GmbH, Bonn
-2. currently maintained by Roman Stumm, Viaboxx GmbH, Kšnigswinter
+2. currently maintained by Roman Stumm, Viaboxx GmbH, Kï¿½nigswinter
 
 How to compile the project
 ==========================
@@ -66,6 +66,7 @@ mvn idea:idea
 [ Note:
 Follow the instructions on
  * https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
+ * https://oss.sonatype.org/index.html#welcome
 to deploy on Sonatype OSS Maven Repository.
 
 Old style (when distribution-management in pom.xml is enabled)
