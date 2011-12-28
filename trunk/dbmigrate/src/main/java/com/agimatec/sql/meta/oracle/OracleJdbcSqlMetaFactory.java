@@ -148,7 +148,7 @@ public class OracleJdbcSqlMetaFactory implements SqlMetaFactory {
             }
         }
         if (columns) buildColumns(aCatalog);
-        if (indices) buildIndices(aCatalog);
+        if (indices) buildIndexes(aCatalog);
         if (indices && primaryKeys) buildPrimaryKeys(
                 aCatalog); // must be called after buildIndices, moves PK index to primaryKey in all tables
         if (columns) {
@@ -224,7 +224,7 @@ public class OracleJdbcSqlMetaFactory implements SqlMetaFactory {
         getQueryBean().executeQuery(queryDefinition).getList();
     }
 
-    private void buildIndices(CatalogDescription aCatalog) throws SQLException,
+    private void buildIndexes(CatalogDescription aCatalog) throws SQLException,
             IOException {
         final QueryDefinition queryDefinition = new QueryDefinition();
         queryDefinition.setQueryObject(aCatalog);

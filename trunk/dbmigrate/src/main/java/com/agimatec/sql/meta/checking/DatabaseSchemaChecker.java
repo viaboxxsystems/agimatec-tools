@@ -163,6 +163,7 @@ public abstract class DatabaseSchemaChecker {
             } else assertTrue("Table: " + xmlTableDescription.getTableName() +
                     "... not found in databaseCatalog!", false);
         }
+        // TODO RSt - views checking not yet implemented
         // todo [RSt] sequences not yet implemented  -> requires DDLScriptSqlMetaFactory
         // todo [RSt] function based indices not yet implemented  -> requires DDLScriptSqlMetaFactory
         // todo [RSt] missing indexes/foreignkeys in schemaConfig not detected -> requires DDLScriptSqlMetaFactory

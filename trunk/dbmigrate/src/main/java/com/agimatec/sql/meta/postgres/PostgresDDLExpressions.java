@@ -15,6 +15,7 @@ import com.agimatec.sql.meta.script.ExtractExpr;
 public class PostgresDDLExpressions extends DDLExpressions {
     /** nun folgen die syntax-formate von den statements, die in den scripten erkannt und verarbeitet werden sollen: */
     private static final String[] statementFormats = {
+            // TODO RSt - create-view, drop-view missing (alter-view missing)
             // "ALTER TABLE Customer ADD CONSTRAINT Cust_name UNIQUE( firstname, lastname) USING INDEX TABLESPACE SAMPLE_IDX"
             "{table-add-constraint ALTER TABLE ${table} ADD " +
                     "{constraint CONSTRAINT ${constraintName} [${unique(UNIQUE)}] '(' {columns ${column}...','} ')' " +
@@ -96,7 +97,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "...','}}",
             // DROP TRIGGER TR_I_User_Core ON User_Core
             "{drop-trigger DROP TRIGGER ${trigger} ON ${table}}",
-            "{drop-table DROP TABLE ${table}}",
+            "{drop-table DROP TABLE ${table} [CASCADE]}",
             "{drop-sequence DROP SEQUENCE ${sequence}}"};
 
     public static final ExtractExpr[] expressions;
