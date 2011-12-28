@@ -22,7 +22,7 @@ public class PostgresSchemaChecker extends DatabaseSchemaChecker {
      * @throws Exception
      */
     public void assertObjectsValid() throws Exception {
-        // do nothing
+        // do nothing (indexes, views, triggers, ... - can they become invalid, how to check this?)
     }
 
     protected DDLScriptSqlMetaFactory getDDLScriptSqlMetaFactory() {

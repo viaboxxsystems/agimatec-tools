@@ -57,6 +57,10 @@ public class CatalogDescription implements Serializable, Cloneable {
         sequences.put(aSD.getSequenceName(), aSD);
     }
 
+    public void removeSequence(String seqName) {
+        sequences.remove(seqName);
+    }
+
     public int getTablesSize() {
         return tables.size();
     }

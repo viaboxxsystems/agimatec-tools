@@ -243,6 +243,13 @@ public class TableDescription implements Serializable, Cloneable {
         return null;
     }
 
+    public void removeColumn(String columnName) {
+        ColumnDescription colDesc = getColumn(columnName);
+        if(colDesc != null) {
+            columns.remove(colDesc);
+        }
+    }
+
 
     public int getColumnSize() {
         return columns.size();

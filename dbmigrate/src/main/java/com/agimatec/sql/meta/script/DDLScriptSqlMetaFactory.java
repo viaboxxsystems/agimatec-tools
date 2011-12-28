@@ -28,7 +28,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     private CatalogDescription catalog;
     private final PropertiesExtractor extractor;
 
-    private final Map<String, CatalogBuilder> builders = new HashMap();
+    private final Map<String, CatalogBuilder> builders = new HashMap<String, CatalogBuilder>();
     private final DDLExpressions ddlSpec;
 
     public DDLScriptSqlMetaFactory(DDLExpressions ddlSpecification) {
@@ -50,6 +50,8 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         builders.put("table-add-foreign-key", new TableAddForeignKeyBuilder());
         builders.put("create-sequence", new CreateSequenceBuilder());
         builders.put("create-table", new CreateTableBuilder());
+        builders.put("drop-table", new DropTableBuilder());
+        builders.put("drop-sequence", new DropSequenceBuilder());
         builders.put("dezign-create-table", new DezignCreateTableBuilder());
         builders.put("table-add-primary-key", new TableAddPrimaryKey());
         builders.put("table-comment", new TableCommentBuilder());
@@ -86,7 +88,11 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         public abstract void process(MapNode values, CatalogDescription catalog) throws
                 IOException, TemplateException;
 
-        /** remove \" */
+        /**
+         * remove \"
+         * @param value - value or null to strip
+         * @return stripped value or null
+         */
         protected String strip(String value) {
             if (value == null) return null;
             int start = 0, end = value.length();
@@ -159,6 +165,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class TableAddColumnsBuilder extends CatalogBuilder {
         // {table=customer, columndefinition=[{typeName=varchar,
         // column=ClientUserNumber, precision={numbers=[{value=37}]}}]}
+
         public void process(MapNode values, CatalogDescription catalog) {
             TableDescription td = getTable(catalog, values.getString("table"));
             List columns = values.getList("columndefinition");
@@ -179,19 +186,30 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                     buildColumnDescription(new MapNode((Map) map.get("add-column")), td);
                 } else if (map.containsKey("alter-column-type")) { // alter-column-type
                     MapNode node = new MapNode((Map) map.get("alter-column-type"));
-                    String colName = node.getString("column");
+                    String colName = strip(node.getString("column"));
                     ColumnDescription colDef = td.getColumn(colName);
                     setColType(node, colDef);
                 } else if (map.containsKey("alter-column-drop-notnull")) { // alter-column-drop-notnull
                     MapNode node = new MapNode((Map) map.get("alter-column-drop-notnull"));
-                    String colName = node.getString("column");
+                    String colName = strip(node.getString("column"));
                     ColumnDescription colDef = td.getColumn(colName);
                     colDef.setNullable(true);
                 } else if (map.containsKey("alter-column-set-notnull")) { // alter-column-set-notnull
                     MapNode node = new MapNode((Map) map.get("alter-column-set-notnull"));
-                    String colName = node.getString("column");
+                    String colName = strip(node.getString("column"));
                     ColumnDescription colDef = td.getColumn(colName);
                     colDef.setNullable(false);
+                } else if (map.containsKey("drop-column")) {
+                    String colName = strip(new MapNode((Map) map.get("add-column")).getString("column"));
+                    td.removeColumn(colName);
+                } else if (map.containsKey("drop-constraint")) {
+                    String consName = strip(new MapNode((Map) map.get("drop-constraint")).getString("constraintName"));
+                    td.removeConstraint(consName);
+                } else if (map.containsKey("alter-column-drop-notnull")) {
+                    MapNode node = new MapNode((Map) map.get("alter-column-drop-notnull"));
+                    String colName = strip(node.getString("column"));
+                    ColumnDescription colDef = td.getColumn(colName);
+                    colDef.setNullable(true);
                 }
             }
         }
@@ -200,6 +218,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class TableCommentBuilder extends CatalogBuilder {
         // {table=customer, columndefinition=[{typeName=varchar,
         // column=ClientUserNumber, precision={numbers=[{value=37}]}}]}
+
         public void process(MapNode values, CatalogDescription catalog) {
             TableDescription td = getTable(catalog, values.getString("table"));
             td.setComment((String) values.get("comment"));
@@ -209,10 +228,11 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class ColumnCommentBuilder extends CatalogBuilder {
         // {table=customer, columndefinition=[{typeName=varchar,
         // column=ClientUserNumber, precision={numbers=[{value=37}]}}]}
+
         public void process(MapNode values, CatalogDescription catalog) {
             String qualifiedColumn = (String) values.get("tableColumn");
             String tableName = qualifiedColumn.substring(0, qualifiedColumn.indexOf('.'));
-            String columnName = qualifiedColumn.substring(tableName.length() + 1);
+            String columnName = strip(qualifiedColumn.substring(tableName.length() + 1));
             TableDescription td = getTable(catalog, tableName);
             ColumnDescription col = td.getColumn(columnName);
             if (col == null) {
@@ -227,6 +247,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class TableAddConstraintBuilder extends CatalogBuilder {
         // {table=PHONENUMBER, constraint={tableSpace={tableSpace="DB_INDEX"}, unique=UNIQUE,
         // constraintName="PHONENUMBER_ATTR", columns=[{column="ATTROID"}, {column="TYPE"}]}}
+
         public void process(MapNode values, CatalogDescription catalog) {
             IndexDescription id = new IndexDescription();
             id.setTableName(strip(values.getString("table")));
@@ -246,6 +267,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class CreateIndexBuilder extends CatalogBuilder {
         // {table=RENTALCARSTATION, tableSpace={tableSpace="DB_INDEX"}, unique=UNIQUE,
         // indexName=RENTALCARSTAT_IDX_CRS_STAT, columns=[{column="CRSTYPE"}, {column="STATIONID"}]}
+
         public void process(MapNode values, CatalogDescription catalog) {
             IndexDescription id = new IndexDescription();
             id.setTableName(strip(values.getString("table")));
@@ -268,6 +290,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class TableAddForeignKeyBuilder extends CatalogBuilder {
         // {table=Customer, constraint={refcolumns=[{column="OBJECTIDENTIFIER"}],
         // refTable=CLIENTORGUNIT, constraintName="Customer_Company", columns=[{column="COMPANYID"}]}}
+
         public void process(MapNode values, CatalogDescription catalog) {
             ForeignKeyDescription fk = new ForeignKeyDescription();
             fk.setTableName(strip(values.getString("table")));
@@ -279,7 +302,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             List refcolumns = values.getList("constraint/refcolumns/refcolumns");
             for (int i = 0; i < columns.size(); i++) {
                 Map eachCol = (Map) columns.get(i);
-                Map refCol = (refcolumns != null) ?  (Map)refcolumns.get(i) : null;
+                Map refCol = (refcolumns != null) ? (Map) refcolumns.get(i) : null;
                 fk.addColumnPair(strip((String) eachCol.get("column")),
                         refCol != null ? strip((String) refCol.get("column")) : null);
             }
@@ -288,18 +311,27 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         }
     }
 
+    class DropSequenceBuilder extends CatalogBuilder {
+
+        public void process(MapNode values, CatalogDescription catalog) throws IOException, TemplateException {
+            String seqName = values.getString("sequence");
+            catalog.removeSequence(seqName);
+        }
+    }
+
     class CreateSequenceBuilder extends CatalogBuilder {
         // {cache={value=100}, nominvalue=NOMINVALUE, increment=1, start=1,
         // noorder=NOORDER, nocycle=NOCYCLE, sequence=SEQ_NLSBundle, nomaxvalue=NOMAXVALUE}
+
         public void process(MapNode values, CatalogDescription catalog) {
             SequenceDescription sd = new SequenceDescription();
             sd.setSequenceName(strip(values.getString("sequence")));
             sd.setCache(getInt(values, "attributes/cache/value"));
             sd.setCycle(!getBool(values, "attributes/nocycle"));
             sd.setIncrement(getInt(values, "attributes/increment"));
-            if(sd.getIncrement() == 0) sd.setIncrement(1);
+            if (sd.getIncrement() == 0) sd.setIncrement(1);
             sd.setStart(getInt(values, "attributes/start"));
-            if(sd.getStart() == 0) sd.setStart(1);
+            if (sd.getStart() == 0) sd.setStart(1);
             //sd.setMaxValue();
             //sd.setMinValue();
             sd.setOrder(!getBool(values, "attributes/noorder"));
@@ -307,9 +339,17 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         }
     }
 
+    class DropTableBuilder extends CatalogBuilder {
+        public void process(MapNode values, CatalogDescription catalog) throws IOException, TemplateException {
+            final String tableName = strip(values.getString("table"));
+            catalog.removeTable(tableName);
+        }
+    }
+
     class CreateTableBuilder extends CatalogBuilder {
         // {table=NLSBUNDLE, columndefinition=[
         // {typeName=VARCHAR, column=DOMAIN, mandatory=NOT NULL, precision={numbers=[{value=500}]}}]}
+
         public void process(MapNode values, CatalogDescription catalog) throws IOException,
                 TemplateException {
             final String tableName = strip(values.getString("table"));
@@ -339,7 +379,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             List refcolumns = aColDef.getList("foreignKey/refcolumns/refcolumns");
             for (int j = 0; j < columns.size(); j++) {
                 Map eachCol = (Map) columns.get(j);
-                Map refCol = (refcolumns != null) ?  (Map)refcolumns.get(j) : null;
+                Map refCol = (refcolumns != null) ? (Map) refcolumns.get(j) : null;
                 fk.addColumnPair(strip((String) eachCol.get("column")),
                         refCol != null ? strip((String) refCol.get("column")) : null);
             }
@@ -363,9 +403,11 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     }
 
     // using syntax preferred by the DeZign ER Tool
+
     protected class DezignCreateTableBuilder extends CreateTableBuilder {
         // {table=NLSBUNDLE, columndefinition=[
         // {typeName=VARCHAR, column=DOMAIN, mandatory=NOT NULL, precision={numbers=[{value=500}]}}]}
+
         public void process(MapNode values, CatalogDescription catalog) throws IOException,
                 TemplateException {
             super.process(values, catalog);
@@ -377,7 +419,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 if (theColDef.getMap().containsKey("tableConstraint")) {
                     buildTableConstraint(theColDef, td);
                 }
-                if(theColDef.getString("columndefinition/isUnique") != null) {
+                if (theColDef.getString("columndefinition/isUnique") != null) {
                     // unique column
                     IndexDescription index = new IndexDescription();
                     index.setTableName(td.getTableName());
@@ -416,6 +458,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     class TableAddPrimaryKey extends CatalogBuilder {
         // {table=NLSTEXT, constraint={tableSpace="DB_INDEX", constraintName="NLSTEXT_PK",
         // columns=[{column=BUNDLEID}, {column=LOCALE}, {column=KEY}]}}
+
         public void process(MapNode values, CatalogDescription catalog) {
             TableDescription td = getTable(catalog, values.getString("table"));
             IndexDescription pk = new IndexDescription();
@@ -433,7 +476,9 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     }
 
     public CatalogDescription getCatalog() {
-        if (catalog == null) catalog = new CatalogDescription();
+        if (catalog == null) {
+            setCatalog(new CatalogDescription());
+        }
         return catalog;
     }
 
@@ -444,6 +489,9 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     /**
      * API -
      * not thread-safe. only fill one catalog at the same time with this instance.
+     * @param scriptURL  - URL to a script to parse
+     * @throws java.io.IOException   - url not found
+     * @throws java.sql.SQLException - error executing SQL
      */
     public void fillCatalog(URL scriptURL) throws SQLException, IOException {
         SQLScriptParser parser = new SQLScriptParser(log);
@@ -479,7 +527,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             }
         }
         if (found == 0) {
-            if(log.isDebugEnabled()) log.debug("IGNORE: " + statement);
+            if (log.isDebugEnabled()) log.debug("IGNORE: " + statement);
         }
         return 0;
     }

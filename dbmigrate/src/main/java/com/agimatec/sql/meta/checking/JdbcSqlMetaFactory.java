@@ -131,7 +131,7 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
                 if (primaryKeys) loadPrimaryKey(meta, tid, td);
                 if (columns) loadColumns(meta, types, tid, td);
                 if (foreignKeys) loadForeignKeys(meta, tid, td);
-                if (indices) loadIndices(meta, tid, td);
+                if (indices) loadIndexes(meta, tid, td);
             }
         }
     }
@@ -140,7 +140,7 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
         return new TableIdentifier(table);
     }
 
-    protected void loadIndices(DatabaseMetaData meta, TableIdentifier tid, TableDescription td)
+    protected void loadIndexes(DatabaseMetaData meta, TableIdentifier tid, TableDescription td)
             throws SQLException {
         ResultSet indSet =
                 meta.getIndexInfo(tid.getCat(), tid.getSchem(), tid.getTable(), false, true);
