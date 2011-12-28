@@ -1,5 +1,12 @@
 = dbmigrate =
 
+== 2.5.3 (Dec 2011) ==
+  * DatabaseSchemaChecker/DDLScriptSqlMetaFactory supports drop-table, drop-sequence, drop-constraint, drop column, drop not-null
+
+== 2.5.2 ==
+  * configuration possible without a migrateconfig.xml file
+  * new parameter -base for AutoMigrationTool
+
 == 2.5.1 (Nov 2011) ==
   * [DBMigrateSpring Spring Integration] (e.g. using dbmigrate in tomcat or jetty)
   * [DBMigrateMaven Maven Integration] (invoking dbmigrate from a maven pom.xml)
