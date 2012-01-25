@@ -111,6 +111,7 @@ Note: These 4 variables overrule the configuration in the JdbcConfig file!
       (after the sequence of migration scripts has been executed) -->
   <file name="Scripts-After-All" dir="upgrade/after-all" file=""/>
 
+ <!-- Optional -->
   <file name="JdbcConfig" file="postgres-test.properties"/>
 
   <!-- optional:
