@@ -52,7 +52,7 @@ jdbcDriver=oracle.jdbc.driver.OracleDriver
 user=scott
 password=tiger
 }}}
-   Or you can use the information from a Datasource (see DBMigrateSpring)
+   Or you can use the information from a Datasource (see [DBMigrateSpring DBMigrateSpring])
       
     * Optional: start-version
 {{{
