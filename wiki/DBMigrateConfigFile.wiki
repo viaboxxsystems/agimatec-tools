@@ -39,19 +39,11 @@ File may end with .sql, .xml or .groovy.
 
 Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
-    * Optional: file with database configuration. ([DBMigrateJdbcConfig JdbcConfig]):
+    * Optional: file with database configuration.
 {{{
 <file name="JdbcConfig" file="oracle.properties"/>
 }}}
-     You can provide a properties file, e.g.
-
-{{{
-# example for oracle.properties
-jdbcUrl=jdbc:oracle:thin:@localhost:1521:XE
-jdbcDriver=oracle.jdbc.driver.OracleDriver
-user=scott
-password=tiger
-}}}
+     You can provide a properties file (see [DBMigrateJdbcConfig JdbcConfig])
    Or you can use the information from a Datasource (see [DBMigrateSpring DBMigrateSpring])
    Or you configure the database in the "env" section (see "Environment variables")
       
