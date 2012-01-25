@@ -39,8 +39,18 @@ File may end with .sql, .xml or .groovy.
 
 Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
-    * Mandatory: file with database configuration. ([DBMigrateJdbcConfig JdbcConfig]):
+    * Optional: file with database configuration. ([DBMigrateJdbcConfig JdbcConfig]):
       <file name="JdbcConfig" file="postgres-test.properties"/>
+     You can provide a properties file, e.g.
+
+{{{
+# example for oracle.properties
+jdbcUrl=jdbc:oracle:thin:@localhost:1521:XE
+jdbcDriver=oracle.jdbc.driver.OracleDriver
+user=scott
+password=tiger
+}}}
+   Or you can use the information from a DataSource (see SpringIntegration)
       
     * Optional: start-version
 {{{
