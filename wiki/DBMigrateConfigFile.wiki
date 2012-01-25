@@ -53,6 +53,7 @@ user=scott
 password=tiger
 }}}
    Or you can use the information from a Datasource (see [DBMigrateSpring DBMigrateSpring])
+   Or you configure the database in the "env" section (see "Environment variables")
       
     * Optional: start-version
 {{{
