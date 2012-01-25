@@ -40,7 +40,9 @@ File may end with .sql, .xml or .groovy.
 Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
     * Optional: file with database configuration. ([DBMigrateJdbcConfig JdbcConfig]):
-      <file name="JdbcConfig" file="postgres-test.properties"/>
+{{{
+<file name="JdbcConfig" file="oracle.properties"/>
+}}}
      You can provide a properties file, e.g.
 
 {{{
@@ -50,7 +52,7 @@ jdbcDriver=oracle.jdbc.driver.OracleDriver
 user=scott
 password=tiger
 }}}
-   Or you can use the information from a DataSource (see SpringIntegration)
+   Or you can use the information from a Datasource (see DBMigrateSpring)
       
     * Optional: start-version
 {{{
