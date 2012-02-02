@@ -11,7 +11,7 @@
     <groupId>de.viaboxx</groupId>
     <artifactId>agimatec-tools</artifactId>
     <packaging>pom</packaging>
-    <version>2.5.4-SNAPSHOT</version>
+    <version>2.5.4</version>
     <name>agimatec</name>
     <description>a collection of java tools/frameworks for database migration, file import in various format and code
         generation
@@ -53,17 +53,17 @@
             <dependency>
                 <groupId>de.viaboxx</groupId>
                 <artifactId>dbimport</artifactId>
-                <version>2.5.4-SNAPSHOT</version>
+                <version>2.5.4</version>
             </dependency>
             <dependency>
                 <groupId>de.viaboxx</groupId>
                 <artifactId>dbmigrate</artifactId>
-                <version>2.5.4-SNAPSHOT</version>
+                <version>2.5.4</version>
             </dependency>
             <dependency>
                 <groupId>de.viaboxx</groupId>
                 <artifactId>annomark</artifactId>
-                <version>2.5.4-SNAPSHOT</version>
+                <version>2.5.4</version>
             </dependency>
 
             <!--
@@ -321,6 +321,6 @@
     </reporting>
 
     <properties>
-        <agimatec-version>2.5.4-SNAPSHOT</agimatec-version>
+        <agimatec-version>2.5.4</agimatec-version>
     </properties>
 </project>
