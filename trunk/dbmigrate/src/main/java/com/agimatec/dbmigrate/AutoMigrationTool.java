@@ -172,7 +172,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         log("----------------- start migration -----------------");
         connectTargetDatabase();
         if (actionOverride != null && !actionOverride.isEmpty()) {
-            print("PERFORMING COMMAND LINE ACTIONS ONLY!");
+            print("performing command line actions only!");
             performActions(actionOverride);
         } else {
             performActions(createActions());
@@ -180,15 +180,15 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     public void performActions(List<MigrateAction> actionOverride) throws Exception {
-        if (sim) print("SIMULATION ONLY - SEQUENCE FOLLOWS:");
+        if (sim) print("simulation only - sequence follows:");
         try {
             if (actionOverride.isEmpty()) {
-                print("THERE ARE NO ACTIONS TO PERFORM.");
+                print("There are no actions to perform.");
             } else {
                 int i = 0;
                 for (MigrateAction each : actionOverride) {
                     i++;
-                    print("ACTION " + i + " (of " + actionOverride.size() + ") = " +
+                    print("action " + i + " (of " + actionOverride.size() + ") = " +
                             each.getInfo());
                     each.doIt();
                 }
@@ -279,14 +279,16 @@ public class AutoMigrationTool extends BaseMigrationTool {
         String version = null;
         try {
             SQLCursor rs = sqlSelect(getDbVersionMeta().toSQLSelectVersion());
-            try {
-                while (rs.next()) {
-                    version = rs.getString(1);
+            if (rs != null) {
+                try {
+                    while (rs.next()) {
+                        version = rs.getString(1);
+                    }
+                } finally {
+                    rs.close();
                 }
-            } finally {
-                rs.close();
             }
-        } catch (SQLException ex) { // we assume: no table DB_VERSION in database
+        } catch (Exception ex) { // we assume: no table DB_VERSION in database
             log.warn("cannot read " + getDbVersionMeta().getQualifiedVersionColumn() + " because " + ex.getMessage());
         }
         return version == null ? null : DBVersionString.fromString(version);

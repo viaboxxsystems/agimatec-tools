@@ -24,13 +24,13 @@ public class SQLScriptExecutor implements ScriptVisitor {
 
     public int visitStatement(String statement) throws SQLException {
         mySQLLogger.info(statement);
-        if(getConnection() == null) {
-          throw new JdbcException("cannot exec: " + statement + ", because 'not connected to database'");
+        if (getConnection() == null) {
+            throw new JdbcException("cannot exec: " + statement + ", because 'not connected to database'");
         }
         Statement stmt = getConnection().createStatement();
         try {
             return stmt.executeUpdate(statement);
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             getConnection().rollback();
             throw ex;
         } finally {
@@ -44,11 +44,17 @@ public class SQLScriptExecutor implements ScriptVisitor {
 
     public void doCommit() throws SQLException {
         mySQLLogger.info("commit");
+        if (getConnection() == null) {
+            throw new JdbcException("cannot commit, because 'not connected to database'");
+        }
         getConnection().commit();
     }
 
     public void doRollback() throws SQLException {
         mySQLLogger.info("rollback");
+        if (getConnection() == null) {
+            throw new JdbcException("cannot rollback, because 'not connected to database'");
+        }
         getConnection().rollback();
     }
 

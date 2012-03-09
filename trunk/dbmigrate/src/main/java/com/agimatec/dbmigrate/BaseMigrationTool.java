@@ -99,11 +99,15 @@ public abstract class BaseMigrationTool implements MigrationTool {
     /**
      * callback - update the version
      *
-     * @throws SQLException
+     * @throws JdbcException
      */
-    public void version(String dbVersion) throws SQLException {
-        UpdateVersionScriptVisitor
-                .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
+    public void version(String dbVersion) throws JdbcException {
+        try {
+            UpdateVersionScriptVisitor
+                    .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
+        } catch (Exception ex) {
+            handleException("cannot update db-version to " + dbVersion, ex);
+        }
     }
 
     /**
@@ -119,11 +123,9 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     public void execSQLScript(String scriptName) throws SQLException, IOException {
         ScriptVisitor visitor = new SQLScriptExecutor(targetDatabase);
-        boolean failOnError = true;
-
         SQLScriptParser parser = new SQLScriptParser(getScriptsDir(), getLog());
         parser.setEnvironment(getEnvironment());
-        parser.setFailOnError(failOnError); // if error occurs, do NOT continue!
+        parser.setFailOnError(true); // if error occurs, do NOT continue!
         parser.execSQLScript(visitor, scriptName);
     }
 
@@ -443,8 +445,8 @@ public abstract class BaseMigrationTool implements MigrationTool {
         Config migCfg = ConfigManager.getDefault()
                 .getConfig("migration", getMigrateConfigFileName());
         if (migCfg == null) {
-           migCfg = new Config();
-           ConfigManager.getDefault().cacheConfig(migCfg, "migration");
+            migCfg = new Config();
+            ConfigManager.getDefault().cacheConfig(migCfg, "migration");
         }
         return migCfg;
     }
@@ -507,10 +509,10 @@ public abstract class BaseMigrationTool implements MigrationTool {
             } else if (each instanceof ListNode) {
                 MapQuery q = new MapQuery(((ListNode) each).getName());
                 boolean isTrue = q.doesMatch(getEnvironment());
-                print("FOUND Condition: (" + q.toString() + ") = " + isTrue);
+                print("Found condition: (" + q.toString() + ") = " + isTrue);
                 if (isTrue) {
                     perform(((ListNode) each).getList()); // recursion!
-                    print("END of Condition: (" + q.toString() + ")");
+                    print("End of Condition: (" + q.toString() + ")");
                 }
             }
         }
@@ -534,21 +536,37 @@ public abstract class BaseMigrationTool implements MigrationTool {
             String dbFile = getJdbcConfigFile();
             JdbcConfig databaseConfig = new JdbcConfig();
             if (dbFile != null) {
-                print("connect to jdbc using " + dbFile + "...");
+                print("Connect to JDBC using " + dbFile + "...");
                 databaseConfig.read(dbFile);
             }
             applyEnvironment(databaseConfig);
             targetDatabase = createDatabase(databaseConfig);
 
             if (getTargetDatabase() != null) {
-                getTargetDatabase().begin();
+                try {
+                    getTargetDatabase().begin();
+                } catch (JdbcException ex) {
+                    handleException("initial connect to database failed", ex);
+                }
             }
         }
     }
 
+    protected void handleException(String msg, Exception ex) {
+        if (isFailOnError()) {
+            getLog().error(msg, ex);
+            if (ex instanceof JdbcException) { // forward it
+                throw (JdbcException) ex;
+            } else { // wrap it
+                throw new JdbcException(ex);
+            }
+        } else {
+            getLog().warn(msg + ": " + ex.getMessage());
+        }
+    }
+
     protected JdbcDatabase createDatabase(JdbcConfig databaseConfig) {
-        JdbcDatabase aDatabase = JdbcDatabaseFactory.createInstance(databaseConfig);
-        return aDatabase;
+        return JdbcDatabaseFactory.createInstance(databaseConfig);
     }
 
     /**
@@ -582,7 +600,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     protected void commit() {
         try {
-            getTargetDatabase().getConnection().commit();
+            assertConnection().commit();
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
@@ -594,7 +612,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     public void print(Object obj) {
-        System.out.println(obj);
+        System.out.println("agimatec.migration: " + obj);
         log(obj);
     }
 
@@ -657,14 +675,17 @@ public abstract class BaseMigrationTool implements MigrationTool {
      * @throws SQLException
      */
     protected SQLCursor sqlSelect(String sql) throws SQLException {
-        Connection conn = getTargetDatabase().getConnection();
-        Statement stmt = conn.createStatement();
+        Statement stmt = assertConnection().createStatement();
         return new SQLCursor(stmt, stmt.executeQuery(sql));
     }
 
+    protected Connection assertConnection() throws JdbcException {
+        if (getTargetDatabase().getConnection() == null) throw new JdbcException("database not connected");
+        return getTargetDatabase().getConnection();
+    }
+
     protected int sqlExec(String sql) throws SQLException {
-        Connection conn = getTargetDatabase().getConnection();
-        Statement stmt = conn.createStatement();
+        Statement stmt = assertConnection().createStatement();
         int rowsAffected = -1;
         try {
             rowsAffected = stmt.executeUpdate(sql);
@@ -676,5 +697,13 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     public void setTargetDatabase(JdbcDatabase targetDatabase) {
         this.targetDatabase = targetDatabase;
+    }
+
+    protected boolean isFailOnError() {
+        Object value = getEnvironment().get("FAIL_ON_ERROR");
+        if (value == null) return true;
+        else if (value instanceof String) return Boolean.parseBoolean((String) value);
+        else if (value instanceof Boolean) return (Boolean) value;
+        else return true;
     }
 }
