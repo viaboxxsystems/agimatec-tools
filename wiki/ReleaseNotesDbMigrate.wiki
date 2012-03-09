@@ -1,5 +1,10 @@
 = dbmigrate =
 
+== 2.5.5 (March 2012) ==
+  * new env-property FAIL_ON_ERROR (allow fail of initial jdbc connect)
+  * improved messages logged
+  * improved error handling
+
 == 2.5.3 (Dec 2011) ==
   * DatabaseSchemaChecker/DDLScriptSqlMetaFactory supports drop-table, drop-sequence, drop-constraint, drop column, drop not-null
 
