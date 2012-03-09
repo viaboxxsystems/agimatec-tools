@@ -704,6 +704,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         if (value == null) return true;
         else if (value instanceof String) return Boolean.parseBoolean((String) value);
         else if (value instanceof Boolean) return (Boolean) value;
+        else if (value instanceof BooleanNode) return ((BooleanNode) value).getValue();
         else return true;
     }
 }
