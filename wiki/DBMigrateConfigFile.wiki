@@ -16,7 +16,7 @@ This configuration is responsible for:
         ...
       </map>
 }}}
-      Predefined are: DB_USER, DB_PASSWORD, DB_SCHEMA, DB_URL, DB_DRIVER. (described below)
+      Predefined are: DB_USER, DB_PASSWORD, DB_SCHEMA, DB_URL, DB_DRIVER, FAIL_ON_ERROR. (described below)
     * Optional: System-properties usable in SQL-Scripts 
       All JVM-Systemproperties are accessible as environment variables. System properties overrule the values in "env" map! (This behavior has changed since version 2.3.3!)
     * Mandatory: Directory, in which the upgrade scripts are:
@@ -66,6 +66,7 @@ Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
   <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
    Predefined keys:
+    FAIL_ON_ERROR : if false, allow initial database connection to fail without exiting with an exception. default is: true
     DB_USER       : if exists, overrule user from JdbcConfig
     DB_PASSWORD   : if exists, overrule password from JdbcConfig
     DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
@@ -74,6 +75,7 @@ Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 Note: These 4 variables overrule the configuration in the JdbcConfig file!
   -->
   <map name="env">
+    <Boolean name="FAIL_ON_ERROR" value="true"/>
     <String name="DB_USER" value="postgres"/>
     <String name="DB_PASSWORD" value="anfang"/>
     <String name="DB_SCHEMA" value="test"/>
