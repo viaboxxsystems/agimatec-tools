@@ -66,7 +66,8 @@ Script name examples: up-1.0.0_hello.sql, up_2_1.sql, up-1-0-1.xml
 
   <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
    Predefined keys:
-    FAIL_ON_ERROR : if false, allow initial database connection to fail without exiting with an exception. default is: true
+    FAIL_ON_ERROR : if false, allow initial database connection 
+       to fail without exiting with an exception. default is: true
     DB_USER       : if exists, overrule user from JdbcConfig
     DB_PASSWORD   : if exists, overrule password from JdbcConfig
     DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
