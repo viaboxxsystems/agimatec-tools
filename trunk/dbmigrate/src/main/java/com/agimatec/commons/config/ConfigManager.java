@@ -150,10 +150,10 @@ public class ConfigManager implements Serializable {
 
     public static URL toURL(String path) throws MalformedURLException {
         if (path.startsWith(C_ProtocolClassPath)) {
-            final String theResPath = path.substring(C_ProtocolClassPath.length());
+            final String theResPath = resolvePath(path.substring(C_ProtocolClassPath.length()));
             return ClassUtils.getClassLoader().getResource(theResPath);
-        } else if(path.indexOf(':')<0) {
-            return new URL("file:"+path);
+        } else if (path.indexOf(':') < 0) {
+            return new URL("file:" + path);
         } else {
             return new URL(path);
         }
@@ -161,18 +161,57 @@ public class ConfigManager implements Serializable {
 
     public static List<URL> toURLs(String path) throws IOException {
         if (path.startsWith(C_ProtocolClassPath)) {
-            final String theResPath = path.substring(C_ProtocolClassPath.length());
-          Enumeration<URL> en = ClassUtils.getClassLoader().getResources(theResPath);
-          List<URL> urls = new ArrayList();
-          while(en.hasMoreElements()) {
-            URL next = en.nextElement();
-            urls.add(next);
-          }
-          return urls;
+            final String theResPath = resolvePath(path.substring(C_ProtocolClassPath.length()));
+            Enumeration<URL> en = ClassUtils.getClassLoader().getResources(theResPath);
+            List<URL> urls = new ArrayList();
+            while (en.hasMoreElements()) {
+                URL next = en.nextElement();
+                urls.add(next);
+            }
+            return urls;
         } else {
             List<URL> urls = new ArrayList(1);
             urls.add(toURL(path));
             return urls;
+        }
+    }
+
+    public static String resolvePath(String theResPath) {
+        /**
+         * in some classloaders, e.g. tomcat webapp .. cannot be part of a resource path,
+         * so try to remove it
+         */
+        if (theResPath.contains("..")) {
+            StringTokenizer tokens = new StringTokenizer(theResPath, "/", true);
+
+            LinkedList<String> parts = new LinkedList<String>();
+            boolean forward = false;
+            while (tokens.hasMoreTokens()) {
+                String part = tokens.nextToken();
+                if(forward) {
+                    forward = false;
+                    if("/".equals(part)) continue;
+                }
+                if ("..".equals(part)) {
+                    if (parts.size() > 1 && "/".equals(parts.getLast())) {
+                        parts.removeLast();
+                        parts.removeLast();
+                        forward = true;
+                    } else {
+                        parts.add(part);
+                    }
+                } else {
+                    parts.add(part);
+                }
+            }
+            StringBuilder buf = new StringBuilder();
+            for(String part : parts) {
+                buf.append(part);
+            }
+            theResPath = buf.toString();
+            return theResPath;
+        } else {
+            return theResPath;
         }
     }
 
