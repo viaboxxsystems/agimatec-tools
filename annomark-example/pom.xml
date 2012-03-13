@@ -3,7 +3,7 @@
     <parent>
         <groupId>de.viaboxx</groupId>
         <artifactId>agimatec-tools</artifactId>
-        <version>2.5.6</version>
+        <version>2.5.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -11,7 +11,7 @@
     <groupId>de.viaboxx</groupId>
     <artifactId>annomark-example</artifactId>
     <packaging>jar</packaging>
-    <version>2.5.6</version>
+    <version>2.5.7-SNAPSHOT</version>
     <name>Example project to demonstrate annotation driven code generation with annomark</name>
     <url>http://code.google.com/p/agimatec-tools/</url>
     <dependencies>
