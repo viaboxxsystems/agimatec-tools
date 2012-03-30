@@ -109,8 +109,16 @@ public class ResourceUtils {
      */
     public static Collection<String> getURLResources(URL dirURL) throws IOException {
         if (dirURL.getProtocol().equals("file")) {
-            /* A file path: easy enough */
-            return Arrays.asList(new File(dirURL.getPath()).list());
+            /* A file path: easy enough, but need to decode when path contains "blanks" (tested under windows) */
+            try {
+                return Arrays.asList(new File(URLDecoder.decode(dirURL.getPath(), "UTF-8")).list());
+            } catch (Exception ignore) {
+                try {
+                    return Arrays.asList(new File(dirURL.getPath()).list());
+                } catch (Exception ex) {
+                    throw new IOException("Cannot list directory " + dirURL.getPath(), ex);
+                }
+            }
         } else if (dirURL.getProtocol().equals("jar")) {
             /* A JAR path */
             String urlPath = dirURL.getPath();
@@ -120,12 +128,12 @@ public class ResourceUtils {
             if (!resourceDir.endsWith("/")) resourceDir = resourceDir + "/";
             JarFile jar;
             try {
-                // but on my Mac this sometimes doesn't work, but this works:
-                jar = new JarFile(jarPath);
+                // there that say so: http://stackoverflow.com/questions/6247144/how-to-load-a-folder-from-a-jar
+                jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
             } catch (Exception ignore) {
                 try {
-                    // there that say so: http://stackoverflow.com/questions/6247144/how-to-load-a-folder-from-a-jar
-                    jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+                    // but on my Mac this sometimes doesn't work, but this works:
+                    jar = new JarFile(jarPath);
                 } catch (Exception ex) {
                     throw new IOException("Cannot open jar " + jarPath + " in " + dirURL, ex);
                 }
