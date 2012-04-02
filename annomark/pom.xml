@@ -3,7 +3,7 @@
     <parent>
         <groupId>de.viaboxx</groupId>
         <artifactId>agimatec-tools</artifactId>
-        <version>2.5.7-SNAPSHOT</version>
+        <version>2.5.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -11,7 +11,7 @@
     <groupId>de.viaboxx</groupId>
     <artifactId>annomark</artifactId>
     <packaging>jar</packaging>
-    <version>2.5.7-SNAPSHOT</version>
+    <version>2.5.7</version>
     <name>Codegenerator with Annogen and Freemarker</name>
     <url>http://code.google.com/p/agimatec-tools/</url>
     <licenses>
