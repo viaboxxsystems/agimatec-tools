@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>de.viaboxx</groupId>
+        <artifactId>agimatec-tools</artifactId>
+        <version>2.5.7</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.viaboxx</groupId>
+    <artifactId>annomark</artifactId>
+    <packaging>jar</packaging>
+    <version>2.5.7</version>
+    <name>Codegenerator with Annogen and Freemarker</name>
+    <url>http://code.google.com/p/agimatec-tools/</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <site>
+            <id>${agimatec-site-id}</id>
+            <url>${agimatec-site-url}/agimatec-tools/site/annomark</url>
+        </site>
+    </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>de.viaboxx</groupId>
+            <artifactId>dbmigrate</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>groovy</groupId>
+            <artifactId>gram</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>annogen</groupId>
+            <artifactId>annogen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Generate database history scripts</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <tasks>
+
+                                <!--  <java classname="org.codehaus.gram.Gram" fork="true">
+                                                  <classpath refid="maven.test.classpath" />
+                                                  <jvmarg value="-Xdebug" />
+                                                  <jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n" />
+
+                                                  <arg value="src/main/java" />
+                                                  <arg value="src/main/groovy/JAMLauncher.groovy" />
+                                                </java>
+                                -->
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create dist.zip with source, binary and templates</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <zip destfile="target/annomark-dist-${agimatec-version}.zip">
+                                    <fileset dir=".">
+                                        <include name="pom.xml" />
+                                        <include name="templates/**" />
+                                        <include name="src/**" />
+                                        <exclude name="src/test/**" />
+                                    </fileset>
+                                    <fileset dir="target">
+                                        <include name="annomark-${agimatec-version}.jar" />
+                                    </fileset>
+                                </zip>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <!-- This profile is needed to make building on mac os x possible-->
+        <profile>
+            <id>mac os x tool path</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Apple Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>${java.version}</version>
+                    <scope>system</scope>
+                    <systemPath>
+                        /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
+                    </systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+</project>

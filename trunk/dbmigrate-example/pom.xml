@@ -1,0 +1,167 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>de.viaboxx</groupId>
+        <artifactId>agimatec-tools</artifactId>
+        <version>2.5.7</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.viaboxx</groupId>
+    <artifactId>dbmigrate-example</artifactId>
+    <packaging>jar</packaging>
+    <version>2.5.7</version>
+    <name>Example project to demonstrate dbmigrate and dbimport</name>
+    <url>http://code.google.com/p/agimatec-tools/</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.viaboxx</groupId>
+            <artifactId>dbmigrate</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.viaboxx</groupId>
+            <artifactId>dbimport</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <stripVersion>true</stripVersion>
+                            <outputDirectory>${dist-dir}/lib</outputDirectory>
+                            <includeScope>compile</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Deploy scripts</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.test.classpath" />
+
+                                <filter filtersfile="${dbms}/filter.properties" />
+                                <filter token="database-version" value="${database-version}" />
+                                <copy filtering="true" todir="${dist-dir}" overwrite="true">
+                                    <fileset dir="${dbms}">
+                                        <exclude name="filter.properties" />
+                                    </fileset>
+                                    <fileset dir="src/main">
+                                        <include name="groovy/*.groovy" />
+                                    </fileset>
+                                </copy>
+                                <copy file="target/dbmigrate-example-${agimatec-version}.jar" tofile="${dist-dir}/lib/dbmigrate-example.jar" />
+
+                                <zip destfile="target/dbmigrate-example-dist-${agimatec-version}.zip">
+                                    <fileset dir="target/dist">
+                                        <include name="**" />
+                                    </fileset>
+                                </zip>
+                                <zip destfile="target/dbmigrate-example-project-${agimatec-version}.zip">
+                                    <fileset dir=".">
+                                        <include name="*.xml" />
+                                        <include name="oracle/**" />
+                                        <include name="src/**" />
+                                        <include name="target/*.jar" />
+                                    </fileset>
+                                </zip>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>setup new databases</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.test.classpath" />
+                                <if>
+                                    <equals arg1="${dbtool-run}" arg2="true" />
+                                    <then>
+                                        <java fork="true" dir="${dist-dir}" failonerror="true" classname="com.agimatec.dbmigrate.AutoMigrationTool" classpathref="maven.test.classpath">
+                                            <jvmarg value="-Dfile.encoding=UTF-8" />
+                                            <arg value="-conf" />
+                                            <arg value="${dbtool-conf}" />
+                                        </java>
+                                    </then>
+                                </if>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <!-- source subdirectory with database scripts -->
+        <dbms>oracle</dbms>
+        <!-- target directory for distribution -->
+        <dist-dir>target/dist</dist-dir>
+        <!-- target database version -->
+        <database-version>2.3.0</database-version>
+        <!-- set to true when dbtool should not run in phase 'install' -->
+        <dbtool-run>false</dbtool-run>
+        <!-- set to the name of the configuration to run dbtool with -->
+        <dbtool-conf>setup.xml</dbtool-conf>
+    </properties>
+
+</project>
