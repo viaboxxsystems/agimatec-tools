@@ -1,5 +1,8 @@
 = dbmigrate =
 
+== 2.5.7 (April 2012) ==
+  * improved resolution of paths (with white spaces) under Windows
+
 == 2.5.6 (March 2012) ==
   * improved resolution of .. paths in URLs inside a webapp container
 
