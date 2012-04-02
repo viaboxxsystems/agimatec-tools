@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  <cv_currency code="EUR" name="Euro"/>
+  <cv_currency code="USD" name="US Dollar"/>
+  
+  <role role_id="1" role_name="SYSTEM"
+        role_description="some role"/>
+
+</dataset>
