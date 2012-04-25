@@ -42,8 +42,8 @@ public class ExcelImportTest extends TestCase {
         HSSFWorkbook wb = new HSSFWorkbook(fs);
         HSSFSheet sheet = wb.getSheetAt(0);
         HSSFRow row = sheet.getRow(2);
-        HSSFCell cell = row.getCell((short) 3);
-        if (cell == null) cell = row.createCell((short) 3);
+        HSSFCell cell = row.getCell(3);
+        if (cell == null) cell = row.createCell(3);
         cell.setCellType(HSSFCell.CELL_TYPE_STRING);
         cell.setCellValue(new HSSFRichTextString("a test"));
 

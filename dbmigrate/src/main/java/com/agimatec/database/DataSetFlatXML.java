@@ -3,6 +3,7 @@ package com.agimatec.database;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,8 @@ public class DataSetFlatXML extends DataSet {
     }
 
     public IDataSet load(InputStream in) throws DataSetException, IOException {
-        return new FlatXmlDataSet(in);
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        return builder.build(in);
     }
 
     public void write(IDataSet set, OutputStream out)

@@ -64,7 +64,7 @@ public class ScriptTransformatorTool extends GeneratorTool implements FilenameFi
           SQLScriptParser parser = new SQLScriptParser(log);
           ScriptTransformator transformator = new ScriptTransformator(
               expressions, target, catalogConversion, templateEngine);
-          parser.iterateSQLScript(transformator, fromFile.toURL());
+          parser.iterateSQLScript(transformator, fromFile.toURI().toURL());
         } finally {
           target.close();
         }
