@@ -2,6 +2,7 @@ package com.agimatec.database;
 
 import com.agimatec.dbmigrate.MigrationTool;
 import com.agimatec.dbmigrate.MigrationToolAware;
+import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 
@@ -64,7 +65,7 @@ public abstract class AbstractDbTool implements MigrationToolAware {
         jdbcConnection = DriverManager.getConnection(url, user, password);
     }
 
-    protected void connectDbUnit() throws SQLException, ClassNotFoundException {
+    protected void connectDbUnit() throws SQLException, ClassNotFoundException, DatabaseUnitException {
         if(connection == null)
             connection = new DatabaseConnection(jdbcConnection);
     }
