@@ -11,6 +11,8 @@ import groovy.util.ScriptException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description: invoke a groovy script with the migration tool<br/>
@@ -25,27 +27,33 @@ public class GroovyScriptTool implements MigrationToolAware {
 
     public GroovyScriptTool(String rootDir) throws IOException {
         if (rootDir == null) {
-            scriptEngine = new GroovyScriptEngine(new URL[]{
-                    ConfigManager.toURL("cp://")}, ClassUtils.getClassLoader());
+            scriptEngineFromCP();
         } else {
-            scriptEngine = new GroovyScriptEngine(new URL[]{
-                    ConfigManager.toURL(rootDir)}, ClassUtils.getClassLoader());
+            scriptEngineFromDirs(new String[]{rootDir});
         }
     }
 
     public GroovyScriptTool(String[] rootDirs) throws IOException {
-        if (rootDirs != null) {
-            URL[] urls = new URL[rootDirs.length];
-            int i = 0;
-            for (String each : rootDirs) {
-                urls[i] = ConfigManager.toURL(each);
-                i++;
-            }
-            scriptEngine = new GroovyScriptEngine(urls, ClassUtils.getClassLoader());
+        if (rootDirs == null) {
+            scriptEngineFromCP();
         } else {
-            scriptEngine = new GroovyScriptEngine(new URL[]{
-                    ConfigManager.toURL("cp://")}, ClassUtils.getClassLoader());
+            scriptEngineFromDirs(rootDirs);
         }
+    }
+
+    private void scriptEngineFromDirs(String[] rootDirs) throws IOException {
+        List<URL> urls = new ArrayList<URL>(rootDirs.length * 3);
+        for (String each : rootDirs) {
+            urls.addAll(ConfigManager.toURLs(each));
+        }
+        scriptEngine = new GroovyScriptEngine(
+                urls.toArray(new URL[urls.size()]), ClassUtils.getClassLoader());
+    }
+
+    private void scriptEngineFromCP() throws IOException {
+        List<URL> urls = ConfigManager.toURLs("cp://");
+        scriptEngine = new GroovyScriptEngine(
+                urls.toArray(new URL[urls.size()]), ClassUtils.getClassLoader());
     }
 
     public void start(String groovyScript) throws ScriptException, ResourceException {
