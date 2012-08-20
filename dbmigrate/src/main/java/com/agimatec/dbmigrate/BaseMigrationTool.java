@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -173,13 +172,13 @@ public abstract class BaseMigrationTool implements MigrationTool {
         checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
     }
 
-    private List<URL> getURLsFromEnv(String configKey) throws MalformedURLException {
+    private List<URL> getURLsFromEnv(String configKey) throws IOException {
         List files = (List) getEnvironment().get(configKey);
         Iterator<String> it = files.iterator();
 
         List<URL> urls = new ArrayList();
         while (it.hasNext()) {
-            urls.add(ConfigManager.toURL(it.next()));
+            urls.addAll(ConfigManager.toURLs(it.next()));
         }
         return urls;
     }
