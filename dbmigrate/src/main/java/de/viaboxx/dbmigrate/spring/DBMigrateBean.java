@@ -15,6 +15,9 @@ import java.util.Map;
  * <p/>
  * Supports spring access common options of AutoMigrationTool: <br>
  * - sim: simulation (false)<br>
+ * - exitJVM: exit Java VM after migration (false)<br>
+ * - stopOnException: true: log and re-throw exception to stop startup,<br>
+ *                    false: log exception and continue(true)<br>
  * - migrateConfigFileName: xml setup file (migration.xml)<br>
  * <p/>
  * <br>Currently not supported features via spring-configuration: <br>
@@ -27,7 +30,7 @@ import java.util.Map;
  * viaboxx GmbH, 2011
  */
 public class DBMigrateBean implements InitializingBean, BeanNameAware {
-    private final AutoMigrationTool tool = new AutoMigrationTool();
+    private final AutoMigrationTool tool;
 
     protected String beanName;
 
@@ -38,6 +41,11 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
      */
     private boolean disabled = false;
     private boolean stopOnException = true;
+
+    public DBMigrateBean() {
+        tool = new AutoMigrationTool();
+        tool.setExitJVM(false);
+    }
 
     /**
      * @param fileName - default is "migration.xml", see BaseMigrationTool#migrateConfigFileName
@@ -60,6 +68,14 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
 
     public void setStopOnException(boolean stopOnException) {
         this.stopOnException = stopOnException;
+    }
+
+    public void setExitJVM(boolean exitJVM) {
+        getTool().setExitJVM(exitJVM);
+    }
+
+    public boolean isExitJVM() {
+        return getTool().isExitJVM();
     }
 
     /**
@@ -111,8 +127,10 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
      * @throws Exception - all exceptions when dbmigrate not successful
      */
     public void afterPropertiesSet() throws Exception {
+        int exitCode = 0;
         if (isDisabled()) {
             getTool().getLog().info(beanName + " - execution disabled!");
+            if (tool.isExitJVM()) System.exit(exitCode);
             return; // do nothing
         }
         try {
@@ -122,11 +140,14 @@ public class DBMigrateBean implements InitializingBean, BeanNameAware {
             getTool().startAutomaticMigration();
             getTool().getLog().info(beanName + " - successful");
         } catch (Exception ex) {
+            exitCode = 1;
             getTool().getLog().error(beanName + " - failed", ex);
             if (isStopOnException()) throw ex; // propagate to stop spring from starting
         } finally {
             getTool().tearDown();
             getTool().getLog().info(beanName + " - finished");
+            if (tool.isExitJVM()) System.exit(exitCode);
+
         }
     }
 

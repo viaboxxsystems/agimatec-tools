@@ -427,4 +427,12 @@ public class AutoMigrationTool extends BaseMigrationTool {
     public void setLocalEnv(Map<Object, Object> localEnv) {
         this.localEnv = localEnv;
     }
+
+    public void setExitJVM(boolean exitJVM) {
+        this.exitJVM = exitJVM;
+    }
+
+    public boolean isExitJVM() {
+        return exitJVM;
+    }
 }
