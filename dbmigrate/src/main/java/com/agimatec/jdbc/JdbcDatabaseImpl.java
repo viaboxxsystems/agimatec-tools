@@ -20,7 +20,6 @@ class JdbcDatabaseImpl implements JdbcDatabase {
 
     private Connection connection;
     private final Properties properties;
-    private boolean transaction = false;
     private boolean autoCommit = false;
 
     public JdbcDatabaseImpl(Properties aProperties) {
@@ -50,7 +49,6 @@ class JdbcDatabaseImpl implements JdbcDatabase {
             autoCommit = connection != null && connection.getAutoCommit();
         } catch (SQLException e) {
         }
-        transaction = connection != null;
     }
 
     private void connect() {
@@ -68,7 +66,7 @@ class JdbcDatabaseImpl implements JdbcDatabase {
     }
 
     public boolean isTransaction() {
-        return connection != null && transaction && !autoCommit;
+        return connection != null && !autoCommit;
     }
 
     public void rollback() {
@@ -77,11 +75,7 @@ class JdbcDatabaseImpl implements JdbcDatabase {
                 connection.rollback();
             } catch (SQLException e) {
                 throw new JdbcException(e);
-            } finally {
-                transaction = false;
             }
-        } else {
-            throw new JdbcException("cannot rollback - transaction not started");
         }
     }
 
@@ -91,11 +85,7 @@ class JdbcDatabaseImpl implements JdbcDatabase {
                 connection.commit();
             } catch (SQLException e) {
                 throw new JdbcException(e);
-            } finally {
-                transaction = false;
             }
-        } else {
-            throw new JdbcException("cannot commit - transaction not started");
         }
     }
 
