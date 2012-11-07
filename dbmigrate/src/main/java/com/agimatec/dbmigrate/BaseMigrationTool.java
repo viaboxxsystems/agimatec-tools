@@ -597,6 +597,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         }
     }
 
+    @Deprecated
     protected void commit() {
         try {
             assertConnection().commit();

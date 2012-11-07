@@ -30,9 +30,6 @@ public class SQLScriptExecutor implements ScriptVisitor {
         Statement stmt = getConnection().createStatement();
         try {
             return stmt.executeUpdate(statement);
-        } catch (SQLException ex) {
-            getConnection().rollback();
-            throw ex;
         } finally {
             stmt.close();
         }
