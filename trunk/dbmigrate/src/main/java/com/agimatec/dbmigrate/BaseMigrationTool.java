@@ -599,11 +599,8 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     @Deprecated
     protected void commit() {
-        try {
-            assertConnection().commit();
-        } catch (SQLException e) {
-            throw new JdbcException(e);
-        }
+        assertConnection();
+        getTargetDatabase().commit();
         log.info("** commit **");
     }
 
@@ -634,9 +631,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
             if (getTargetDatabase() == null) {
                 return;
             }
-            if (getTargetDatabase().isTransaction()) {
-                getTargetDatabase().rollback();
-            }
+            getTargetDatabase().rollback();
         } catch (Exception ex) {
             getLog().error(null, ex);
         }

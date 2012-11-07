@@ -44,7 +44,7 @@ public class SQLScriptExecutor implements ScriptVisitor {
         if (getConnection() == null) {
             throw new JdbcException("cannot commit, because 'not connected to database'");
         }
-        getConnection().commit();
+        store.commit();
     }
 
     public void doRollback() throws SQLException {
@@ -52,7 +52,7 @@ public class SQLScriptExecutor implements ScriptVisitor {
         if (getConnection() == null) {
             throw new JdbcException("cannot rollback, because 'not connected to database'");
         }
-        getConnection().rollback();
+        store.rollback();
     }
 
     public void log(Object obj) {
