@@ -22,7 +22,7 @@ Create your own templates, e.g. for struts-validation from your Form-Classes, fo
   <dependency>
     <groupId>de.viaboxx</groupId>
     <artifactId>annomark</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.10</version>
   </dependency>
 }}}
 
