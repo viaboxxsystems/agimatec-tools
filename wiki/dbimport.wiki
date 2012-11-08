@@ -13,7 +13,7 @@ Some of the utility classes are designed for simple usage from within groovy.
   <dependency>
     <groupId>de.viaboxx</groupId>
     <artifactId>dbimport</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.10</version>
   </dependency>
 }}}
 
