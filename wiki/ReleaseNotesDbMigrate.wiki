@@ -1,5 +1,22 @@
 = dbmigrate =
 
+== 2.5.10 (Nov 2012) ==
+  * postgres 9.1 is a little picky when committing a transaction that is in autoCommit-mode, so avoid problems with invalid commit/rollback calls
+  * less exceptions and less calls to rollback/commit, none when connection in autocommit mode, transactions implicit running when connection established
+
+== 2.5.9 (Sept 2012) ==
+  * upgrade commons-io from 2.3 to 2.4
+
+== 2.5.8 (August 2012) ==
+  * several dependencies upgraded and use of deprecated APIs reduced:
+ junit 4.8.2-> 4.10
+ dbunit 2.2 -> 2.4.8
+ jdom 1.0 -> 1.1
+ groovy-all 1.6.2 -> 1.8.6
+ commons-lang 2.4 -> 2.6
+  * reading more URLs for groovy scripts, not only first match
+  * new "exitJVM" property supported for DBMigrateBean
+
 == 2.5.7 (April 2012) ==
   * improved resolution of paths (with white spaces) under Windows
 
