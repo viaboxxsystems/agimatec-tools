@@ -227,8 +227,9 @@ public abstract class DatabaseSchemaChecker {
           boolean columnsOK = indexColumnsEqual(xmlIndexDescription,
               databaseIndexDescription);
             if (!columnsOK) {
-                assertTrue("Index: " + xmlIndexDescription.getIndexName() +
-                        "... Column differ! expected: " +
+                assertTrue("Table: " + xmlIndexDescription.getTableName() +
+                        ", index: " + xmlIndexDescription.getIndexName() +
+                        "... Columns differ! expected: " +
                         xmlIndexDescription.getColumns() + " but was " +
                         databaseIndexDescription.getColumns(), false);
             }
