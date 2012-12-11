@@ -16,6 +16,9 @@ public class PostgresDDLExpressions extends DDLExpressions {
     /** nun folgen die syntax-formate von den statements, die in den scripten erkannt und verarbeitet werden sollen: */
     private static final String[] statementFormats = {
             // TODO RSt - create-view, drop-view missing (alter-view missing)
+            // TODO RST - cannot detect: "ALTER TABLE t alter column c1 set not null, add primary key (c);"
+            // use "ALTER TABLE ..., add constraint t_pkey primary key (c);" instead
+
             // "ALTER TABLE Customer ADD CONSTRAINT Cust_name UNIQUE( firstname, lastname) USING INDEX TABLESPACE SAMPLE_IDX"
             "{table-add-constraint ALTER TABLE ${table} ADD " +
                     "{constraint CONSTRAINT ${constraintName} [${unique(UNIQUE)}] '(' {columns ${column}...','} ')' " +
