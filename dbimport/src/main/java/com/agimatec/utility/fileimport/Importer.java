@@ -120,4 +120,7 @@ public class Importer {
         }
     }
 
+    public ImporterProcessor getProcessor() {
+        return processor;
+    }
 }
