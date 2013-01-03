@@ -5,8 +5,8 @@ import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -20,7 +20,7 @@ import java.util.*;
  * Copyright: Agimatec GmbH
  */
 public class FreemarkerFileGenerator {
-    protected static final Log log = LogFactory.getLog(FreemarkerFileGenerator.class);
+    protected static final Logger log = LoggerFactory.getLogger(FreemarkerFileGenerator.class);
 
     protected Configuration freemarker;
     private Map root = new HashMap();

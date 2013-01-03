@@ -2,8 +2,8 @@ package com.agimatec.dbmigrate.util;
 
 import com.agimatec.commons.beans.MapQuery;
 import com.agimatec.sql.script.ScriptVisitor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Stack;
  * @author Roman Stumm
  */
 public final class ConditionalScriptVisitor extends ScriptVisitorDelegate {
-    private static final Log log = LogFactory.getLog(ConditionalScriptVisitor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConditionalScriptVisitor.class);
 
     private Map environment = Collections.EMPTY_MAP;
     private Stack conditionStack = new Stack();

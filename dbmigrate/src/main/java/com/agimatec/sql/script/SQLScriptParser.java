@@ -6,8 +6,8 @@ import com.agimatec.commons.util.PropertyReplacer;
 import com.agimatec.jdbc.JdbcException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -37,8 +37,8 @@ import java.util.Map;
  * @author Roman Stumm
  */
 public class SQLScriptParser {
-    private static final Log myClassLogger = LogFactory.getLog(SQLScriptParser.class);
-    private Log myLog = myClassLogger;
+    private static final Logger myClassLogger = LoggerFactory.getLogger(SQLScriptParser.class);
+    private Logger myLog = myClassLogger;
     private boolean myFailOnError = false;
     private final String myScriptRoot;
     /** optional - environment map */
@@ -67,17 +67,17 @@ public class SQLScriptParser {
 
     private static final String[] PROCEDURE_SEPARATORS = {"\n", "\r"};
 
-    public SQLScriptParser(String aScriptRoot, Log aLog) {
+    public SQLScriptParser(String aScriptRoot, Logger aLog) {
         myLog = aLog;
         myScriptRoot = aScriptRoot;
     }
 
-    public SQLScriptParser(Log aLog) {
+    public SQLScriptParser(Logger aLog) {
         myScriptRoot = null;
         myLog = aLog;
     }
 
-    public void useLogger(Log aLogger) {
+    public void useLogger(Logger aLogger) {
         myLog = aLogger;
     }
 
@@ -112,7 +112,7 @@ public class SQLScriptParser {
         }
     }
 
-    protected Log getLog() {
+    protected Logger getLog() {
         return myLog;
     }
 

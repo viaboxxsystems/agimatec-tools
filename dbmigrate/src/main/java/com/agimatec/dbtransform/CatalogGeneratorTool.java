@@ -5,8 +5,8 @@ import com.agimatec.commons.generator.GeneratorTool;
 import com.agimatec.dbtransform.ejb3.Ejb3Schema;
 import com.agimatec.sql.meta.CatalogDescription;
 import com.agimatec.sql.meta.persistence.XStreamPersistencer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * Copyright: Agimatec GmbH
  */
 public class CatalogGeneratorTool extends GeneratorTool {
-    protected static final Log log = LogFactory.getLog(CatalogGeneratorTool.class);
+    protected static final Logger log = LoggerFactory.getLogger(CatalogGeneratorTool.class);
 
     private CatalogConversion config;
 

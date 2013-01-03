@@ -1,8 +1,8 @@
 package com.agimatec.sql.query;
 
 import com.agimatec.sql.SQLStatement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -20,7 +20,7 @@ import java.sql.SQLException;
 public class JdbcQueryUtil extends JdbcExecutor implements Serializable {
     protected final Connection connection;
     protected final SQLBuilder sqlBuilder;
-    protected static final Log log = LogFactory.getLog(JdbcQueryUtil.class);
+    protected static final Logger log = LoggerFactory.getLogger(JdbcQueryUtil.class);
 
     /** Use StoreQueryBeanBuilder.create() instead of this constructor! */
     public JdbcQueryUtil(final Connection aConnection, final SQLBuilder aSqlBuilder) {

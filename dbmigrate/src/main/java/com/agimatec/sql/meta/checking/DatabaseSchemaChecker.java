@@ -6,8 +6,8 @@ import com.agimatec.sql.meta.*;
 import com.agimatec.sql.meta.oracle.OracleSchemaChecker;
 import com.agimatec.sql.meta.postgres.PostgresSchemaChecker;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +22,7 @@ import java.util.*;
  * Copyright: Agimatec GmbH
  */
 public abstract class DatabaseSchemaChecker {
-    protected static final Log logger = LogFactory.getLog(DatabaseSchemaChecker.class);
+    protected static final Logger logger = LoggerFactory.getLogger(DatabaseSchemaChecker.class);
     protected final List myFoundErrors;
     protected JdbcDatabase database;
     protected Map unknownColumns;    // key = table name, value = set of column names
@@ -405,7 +405,7 @@ public abstract class DatabaseSchemaChecker {
             if (obj instanceof Throwable) {
                 logger.error(null, (Throwable) obj);
             } else {
-                logger.info(obj);
+                logger.info(String.valueOf(obj));
             }
         }
     }

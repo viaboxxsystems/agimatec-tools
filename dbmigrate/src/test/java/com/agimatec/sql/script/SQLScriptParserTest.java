@@ -3,8 +3,8 @@ package com.agimatec.sql.script;
 import com.agimatec.commons.util.ClassUtils;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ import java.util.Properties;
  */
 public class SQLScriptParserTest extends TestCase {
 
-  private static final Log myLogger = LogFactory.getLog(SQLScriptParser.class);
+  private static final Logger myLogger = LoggerFactory.getLogger(SQLScriptParser.class);
 
   private ScriptVisitorDummy visitor;
   private SQLScriptParser parser;

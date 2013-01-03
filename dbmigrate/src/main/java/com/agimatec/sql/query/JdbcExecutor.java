@@ -1,8 +1,8 @@
 package com.agimatec.sql.query;
 
 import com.agimatec.sql.SQLStatement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public abstract class JdbcExecutor {
 
-    protected final static Log log = LogFactory.getLog("agimatec.sql.meta");
+    protected final static Logger log = LoggerFactory.getLogger("agimatec.sql.meta");
 
     /**
      * execute a SQL-QUERY (select) and return a LookupResult

@@ -16,8 +16,8 @@ import com.agimatec.sql.script.SQLScriptExecutor;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +40,7 @@ import java.util.*;
  * @author Roman Stumm
  */
 public abstract class BaseMigrationTool implements MigrationTool {
-    protected static final Log log = LogFactory.getLog("agimatec.migration");
+    protected static final Logger log = LoggerFactory.getLogger("agimatec.migration");
 
     protected JdbcDatabase targetDatabase;
     protected String migrateConfigFileName = "migration.xml";
@@ -617,11 +617,11 @@ public abstract class BaseMigrationTool implements MigrationTool {
         if (obj instanceof Throwable) {
             getLog().error(null, (Throwable) obj);
         } else {
-            getLog().info(obj);
+            getLog().info(String.valueOf(obj));
         }
     }
 
-    public Log getLog() {
+    public Logger getLog() {
         return log;
     }
 

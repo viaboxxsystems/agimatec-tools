@@ -1,7 +1,7 @@
 package com.agimatec.commons.config;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Roman Stumm
  */
 public class FileNode extends Node {
-    private static final Log log = LogFactory.getLog(FileNode.class);
+    private static final Logger log = LoggerFactory.getLogger(FileNode.class);
     protected String dir;
     protected String file;
     protected boolean relative;

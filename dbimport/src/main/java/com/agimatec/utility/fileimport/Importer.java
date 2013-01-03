@@ -1,6 +1,7 @@
 package com.agimatec.utility.fileimport;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -14,7 +15,7 @@ import java.io.Writer;
  * Copyright: Agimatec GmbH
  */
 public class Importer {
-    protected static final Logger log = Logger.getLogger(Importer.class);
+    protected static final Logger log = LoggerFactory.getLogger(Importer.class);
     /** processor is responsible to do the actual import process */
     protected final ImporterProcessor processor;
     /** is determines the input format and configuration */
@@ -116,7 +117,7 @@ public class Importer {
         if (obj instanceof Throwable) {
             log.error(null, (Throwable) obj);
         } else {
-            log.info(obj);
+            log.info(String.valueOf(obj));
         }
     }
 

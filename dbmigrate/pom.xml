@@ -40,13 +40,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -114,7 +119,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>commons-logging,commons-lang,log4j,commons-io</includeArtifactIds>
+                            <includeArtifactIds>commons-lang,commons-io</includeArtifactIds>
                             <stripVersion>false</stripVersion>
                             <outputDirectory>target/dep-libs/minimal</outputDirectory>
                             <includeScope>compile</includeScope>

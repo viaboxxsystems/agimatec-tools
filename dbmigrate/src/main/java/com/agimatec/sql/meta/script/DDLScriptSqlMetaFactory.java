@@ -5,8 +5,8 @@ import com.agimatec.sql.meta.*;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
 import freemarker.template.TemplateException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +24,7 @@ import java.util.Map;
  * Copyright: Agimatec GmbH
  */
 public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
-    private static final Log log = LogFactory.getLog(DDLScriptSqlMetaFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(DDLScriptSqlMetaFactory.class);
     private CatalogDescription catalog;
     private final PropertiesExtractor extractor;
 
@@ -513,7 +513,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 found++;
                 if (log.isDebugEnabled()) {
                     log.debug("FOUND " + theExpr.getName() + " in: " + statement);
-                    log.debug(values);
+                    log.debug(String.valueOf(values));
                 }
                 CatalogBuilder builder = builders.get(theExpr.getName());
                 if (builder != null) {

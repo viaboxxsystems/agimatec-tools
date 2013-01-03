@@ -3,8 +3,8 @@ package com.agimatec.commons.config;
 import com.agimatec.commons.config.sax.ConfigContentHandler;
 import com.agimatec.commons.config.sax.ConfigWriter;
 import com.agimatec.commons.util.ClassUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -42,7 +42,7 @@ import java.util.*;
  * <br>Author: Roman Stumm
  */
 public class ConfigManager implements Serializable {
-    private static final Log myLogger = LogFactory.getLog(ConfigManager.class);
+    private static final Logger myLogger = LoggerFactory.getLogger(ConfigManager.class);
     public static final String C_ProtocolClassPath = "cp://";
     protected static ConfigManager singleton = new ConfigManager("configmanager.ini");
 

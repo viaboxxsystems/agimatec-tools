@@ -1,7 +1,7 @@
 package com.agimatec.jdbc;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,7 @@ import java.util.Properties;
  * Copyright: Agimatec GmbH
  */
 class JdbcDatabaseImpl implements JdbcDatabase {
-    protected static final Log log = LogFactory.getLog(JdbcDatabaseImpl.class);
+    protected static final Logger log = LoggerFactory.getLogger(JdbcDatabaseImpl.class);
 
     private Connection connection;
     private final Properties properties;

@@ -2,16 +2,16 @@ package com.agimatec.sql.script;
 
 import com.agimatec.jdbc.JdbcDatabase;
 import com.agimatec.jdbc.JdbcException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SQLScriptExecutor implements ScriptVisitor {
-    private static final Log myLogger = LogFactory.getLog(SQLScriptExecutor.class);
-    protected final static Log mySQLLogger = LogFactory.getLog("commons.sql");
+    private static final Logger myLogger = LoggerFactory.getLogger(SQLScriptExecutor.class);
+    protected final static Logger mySQLLogger = LoggerFactory.getLogger("commons.sql");
     private JdbcDatabase store;
 
     public SQLScriptExecutor(JdbcDatabase aStore) {
@@ -59,7 +59,7 @@ public class SQLScriptExecutor implements ScriptVisitor {
         if (obj instanceof Throwable) {
             myLogger.error(null, (Throwable) obj);
         } else {
-            myLogger.info(obj);
+            myLogger.info(String.valueOf(obj));
         }
     }
 

@@ -4,8 +4,8 @@ import com.agimatec.commons.generator.GeneratorTool;
 import com.agimatec.sql.meta.persistence.XStreamPersistencer;
 import com.agimatec.sql.meta.script.DDLExpressions;
 import com.agimatec.sql.script.SQLScriptParser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -18,7 +18,7 @@ import java.io.*;
  * Copyright: Agimatec GmbH
  */
 public class ScriptTransformatorTool extends GeneratorTool implements FilenameFilter {
-  private static final Log log = LogFactory.getLog(ScriptTransformatorTool.class);
+  private static final Logger log = LoggerFactory.getLogger(ScriptTransformatorTool.class);
 
   private CatalogConversion catalogConversion;
 

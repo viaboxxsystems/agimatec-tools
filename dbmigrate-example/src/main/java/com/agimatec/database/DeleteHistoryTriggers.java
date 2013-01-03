@@ -5,8 +5,8 @@ import com.agimatec.sql.query.QueryDefinition;
 import com.agimatec.sql.query.QueryResult;
 import com.agimatec.sql.query.SQLBuilder;
 import com.agimatec.utility.fileimport.SqlUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ import java.text.MessageFormat;
  * Copyright: Agimatec GmbH
  */
 public class DeleteHistoryTriggers extends AbstractDbTool {
-    protected static final Log log = LogFactory.getLog("agimatec.migration");
+    protected static final Logger log = LoggerFactory.getLogger("agimatec.migration");
 
     public static void main(String[] args) throws Exception {
         DeleteHistoryTriggers tool = new DeleteHistoryTriggers();

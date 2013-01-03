@@ -1,6 +1,7 @@
 package com.agimatec.utility.fileimport;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -12,7 +13,7 @@ import java.io.*;
  * Copyright: Agimatec GmbH
  */
 public class LineImporterSpec implements ImporterSpec {
-    protected static final Logger log = Logger.getLogger(LineImporterSpec.class);
+    protected static final Logger log = LoggerFactory.getLogger(LineImporterSpec.class);
     private Header headerSpec = Header.NONE;
     private LineTokenizerFactory lineTokenizerFactory;
     private String[] fieldNames;

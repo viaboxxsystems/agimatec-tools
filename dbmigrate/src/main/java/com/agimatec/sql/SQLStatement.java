@@ -1,7 +1,7 @@
 
 package com.agimatec.sql;
 
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
 
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -94,7 +94,7 @@ public class SQLStatement {
      * Logging convenience -
      * Log the receiver's sql (with ? instead of parameters) and parameters (separetely) onto the logdevice under info priority
      */
-    public void logInfo(final Log log) {
+    public void logInfo(final Logger log) {
         if (log.isInfoEnabled()) {
             log.info(getStatement());
             final StringBuilder buf = new StringBuilder();

@@ -3,8 +3,8 @@ package com.agimatec.dbmigrate.util;
 import com.agimatec.jdbc.JdbcDatabase;
 import com.agimatec.jdbc.JdbcException;
 import com.agimatec.sql.script.ScriptVisitor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  * <b>Company:</b>       Agimatec GmbH<br>
  */
 public class ReconnectScriptVisitor extends ScriptVisitorDelegate {
-    private static final Log log = LogFactory.getLog(ReconnectScriptVisitor.class);
+    private static final Logger log = LoggerFactory.getLogger(ReconnectScriptVisitor.class);
 
     private JdbcDatabase store;
 
