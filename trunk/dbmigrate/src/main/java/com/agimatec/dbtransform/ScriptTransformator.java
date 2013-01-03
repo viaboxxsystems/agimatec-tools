@@ -7,8 +7,8 @@ import com.agimatec.sql.meta.script.DDLExpressions;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
 import com.agimatec.sql.meta.script.ExtractExpr;
 import freemarker.template.TemplateException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,7 +24,7 @@ import java.util.Map;
  * Copyright: Agimatec GmbH
  */
 public class ScriptTransformator extends DDLScriptSqlMetaFactory {
-    private static final Log log = LogFactory.getLog(ScriptTransformator.class);
+    private static final Logger log = LoggerFactory.getLogger(ScriptTransformator.class);
 
     private final PrintWriter target;
     private final CatalogConversion catalogConversion; // data type conversion
@@ -68,7 +68,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
                 found++;
                 if (log.isDebugEnabled()) {
                     log.debug("FOUND " + theExpr.getName() + " in: " + statement);
-                    log.debug(values);
+                    log.debug(String.valueOf(values));
                 }
                 CatalogBuilder builder = getBuilders().get(theExpr.getName());
                 if (builder != null) {

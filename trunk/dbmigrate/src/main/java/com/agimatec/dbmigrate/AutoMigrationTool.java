@@ -79,7 +79,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
             }
             if (tool.exitJVM) System.exit(0);
         } catch (Throwable ex) {
-            log.fatal(null, ex);
+            log.error(null, ex);
             if (tool.exitJVM) System.exit(1);
         }
     }

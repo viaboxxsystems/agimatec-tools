@@ -1,6 +1,7 @@
 package com.agimatec.utility.fileimport;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ import java.util.List;
  * Copyright: Agimatec GmbH
  */
 public class ImportController {
-    protected static final Logger log = Logger.getLogger(ImportController.class);
+    private static final Logger log = LoggerFactory.getLogger(ImportController.class);
 
     protected Connection connection;
     protected SqlUtil sqlUtil;

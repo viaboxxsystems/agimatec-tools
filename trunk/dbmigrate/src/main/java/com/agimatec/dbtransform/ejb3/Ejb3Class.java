@@ -4,12 +4,11 @@ import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.ForeignKeyDescription;
 import com.agimatec.sql.meta.IndexDescription;
 import com.agimatec.sql.meta.TableDescription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Description: <br/>
@@ -19,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  * Copyright: Agimatec GmbH
  */
 public class Ejb3Class extends Ejb3Prototype {
-    private static final Log log = LogFactory.getLog(Ejb3Class.class);
+    private static final Logger log = LoggerFactory.getLogger(Ejb3Class.class);
     private final TableDescription table;
     private final List<Ejb3Attribute> attributes = new ArrayList();
     private final List<Ejb3Relationship> relationships = new ArrayList();

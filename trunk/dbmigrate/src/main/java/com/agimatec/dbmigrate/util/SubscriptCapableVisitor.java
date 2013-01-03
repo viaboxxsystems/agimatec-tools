@@ -2,8 +2,8 @@ package com.agimatec.dbmigrate.util;
 
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.StringTokenizer;
@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
  * @author Roman Stumm
  */
 public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
-    private static final Log log = LogFactory.getLog(SubscriptCapableVisitor.class);
+    private static final Logger log = LoggerFactory.getLogger(SubscriptCapableVisitor.class);
     private final SQLScriptParser parser;
 
     public SubscriptCapableVisitor(ScriptVisitor nextVisitor, SQLScriptParser parser) {

@@ -1,8 +1,8 @@
 package com.agimatec.dbmigrate;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.StringTokenizer;
 
@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * @author Roman Stumm
  */
 public final class DBVersionString implements Comparable {
-  private static final Log log = LogFactory.getLog(DBVersionString.class);
+  private static final Logger log = LoggerFactory.getLogger(DBVersionString.class);
 
   private final String fileName;
   private int major, minor, increment;

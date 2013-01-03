@@ -4,7 +4,8 @@ import com.agimatec.utility.fileimport.ImporterProcessor;
 import com.agimatec.utility.fileimport.ImporterSpec;
 import groovy.lang.Closure;
 import groovy.util.slurpersupport.GPathResult;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Writer;
 import java.util.Iterator;
@@ -18,7 +19,7 @@ import java.util.Iterator;
  * Copyright: Agimatec GmbH
  */
 public class XmlSlurperSpec implements ImporterSpec {
-    protected static final Logger log = Logger.getLogger(XmlSlurperSpec.class);
+    protected static final Logger log = LoggerFactory.getLogger(XmlSlurperSpec.class);
     private final Closure headerProcessing;
     private final Closure gpathRetriever;
     private final Closure elementProcessing;

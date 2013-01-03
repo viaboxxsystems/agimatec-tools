@@ -1,16 +1,16 @@
 package com.agimatec.database;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * INSERT dataset into a database.
  * Optional execution of DELETE with a different dataset possible.
  */
 public class DbUnitSetupTool extends AbstractDbTool {
-    protected static final Log log = LogFactory.getLog(DbUnitSetupTool.class);
+    protected static final Logger log = LoggerFactory.getLogger(DbUnitSetupTool.class);
 
     private String deleteDataFile = "delete_data.xml";
     /**

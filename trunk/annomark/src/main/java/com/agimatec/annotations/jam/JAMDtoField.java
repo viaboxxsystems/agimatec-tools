@@ -5,11 +5,11 @@ import com.agimatec.annotations.DTOAttributes;
 import com.sun.javadoc.Type;
 import com.sun.tools.javadoc.FieldDocImpl;
 import com.sun.tools.javadoc.ParameterizedTypeImpl;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jam.JAnnotatedElement;
 import org.codehaus.jam.JClass;
 import org.codehaus.jam.JField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.StringTokenizer;
 
@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
  * Copyright: Agimatec GmbH
  */
 public class JAMDtoField extends JAMDtoAnnotatedElement {
-    private static final Log log = LogFactory.getLog(JAMDtoField.class);
+    private static final Logger log = LoggerFactory.getLogger(JAMDtoField.class);
     private final JField field;
     private final JAMDtoClass dtoClass;
 

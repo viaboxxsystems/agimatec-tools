@@ -1,7 +1,8 @@
 package com.agimatec.commons.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
  * @author Roman Stumm
  */
 public class PropertyReplacer {
-    private static final Log myLogger = LogFactory.getLog(PropertyReplacer.class);
+    private static final Logger myLogger = LoggerFactory.getLogger(PropertyReplacer.class);
 
     private final Map myProperties;
 

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <!-- parent POM to Deploy Snapshots and Stage Releases with Maven on SonaType OSS Repos -->
     <parent>
@@ -97,9 +98,21 @@
                 <version>1.8.6</version>
             </dependency>
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j-version}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>1.2.16</version>
+                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
@@ -168,11 +181,6 @@
                 <version>2.3.19</version>
             </dependency>
             <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-            <dependency>
                 <groupId>dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>1.6.1</version>
@@ -239,22 +247,22 @@
         </dependencies>
     </dependencyManagement>
 
-  <!--  <distributionManagement>
-        <site>
-            <id>${agimatec-site-id}</id>
-            <url>${agimatec-site-url}/agimatec-tools/site</url>
-        </site>
-        <snapshotRepository>
-            <id>deployment.dav</id>
-            <name>Agimatec Snapshot Artifacts</name>
-            <url>${deployment-dav-url}</url>
-        </snapshotRepository>
-        <repository>
-            <id>internal.dav</id>
-            <name>Agimatec Artifacts</name>
-            <url>${internal-dav-url}</url>
-        </repository>
-    </distributionManagement>   -->
+    <!--  <distributionManagement>
+          <site>
+              <id>${agimatec-site-id}</id>
+              <url>${agimatec-site-url}/agimatec-tools/site</url>
+          </site>
+          <snapshotRepository>
+              <id>deployment.dav</id>
+              <name>Agimatec Snapshot Artifacts</name>
+              <url>${deployment-dav-url}</url>
+          </snapshotRepository>
+          <repository>
+              <id>internal.dav</id>
+              <name>Agimatec Artifacts</name>
+              <url>${internal-dav-url}</url>
+          </repository>
+      </distributionManagement>   -->
 
     <modules>
         <module>dbimport</module>
@@ -321,5 +329,6 @@
 
     <properties>
         <agimatec-version>${project.version}</agimatec-version>
+        <slf4j-version>1.7.2</slf4j-version>
     </properties>
 </project>

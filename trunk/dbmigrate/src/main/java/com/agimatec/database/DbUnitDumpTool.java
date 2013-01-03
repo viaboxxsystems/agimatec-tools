@@ -1,8 +1,8 @@
 package com.agimatec.database;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dbunit.DatabaseUnitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Copyright: Agimatec GmbH
  */
 public class DbUnitDumpTool extends AbstractDbTool {
-    protected static final Log log = LogFactory.getLog(DbUnitDumpTool.class);
+    protected static final Logger log = LoggerFactory.getLogger(DbUnitDumpTool.class);
 
     public void execute() throws SQLException, DatabaseUnitException, IOException,
             ClassNotFoundException {
