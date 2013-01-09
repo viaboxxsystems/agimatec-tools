@@ -48,7 +48,7 @@ public class ExcelImportTest extends TestCase {
         cell.setCellValue(new HSSFRichTextString("a test"));
 
         // Write the output to a file
-        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        FileOutputStream fileOut = new FileOutputStream("target/workbook.xls");
         wb.write(fileOut);
         fileOut.close();
     }
