@@ -147,4 +147,20 @@ public class LineImportProcessor extends ImporterProcessor {
     public Object getCurrentLine() {
         return currentLine;
     }
+
+    public void setCurrentLine(Object currentLine) {
+        this.currentLine = currentLine;
+    }
+
+    public void setLineReader(LineReader lineReader) {
+        this.lineReader = lineReader;
+    }
+
+    public void setHeaderLine(Object headerLine) {
+        this.headerLine = headerLine;
+    }
+
+    public void setCurrentRow(Map currentRow) {
+        this.currentRow = currentRow;
+    }
 }

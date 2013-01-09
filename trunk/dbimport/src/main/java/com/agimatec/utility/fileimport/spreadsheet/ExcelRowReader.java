@@ -1,6 +1,9 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
+import com.agimatec.utility.fileimport.LineImportProcessor;
 import com.agimatec.utility.fileimport.LineReader;
+import org.apache.poi.hssf.usermodel.HSSFAccess;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -108,12 +111,35 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         this.workbook = workbook;
     }
 
+
+/*  this does not work yet.
+    public void removeCurrentRow(LineImportProcessor processor) {
+        ExcelRow row = (ExcelRow) processor.getCurrentLine();
+        int rowNum = row.getRowNum();
+        sheet.removeRow(row.getRow());
+        rowIterator = sheet.rowIterator();
+        while (rowIterator.hasNext()) {
+            Row theRow = rowIterator.next();
+            if (theRow.getRowNum() == rowNum) {
+                processor.setCurrentLine(theRow);
+            }
+        }
+    }*/
+
+    public void removeCurrentRow(LineImportProcessor processor) {
+        // A HACK, I know. Prevent from ConcurrentModificationException but remove row from sheet:
+        rowIterator.remove(); // remove the row that has just been read: from iterator..
+        ExcelRow line = (ExcelRow) processor.getCurrentLine();
+        HSSFAccess.getInternalSheet(sheet)
+                .removeRow(HSSFAccess.getRowRecord(((HSSFRow) line.getRow()))); // .. and from physical sheet
+    }
+
     // source from http://pastebin.com/ff806298
     // unsolved issues:
     // + What to do with the formula in the moved columns?
     // + Column breaks
     // + Merged regions
-    public void removeColumn(int columnToDelete) {
+    public void removeColumn(int columnNum) {
         int maxColumn = 0;
         for (int r = 0; r < sheet.getLastRowNum() + 1; r++) {
             Row row = sheet.getRow(r);
@@ -127,10 +153,10 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
             if (lastColumn > maxColumn)
                 maxColumn = lastColumn;
 
-            if (lastColumn < columnToDelete)
+            if (lastColumn < columnNum)
                 continue;
 
-            for (int x = columnToDelete + 1; x < lastColumn + 1; x++) {
+            for (int x = columnNum + 1; x < lastColumn + 1; x++) {
                 Cell oldCell = row.getCell(x - 1);
                 if (oldCell != null)
                     row.removeCell(oldCell);
