@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+  <list name="Operations">
+    <text name="invokeBean" value="com.agimatec.database.DeleteHistoryTriggers#execute()"/>
+  </list>
+</config>
+
