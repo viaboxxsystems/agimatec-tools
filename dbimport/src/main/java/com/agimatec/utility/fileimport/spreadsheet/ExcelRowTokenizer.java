@@ -18,7 +18,7 @@ public class ExcelRowTokenizer implements LineTokenizer<ExcelRow, ExcelCell> {
 
     public ExcelRowTokenizer(ExcelRow aLine) {
 //        row = aLine;
-        cellIterator = aLine.row.cellIterator();
+        cellIterator = aLine.getRow().cellIterator();
     }
 
     public boolean isLineIncomplete() {
