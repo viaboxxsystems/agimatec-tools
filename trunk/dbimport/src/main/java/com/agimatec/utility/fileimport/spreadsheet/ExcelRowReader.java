@@ -34,6 +34,10 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         return sheetIndex;
     }
 
+    /**
+     * sheet index is 0-based
+     * @param sheetIndex
+     */
     public void setSheetIndex(int sheetIndex) {
         this.sheetIndex = sheetIndex;
     }

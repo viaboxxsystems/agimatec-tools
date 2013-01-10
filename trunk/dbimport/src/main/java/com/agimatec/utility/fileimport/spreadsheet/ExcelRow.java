@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Row;
  * Copyright: Agimatec GmbH
  */
 public class ExcelRow implements IRow {
-    final Row row;
+    private final Row row;
 
     public ExcelRow(Row hssfRow) {
         row = hssfRow;
@@ -34,5 +34,14 @@ public class ExcelRow implements IRow {
 
     public ICell getCell(int num) {
         return new ExcelCell(row.getCell(num));
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ExcelRow");
+        sb.append("{rowNum=").append(getRowNum());
+        sb.append('}');
+        return sb.toString();
     }
 }
