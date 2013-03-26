@@ -24,7 +24,7 @@ _usage: java com.agimatec.dbmigrate.!AutoMigrationTool -help -sim true|yes|false
 || -script || optional, multiple occurrence supported. name of a script-file (sql, groovy, xml) with operations. tool will execute the given file(s) only!||
 || -op || optional, multiple occurrence supported. the operation in the same syntax as in a xml-script. tool will execute the given operation(s) only! || 
 || -exit || -exit false: do not exit JVM with System.exit() after migration. The default is "true", but this option improves the integration into a maven pom and other Java processes, that want to call dbmigrate via its main() method ||
-|| -base || (optional) set the config base URL of the resource or directory, defaults to the path given in resource 'configmanager.ini' or file: if none available|| 
+|| -base || (optional) set the config base URL of the resource or directory, defaults to the path given in resource 'configmanager.ini' or file: if none available. cp:// is the classpath-protocol. || 
 
 == Examples ==
 {{{
