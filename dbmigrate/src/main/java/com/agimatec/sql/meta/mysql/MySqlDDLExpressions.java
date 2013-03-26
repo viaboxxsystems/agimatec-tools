@@ -1,4 +1,4 @@
-package com.agimatec.sql.meta.postgres;
+package com.agimatec.sql.meta.mysql;
 
 import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.script.DDLExpressions;
@@ -6,14 +6,14 @@ import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
 import com.agimatec.sql.meta.script.ExtractExpr;
 
 /**
- * Description: <br/>
- * User: roman.stumm <br/>
- * Date: 24.04.2007 <br/>
- * Time: 19:00:56 <br/>
- * Copyright: Agimatec GmbH
+ * <p>syntax expressions to parse MySql scripts</p>
+ * User: roman.stumm@viaboxx.de<br>
+ * Date: 26.03.13
  */
-public class PostgresDDLExpressions extends DDLExpressions {
-    /** nun folgen die syntax-formate von den statements, die in den scripten erkannt und verarbeitet werden sollen: */
+public class MySqlDDLExpressions extends DDLExpressions {
+    /**
+     * nun folgen die syntax-formate von den statements, die in den scripten erkannt und verarbeitet werden sollen:
+     */
     private static final String[] statementFormats = {
             // limitation - create-view, drop-view missing (alter-view missing)
             // limitation - cannot detect: "ALTER TABLE t alter column c1 set not null, add primary key (c);"
@@ -38,16 +38,15 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}", // ilb
             //"CREATE TABLE Rate (PRICE NUMBER(9,2) NOT NULL, PRICE2 NUMBER(2), PRICE3 INTEGER, PRICE4 CHAR)"
             "{dezign-create-table CREATE TABLE ${table} '(' " + "{tableElement " +
-                    "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')' " +
-                    "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
-                    "[{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' " +
-                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] " +
-                    "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
+                    // support: "constraint MY_TABLE_FK foreign key (FK_COL_NAME) references REFERENCED_TABLE(ID_COL_NAME)"
+                    "[{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')' " +
+                    "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] }]" +
+                    "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')' }]" +
                     "[{columndefinition ${column} ${typeName} [${varying(VARYING)}]" +
                     "[{precision '(' {numbers ${value}...','} [CHAR]')'}] " +
                     "[{default DEFAULT ${defaultValue}}] " +
                     "[{constraint CONSTRAINT ${constraintName}}] " +
-                    "[${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}] " + "...','} ')'}",
+                    "[${mandatory(NOT NULL)}] [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}] " + "...','} ')'}",
             "{create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                     "[{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
@@ -65,7 +64,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
             "{table-comment COMMENT ON TABLE ${table} IS ${comment{'}}}",
             //COMMENT ON COLUMN User_Core.gender IS 'MALE or FEMALE or null as GenderEnum'
             "{column-comment COMMENT ON COLUMN ${tableColumn} IS ${comment{'}}",
-            // ALTER TABLE test 
+            // ALTER TABLE test
             //  alter column col2 TYPE varchar(200),
             //  alter column col3 type varchar(150),
             //  add col4 integer not null,
@@ -75,7 +74,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "[{alter-column-set-notnull ALTER [COLUMN] ${column} SET NOT NULL}]" +
 
                     "[{alter-column-drop-notnull ALTER [COLUMN] ${column} DROP NOT NULL}]" +
-            
+
                     "[{constraint ADD CONSTRAINT ${constraintName} [${unique(UNIQUE)}] '(' {columns ${column}...','} ')' " +
                     "}]" +
 
@@ -100,7 +99,7 @@ public class PostgresDDLExpressions extends DDLExpressions {
                     "...','}}",
             // DROP TRIGGER TR_I_User_Core ON User_Core
             "{drop-trigger DROP TRIGGER ${trigger} ON ${table}}",
-            "{drop-table DROP TABLE ${table} [CASCADE]}",
+            "{drop-table DROP TABLE [IF EXISTS] ${table} [CASCADE]}",
             "{drop-sequence DROP SEQUENCE ${sequence}}"};
 
     public static final ExtractExpr[] expressions;
@@ -109,21 +108,29 @@ public class PostgresDDLExpressions extends DDLExpressions {
         expressions = DDLScriptSqlMetaFactory.compileExpressions(statementFormats);
     }
 
+    @Override
     public ExtractExpr[] getExpressions() {
         return expressions;
     }
 
-    /** equalize type names */
+    /**
+     * equalize type names
+     */
+    @Override
     public void equalizeColumn(ColumnDescription cd) {
-        if (cd.getTypeName().equalsIgnoreCase("CHARACTER VARYING")) {
-            cd.setTypeName("VARCHAR");
-        } else if (cd.getTypeName().equalsIgnoreCase("BOOL")) {
-            cd.setTypeName("BOOLEAN");
-        } else if(cd.getTypeName().equalsIgnoreCase("int4")) {
-            cd.setTypeName("INTEGER");
-        } else if(cd.getTypeName().equalsIgnoreCase("int8")) {
-            cd.setTypeName("BIGINT");
-        }
+        // do nothing
+    }
 
+    @Override
+    public String strip(String value) {
+        if (value == null) return null;
+        int start = 0, end = value.length();
+        if (value.startsWith("`")) {
+            start++;
+        }
+        if (value.endsWith("`")) {
+            end--;
+        }
+        return value.substring(start, end);
     }
 }

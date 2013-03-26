@@ -20,16 +20,22 @@ import java.util.*;
 public class JdbcSqlMetaFactory implements SqlMetaFactory {
     private final JdbcDatabase database;
 
-    /** default = true. load indices? */
+    /**
+     * default = true. load indices?
+     */
     private boolean indices = true;
     /**
      * default = true. load primary key?
      * if true, requires indices to be true, otherwise this has no effect.
      */
     private boolean primaryKeys = true;
-    /** default = true. query columns? */
+    /**
+     * default = true. query columns?
+     */
     private boolean columns = true;
-    /** default = true. query foreign keys */
+    /**
+     * default = true. query foreign keys
+     */
     private boolean foreignKeys = true;
 
     public JdbcSqlMetaFactory(JdbcDatabase database) {
@@ -76,7 +82,9 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
         // do nothing
     }
 
-    /** create a CatalogDescription */
+    /**
+     * create a CatalogDescription
+     */
     public CatalogDescription buildCatalog(String[] tables) throws SQLException, IOException {
         CatalogDescription catalog = new CatalogDescription();
         catalog.setSchemaName(getDatabase().getConnection().getCatalog());
@@ -88,7 +96,15 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
         String cat, schem, table;
 
         public TableIdentifier(String table) {
-            this.table = table;
+            int idx = table.indexOf('.');
+            if (idx >= 0) {
+                this.cat = table.substring(0, idx);
+                if (idx < table.length() - 1) {
+                    this.table = table.substring(idx + 1);
+                }
+            } else {
+                this.table = table;
+            }
         }
 
         public String getCat() {
@@ -125,7 +141,7 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
                 tid.setCat(cat);
                 String schem = tableSet.getString("TABLE_SCHEM");
                 tid.setSchem(schem);
-                TableDescription td = createTable(tableSet.getString("TABLE_NAME"));
+                TableDescription td = createTable(tid);
                 aCatalog.addTable(td);
                 td.setComment(tableSet.getString("REMARKS"));
                 if (primaryKeys) loadPrimaryKey(meta, tid, td);
@@ -251,9 +267,19 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
         }
     }
 
-    protected TableDescription createTable(String tableName) throws SQLException {
+    protected TableDescription createTable(TableIdentifier tableIdentifier) throws SQLException {
         final TableDescription tableDesc = new TableDescription();
-        tableDesc.setTableName(tableName.toUpperCase());
+        StringBuilder qualifiedTableName = new StringBuilder();
+        if (tableIdentifier.getSchem() != null) {
+            qualifiedTableName.append(tableIdentifier.getSchem());
+            qualifiedTableName.append(".");
+        }
+        if (tableIdentifier.getCat() != null) {
+            qualifiedTableName.append(tableIdentifier.getCat());
+            qualifiedTableName.append(".");
+        }
+        qualifiedTableName.append(tableIdentifier.getTable());
+        tableDesc.setTableName(qualifiedTableName.toString().toUpperCase());
         return tableDesc;
     }
 
