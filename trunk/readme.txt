@@ -23,7 +23,7 @@ You need to download and install maven2 from: http://maven.apache.org/
 Some dependencies might not be available from official maven2-repositories:
   * Dependency: com.sun:tools:jar:1.5.0_12 missing?
 
-  Using a different JDK than 1.5.0_12?
+  Using an older JDK than 1.5.0_12?
   ------------------------------------
   Change      
       <dependency>
