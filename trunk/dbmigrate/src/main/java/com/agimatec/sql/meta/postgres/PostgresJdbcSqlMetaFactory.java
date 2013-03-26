@@ -44,7 +44,7 @@ public class PostgresJdbcSqlMetaFactory extends JdbcSqlMetaFactory {
 
     @Override
     protected TableIdentifier createTableIdentifier(String table) {
-        return new TableIdentifier(table.toLowerCase());
+        return super.createTableIdentifier(table.toLowerCase());
     }
 
 }

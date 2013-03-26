@@ -94,15 +94,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
          * @return stripped value or null
          */
         protected String strip(String value) {
-            if (value == null) return null;
-            int start = 0, end = value.length();
-            if (value.startsWith("\"")) {
-                start++;
-            }
-            if (value.endsWith("\"")) {
-                end--;
-            }
-            return value.substring(start, end);
+            return ddlSpec.strip(value);
         }
 
         protected int getInt(MapNode values, String path) {
@@ -127,6 +119,16 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             cd.setNullable(!getBool(aColDef, "mandatory"));
             setColType(aColDef, cd);
             aTd.addColumn(cd);
+            if(aColDef.getString("isPK") != null) {
+                IndexDescription pk = aTd.getPrimaryKey();
+               if(pk == null) {
+                   pk = new IndexDescription();
+                   pk.setTableName(aTd.getTableName());
+                   pk.setUnique(true);
+                   aTd.setPrimaryKey(pk);
+               }
+                pk.addColumn(cd.getColumnName());
+            }
             return cd;
         }
 
@@ -371,7 +373,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         protected void buildForeignKey(MapNode aColDef, TableDescription aTd) {
             ForeignKeyDescription fk = new ForeignKeyDescription();
             fk.setTableName(aTd.getTableName());
-            //fk.setConstraintName(strip(values.getString("constraint/constraintName")));
+            fk.setConstraintName(strip(aColDef.getString("foreignKey/constraint/constraintName")));
             fk.setRefTableName(strip(aColDef.getString("foreignKey/refTable")));
             fk.setTableSpace(
                     strip(aColDef.getString("foreignKey/tableSpace/tableSpace")));
@@ -391,7 +393,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             pk.setTableName(aTd.getTableName());
             pk.setTableSpace(
                     strip(aColDef.getString("primaryKey/tableSpace/tableSpace")));
-            //pk.setIndexName(strip(values.getString("constraint/constraintName")));
+            pk.setIndexName(strip(aColDef.getString("primaryKey/constraint/constraintName")));
             pk.setUnique(true);
             List columns = aColDef.getList("primaryKey/columns");
             for (Object column : columns) {

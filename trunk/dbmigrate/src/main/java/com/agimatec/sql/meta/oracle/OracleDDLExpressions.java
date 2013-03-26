@@ -42,7 +42,7 @@ public class OracleDDLExpressions extends DDLExpressions {
                     "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}", // ilb
             //"CREATE TABLE Rate (PRICE NUMBER(9,2) NOT NULL, PRICE2 NUMBER(2), PRICE3 INTEGER, PRICE4 CHAR)"
             "{dezign-create-table CREATE TABLE ${table} '(' " + "{tableElement " +
-                    "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'] " +
+                    "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')' " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
                     "[{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' " +
                     "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')' }] " +
