@@ -254,6 +254,7 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
             IndexDescription pk = new IndexDescription();
             td.setPrimaryKey(pk);
             pk.setIndexName(colSet.getString("PK_NAME"));
+            pk.setTableName(tid.getTable());
             pk.setUnique(true);
             do {
                 pkColSeq.put(colSet.getInt("KEY_SEQ"), colSet.getString("COLUMN_NAME"));
@@ -269,17 +270,9 @@ public class JdbcSqlMetaFactory implements SqlMetaFactory {
 
     protected TableDescription createTable(TableIdentifier tableIdentifier) throws SQLException {
         final TableDescription tableDesc = new TableDescription();
-        StringBuilder qualifiedTableName = new StringBuilder();
-        if (tableIdentifier.getSchem() != null) {
-            qualifiedTableName.append(tableIdentifier.getSchem());
-            qualifiedTableName.append(".");
-        }
-        if (tableIdentifier.getCat() != null) {
-            qualifiedTableName.append(tableIdentifier.getCat());
-            qualifiedTableName.append(".");
-        }
-        qualifiedTableName.append(tableIdentifier.getTable());
-        tableDesc.setTableName(qualifiedTableName.toString().toUpperCase());
+        tableDesc.setTableName(tableIdentifier.getTable());
+        tableDesc.setCatalogName(tableIdentifier.getCat());
+        tableDesc.setSchemaName(tableIdentifier.getSchem());
         return tableDesc;
     }
 

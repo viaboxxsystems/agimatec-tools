@@ -27,6 +27,8 @@ public class TableDescription implements Serializable, Cloneable {
             new ArrayList(); // list of IndexDescription
     private List<ForeignKeyDescription> foreignKeys =
             new ArrayList(); // list of ForeignKeyDescription
+    private String catalogName;
+    private String schemaName;
 
     public TableDescription() {
     }
@@ -61,6 +63,20 @@ public class TableDescription implements Serializable, Cloneable {
         }
     }
 
+    public String getQualifiedTableName() {
+        StringBuilder qualifiedTableName = new StringBuilder();
+        if (getSchemaName() != null) {
+            qualifiedTableName.append(getSchemaName());
+            qualifiedTableName.append(".");
+        }
+        if (getCatalogName() != null) {
+            qualifiedTableName.append(getCatalogName());
+            qualifiedTableName.append(".");
+        }
+        qualifiedTableName.append(getTableName());
+        return qualifiedTableName.toString();
+    }
+
     public String getTableName() {
         return tableName;
     }
@@ -93,9 +109,9 @@ public class TableDescription implements Serializable, Cloneable {
     }
 
     public boolean isUnique(List<String> columns) {
-        List <IndexDescription> indices = findIndicesForColumns(columns);
-        for(IndexDescription index : indices) {
-            if(index.isUnique()) return true;
+        List<IndexDescription> indices = findIndicesForColumns(columns);
+        for (IndexDescription index : indices) {
+            if (index.isUnique()) return true;
         }
         return false;
     }
@@ -122,7 +138,7 @@ public class TableDescription implements Serializable, Cloneable {
     }
 
     public void removeIndex(String indexName) {
-        for (Iterator iter = indices.iterator(); iter.hasNext();) {
+        for (Iterator iter = indices.iterator(); iter.hasNext(); ) {
             IndexDescription theindexDescription = (IndexDescription) iter.next();
             if (theindexDescription.getIndexName().equalsIgnoreCase(indexName)) {
                 iter.remove();
@@ -139,7 +155,7 @@ public class TableDescription implements Serializable, Cloneable {
     }
 
     public void removeConstraint(String indexName) {
-        for (Iterator iter = constraints.iterator(); iter.hasNext();) {
+        for (Iterator iter = constraints.iterator(); iter.hasNext(); ) {
             IndexDescription theindexDescription = (IndexDescription) iter.next();
             if (theindexDescription.getIndexName().equalsIgnoreCase(indexName)) {
                 iter.remove();
@@ -245,7 +261,7 @@ public class TableDescription implements Serializable, Cloneable {
 
     public void removeColumn(String columnName) {
         ColumnDescription colDesc = getColumn(columnName);
-        if(colDesc != null) {
+        if (colDesc != null) {
             columns.remove(colDesc);
         }
     }
@@ -260,7 +276,7 @@ public class TableDescription implements Serializable, Cloneable {
     }
 
     public String toString() {
-        return getTableName();
+        return getQualifiedTableName();
     }
 
     public IndexDescription findIndexForColumns(List<String> columns) {
@@ -296,5 +312,21 @@ public class TableDescription implements Serializable, Cloneable {
             }
         }
         return indices;
+    }
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
     }
 }

@@ -23,20 +23,20 @@ public class PostgresJdbcSqlMetaFactory extends JdbcSqlMetaFactory {
      **/
     public void equalizeColumn(ColumnDescription cd) {
         super.equalizeColumn(cd);
-        if (cd.getTypeName().equals("int8")) {
+        if (cd.getTypeName().equalsIgnoreCase("int8")) {
             cd.setTypeName("BIGINT");
-        } else if (cd.getTypeName().equals("int4")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("int4")) {
             cd.setTypeName("INTEGER");
-        } else if (cd.getTypeName().equals("timestamp")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("timestamp")) {
             cd.setPrecision(0);
             cd.setPrecisionEnabled(false);
-        } else if (cd.getTypeName().equals("int2")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("int2")) {
             cd.setTypeName("SMALLINT");
-        } else if (cd.getTypeName().equals("bpchar")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("bpchar")) {
             cd.setTypeName("CHARACTER");
-        } else if (cd.getTypeName().equals("bool")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("bool")) {
             cd.setTypeName("BOOLEAN");
-        } else if (cd.getTypeName().equals("time")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("time")) {
             cd.setPrecisionEnabled(false);
             cd.setPrecision(0);
         }

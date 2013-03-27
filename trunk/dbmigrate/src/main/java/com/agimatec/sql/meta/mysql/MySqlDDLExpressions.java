@@ -37,16 +37,24 @@ public class MySqlDDLExpressions extends DDLExpressions {
                     "[${nomaxvalue(NOMAXVALUE)}] [${nominvalue(NOMINVALUE)}] [${nocycle(NOCYCLE)}] " +
                     "[${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}", // ilb
             //"CREATE TABLE Rate (PRICE NUMBER(9,2) NOT NULL, PRICE2 NUMBER(2), PRICE3 INTEGER, PRICE4 CHAR)"
-            "{dezign-create-table CREATE TABLE ${table} '(' " + "{tableElement " +
+            "{dezign-create-table CREATE TABLE ${table} '(' " +
+                    "{tableElement " +
+
                     // support: "constraint MY_TABLE_FK foreign key (FK_COL_NAME) references REFERENCED_TABLE(ID_COL_NAME)"
                     "[{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')' " +
                     "REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] }]" +
+
                     "[{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')' }]" +
+
+                    "[{tableIndex [${isUnique(UNIQUE)}] KEY ${indexName} '(' {columns ${column}...','} ')' }]" +
+
                     "[{columndefinition ${column} ${typeName} [${varying(VARYING)}]" +
-                    "[{precision '(' {numbers ${value}...','} [CHAR]')'}] " +
+                    "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${unsigned(UNSIGNED)}] [{collation COLLATE ${collation}}] " +
                     "[{default DEFAULT ${defaultValue}}] " +
                     "[{constraint CONSTRAINT ${constraintName}}] " +
-                    "[${mandatory(NOT NULL)}] [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}] " + "...','} ')'}",
+                    "[${mandatory(NOT NULL)}] [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE ${updateRule}}] [COMMENT ${comment{'}}]}]"
+
+                    + "...','} ')'}",
             "{create-table CREATE TABLE ${table} '(' " + "{tableElement " +
                     "[{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' " +
                     "[{tableSpace USING INDEX TABLESPACE ${tableSpace} }] }]" +
@@ -87,9 +95,10 @@ public class MySqlDDLExpressions extends DDLExpressions {
                     "[{drop-column DROP [COLUMN] ${column}}]" +
 
                     "[{add-column ADD [COLUMN] ${column} ${typeName} [${varying(VARYING)}]" +
+                    "[{precision '(' {numbers ${value}...','} [CHAR]')'}] [${unsigned(UNSIGNED)}] [{collation COLLATE ${collation}}] " +
                     "[{default DEFAULT ${defaultValue}}] " +
                     "[{constraint CONSTRAINT ${constraintName}}] " +
-                    "[{precision '(' {numbers ${value}...','} ')'}] [${mandatory(NOT NULL)}]}] " +
+                    "[${mandatory(NOT NULL)}] [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE ${updateRule}}] [COMMENT ${comment{'}}]}]" +
 
                     "[{alter-column-type ALTER [COLUMN] ${column} TYPE ${typeName} [${varying(VARYING)}]" +
                     "[{default DEFAULT ${defaultValue}}] " +
@@ -118,7 +127,10 @@ public class MySqlDDLExpressions extends DDLExpressions {
      */
     @Override
     public void equalizeColumn(ColumnDescription cd) {
-        // do nothing
+       if(cd.getTypeName().equalsIgnoreCase("tinyint") && cd.getPrecision() == 1) {
+           cd.setTypeName("BIT");
+           cd.setPrecision(0);
+       }
     }
 
     @Override
