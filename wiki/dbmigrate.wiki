@@ -5,7 +5,7 @@
 
 Excursion: [DBMigrateWhy Why use dbmigrate and who can use it?]
 
-You can use the dbmigrate tool to manage the creation and evolution of one or more databases. It supports postgres and oracle explicitly, but should run with any JDBC database. With this tool, you can set up a project with scripts (e.g. SQL) to create the database and put upgrade scripts into another directory to upgrade to a newer schema version. 
+You can use the dbmigrate tool to manage the creation and evolution of one or more databases. It supports postgres, mysql and oracle explicitly, but should run with any JDBC database. With this tool, you can set up a project with scripts (e.g. SQL) to create the database and put upgrade scripts into another directory to upgrade to a newer schema version. 
 
 Normally you write a configuration to setup the database from scratch and another configuration to upgrade to higher versions. In upgrade-mode, the tool executes all upgrade scripts that are required.
 
