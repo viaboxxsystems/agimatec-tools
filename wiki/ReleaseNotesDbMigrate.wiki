@@ -1,5 +1,8 @@
 = dbmigrate =
 
+== 2.5.12 (March 2013) ==
+  * support for MySql (DatabaseSchemaChecker)
+
 == 2.5.10 (Nov 2012) ==
   * postgres 9.1 is a little picky when committing a transaction that is in autoCommit-mode, so avoid problems with invalid commit/rollback calls
   * less exceptions and less calls to rollback/commit, none when connection in autocommit mode, transactions implicit running when connection established
