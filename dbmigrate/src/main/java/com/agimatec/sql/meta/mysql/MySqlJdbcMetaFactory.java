@@ -3,6 +3,7 @@ package com.agimatec.sql.meta.mysql;
 import com.agimatec.jdbc.JdbcDatabase;
 import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.checking.JdbcSqlMetaFactory;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * <p>read mysql catalog information</p>
@@ -21,14 +22,15 @@ public class MySqlJdbcMetaFactory extends JdbcSqlMetaFactory {
      **/
     public void equalizeColumn(ColumnDescription cd) {
         super.equalizeColumn(cd);
-        if (cd.getTypeName().equals("BIGINT")) {
-            cd.setPrecision(cd.getPrecision() + 1);  // driver returns 19 for BIGINT(20)
-            // Precision 20 is default for BIGINT
-        } else if (cd.getTypeName().equals("SMALLINT")) {
-            cd.setPrecision(cd.getPrecision() + 1);  // driver returns 5 for SMALLINT(6)
-            // Precision 6 is default for SMALLINT
+        if(ArrayUtils.contains(NUM_TYPES, cd.getTypeName().toUpperCase())) {
+            cd.setPrecision(cd.getPrecision() + 1); // driver returns a precision that is one to low (19 for "BIGINT(20)" etc.)
+        }
+        if(cd.getTypeName().toUpperCase().equals("TINYINT UNSIGNED")) {
+            cd.setPrecision(cd.getPrecision() - 1); // driver returns a precision that is one to high (3 for "tinyint(2) unsigned" etc.)
         }
     }
+
+    private static final String[] NUM_TYPES = {"BIGINT", "SMALLINT", "INT", "TINYINT"};
 
     @Override
     protected TableIdentifier createTableIdentifier(String table) {

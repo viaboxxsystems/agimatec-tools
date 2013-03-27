@@ -97,6 +97,15 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             return ddlSpec.strip(value);
         }
 
+        protected String unqualified(String value) {
+            int idx = value.lastIndexOf('.');
+            if(idx>=0) {
+                return value.substring(idx+1);
+            }  else {
+                return value;
+            }
+        }
+
         protected int getInt(MapNode values, String path) {
             String s = values.getString(path);
             if (s != null && s.length() > 0) try {
@@ -117,6 +126,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             ColumnDescription cd = new ColumnDescription();
             cd.setColumnName(strip(aColDef.getString("column")));
             cd.setNullable(!getBool(aColDef, "mandatory"));
+            cd.setComment((String) aColDef.get("comment"));
             setColType(aColDef, cd);
             aTd.addColumn(cd);
             if(aColDef.getString("isPK") != null) {
@@ -145,6 +155,9 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 }
             }
             cd.setTypeName(aColDef.getString("typeName"));
+            if (aColDef.getString("unsigned") != null) {
+                cd.setTypeName(cd.getTypeName() + " " + aColDef.getString("unsigned"));
+            }
             if (aColDef.getString("varying") != null) {
                 cd.setTypeName(cd.getTypeName() + " " + aColDef.getString("varying"));
             }
@@ -157,7 +170,17 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             TableDescription td = aCatalog.getTable(aTableName);
             if (td == null) {
                 td = new TableDescription();
-                td.setTableName(strip(aTableName));
+                td.setTableName(unqualified(aTableName));
+                if(aTableName.contains(".")) {
+                    String[] array = aTableName.split("\\.");
+                    if(array.length == 2) {
+                        td.setCatalogName(array[0]);
+                    }
+                    if(array.length == 3) {  // ?? unclear what difference is between schema and catalog
+                        td.setSchemaName(array[0]);
+                        td.setCatalogName(array[1]);
+                    }
+                }
                 aCatalog.addTable(td);
             }
             return td;
@@ -262,7 +285,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 id.addColumn(strip((String) eachCol.get("column")));
             }
             TableDescription td = getTable(catalog, id.getTableName());
-            td.addIndex(id);
+            td.addConstraint(id);
         }
     }
 
@@ -404,7 +427,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         }
     }
 
-    // using syntax preferred by the DeZign ER Tool
+    // using syntax preferred by the DeZign ER Tool - not only there, but as a full table description creator
 
     protected class DezignCreateTableBuilder extends CreateTableBuilder {
         // {table=NLSBUNDLE, columndefinition=[
@@ -420,6 +443,9 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 MapNode theColDef = new MapNode((Map) element);
                 if (theColDef.getMap().containsKey("tableConstraint")) {
                     buildTableConstraint(theColDef, td);
+                }
+                if(theColDef.getMap().containsKey("tableIndex")) {
+                    buildTableIndex(theColDef, td);
                 }
                 if (theColDef.getString("columndefinition/isUnique") != null) {
                     // unique column
@@ -453,6 +479,29 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                     index.setUnique(true);
                 }
                 aTd.addConstraint(index);
+            }
+        }
+
+        protected void buildTableIndex(MapNode aColDef, TableDescription aTd) {
+            IndexDescription index = new IndexDescription();
+            index.setTableName(aTd.getTableName());
+            index.setTableSpace(
+                    strip(aColDef.getString("tableIndex/tableSpace/tableSpace")));
+            index.setIndexName(strip(aColDef.getString(
+                    "tableIndex/indexName")));
+            List columns = aColDef.getList("tableIndex/columns");
+            for (Object column : columns) {
+                Map eachCol = (Map) column;
+                index.addColumn(strip((String) eachCol.get("column")));
+            }
+            if (aColDef.getString("tableIndex/isPK") != null) {
+                index.setUnique(true);
+                aTd.setPrimaryKey(index);
+            } else {
+                if (aColDef.getString("tableIndex/isUnique") != null) {
+                    index.setUnique(true);
+                }
+                aTd.addIndex(index);
             }
         }
     }

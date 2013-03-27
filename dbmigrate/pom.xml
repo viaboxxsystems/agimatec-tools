@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>de.viaboxx</groupId>
@@ -69,6 +70,13 @@
           <artifactId>postgresql</artifactId>
           <scope>provided</scope>
         </dependency>-->
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.18</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -152,13 +160,13 @@
                             <tasks>
                                 <zip destfile="${dist-dir}.zip">
                                     <fileset dir=".">
-                                        <include name="pom.xml" />
-                                        <include name="templates/**" />
-                                        <include name="src/**" />
-                                        <exclude name="src/test/**" />
+                                        <include name="pom.xml"/>
+                                        <include name="templates/**"/>
+                                        <include name="src/**"/>
+                                        <exclude name="src/test/**"/>
                                     </fileset>
                                     <fileset dir="target">
-                                        <include name="dbmigrate-${agimatec-version}.jar" />
+                                        <include name="dbmigrate-${agimatec-version}.jar"/>
                                     </fileset>
                                 </zip>
                             </tasks>

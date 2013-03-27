@@ -162,8 +162,10 @@ public abstract class DatabaseSchemaChecker {
                         databaseTableDescription);
                 checkUnknownColumns(databaseTableDescription,
                         xmlTableDescription.getColumnNames());
-            } else assertTrue("Table: " + xmlTableDescription.getTableName() +
-                    "... not found in databaseCatalog!", false);
+            } else {
+                assertTrue("Table: " + xmlTableDescription.getTableName() +
+                        "... not found in databaseCatalog!", false);
+            }
         }
         // TODO RSt - views checking not yet implemented
         // todo [RSt] sequences not yet implemented  -> requires DDLScriptSqlMetaFactory
@@ -320,29 +322,33 @@ public abstract class DatabaseSchemaChecker {
                         isTypeCompatible(xmlColumnDescription, databaseColumnDescription));
 
                 assertTrue("Table: " + tableName + ", ColumnName: " +
-                        xmlColumnDescription.getColumnName() + "... Nullable expected: " +
-                        xmlColumnDescription.isNullable() + " but was: " +
-                        databaseColumnDescription.isNullable(), xmlColumnDescription
+                        xmlColumnDescription.getColumnName() + "... : expected " +
+                        nullable(xmlColumnDescription.isNullable()) + " but was " +
+                        nullable(databaseColumnDescription.isNullable()), xmlColumnDescription
                         .isNullable() == databaseColumnDescription.isNullable());
             }
         }
     }
 
-    protected boolean isTypeCompatible(ColumnDescription xmlColumnDescription, ColumnDescription databaseColumnDescription) {
-        return xmlColumnDescription.getTypeName().equalsIgnoreCase(databaseColumnDescription.getTypeName());
+    private String nullable(boolean value) {
+        return value ? "NULL" : "NOT NULL";
     }
 
-    protected boolean isScaleCompatible(ColumnDescription xmlColumnDescription, ColumnDescription databaseColumnDescription) {
-        return xmlColumnDescription.getScale() == databaseColumnDescription.getScale();
+    protected boolean isTypeCompatible(ColumnDescription expected, ColumnDescription actual) {
+        return expected.getTypeName().equalsIgnoreCase(actual.getTypeName());
     }
 
-    protected boolean isPrecisionCompatible(ColumnDescription xmlColumnDescription, ColumnDescription databaseColumnDescription) {
-        return xmlColumnDescription.getPrecision() == databaseColumnDescription.getPrecision();
+    protected boolean isScaleCompatible(ColumnDescription expected, ColumnDescription actual) {
+        return expected.getScale() == actual.getScale();
+    }
+
+    protected boolean isPrecisionCompatible(ColumnDescription expected, ColumnDescription actual) {
+        return expected.getPrecision() == actual.getPrecision();
     }
 
     protected void compareForeignKeyDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
         String tableName = xmlTableDescription.getTableName();
-        Set<ForeignKeyDescription> unCheckedDatabaseFKs = new HashSet<ForeignKeyDescription>();
+        List<ForeignKeyDescription> unCheckedDatabaseFKs = new ArrayList<ForeignKeyDescription>();
         if (databaseTableDescription.getForeignKeys() != null) {
             unCheckedDatabaseFKs.addAll(databaseTableDescription.getForeignKeys());
         }
