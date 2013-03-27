@@ -1,10 +1,12 @@
 package com.agimatec.sql.meta.mysql;
 
 import com.agimatec.commons.config.ConfigManager;
+import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.TableDescription;
 import com.agimatec.sql.meta.script.DDLExpressions;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -44,7 +46,6 @@ public class MySqlDDLExpressionsTest {
         assertEquals("OTHER_TABLE", factory.getCatalog().getTable("OTHER_TABLE").getTableName());
         assertEquals("TEST_TABLE", factory.getCatalog().getTable("TEST_TABLE").getTableName());
         assertEquals("other_db", factory.getCatalog().getTable("TEST_TABLE").getCatalogName());
-        assertEquals(null, factory.getCatalog().getTable("TEST_TABLE").getCatalogName());
         assertEquals("other_table_seq", factory.getCatalog().getTable("OTHER_TABLE_SEQ").getTableName());
 
         TableDescription table = factory.getCatalog().getTable("TEST_TABLE");
@@ -80,12 +81,18 @@ public class MySqlDDLExpressionsTest {
         assertEquals("value can be 1-3", table.getColumn("commented_column").getComment());
     }
 
-//    @Test
-//    public void test2() throws IOException, SQLException {
-//        URL script = ConfigManager.toURL("cp://mysql/V1_1__structure.batch.sql");
-//        factory.fillCatalog(script);
-//        assertNotNull(factory.getCatalog());
-//        assertEquals(54, factory.getCatalog().getTablesSize());
-//        assertEquals(0, factory.getCatalog().getSequencesSize());
-//    }
+    @Test
+    @Ignore
+    public void test2() throws IOException, SQLException {
+        URL script = ConfigManager.toURL("cp://mysql/mysql-real-schema.sql");
+        factory.fillCatalog(script);
+        assertNotNull(factory.getCatalog());
+        assertEquals(10, factory.getCatalog().getTablesSize());
+        assertEquals(0, factory.getCatalog().getSequencesSize());
+
+        TableDescription table = factory.getCatalog().getTable("imp_prefetch");
+        assertNotNull(table);
+        ColumnDescription column = table.getColumn("created_by");
+        assertNotNull(column);
+    }
 }
