@@ -90,6 +90,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
 
         /**
          * remove \"
+         *
          * @param value - value or null to strip
          * @return stripped value or null
          */
@@ -99,9 +100,9 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
 
         protected String unqualified(String value) {
             int idx = value.lastIndexOf('.');
-            if(idx>=0) {
-                return value.substring(idx+1);
-            }  else {
+            if (idx >= 0) {
+                return value.substring(idx + 1);
+            } else {
                 return value;
             }
         }
@@ -129,14 +130,14 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             cd.setComment((String) aColDef.get("comment"));
             setColType(aColDef, cd);
             aTd.addColumn(cd);
-            if(aColDef.getString("isPK") != null) {
+            if (aColDef.getString("isPK") != null) {
                 IndexDescription pk = aTd.getPrimaryKey();
-               if(pk == null) {
-                   pk = new IndexDescription();
-                   pk.setTableName(aTd.getTableName());
-                   pk.setUnique(true);
-                   aTd.setPrimaryKey(pk);
-               }
+                if (pk == null) {
+                    pk = new IndexDescription();
+                    pk.setTableName(aTd.getTableName());
+                    pk.setUnique(true);
+                    aTd.setPrimaryKey(pk);
+                }
                 pk.addColumn(cd.getColumnName());
             }
             return cd;
@@ -167,16 +168,18 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
 
         protected TableDescription getTable(CatalogDescription aCatalog,
                                             String aTableName) {
+            String simpleName = unqualified(aTableName);
             TableDescription td = aCatalog.getTable(aTableName);
+            if (td == null && !aTableName.equals(simpleName)) td = aCatalog.getTable(simpleName);
             if (td == null) {
                 td = new TableDescription();
-                td.setTableName(unqualified(aTableName));
-                if(aTableName.contains(".")) {
+                td.setTableName(simpleName);
+                if (aTableName.contains(".")) {
                     String[] array = aTableName.split("\\.");
-                    if(array.length == 2) {
+                    if (array.length == 2) {
                         td.setCatalogName(array[0]);
                     }
-                    if(array.length == 3) {  // ?? unclear what difference is between schema and catalog
+                    if (array.length == 3) {  // ?? unclear what difference is between schema and catalog
                         td.setSchemaName(array[0]);
                         td.setCatalogName(array[1]);
                     }
@@ -444,7 +447,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 if (theColDef.getMap().containsKey("tableConstraint")) {
                     buildTableConstraint(theColDef, td);
                 }
-                if(theColDef.getMap().containsKey("tableIndex")) {
+                if (theColDef.getMap().containsKey("tableIndex")) {
                     buildTableIndex(theColDef, td);
                 }
                 if (theColDef.getString("columndefinition/isUnique") != null) {
@@ -540,7 +543,8 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     /**
      * API -
      * not thread-safe. only fill one catalog at the same time with this instance.
-     * @param scriptURL  - URL to a script to parse
+     *
+     * @param scriptURL - URL to a script to parse
      * @throws java.io.IOException   - url not found
      * @throws java.sql.SQLException - error executing SQL
      */
