@@ -6,6 +6,122 @@ You can invoke dbmigrate with the maven-exec-plugin from within a pom.xml
 This can be an alternative for the maven-sql-plugin to setup a new database (-Pdevelop-db) or to execute some scripts (-Preset-db) with maven.
 The example shows the invocation bound to a maven lifecycle phase (process-test-resources).
 
+= Example to just check the database schema =
+Check the database for compliance with sql scripts.
+
+
+Example profiles-section of a maven pom.xml
+{{{
+...
+        <profile>
+            <id>checkdb</id>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <properties>
+
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>de.viaboxx</groupId>
+                    <artifactId>dbmigrate</artifactId>
+                    <version>2.5.12</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>com.agimatec.dbmigrate.AutoMigrationTool</argument>
+                                        <argument>-base</argument>
+                                        <argument>cp://db/</argument>
+                                        <argument>-conf</argument>
+                                        <argument>dbmigrate.xml</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+...
+}}}
+
+In the src/main/resources/db folder add:
+
+file dbmigrate.xml
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+    <map name="env">
+        <String name="DB_USER" value="root"/>
+        <String name="DB_PASSWORD" value=""/>
+        <String name="DB_DRIVER" value="com.mysql.jdbc.Driver"/>
+        <String name="DB_URL" value="jdbc:mysql://localhost:3306/mysqlexample_db"/>
+    </map>
+    <file name="Scripts-After-All" dir="check" file=""/>
+</config>
+}}}
+
+in src/main/resources/db/check folder add:
+
+file 1.0_check.xml
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <map name="env">
+        <ArrayList name="scripts">
+            <String value="cp://db/setup/structure.sql"/>
+            <!-- add more script urls here to create the database scheme -->
+        </ArrayList>
+    </map>
+
+    <list name="Operations">
+        <text name="checkSchemaComplete" value="mysql,scripts"/>
+    </list>
+</config>
+}}}
+
+
+The sql script to create the database is stored in
+src/main/resources/db/setup/structure.sql:
+{{{
+  
+CREATE TABLE mytable (
+  `id` varchar(100) not null,
+  dtcreated datetime,
+  dtupdated datetime,
+  updated_by varchar(32),
+  created_by varchar(32),
+  PRIMARY KEY (`id`)
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+...
+}}}
+
+
+invoke with:
+
+mvn process-test-resources -Pcheckdb
+
+That's it. You do not need a db_version table or anything, because dbmigrate is just used to validate the schema against the scripts.
+No runtime dependencies are need in your project, other can the jar containing the jdbc driver.
+
+
 = Details =
 
 Example pom.xml:
