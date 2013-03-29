@@ -9,6 +9,21 @@ You can use the dbmigrate tool to manage the creation and evolution of one or mo
 
 Normally you write a configuration to setup the database from scratch and another configuration to upgrade to higher versions. In upgrade-mode, the tool executes all upgrade scripts that are required.
 
+===Features===
+  * Migrate a database automatically to the current version by execution of .sql scripts or java code
+  * Check an existing database for compliance against .sql scripts
+
+===How does the database-schema-check work?====
+The DatabaseSchemaChecker gets 
+  # a JdbcDatabase with connection properties as input and
+  # a list of URLs to .sql scripts as input.
+  # it reads the database catalog and builds a CatalogDescription (1)
+  # it parses all sql-scripts and builds another CatalogDescription (2)
+  # it compares the actual catalog (1) with the expected catalog (2) and reports all differences found.
+
+==> Thus you immediatly find any modifications in the database or inconsistencies in your schema-scripts.
+
+
 == [GettingStartedDbMigrate Getting started!] ==
 
   * GettingStartedDbMigrate 
