@@ -2,7 +2,17 @@
 
 = Introduction =
 
-Getting started with dbmigrate...
+*Why database migration?*
+
+The flyway framework is a good alternative for dbmigrate, too.
+It also explains the motivation for such a framework:
+  * http://flywaydb.org/getstarted/whyDatabaseMigrations.html
 
 
-= Details =
+
+= Integrating dbmigrate into your project =
+
+  * [DBMigrateMaven maven integration]
+  If you want to invoke dbmigrate from maven or avoid runtime dependencies with your code.
+  * [DBMigrateSpring spring integration]
+  If you want you app to automatically migrate the database if required during startup using dbmigrate.
