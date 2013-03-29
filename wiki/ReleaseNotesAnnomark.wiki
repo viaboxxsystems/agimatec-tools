@@ -1,4 +1,9 @@
 = annomark =
+
+== March 2013 ==
+
+"annomark" will NOT be developed any longer.
+
 == 2.5.0 (July 2011) ==
   * Changed artifactId from com.agimatec to de.viaboxx
   * Published artifacts to maven central. 
