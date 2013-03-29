@@ -121,6 +121,16 @@ mvn process-test-resources -Pcheckdb
 That's it. You do not need a db_version table or anything, because dbmigrate is just used to validate the schema against the scripts.
 No runtime dependencies are need in your project, other can the jar containing the jdbc driver.
 
+===How to check multiple databases?===
+There is only 1 connection at a time. You can reconnect to a different database or change the user in .sql scripts:
+
+src/main/resources/db/check/2.0_reconnect.sql
+{{{
+CONNECT ${DB_USER}/${DB_PASSWORD}@otherdb_db;
+}}}
+
+DB_USER and DB_PASSWORD: are properties defined in dbmigrate.xml or given as JVM system properties
+
 
 = Details =
 
