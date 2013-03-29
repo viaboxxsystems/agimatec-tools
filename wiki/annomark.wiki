@@ -1,7 +1,12 @@
 #summary annotation based code generation framework
 #labels Featured
 
+March 2013
+
+"annomark" will NOT be developed any longer. 
+
 = Introduction =
+
 
 "annomark" is a tool that combines [http://annogen.codehaus.org/ "annogen"] and [http://freemarker.sourceforge.net/ "freemarker"]. This combination allows to process your classes with your annotations without the need for low-level java-programming with the annogen and freemarker APIs.
 You just annotate your classes (with predefined or own annotations) and use one of the predefined freemarker templates (or create your own templates) to generate one or more output files. 
