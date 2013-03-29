@@ -23,7 +23,7 @@ The AutoMigrationTool maintains a table db_version in the database in which it s
 
 ===Migration scripts===
   # script name contains a version information:
-  up_[version]_additional_info.[suffix]
+  up_version_additional_info.suffix
 
 suffix can be:
   # .sql
