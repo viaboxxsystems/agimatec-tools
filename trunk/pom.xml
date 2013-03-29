@@ -268,8 +268,8 @@
     <modules>
         <module>dbimport</module>
         <module>dbmigrate</module>
-        <module>annomark</module>
-        <module>annomark-example</module>
+        <!--<module>annomark</module>-->
+        <!--<module>annomark-example</module>-->
         <module>dbmigrate-example</module>
     </modules>
 

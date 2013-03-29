@@ -16,7 +16,26 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Description: <br/>
+ * Description: Compare a database schema against sql scripts and find differences.<br/>
+ * Example for mysql:
+ * <pre>
+ *       JdbcConfig config = new JdbcConfig();
+         config.setDriver("com.mysql.jdbc.Driver");
+         config.setConnect("jdbc:mysql://localhost:3306/mysql_db");
+         config.getProperties().put("user", "root");
+         config.getProperties().put("password", "");
+         JdbcDatabase targetDatabase = JdbcDatabaseFactory.createInstance(config);
+         targetDatabase.begin();
+
+         DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms("mysql");
+         checker.setDatabase(targetDatabase);
+         List<URL> urls = new ArrayList<URL>();
+         urls.add(getClass().getClassLoader().getResource("mysql/mysql-schema.sql"));
+         // add more script URLs that belong to the database schema...
+         checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
+
+         targetDatabase.close();
+ * </pre>
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 14:58:47 <br/>
