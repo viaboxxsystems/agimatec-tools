@@ -132,7 +132,7 @@ CONNECT ${DB_USER}/${DB_PASSWORD}@otherdb_db;
 DB_USER and DB_PASSWORD: are properties defined in dbmigrate.xml or given as JVM system properties
 
 
-= Details =
+= More examples =
 
 Example pom.xml:
 
