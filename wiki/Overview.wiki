@@ -15,6 +15,9 @@ You can
   * use dbmigrate (and optionally dbimport from within some of your scripts)
   * use annomark, but this requires dbmigrate in the classpath as well (because annomark uses some common-utility classes from dbmigrate)
 
+
+<img src="http://agimatec-tools.googlecode.com/svn/wiki/Schema.png"/>
+
 == What's new? ==
   
   * ReleaseNotes
