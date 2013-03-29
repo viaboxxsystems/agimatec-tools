@@ -13,7 +13,16 @@ Normally you write a configuration to setup the database from scratch and anothe
   * Migrate a database automatically to the current version by execution of .sql scripts or java code
   * Check an existing database for compliance against .sql scripts
 
+=== How does database migration work?===
+The AutoMigrationTool maintains a table db_version in the database in which it stored the database version.
+
+   # it reads the db_version table
+   # it scanns in a preconfigured folder for migration scripts
+   # it executes all scripts, that are required to migrate the database from the current version to a target version (or the latest version possible)
+   # it update the db_version table
+
 ===How does the database-schema-check work?====
+The schema-check is an optional validation step. It can be invoked separately or as a (final) part of the database migration.
 The DatabaseSchemaChecker gets 
   # a JdbcDatabase with connection properties as input and
   # a list of URLs to .sql scripts as input.
