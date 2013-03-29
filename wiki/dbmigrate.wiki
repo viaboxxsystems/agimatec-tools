@@ -17,9 +17,27 @@ Normally you write a configuration to setup the database from scratch and anothe
 The AutoMigrationTool maintains a table db_version in the database in which it stored the database version.
 
    # it reads the db_version table
-   # it scanns in a preconfigured folder for migration scripts
+   # it scans in a preconfigured folder for migration scripts
    # it executes all scripts, that are required to migrate the database from the current version to a target version (or the latest version possible)
    # it update the db_version table
+
+===Migration scripts===
+  # script name contains a version information:
+  up_[version]_additional_info.[suffix]
+
+suffix can be:
+  # .sql
+  # .xml
+  # .groovy 
+
+version can be:
+  # a number or many numbers divided by _ or . or -
+
+additional_info is an optional description for the script.
+
+examples:
+up_1_0_0_initial.sql
+up_2.1.35.sql
 
 ===How does the database-schema-check work?====
 The schema-check is an optional validation step. It can be invoked separately or as a (final) part of the database migration.
