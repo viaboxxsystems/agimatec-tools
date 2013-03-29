@@ -11,9 +11,9 @@ Normally you write a configuration to setup the database from scratch and anothe
 
 == [GettingStartedDbMigrate Getting started!] ==
 
-Look into the example to get an impression quickly or to use the example as a starting project for your own database.
-
-Look into the detailed documentation to learn the configuration and other features.
+  * GettingStartedDbMigrate 
+  * Look into the example to get an impression quickly or to use the example as a starting project for your own database.
+  * Look into the detailed documentation to learn the configuration and other features.
 
 == Reference dbmigrate in maven pom.xml ==
 {{{
