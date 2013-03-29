@@ -9,6 +9,8 @@ You can use the dbmigrate tool to manage the creation and evolution of one or mo
 
 Normally you write a configuration to setup the database from scratch and another configuration to upgrade to higher versions. In upgrade-mode, the tool executes all upgrade scripts that are required.
 
+== [GettingStartedDbMigrate Getting started!] ==
+
 Look into the example to get an impression quickly or to use the example as a starting project for your own database.
 
 Look into the detailed documentation to learn the configuration and other features.
@@ -18,7 +20,7 @@ Look into the detailed documentation to learn the configuration and other featur
   <dependency>
     <groupId>de.viaboxx</groupId>
     <artifactId>dbmigrate</artifactId>
-    <version>2.5.10</version>
+    <version>2.5.12</version>
   </dependency>
 }}}
 
