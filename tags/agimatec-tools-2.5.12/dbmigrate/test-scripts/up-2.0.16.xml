@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+  <list name="Operations">
+    <text name="doSQLScript" value="subscript.sql"/>
+    <!--<text name="halt" value="manually perform something"/>-->
+    <text name="doSQLScriptIgnoreErrors" value="subscript.sql"/>
+    <text name="version" value="2.0.16"/>
+  </list>
+</config>
+

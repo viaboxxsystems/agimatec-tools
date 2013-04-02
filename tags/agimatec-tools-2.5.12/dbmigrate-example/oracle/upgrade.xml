@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+
+  <map name="env">
+    <String name="DB_USER" value="@testdb.jdbcUser@"/>
+    <String name="DB_PASSWORD" value="@testdb.jdbcPassword@"/>
+    
+    <!-- schema namen -->
+    <String name="DB_testdb" value="@testdb.jdbcUser@"/>
+    <String name="DB_system" value="@system.jdbcUser@"/>
+
+    <String name="DB_testdb_PASSWORD" value="@testdb.jdbcPassword@"/>
+    <String name="DB_system_PASSWORD" value="@system.jdbcPassword@"/>
+
+    <!-- enable customer data migration -->
+    <Boolean name="testdata_enabled" value="@DBTOOL.testdata_enabled@"/>
+    
+    <String name="TRUE" value="1"/>
+    <String name="FALSE" value="0"/>
+    <String name="DBMS" value="oracle"/>
+  </map>
+
+  <file name="Scripts-Before-All" dir="upgrade/before-all" file=""/>
+  <file name="Scripts" dir="upgrade" file=""/>
+  <file name="Scripts-After-All" dir="upgrade/after-all" file=""/>
+
+  <file name="JdbcConfig" file="upgrade/conf/oracle.properties"/>
+  <text name="to-version" value="@database-version@"/>
+
+</config>
