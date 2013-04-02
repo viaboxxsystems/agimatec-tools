@@ -66,6 +66,13 @@ public class ConfigManager implements Serializable {
         myConfigRootRessouceName = aConfigRootRessouceName;
     }
 
+
+    public static ConfigManager createForClasspath() {
+        ConfigManager cm = new ConfigManager(null);
+        cm.setConfigRootPath(C_ProtocolClassPath);
+        return cm;
+    }
+
     /**
      * @return the singleton default instance of this class
      */
@@ -188,9 +195,9 @@ public class ConfigManager implements Serializable {
             boolean forward = false;
             while (tokens.hasMoreTokens()) {
                 String part = tokens.nextToken();
-                if(forward) {
+                if (forward) {
                     forward = false;
-                    if("/".equals(part)) continue;
+                    if ("/".equals(part)) continue;
                 }
                 if ("..".equals(part)) {
                     if (parts.size() > 1 && "/".equals(parts.getLast())) {
@@ -205,7 +212,7 @@ public class ConfigManager implements Serializable {
                 }
             }
             StringBuilder buf = new StringBuilder();
-            for(String part : parts) {
+            for (String part : parts) {
                 buf.append(part);
             }
             theResPath = buf.toString();

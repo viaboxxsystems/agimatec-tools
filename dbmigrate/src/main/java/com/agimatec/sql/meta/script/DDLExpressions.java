@@ -1,9 +1,14 @@
 package com.agimatec.sql.meta.script;
 
+import com.agimatec.commons.config.Config;
+import com.agimatec.commons.config.ConfigManager;
+import com.agimatec.commons.config.TextNode;
 import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.mysql.MySqlDDLExpressions;
 import com.agimatec.sql.meta.oracle.OracleDDLExpressions;
 import com.agimatec.sql.meta.postgres.PostgresDDLExpressions;
+
+import java.util.List;
 
 /**
  * Description: <br/>
@@ -49,6 +54,7 @@ public abstract class DDLExpressions {
 
     /**
      * remove \"
+     *
      * @param value - value or null to strip
      * @return stripped value or null
      */
@@ -62,5 +68,19 @@ public abstract class DDLExpressions {
             end--;
         }
         return value.substring(start, end);
+    }
+
+    public static ExtractExpr[] compileExpressions(String ddlXmlPath) {
+        Config cfg = ConfigManager.createForClasspath().readConfig(ddlXmlPath);
+        return DDLScriptSqlMetaFactory.compileExpressions(convertToArray(cfg.getList("ddl")));
+    }
+
+    private static String[] convertToArray(List<TextNode> texts) {
+        String[] stmtFormats = new String[texts.size()];
+        int i = 0;
+        for (TextNode each : texts) {
+            stmtFormats[i++] = each.getValue().trim().replace("\n", "");
+        }
+        return stmtFormats;
     }
 }

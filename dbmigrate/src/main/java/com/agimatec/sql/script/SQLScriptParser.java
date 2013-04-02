@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * <p>Title: Agimatec GmbH</p>
- * <p>Description: This class is capable to parse Oracle-SQL scripts. It is not a fully SQL and PL/SQL parser and
+ * <p>Description: This class is capable to parse SQL scripts. It is not a fully SQL and PL/SQL parser and
  * somehow heuristic.<br>
  * Able to parse:<br>
  * - SQL-statements (insert, update, select, delete, merge, synonyms, grants, create table, alter table, ...).

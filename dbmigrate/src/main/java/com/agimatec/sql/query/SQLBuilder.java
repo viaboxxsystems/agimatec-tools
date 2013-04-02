@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Description: Radikal abgespeckte Funktionalität:
- * Diese klasse ist nur noch ein Schatten ihrer selbst!
- * Hier werden nur noch einfache Statements aus einer .properties Datei geholt, mehr
- * wenn nötig später...<br/>
+ * Description: load sql statements from properties file, can replace parameter markers "?"<br/>
  * User: roman.stumm <br/>
  * Date: 09.11.2007 <br/>
  * Time: 15:08:00 <br/>
