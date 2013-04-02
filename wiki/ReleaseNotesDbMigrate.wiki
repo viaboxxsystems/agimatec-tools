@@ -2,6 +2,7 @@
 
 == 2.5.12 (March 2013) ==
   * support for mysql database (incl DatabaseSchemaChecker)
+  * ddl descriptions for mysql, postgres and oracle extracted to xml files
 
 == 2.5.10 (Nov 2012) ==
   * postgres 9.1 is a little picky when committing a transaction that is in autoCommit-mode, so avoid problems with invalid commit/rollback calls
