@@ -7,7 +7,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.sql.DataSource;
 
 /**
- * Description: <br>
+ * Description: you can optionally configure the database connection for dbmigrate by
+ * providing a BasicDataSource. Otherwise dbmigrate uses its proprietary database connection settings by:
+ * DB_USER, DB_PASSWORD, DB_URL, DB_DRIVER environment entries<br>
  * User: roman.stumm<br>
  * Date: 04.11.2011<br>
  * Time: 09:51:39<br>
@@ -28,7 +30,7 @@ class DBCPAdapter {
      * @param dataSource
      */
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = (BasicDataSource)dataSource;
+        this.dataSource = (BasicDataSource) dataSource;
     }
 
     public void configure(AutoMigrationTool tool) {
