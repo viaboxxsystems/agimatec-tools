@@ -16,3 +16,6 @@ It also explains the motivation for such a framework:
   If you want to invoke dbmigrate from maven or avoid runtime dependencies with your code.
   * [DBMigrateSpring spring integration]
   If you want you app to automatically migrate the database if required during startup using dbmigrate.
+
+== Tipp ==
+You probably want to have both maven + spring integration!
