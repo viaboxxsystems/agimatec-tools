@@ -1,5 +1,4 @@
 #summary annotation based code generation framework
-#labels Featured
 
 March 2013
 
