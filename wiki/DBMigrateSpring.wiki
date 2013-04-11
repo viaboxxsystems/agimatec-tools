@@ -83,6 +83,9 @@ After having done several projects with dbmigrate and the springframework, this 
   * use properties with spring and configure in spring as much as possible 
   * the spring-configuration provides the setup-option to recreate your databases/users etc from scratch and the upgrade-option to migrate to the lastest schema version
   * example for postgres. similar configuration for mysql possible
+  * I assume, your application is using the default directory layout of a maven java project
+
+== Configuration ==
 
 1. file spring-context.xml in resources/META-INF/spring
 {{{
@@ -290,3 +293,14 @@ app-jdbc-password=secret
 }}}
 
 Other properties used in spring that do not appear here (like dbmigrate-jdbc-password) are optional, because their default value is provided after the ':' => ${dbmigrate-jdbc-password:admin} default value is 'admin' for the property 'dbmigrate-jdbc-password'
+
+
+== Usage ==
+
+1. first start: setup database
+Before starting the app the first time, the database must be created:
+    Run your app with -Ddbmigrate-env=setup
+
+2. normal start: migrate database
+When the app starts normally, it migrates the database to the latest version:
+    Run your app with -Ddbmigrate-env=upgrade
