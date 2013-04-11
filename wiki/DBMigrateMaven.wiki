@@ -188,7 +188,7 @@ If you additionally want to provide the option to run dbmigrate from maven witho
                                     <target>SCRIPT</target>
                                     <outputFile>src/main/resources/database/drop-schema.sql</outputFile>
                                     <force>true</force>
-                                    <format>true</format>
+                                    <format>false</format>
                                     <type>DROP</type>
                                 </configuration>
                             </execution>
