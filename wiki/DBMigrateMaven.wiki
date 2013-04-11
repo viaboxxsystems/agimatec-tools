@@ -6,6 +6,212 @@ You can invoke dbmigrate with the maven-exec-plugin from within a pom.xml
 This can be an alternative for the maven-sql-plugin to setup a new database (-Pdevelop-db) or to execute some scripts (-Preset-db) with maven.
 The example shows the invocation bound to a maven lifecycle phase (process-test-resources).
 
+= A real best practise example =
+Refer to the spring integration to configure dbmigrate as part of the startup of your application.
+
+If you additionally want to provide the option to run dbmigrate from maven without the need to start your app, you can follow the 'best practise example', too. 
+
+1. pom.xml 
+{{{
+  ...
+  <dependencies>
+       <dependency>
+            <groupId>de.viaboxx</groupId>
+            <artifactId>dbmigrate</artifactId>
+            <version>2.5.12</version>
+        </dependency>
+  ...
+  </dependencies>
+
+   <profiles>
+        <profile>
+            <!--
+                The Profile "setup" is used when a developer wants to
+                - drop/create the database/role/user/schema the first time or after a schema-change
+
+                invoke: mvn -Psetup exec:java
+            -->
+            <id>setup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>com.agimatec.dbmigrate.AutoMigrationTool</mainClass>
+                            <arguments>
+                                <argument>-base</argument>
+                                <argument>cp://database/</argument>
+                                <argument>-conf</argument>
+                                <argument>setup.xml</argument>
+                                <argument>-exit</argument>
+                                <argument>false</argument>
+                            </arguments>
+                            <systemProperties>
+                                <systemProperty>
+                                    <key>DB_URL</key>
+                                    <value>jdbc:postgresql://localhost:5432/postgres</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>DB_SCHEMA</key>
+                                    <value>postgres</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>DB_USER</key>
+                                    <value>postgres</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>DB_PASSWORD</key>
+                                    <value>admin</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>APP_DB</key>
+                                    <value>appdb</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>APP_USER</key>
+                                    <value>appuser</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>APP_PASSWORD</key>
+                                    <value>secret</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!--
+                The Profile "upgrade" is used when a developer wants to upgrade the database without starting the app
+                invoke: mvn -Pupgrade exec:java
+            -->
+            <id>upgrade</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>com.agimatec.dbmigrate.AutoMigrationTool</mainClass>
+                            <systemProperties>
+                                <systemProperty>
+                                    <key>DB_URL</key>
+                                    <value>jdbc:postgresql://localhost:5432/appdb</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>DB_USER</key>
+                                    <value>appuser</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <key>DB_PASSWORD</key>
+                                    <value>secret</value>
+                                </systemProperty>
+                            </systemProperties>
+                            <arguments>
+                                <argument>-base</argument>
+                                <argument>cp://database/</argument>
+                                <argument>-conf</argument>
+                                <argument>upgrade.xml</argument>
+                                <argument>-exit</argument>
+                                <argument>false</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <!-- OPTIONAL
+             this is a possibility to integrate hiberate4 SchemaExport with the hibernate4-maven-plugin to create
+             the file schema.sql after you changed your entity classes -->
+        <profile>
+            <id>generate</id>
+            <properties>
+                <hibernate.connection.driver_class>org.postgresql.Driver</hibernate.connection.driver_class>
+                <hibernate.dialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernate.dialect>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- mvn -Pgenerate clean compile
+
+                            or - if no <phase> is configured:
+                            mvn -Pgenerate clean compile hibernate4:export -->
+                        <groupId>de.juplo</groupId>
+                        <artifactId>hibernate4-maven-plugin</artifactId>
+                        <version>1.0.1</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>export</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <target>SCRIPT</target>
+                            <outputFile>src/main/resources/database/schema.sql</outputFile>
+                            <force>true</force>
+                            <format>true</format>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+   </profiles>
+ 
+  ...
+</project>
+
+}}}
+
+2. other files
+the other files needed to run this pom.xml are contained in [DBMigrateSpring spring integration - best practise example].
+
+you need
+  * setup.xml
+  * upgrade.xml
+
+in directory resources/database. But spring is not required for a pure maven integration, so you do NOT need the configuration files and properties unless you also want to have spring integration (I prefer to have both).
+ 
+== Usage ==
+
+1. Create the database (drop/create)
+{{{
+mvn -Psetup exec:java
+}}}
+
+2. Migrate the database
+{{{
+    mvn -Pupgrade exec:java
+}}}
+
+3. Let hibernate generate the schema.sql file
+{{{
+    mvn -Pgenerate clean compile
+}}}
+------
+
 = Example to just check the database schema =
 Check the database for compliance with sql scripts.
 
