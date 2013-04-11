@@ -1,7 +1,7 @@
 = dbmigrate =
 
 == 2.5.12 (March 2013) ==
-  * documentation improved, more best-practise examples for spring integration and maven integration of dbmigrate
+  * Wiki documentation improved, more best-practise examples for spring integration and maven integration of dbmigrate
   * support for mysql database (incl DatabaseSchemaChecker)
   * ddl descriptions for mysql, postgres and oracle extracted to xml files
 
