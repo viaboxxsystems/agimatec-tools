@@ -189,6 +189,11 @@ After having done several projects with dbmigrate and the springframework, this 
 </config>
 }}}
 
+When you make changes on your database:
+##################################################################
+### Do not forget to set/update the DB_VERSION in 'setup.xml'! ###
+##################################################################
+
 4. script to create user and database in resources/database/setup
 
 file 0.0.1_create_database.sql
@@ -304,3 +309,7 @@ Before starting the app the first time, the database must be created:
 2. normal start: migrate database
 When the app starts normally, it migrates the database to the latest version:
     Run your app with -Ddbmigrate-env=upgrade
+
+#########################################
+### 'upgrade' is the default behavior ###
+#########################################
