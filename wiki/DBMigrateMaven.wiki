@@ -155,24 +155,45 @@ If you additionally want to provide the option to run dbmigrate from maven witho
                         <!-- mvn -Pgenerate clean compile
 
                             or - if no <phase> is configured:
-                            mvn -Pgenerate clean compile hibernate4:export -->
+                            mvn -Pgenerate clean compile hibernate4:export
+
+                            documentation, see http://juplo.de/hibernate4-maven-plugin/
+                            -->
                         <groupId>de.juplo</groupId>
                         <artifactId>hibernate4-maven-plugin</artifactId>
                         <version>1.0.1</version>
                         <executions>
                             <execution>
+                                <id>generate-schema</id>
                                 <phase>compile</phase>
                                 <goals>
                                     <goal>export</goal>
                                 </goals>
+                                <configuration>
+                                    <target>SCRIPT</target>
+                                    <outputFile>src/main/resources/database/schema.sql</outputFile>
+                                    <force>true</force>
+                                    <format>true</format>
+                                    <type>CREATE</type>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>generate-drop</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>export</goal>
+                                </goals>
+                                <configuration>
+                                    <target>SCRIPT</target>
+                                    <outputFile>src/main/resources/database/drop-schema.sql</outputFile>
+                                    <force>true</force>
+                                    <format>true</format>
+                                    <type>DROP</type>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <target>SCRIPT</target>
-                            <outputFile>src/main/resources/database/schema.sql</outputFile>
-                            <force>true</force>
-                            <format>true</format>
-                        </configuration>
+
                     </plugin>
                 </plugins>
             </build>
