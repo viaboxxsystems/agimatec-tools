@@ -15,13 +15,16 @@
             ${start} [${nomaxvalue(NOMAXVALUE)}] [${nominvalue(NOMINVALUE)}] [${nocycle(NOCYCLE)}] [${noorder(NOORDER)}]
             [{cache CACHE ${value}}]}]}
         </text>
-        <text>{dezign-create-table CREATE TABLE ${table} '(' {tableElement [{tableConstraint [{constraint CONSTRAINT
-            ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'
-            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}] [{foreignKey FOREIGN KEY '(' {columns ${column}...','}
-            ')' REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] [{tableSpace USING INDEX
-            TABLESPACE ${tableSpace}}]}] [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [{precision '('
-            {numbers ${value}...','} [CHAR] ')'}] [{default DEFAULT ${defaultValue}}] [{constraint CONSTRAINT
-            ${constraintName}}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}]...','} ')'}
+        <text>{dezign-create-table CREATE TABLE ${table} '(' {tableElement
+            [{tableConstraint
+            [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}] '(' {columns ${column}...','} ')'
+            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}]
+            [{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')'
+            REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]
+            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}]
+            [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [{precision '('
+            {numbers ${value}...','} [CHAR] ')'}] [{default DEFAULT ${defaultValue}}]
+            [{constraint CONSTRAINT ${constraintName}}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}]...','} ')'}
         </text>
         <text>{create-table CREATE TABLE ${table} '(' {tableElement [{primaryKey PRIMARY KEY '(' {columns
             ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}] [{foreignKey FOREIGN KEY '('
