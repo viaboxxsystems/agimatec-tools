@@ -8,6 +8,15 @@
 /* Sequences                                                              */
 /* ---------------------------------------------------------------------- */
 
+-- with and without constraint name for foreign keys
+create table alternative_foreignkey_syntax (
+      username varchar(255) not null,
+      authority varchar(255) not null,
+      user_id  BIGINT,
+      constraint fk_authorities_users foreign key(username) references users(username),
+      foreign key(user_id) references User_Core(user_id),
+      primary key (username, authority));
+
 CREATE SEQUENCE hibernate_sequence INCREMENT 1 START 500000;
 
 /* ---------------------------------------------------------------------- */
