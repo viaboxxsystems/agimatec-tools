@@ -1,5 +1,7 @@
 = dbmigrate =
 
+== 2.5.14 (May 2013) ==
+
 April 2013
   * Wiki documentation improved, more best-practise examples for spring integration and maven integration of dbmigrate
 
