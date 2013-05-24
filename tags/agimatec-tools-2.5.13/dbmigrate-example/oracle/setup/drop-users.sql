@@ -1,0 +1,1 @@
+drop user ${DB_testdb} cascade;

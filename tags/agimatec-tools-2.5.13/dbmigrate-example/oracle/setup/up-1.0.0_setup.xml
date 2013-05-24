@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+  <list name="Operations">
+    <!-- ############## create Datenbank/User ########### -->
+    <text name="doSQLScript" value="connect/system.sql"/>
+    <text name="doSQLScriptIgnoreErrors" value="drop-users.sql"/>
+    <text name="doSQLScript" value="create-users.sql"/>
+    
+    <!-- ############## create Schema ########### -->
+    <text name="doSQLScript" value="connect/testdb.sql"/>
+    <text name="doSQLScript" value="create-tables.sql"/>
+
+    <!-- create some PLSQL procedures -->
+    <text name="execSQLScript" value="plsql-history-session-spec.sql"/>
+    <text name="execSQLScript" value="plsql-history-session-body.sql"/>
+    <text name="doSQLScript" value="functions/create-functions.sql"/>
+        
+    <!-- ############## import Data ########### -->    
+    <list name="testdata_enabled=true">
+      <text name="doSQLScript" value="cp://insert-common.sql"/>
+      <text name="dbSetup" value="cp://data.xml"/>
+      <text name="doGroovyScript" value="importUsersXml.groovy(cp://test-users.xml)"/>
+      <text name="doGroovyScript" value="importPostcodesCsv.groovy(cp://postcodes.csv)"/>
+    </list>
+    <text name="version" value="@database-version@"/>
+  </list>
+</config>
+
