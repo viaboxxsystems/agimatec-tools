@@ -1,5 +1,13 @@
 = dbimport =
 
+== 2.5.13 (May 2013) ==
+  * NEW: SharedExcelRowReaderFactory: helps to implement multiple imports on the same excel workbook.
+  * NEW: ExcelGenerator: convenience class to write data as excel worksheet.
+  * NEW: ExcelImporterSpec: convenience ImporterSpec for importing Excel spreadsheets.
+  * NEW: ExcelImportProcessor
+  * ExcelRowReader: supports sheetName and keepOpen
+  * NEW: ExcelUtils: provides commonly used methods to read data from excel cells
+
 == 2.5.11 ==
    * ExcelRowReader: added code to remove the current row from excel sheet during import
    * ExcelRowReader: added code to remove a column from a excel sheet
