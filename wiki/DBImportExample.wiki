@@ -225,7 +225,6 @@ public class MyWorkbookGenerator extends ExcelGenerator {
           "First Name", "Last Name", "MyHeader3"
         );
         sheet.getRow(rowNum - 1).getCell(0).setCellStyle(style(STYLE_UNDERLINE_HEADER));
-        sheet.getRow(rowNum - 1).getCell(1).setCellStyle(style(STYLE_BLUE_HEADER));
          // etc...
 
          for (MyDataEntry each : input.getEntries()) {
