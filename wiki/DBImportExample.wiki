@@ -138,7 +138,34 @@ def spec = new XmlSlurperSpec(
 
 }}}
 
-== Example 2 (Groovy) ==
+== Example 2 (Java) ==
+since 2.5.13, using convenience class to read from sheets in a excel workbook
+
+{{{
+InputStream stream = new FileInputStream("workbook.xls");                       
+ExcelRowTokenizerFactory factory = new SharedExcelRowReaderFactory();           
+try {                                                                           
+   ImporterSpec spec1 = new ExcelImporterSpec("SheetName1") { 
+     protected void processRow(ExcelImportProcessor processor) {                   
+      processor.getString("column title 1"));                                                           
+      processor.getBoolean("column title 2"));                                                          
+     }                                                                                                    
+   };            
+   spec1.setLineTokenizerFactory(factory);                                      
+   Importer importer1 = new Importer(spec1);                                    
+   importer1.importFrom(stream);                                                
+                                                                                                                                                              
+   ImporterSpec spec2 = new ExcelImporterSpec("SheetName2") { ... };            
+   spec2.setLineTokenizerFactory(factory);                                      
+   Importer importer2 = new Importer(spec2);                                    
+   importer2.importFrom(stream);                                                
+                                                                                
+} finally {                                                                     
+ stream.close();                                                                
+}                                                                               
+}}}
+
+== Example 3 (Groovy) ==
 {{{
   LineImporterSpecGroovy spec = new LineImporterSpecGroovy( { processor ->
     def cell = processor.currentRow['the_header_column_name_here'];
@@ -154,3 +181,61 @@ def spec = new XmlSlurperSpec(
 }}}
 
   * You can read all cell attributes (color, font, formular, comment) inside your processRow() method or groovy closure. (see class ExcelCell and refer to [http://poi.apache.org/hssf/index.html POI-HSSF docs])
+
+
+== Write Excel workbook ==
+see class ExcelGenerator
+
+Example of your custom subclass:
+{{{
+public class MyWorkbookGenerator extends ExcelGenerator {
+     final MyData input;
+    // Custom styles
+    String STYLE_UNDERLINE_HEADER = "underlineHeader";
+    protected HSSFSheet sheet;
+    protected HSSFRow row;
+
+     public WorkbookGenerator(MyData input) {
+        this.input = input;
+    }
+
+   @Override
+    protected void initStyles() {
+        super.initStyles();    // call super!
+        HSSFCellStyle style = getStyles().boldHeader();
+        style.getFont(wb).setUnderline(Font.U_SINGLE);
+        getStyles().put(STYLE_UNDERLINE_HEADER, style);
+
+        // .. more custom styles to create+cache here
+   } 
+
+
+    @Override
+    protected void generateSheets() {
+        generateMySheet1(); // ... custom logic to create the sheets with data
+   } 
+
+    private void generateMySheet1() {
+        sheet = wb.createSheet("MySheetName 1");
+        int rowNum = 0;
+        row = sheet.createRow(rowNum++);
+        createCell(row, 0, "My Sheet Title", style(STYLE_boldTitle));
+        createCell(row, 10, "My Legend", style(STYLE_boldHeader));
+        createHeaders(sheet.createRow(rowNum++), 0, style(STYLE_boldHeader),
+          "First Name", "Last Name", "MyHeader3"
+        );
+        sheet.getRow(rowNum - 1).getCell(0).setCellStyle(style(STYLE_UNDERLINE_HEADER));
+        sheet.getRow(rowNum - 1).getCell(1).setCellStyle(style(STYLE_BLUE_HEADER));
+         // etc...
+
+         for (MyDataObject each : input.values()) {
+            row = sheet.createRow(rowNum++);
+            int colNum = 0;
+            createCell(row, colNum++, each.getFirstName()); 
+            createCell(row, colNum++, each.getLastName()); 
+            // etc...
+         }
+         // etc...
+    }
+
+}}}
