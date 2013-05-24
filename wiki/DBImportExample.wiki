@@ -228,7 +228,7 @@ public class MyWorkbookGenerator extends ExcelGenerator {
         sheet.getRow(rowNum - 1).getCell(1).setCellStyle(style(STYLE_BLUE_HEADER));
          // etc...
 
-         for (MyDataObject each : input.values()) {
+         for (MyDataEntry each : input.getEntries()) {
             row = sheet.createRow(rowNum++);
             int colNum = 0;
             createCell(row, colNum++, each.getFirstName()); 
@@ -237,5 +237,6 @@ public class MyWorkbookGenerator extends ExcelGenerator {
          }
          // etc...
     }
+}
 
 }}}
