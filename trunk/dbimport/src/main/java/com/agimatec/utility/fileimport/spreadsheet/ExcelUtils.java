@@ -26,11 +26,15 @@ public class ExcelUtils {
     public static boolean getBoolean(Map<String, ICell> row, String columnName) {
         ICell cell = row.get(columnName);
         if (cell == null) return false;
-        if (cell.getValue() instanceof Boolean) return (Boolean) cell.getValue();
-        else {
+        Object value = cell.getValue();
+        if (value instanceof Boolean) return (Boolean) cell.getValue();
+        else if (value instanceof Number) return ((Number) value).intValue() != 0;
+        else if (value != null) {
             String content = cell.getStringValue().trim();
-            return !("".equals(content) || "0".equals(content)) &&
-                    ("yes".equalsIgnoreCase(content) || "true".equalsIgnoreCase(content));
+            return ("1".equalsIgnoreCase(content) || "yes".equalsIgnoreCase(content) ||
+                    "true".equalsIgnoreCase(content));
+        } else {
+            return false;
         }
     }
 
