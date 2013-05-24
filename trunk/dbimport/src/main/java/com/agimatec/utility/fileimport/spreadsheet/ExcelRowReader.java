@@ -62,6 +62,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
      */
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
+        setSheet(null);
     }
 
     /**
@@ -90,6 +91,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
      */
     public void setSheetIndex(int sheetIndex) {
         this.sheetIndex = sheetIndex;
+        setSheet(null);
     }
 
     /**
@@ -155,6 +157,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
 
     public void setFileSystem(POIFSFileSystem fileSystem) {
         this.fileSystem = fileSystem;
+        setWorkbook(null);
     }
 
     public Iterator<Row> getRowIterator() {
@@ -171,6 +174,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
 
     public void setSheet(HSSFSheet sheet) {
         this.sheet = sheet;
+        setRowIterator(null);
     }
 
     public HSSFWorkbook getWorkbook() {
@@ -179,6 +183,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
 
     public void setWorkbook(HSSFWorkbook workbook) {
         this.workbook = workbook;
+        setSheet(null);
     }
 
     public InputStream getStream() {
