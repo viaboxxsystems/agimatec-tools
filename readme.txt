@@ -57,6 +57,11 @@ mvn install
 -----------------------
 mvn site
 
+checkin javadoc and set correct mimetype:
+-----------------------------------------
+cd javadoc
+svn --recursive propset svn:mime-type text/html .
+
 (optional) generate an IntelliJ project:
 -----------------------------
 mvn idea:idea
