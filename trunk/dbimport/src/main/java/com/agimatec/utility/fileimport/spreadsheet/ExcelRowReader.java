@@ -1,5 +1,6 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
+import com.agimatec.utility.fileimport.ImporterException;
 import com.agimatec.utility.fileimport.LineImportProcessor;
 import com.agimatec.utility.fileimport.LineReader;
 import org.apache.poi.hssf.usermodel.HSSFAccess;
@@ -18,9 +19,9 @@ import java.util.Iterator;
 /**
  * Description: read a spreadsheet line by line (each line is a {@Row})<br/>
  * User: roman.stumm <br/>
- * Date: 11.06.2008 <br/>
+ * Date: 11.06.2008, 24.05.2013<br/>
  * Time: 18:03:51 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Viaboxx GmbH
  */
 public class ExcelRowReader implements LineReader<ExcelRow> {
     private int sheetIndex = 0;
@@ -29,13 +30,62 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
     private HSSFSheet sheet;
     private Iterator<Row> rowIterator;
     private InputStream stream;
+    /**
+     * @since 2.5.13
+     */
+    private String sheetName;
+    /**
+     * @since 2.5.13
+     */
+    private final boolean keepOpen;
+
+    /**
+     * @param keepOpen - true to prevent stream.close() on call of close()
+     * @since 2.5.13
+     */
+    public ExcelRowReader(boolean keepOpen) {
+        this.keepOpen = keepOpen;
+    }
+
+    /**
+     * create an instance that closes the stream on call of close() (keepOpen = false)
+     */
+    public ExcelRowReader() {
+        keepOpen = false;
+    }
+
+    /**
+     * set sheet name to import. if sheetName is set, the sheetIndex will be ignored.
+     *
+     * @param sheetName
+     * @since 2.5.13
+     */
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
+    }
+
+    /**
+     * @since 2.5.13
+     */
+    public String getSheetName() {
+        return sheetName;
+    }
 
     public int getSheetIndex() {
         return sheetIndex;
     }
 
     /**
-     * sheet index is 0-based
+     * @return true when stream not closed when close() called on receiver.
+     * @since 2.5.13
+     */
+    public boolean isKeepOpen() {
+        return keepOpen;
+    }
+
+    /**
+     * sheet index is 0-based. sheetName has priority before sheetIndex.
+     *
      * @param sheetIndex
      */
     public void setSheetIndex(int sheetIndex) {
@@ -64,7 +114,11 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         }
     }
 
-    protected void init() throws IOException {
+    /**
+     * @throws IOException
+     * @throws ImporterException - invalid sheet name (sheet not found by name)
+     */
+    protected void init() throws IOException, ImporterException {
         if (rowIterator != null) return; // short-circuit
 
         if (fileSystem == null) {
@@ -74,13 +128,25 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
             workbook = new HSSFWorkbook(fileSystem);
         }
         if (sheet == null) {
-            sheet = workbook.getSheetAt(sheetIndex);
+            if (sheetName != null) {
+                sheet = workbook.getSheet(sheetName);
+                if (sheet == null) {
+                    throw new ImporterException("Sheet not found by name: " + getSheetName(), true);
+                }
+            } else {
+                sheet = workbook.getSheetAt(sheetIndex);
+            }
         }
         rowIterator = sheet.rowIterator();
     }
 
+    /**
+     * close underlying stream (if keepOpen is false)
+     *
+     * @throws IOException
+     */
     public void close() throws IOException {
-        stream.close();
+        if (!keepOpen && stream != null) stream.close();
     }
 
     public POIFSFileSystem getFileSystem() {
@@ -115,8 +181,11 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         this.workbook = workbook;
     }
 
+    public InputStream getStream() {
+        return stream;
+    }
 
-/*  this does not work yet.
+    /*  this does not work yet.
     public void removeCurrentRow(LineImportProcessor processor) {
         ExcelRow row = (ExcelRow) processor.getCurrentLine();
         int rowNum = row.getRowNum();
