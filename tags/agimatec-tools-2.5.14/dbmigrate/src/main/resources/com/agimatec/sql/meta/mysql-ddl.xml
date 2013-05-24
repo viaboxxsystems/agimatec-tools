@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config name="mysql">
+    <!--
+   limitation - create-view, drop-view missing (alter-view missing)
+   limitation - cannot detect: "ALTER TABLE t alter column c1 set not null, add primary key (c);"
+   use "ALTER TABLE ..., add constraint t_pkey primary key (c);" instead
+    -->
+    <list name="ddl">
+        <text>{table-add-constraint ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName}
+            [${unique(UNIQUE)}] '(' {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
+        </text>
+        <text>
+            {create-index CREATE [${unique(UNIQUE)}] INDEX ${indexName} ON ${table} '('
+            {columns ${column} [{func '(' {elements ${each}...','} ')'}] [ASC] [${desc(DESC)}]...','} ')'
+            [{tableSpace TABLESPACE ${tableSpace}}]}
+        </text>
+        <text>
+            {table-add-foreign-key ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName} FOREIGN KEY '('
+            {columns ${column}...','} ')'
+            REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] [ON] [DELETE] [${onDeleteRule}]
+            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
+        </text>
+        <text>
+            {create-sequence CREATE SEQUENCE ${sequence} [{attributes INCREMENT [BY] ${increment}
+            START [WITH] ${start} [${nomaxvalue(NOMAXVALUE)}] [${nominvalue(NOMINVALUE)}] [${nocycle(NOCYCLE)}]
+            [${noorder(NOORDER)}] [{cache CACHE ${value}}]}]}
+        </text>
+        <text>
+            {dezign-create-table CREATE TABLE ${table} '(' {tableElement
+            [{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')'
+            REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]}]
+            [{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}]
+            '(' {columns ${column}...','} ')'}]
+            [{tableIndex [${isUnique(UNIQUE)}] KEY ${indexName} '(' {columns ${column}...','} ')'}]
+            [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [{precision '(' {numbers ${value}...','}
+            [CHAR] ')'}]
+            [${unsigned(UNSIGNED)}] [{collation COLLATE ${collation}}] [{default DEFAULT ${defaultValue}}] [{constraint
+            CONSTRAINT ${constraintName}}] [${mandatory(NOT NULL)}]
+            [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE
+            ${updateRule}}] [COMMENT] [${comment{'}}]}]...','} ')'}
+        </text>
+        <text>
+            {create-table CREATE TABLE ${table} '(' {tableElement
+            [{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE
+            ${tableSpace}}]}]
+            [{foreignKey FOREIGN KEY '(' {columns ${column}...','} ')' REFERENCES ${refTable} [{refcolumns '('
+            {refcolumns ${column}...','} ')'}] [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}]
+            [{columndefinition ${column} ${typeName} [{precision '(' {numbers ${value}...','} [CHAR] ')'}]
+            [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}]...','} ')'}
+        </text>
+        <text>
+            {table-add-primary-key ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName} PRIMARY KEY '('
+            {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
+        </text>
+        <text>{table-comment COMMENT ON TABLE ${table} IS ${comment{'}}}</text>
+        <text>{column-comment COMMENT ON COLUMN ${tableColumn} IS ${comment{'}}}</text>
+        <text>
+            {table-alter-columns ALTER TABLE ${table} {tableElement
+            [{alter-column-set-notnull ALTER [COLUMN] ${column} SET NOT NULL}]
+            [{alter-column-drop-notnull ALTER [COLUMN] ${column} DROP NOT NULL}]
+            [{constraint ADD CONSTRAINT ${constraintName} [${unique(UNIQUE)}] '(' {columns ${column}...','} ')'}]
+            [{add-foreign-key ADD CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' REFERENCES
+            ${refTable}
+            [{refcolumns '(' {refcolumns ${column}...','} ')'}] [ON] [DELETE] [${onDeleteRule}] [{tableSpace USING INDEX
+            TABLESPACE ${tableSpace}}]}]
+            [{drop-constraint DROP CONSTRAINT ${constraintName}}] [{drop-column DROP [COLUMN] ${column}}]
+            [{add-column ADD [COLUMN] ${column} ${typeName} [${varying(VARYING)}] [{precision '(' {numbers
+            ${value}...','} [CHAR] ')'}]
+            [${unsigned(UNSIGNED)}] [{collation COLLATE ${collation}}] [{default DEFAULT ${defaultValue}}] [{constraint
+            CONSTRAINT ${constraintName}}] [${mandatory(NOT NULL)}]
+            [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE
+            ${updateRule}}] [COMMENT] [${comment{'}}]}]
+            [{alter-column-type ALTER [COLUMN] ${column} TYPE ${typeName} [${varying(VARYING)}] [{default DEFAULT
+            ${defaultValue}}]
+            [{constraint CONSTRAINT ${constraintName}}] [{precision '(' {numbers ${value}...','} ')'}]
+            [${mandatory(NOT NULL)}]}]...','}}
+        </text>
+        <text>{drop-trigger DROP TRIGGER ${trigger} ON ${table}}</text>
+        <text>{drop-table DROP TABLE [IF] [EXISTS] ${table} [CASCADE]}</text>
+        <text>{drop-sequence DROP SEQUENCE ${sequence}}</text>
+    </list>
+</config>
