@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 11:17<br>
  * viaboxx GmbH, 2013
  * </p>
+ *
  * @since 2.5.13
  */
 public abstract class ExcelGenerator {
@@ -81,7 +82,7 @@ public abstract class ExcelGenerator {
         else if (value instanceof Calendar)
             cell.setCellValue((Calendar) value);
         else if (value instanceof Date)
-            cell.setCellValue((Date) value);
+            cell.setCellValue((Date) value); // do not forget to set a cellStyle with a dataFormat
         else if (value instanceof Number)
             cell.setCellValue(((Number) value).doubleValue());
         else if (value instanceof Boolean)
