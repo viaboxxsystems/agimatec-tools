@@ -1,1 +1,0 @@
-DROP TRIGGER ${trigger};

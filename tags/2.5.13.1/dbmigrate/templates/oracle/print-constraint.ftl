@@ -1,1 +1,0 @@
-CONSTRAINT ${index.indexName}<#if index.unique> UNIQUE</#if> (<#list generator.exeptLast(index.columns) as col>${col}, </#list>${generator.last(index.columns)})

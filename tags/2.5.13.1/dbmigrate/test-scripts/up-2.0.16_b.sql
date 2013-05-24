@@ -1,1 +1,0 @@
--- inside 2.0.16_b.sql file
