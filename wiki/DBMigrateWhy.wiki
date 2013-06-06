@@ -1,6 +1,5 @@
 #summary Why use dbmigrate and who can use it
 
-_Blog entry from http://blog.agimatec.de _
 
 = The New-software-and-old-data-problem =
 
