@@ -52,6 +52,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <optional>true</optional>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -104,6 +105,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+            <scope>test</scope>
             <optional>true</optional>
         </dependency>
 
