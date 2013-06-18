@@ -2,7 +2,7 @@
 
 March 2013
 
-"annomark" will NOT be developed any longer after release is 2.5.11.
+"annomark" will NOT be developed any longer after release 2.5.11.
 
 = Introduction =
 
