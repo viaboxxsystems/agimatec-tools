@@ -23,19 +23,9 @@ public class PostgresDDLExpressions extends DDLExpressions {
         return expressions;
     }
 
-    /**
-     * equalize type names
-     */
+    @Override
     public void equalizeColumn(ColumnDescription cd) {
-        if (cd.getTypeName().equalsIgnoreCase("CHARACTER VARYING")) {
-            cd.setTypeName("VARCHAR");
-        } else if (cd.getTypeName().equalsIgnoreCase("BOOL")) {
-            cd.setTypeName("BOOLEAN");
-        } else if (cd.getTypeName().equalsIgnoreCase("int4")) {
-            cd.setTypeName("INTEGER");
-        } else if (cd.getTypeName().equalsIgnoreCase("int8")) {
-            cd.setTypeName("BIGINT");
-        }
-
+        // ignore
     }
+
 }

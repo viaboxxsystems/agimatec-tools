@@ -49,6 +49,18 @@ public class PostgresSchemaChecker extends DatabaseSchemaChecker {
             return "FLOAT";
         } else if (cd.getTypeName().equalsIgnoreCase("numeric")) {
             return "DECIMAL";
+        } else if(cd.getTypeName().equalsIgnoreCase("int8")) {
+            return "BIGINT";
+        } else if(cd.getTypeName().equalsIgnoreCase("int4")) {
+            return "INTEGER";
+        } else if(cd.getTypeName().equalsIgnoreCase("int2")) {
+            return "SMALLINT";
+        } else if(cd.getTypeName().equalsIgnoreCase("bpchar")) {
+            return "CHARACTER";
+        } else if(cd.getTypeName().equalsIgnoreCase("BOOL")) {
+            return "BOOLEAN";
+        } else if(cd.getTypeName().equalsIgnoreCase("CHARACTER VARYING")) {
+            return "VARCHAR";
         }
         return cd.getTypeName();
     }
