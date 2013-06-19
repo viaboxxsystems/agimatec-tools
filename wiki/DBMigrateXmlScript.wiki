@@ -189,3 +189,5 @@ You can tell the tool, that some scripts use a different file format. Provide a 
      SQL (default) = a sql script with ; separator between statements
      JDBC (eclipselink) = a sql script where each line is a statement, no ;
      STMT = a sql script that contains a single sql statement 
+
+The 'options' list contains a 'map' per file-url. 'options' is optional.
