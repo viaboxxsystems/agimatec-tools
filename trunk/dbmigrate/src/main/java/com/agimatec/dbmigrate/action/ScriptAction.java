@@ -12,12 +12,24 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
 public abstract class ScriptAction extends MigrateAction {
     protected String scriptName;
 
+    public static enum FileFormat {
+        XML,
+        SQL,
+        JDBC,
+        STMT,
+        GROOVY
+    }
+
     public static ScriptAction create(AutoMigrationTool tool, String fileName, String fileType) {
-        if ("xml".equalsIgnoreCase(fileType)) {
+        if (FileFormat.XML.name().equalsIgnoreCase(fileType)) {
             return new XmlScriptAction(tool, fileName);
-        } else if ("sql".equalsIgnoreCase(fileType)) {
+        } else if (FileFormat.SQL.name().equalsIgnoreCase(fileType)) {
             return new SqlScriptAction(tool, fileName);
-        } else if ("groovy".equalsIgnoreCase(fileType)) {
+        } else if (FileFormat.JDBC.name().equalsIgnoreCase(fileType)) {
+            return new SqlLinesAction(tool, fileName);
+        } else if (FileFormat.STMT.name().equalsIgnoreCase(fileType)) {
+            return new SqlExecAction(tool, fileName);
+        } else if (FileFormat.GROOVY.name().equalsIgnoreCase(fileType)) {
             return new GroovyScriptAction(tool, fileName);
         } else {
             tool.log("not a supported file type: " + fileName);

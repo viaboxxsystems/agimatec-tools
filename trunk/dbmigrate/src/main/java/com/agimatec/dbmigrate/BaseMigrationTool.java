@@ -5,6 +5,7 @@ import com.agimatec.commons.config.*;
 import com.agimatec.commons.util.PropertyReplacer;
 import com.agimatec.database.DbUnitDumpTool;
 import com.agimatec.database.DbUnitSetupTool;
+import com.agimatec.dbmigrate.action.ScriptAction;
 import com.agimatec.dbmigrate.groovy.GroovyScriptTool;
 import com.agimatec.dbmigrate.util.*;
 import com.agimatec.jdbc.JdbcConfig;
@@ -24,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -208,8 +210,56 @@ public abstract class BaseMigrationTool implements MigrationTool {
         String configKey = t.nextToken();
         DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms(databaseType);
         checker.setDatabase(getTargetDatabase());
-        List<URL> urls = getURLsFromEnv(configKey);
-        checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
+        List<DatabaseSchemaChecker.Options> options = parseOptions(t);
+        List<URL> urls = getURLsFromEnv(configKey, options);
+        checker.checkDatabaseSchema(options, urls.toArray(new URL[urls.size()]));
+    }
+
+    protected List<DatabaseSchemaChecker.Options> parseOptions(StringTokenizer t) throws MalformedURLException {
+        if (t.hasMoreTokens()) {
+            List<DatabaseSchemaChecker.Options> options = new ArrayList<DatabaseSchemaChecker.Options>();
+            String optionsKey = t.nextToken();
+            Object value = getEnvironment().get(optionsKey);
+            List rawOptions = value instanceof List ? (List) value :
+                    (value instanceof ListNode) ? ((ListNode) value).getList() : null;
+            if (rawOptions != null) {
+                for (Object each : rawOptions) {
+                    Map map = each instanceof Map ? (Map) each : ((MapNode) each).getMap();
+                    DatabaseSchemaChecker.Options option = new DatabaseSchemaChecker.Options();
+                    String format = (String) map.get("format");
+                    if (format != null) {
+                        option.format = ScriptAction.FileFormat.valueOf(format.toUpperCase());
+                    }
+                    options.add(option);
+                }
+            }
+            return options;
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
+    private List<URL> getURLsFromEnv(String configKey, List<DatabaseSchemaChecker.Options> options) throws IOException {
+        if (options == null || options.isEmpty()) return getURLsFromEnv(configKey);
+        List files = (List) getEnvironment().get(configKey);
+        Iterator<String> filesIterator = files.iterator();
+
+        List<URL> urls = new ArrayList();
+        Iterator<DatabaseSchemaChecker.Options> optionsIterator = options.iterator();
+        List<DatabaseSchemaChecker.Options> optionsCopy = new ArrayList<DatabaseSchemaChecker.Options>(options.size());
+        while (filesIterator.hasNext()) {
+            List<URL> urls0 = ConfigManager.toURLs(filesIterator.next());
+            if (optionsIterator.hasNext()) {
+                DatabaseSchemaChecker.Options options1 = optionsIterator.next();
+                for (URL ignored : urls0) {
+                    optionsCopy.add(options1);
+                }
+            }
+            urls.addAll(urls0);
+        }
+        options.clear();
+        options.addAll(optionsCopy);
+        return urls;
     }
 
     private List<URL> getURLsFromEnv(String configKey) throws IOException {

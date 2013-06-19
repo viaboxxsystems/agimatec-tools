@@ -1,6 +1,7 @@
 package com.agimatec.sql.meta.script;
 
 import com.agimatec.commons.config.MapNode;
+import com.agimatec.dbmigrate.action.ScriptAction;
 import com.agimatec.sql.meta.*;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
@@ -544,13 +545,26 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
      * API -
      * not thread-safe. only fill one catalog at the same time with this instance.
      *
-     * @param scriptURL - URL to a script to parse
+     * @param scriptURL  - URL to a script to parse
+     * @param fileFormat - SQL, JDBC, STMT supported
      * @throws java.io.IOException   - url not found
      * @throws java.sql.SQLException - error executing SQL
      */
-    public void fillCatalog(URL scriptURL) throws SQLException, IOException {
+    public void fillCatalog(URL scriptURL, ScriptAction.FileFormat fileFormat) throws SQLException, IOException {
         SQLScriptParser parser = new SQLScriptParser(log);
-        parser.iterateSQLScript(this, scriptURL);
+        if (fileFormat == null || fileFormat.equals(ScriptAction.FileFormat.SQL)) {
+            parser.iterateSQLScript(this, scriptURL);
+        } else if (fileFormat.equals(ScriptAction.FileFormat.JDBC)) {
+            parser.iterateSQLLines(this, scriptURL);
+        } else if (fileFormat.equals(ScriptAction.FileFormat.STMT)) {
+            parser.execSQLScript(this, scriptURL);
+        } else {
+            throw new UnsupportedOperationException(scriptURL + "is not a supported file type: " + fileFormat);
+        }
+    }
+
+    public void fillCatalog(URL scriptURL) throws SQLException, IOException {
+        fillCatalog(scriptURL, null);
     }
 
     /**

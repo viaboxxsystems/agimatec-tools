@@ -1,5 +1,6 @@
 package com.agimatec.sql.meta.checking;
 
+import com.agimatec.dbmigrate.action.ScriptAction;
 import com.agimatec.jdbc.JdbcDatabase;
 import com.agimatec.jdbc.JdbcException;
 import com.agimatec.sql.meta.*;
@@ -20,21 +21,21 @@ import java.util.*;
  * Example for mysql:
  * <pre>
  *       JdbcConfig config = new JdbcConfig();
-         config.setDriver("com.mysql.jdbc.Driver");
-         config.setConnect("jdbc:mysql://localhost:3306/mysql_db");
-         config.getProperties().put("user", "root");
-         config.getProperties().put("password", "");
-         JdbcDatabase targetDatabase = JdbcDatabaseFactory.createInstance(config);
-         targetDatabase.begin();
-
-         DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms("mysql");
-         checker.setDatabase(targetDatabase);
-         List<URL> urls = new ArrayList<URL>();
-         urls.add(getClass().getClassLoader().getResource("mysql/mysql-schema.sql"));
-         // add more script URLs that belong to the database schema...
-         checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
-
-         targetDatabase.close();
+ * config.setDriver("com.mysql.jdbc.Driver");
+ * config.setConnect("jdbc:mysql://localhost:3306/mysql_db");
+ * config.getProperties().put("user", "root");
+ * config.getProperties().put("password", "");
+ * JdbcDatabase targetDatabase = JdbcDatabaseFactory.createInstance(config);
+ * targetDatabase.begin();
+ *
+ * DatabaseSchemaChecker checker = DatabaseSchemaChecker.forDbms("mysql");
+ * checker.setDatabase(targetDatabase);
+ * List<URL> urls = new ArrayList<URL>();
+ * urls.add(getClass().getClassLoader().getResource("mysql/mysql-schema.sql"));
+ * // add more script URLs that belong to the database schema...
+ * checker.checkDatabaseSchema(urls.toArray(new URL[urls.size()]));
+ *
+ * targetDatabase.close();
  * </pre>
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
@@ -139,10 +140,29 @@ public abstract class DatabaseSchemaChecker {
      * @throws Exception
      */
     public void checkDatabaseSchema(URL[] scripts) throws Exception {
+        checkDatabaseSchema(Collections.EMPTY_LIST, scripts);
+    }
+
+    public static class Options {
+        public ScriptAction.FileFormat format = ScriptAction.FileFormat.SQL;
+    }
+
+    /**
+     * API - check the database for compatibility with the given XML-DDL configuration.
+     * Additional add all DDL in the scripts to the schema.
+     *
+     * @param options - list with options per script (may be empty) - corresponding to index in 'scripts'
+     * @param scripts - scripts for schema (Soll-Zustand)
+     *                Der Ist-Zustand steht in der Datenbank und wird mit dem Soll-Zustand verglichen.
+     * @throws Exception
+     */
+    public void checkDatabaseSchema(final List<Options> options, URL[] scripts) throws Exception {
         CatalogDescription expectedCatalog;
         DDLScriptSqlMetaFactory factory = getDDLScriptSqlMetaFactory();
+        int idx = 0;
         for (URL script : scripts) {
-            factory.fillCatalog(script);
+            Options option = options != null && options.size() > idx ? options.get(idx++) : null;
+            factory.fillCatalog(script, option == null ? null : option.format);
         }
         expectedCatalog = factory.getCatalog();
         if (expectedCatalog == null) {
@@ -224,7 +244,8 @@ public abstract class DatabaseSchemaChecker {
         return false;
     }
 
-    protected void compareSingleIndexDescription(IndexDescription xmlIndexDescription, IndexDescription databaseIndexDescription) {
+    protected void compareSingleIndexDescription(IndexDescription xmlIndexDescription,
+                                                 IndexDescription databaseIndexDescription) {
         if (xmlIndexDescription == null && databaseIndexDescription == null) return;
         if (xmlIndexDescription == null) {
             assertTrue("Table: " + databaseIndexDescription.getTableName() +
@@ -289,7 +310,8 @@ public abstract class DatabaseSchemaChecker {
         return columnsOK;
     }
 
-    protected void compareIndexDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
+    protected void compareIndexDescription(TableDescription xmlTableDescription,
+                                           TableDescription databaseTableDescription) {
         for (int i = 0; i < xmlTableDescription.getIndexSize(); i++) {
             IndexDescription xmlIndexDescription = xmlTableDescription.getIndex(i);
             IndexDescription databaseIndexDescription = null;
@@ -310,7 +332,8 @@ public abstract class DatabaseSchemaChecker {
         }
     }
 
-    private void compareColumnDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
+    private void compareColumnDescription(TableDescription xmlTableDescription,
+                                          TableDescription databaseTableDescription) {
         String tableName = xmlTableDescription.getTableName();
         for (int i = 0; i < xmlTableDescription.getColumnSize(); i++) {
             ColumnDescription xmlColumnDescription = xmlTableDescription.getColumn(i);
@@ -365,7 +388,8 @@ public abstract class DatabaseSchemaChecker {
         return expected.getPrecision() == actual.getPrecision();
     }
 
-    protected void compareForeignKeyDescription(TableDescription xmlTableDescription, TableDescription databaseTableDescription) {
+    protected void compareForeignKeyDescription(TableDescription xmlTableDescription,
+                                                TableDescription databaseTableDescription) {
         String tableName = xmlTableDescription.getTableName();
         List<ForeignKeyDescription> unCheckedDatabaseFKs = new ArrayList<ForeignKeyDescription>();
         if (databaseTableDescription.getForeignKeys() != null) {
@@ -424,7 +448,8 @@ public abstract class DatabaseSchemaChecker {
         }
         for (ForeignKeyDescription uncheckedFK : unCheckedDatabaseFKs) {
             assertTrue("Table: " + tableName + " contains unexpected foreign key constaint named '"
-                    + uncheckedFK + " on columns " + uncheckedFK.getColumns() + "' referencing table '" + uncheckedFK.getRefTableName() + "'", false);
+                    + uncheckedFK + " on columns " + uncheckedFK.getColumns() + "' referencing table '" +
+                    uncheckedFK.getRefTableName() + "'", false);
         }
     }
 
