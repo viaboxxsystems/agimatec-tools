@@ -148,6 +148,46 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     /**
+     * callback - read the script and execute each SQL line
+     *
+     * @throws IOException
+     * @throws SQLException
+     */
+    public void doSQLLines(String scriptName) throws IOException, SQLException {
+        iterateSQLLines(new SQLScriptExecutor(targetDatabase), scriptName, true);
+    }
+
+    /**
+     * callback - read the script and execute each SQL line
+     *
+     * @throws Exception
+     */
+    public void doSQLLinesIgnoreErrors(String scriptName) throws Exception {
+        iterateSQLLines(new SQLScriptExecutor(targetDatabase), scriptName, false);
+    }
+
+    /**
+     * iterate sql script.
+     */
+    protected void iterateSQLLines(ScriptVisitor visitor, String scriptName,
+                                   boolean failOnError)
+            throws IOException, SQLException {
+        SQLScriptParser parser = new SQLScriptParser(getScriptsDir(), getLog());
+        Map env;
+        parser.setEnvironment(env = getEnvironment());
+        parser.setFailOnError(failOnError); // if error occurs, do NOT continue!
+
+        visitor = new ReconnectScriptVisitor(targetDatabase, visitor);
+        visitor = new SubscriptCapableVisitor(visitor, parser);
+        visitor = new UpdateVersionScriptVisitor(targetDatabase, visitor, dbVersionMeta);
+        visitor = new ConditionalScriptVisitor(visitor,
+                env); // must be outer visitor to prevent execution in case of false-conditions
+
+        parser.iterateSQLLines(visitor, scriptName);
+    }
+
+
+    /**
      * callback - invoke DatabaseSchemaChecker for invalid triggers, views, ...
      */
     public void checkObjectsValid(String databaseType) throws Exception {
