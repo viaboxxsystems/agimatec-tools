@@ -1,6 +1,7 @@
 package com.agimatec.sql.meta.postgres;
 
 import com.agimatec.sql.meta.CatalogDescription;
+import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.checking.DatabaseSchemaChecker;
 import com.agimatec.sql.meta.script.DDLExpressions;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
@@ -34,5 +35,21 @@ public class PostgresSchemaChecker extends DatabaseSchemaChecker {
             throws SQLException, IOException {
         PostgresJdbcSqlMetaFactory factory = new PostgresJdbcSqlMetaFactory(getDatabase());
         return factory.buildCatalog(tableNames);
+    }
+
+    @Override
+    protected boolean isTypeCompatible(ColumnDescription expected, ColumnDescription actual) {
+        boolean valid = super.isTypeCompatible(expected, actual);    // call super!
+        if (valid) return valid;
+        return equalizeType(expected).equalsIgnoreCase(equalizeType(actual));
+    }
+
+    private String equalizeType(ColumnDescription cd) {
+        if (cd.getTypeName().equalsIgnoreCase("float8")) {
+            return "FLOAT";
+        } else if (cd.getTypeName().equalsIgnoreCase("numeric")) {
+            return "DECIMAL";
+        }
+        return cd.getTypeName();
     }
 }
