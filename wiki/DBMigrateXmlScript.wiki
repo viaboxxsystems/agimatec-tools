@@ -123,7 +123,7 @@ Compare schema of database with SQL-Scripts.
 2. (Comma-separated) Name of env-entries, that contains a list of Strings, that are File-URLs. These files are .sql-Files, which will be parsed und compared with the physical database schema (read from the database).
 This is a mightly operation that allows to check whether all schema elements (columns, keys, tables) are correctly migrated.
 
-=== Example ===
+=== Example 1 ===
 {{{
 <config>
   <map name="env">
@@ -139,7 +139,35 @@ This is a mightly operation that allows to check whether all schema elements (co
   </list>
 </config>
 }}}
-  
+
+=== Example 2 (eclipselink) ===
+{{{
+  <config>
+    <map name="env">
+        <ArrayList name="schema-files">
+            <String value="cp://database/schema.sql"/>
+            <String value="cp://database/create_custom_tables.sql"/>
+        </ArrayList>
+        <ArrayList name="options">
+            <map>
+                <String name="format" value="JDBC"/>
+            </map>
+            <map/>
+        </ArrayList>
+    </map>
+
+    <list name="Operations">
+        <text name="checkSchemaComplete" value="postgres,schema-files,options"/>
+    </list>
+</config>
+}}}
+
+You can tell the tool, that some scripts use a different file format. Provide a list of "options" that are maps will the following entries supported:
+  * format = one of JDBC, SQL, STMT 
+     SQL (default) = a sql script with ; separator between statements
+     JDBC (eclipselink) = a sql script where each line is a statement, no ;
+     STMT = a sql script that contains a single sql statement 
+
 == conditional execution with <list> ==
 
 Operations, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tag. 
