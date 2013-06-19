@@ -117,6 +117,8 @@ b) 2 parameters
 Check if database contains invalid Trigger, Indices, Views.
 Parameter: databaseType ("oracle", "postgres") 
 
+= Database Schema Checker =
+
   * checkSchemaComplete 
 Compare schema of database with SQL-Scripts.
 1. Parameter: databaseType ("oracle", "postgres")
