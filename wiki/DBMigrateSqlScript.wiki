@@ -5,6 +5,11 @@ The tool can substitute enviornment variables and supports conditional execution
 
 *Known limitations*
   * Problems with Oracle-packages. You can execute packages by invocation from within a xml configuration file. (see [DBMigrateXmlScript XML scripts])
+
+== File Types ==
+  * If you use file-type (ending) .stmt, a script will be executed as a single statement (for oracle-packages)
+  * If you use file-type .jdbc, a script will be executed as a line-by-line script (eclipselink)
+  * Otherwise file-type .sql is expected where ; is a separator between statements and multi-line-statements are supported. 
    
 = Features =
   * Each sql statement is terminated by ; or a new line with a sole \ character.
