@@ -117,6 +117,26 @@ b) 2 parameters
 Check if database contains invalid Trigger, Indices, Views.
 Parameter: databaseType ("oracle", "postgres") 
 
+== conditional execution with <list> ==
+
+Operations, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tag. 
+The name-attribute of the <list> contains the condition expression 
+(same syntax and features as in SQL-Scripts, see -- #if).
+
+Example:
+  * Execute "doSQLScript" and "invokeBean" when "testdata_enabled=true"
+{{{
+<config>
+  <list name="Operations">
+    <list name="testdata_enabled=true">
+        <text name="doSQLScript" value="insert-some-data.sql"/>
+        <text name="invokeBean" value="com.agimatec.database.InsertJasperReport#save(2,user-chart.jrxml)"/>
+     </list>
+     <text name="version" value="2.0.24"/>
+  </list>
+</config>
+}}}
+
 = Database Schema Checker =
 
   * checkSchemaComplete 
@@ -169,23 +189,3 @@ You can tell the tool, that some scripts use a different file format. Provide a 
      SQL (default) = a sql script with ; separator between statements
      JDBC (eclipselink) = a sql script where each line is a statement, no ;
      STMT = a sql script that contains a single sql statement 
-
-== conditional execution with <list> ==
-
-Operations, that you need to execute under specific conditions (depending on environment variables from <map name="env">), are nested elements under a <list> tag. 
-The name-attribute of the <list> contains the condition expression 
-(same syntax and features as in SQL-Scripts, see -- #if).
-
-Example:
-  * Execute "doSQLScript" and "invokeBean" when "testdata_enabled=true"
-{{{
-<config>
-  <list name="Operations">
-    <list name="testdata_enabled=true">
-        <text name="doSQLScript" value="insert-some-data.sql"/>
-        <text name="invokeBean" value="com.agimatec.database.InsertJasperReport#save(2,user-chart.jrxml)"/>
-     </list>
-     <text name="version" value="2.0.24"/>
-  </list>
-</config>
-}}}
