@@ -11,10 +11,14 @@ import java.util.StringTokenizer;
 /**
  * <b>Description:</b>   visitor able to invoke subscripts
  * with oracle @ syntax<br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
+ * @ ->  iterateSQLScript  (semicolon separated)
+ * @; ->  iterateSQLScript (semicolon separated)
+ * @> -> execSQLScript     (script as a single statement)
+ * @| -> iterateSQLLines   (execute linewise)
+ * <b>Copyright:</b>     Copyright (c) 2007<br>
+ * <b>Company:</b>       Agimatec GmbH<br>
  */
 public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
     private static final Logger log = LoggerFactory.getLogger(SubscriptCapableVisitor.class);
@@ -28,8 +32,12 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
     public int visitStatement(String statement) throws SQLException {
         if (statement.startsWith("@")) {
             try {
-                if(statement.charAt(1) == '>') {
+                if (statement.charAt(1) == '>') {
                     parser.execSQLScript(this, statement.substring(2));
+                } else if (statement.charAt(1) == '|') {
+                    parser.iterateSQLLines(this, statement.substring(2));
+                } else if (statement.charAt(1) == ';') {
+                    parser.iterateSQLScript(this, statement.substring(2));
                 } else {
                     parser.iterateSQLScript(this, statement.substring(1));
                 }
@@ -38,8 +46,7 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
                 throw new SQLException(e.getMessage(), e);
             }
             return 0;
-        } else
-        if (statement.length() > 5 && statement.substring(0, 4).toLowerCase().equals("set ")) {
+        } else if (statement.length() > 5 && statement.substring(0, 4).toLowerCase().equals("set ")) {
             doSetExpression(statement.substring(4));
             return 0;
         } else {
@@ -56,7 +63,7 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
             if (!"=".equals(nt) && !" ".equals(nt)) {
                 log.warn("Illegal operator, expected '=' in: " + expression);
                 return;
-            } else if("=".equals(nt)) break;
+            } else if ("=".equals(nt)) break;
         }
         String value = nextToken(tokens, expression);
         if (varName == null || value == null) return;
