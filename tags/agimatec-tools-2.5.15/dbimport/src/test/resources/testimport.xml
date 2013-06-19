@@ -1,0 +1,14 @@
+<root>
+  <sample>
+    <first>Hello</first>
+    <second>World</second>
+  </sample>
+  <sample>
+    <first>John</first>
+    <second>Doe</second>
+  </sample>
+  <sample>
+    <first>Mary</first>
+    <second>Poppins</second>
+  </sample>
+</root>
