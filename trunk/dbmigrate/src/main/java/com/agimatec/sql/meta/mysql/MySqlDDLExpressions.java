@@ -29,7 +29,7 @@ public class MySqlDDLExpressions extends DDLExpressions {
         if (cd.getTypeName().equalsIgnoreCase("tinyint") && cd.getPrecision() == 1) {
             cd.setTypeName("BIT");
             cd.setPrecision(0);
-        } else if (cd.getTypeName().equalsIgnoreCase("bool")) {
+        } else if (cd.getTypeName().equalsIgnoreCase("bool") || cd.getTypeName().equalsIgnoreCase("boolean")) {
             cd.setTypeName("BIT");
             cd.setPrecision(0);
         }

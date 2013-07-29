@@ -45,6 +45,8 @@ public class MySqlSchemaChecker extends DatabaseSchemaChecker {
         if (xmlPrecision == 0 && "DOUBLE".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 22;
         if (xmlPrecision == 0 && "TEXT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 65535;
         if (xmlPrecision == 0 && "MEDIUMTEXT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 16777215;
+        if (xmlPrecision == 0 && "MEDIUMBLOB".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 16777215;
+        if (xmlPrecision == 0 && "BLOB".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 65535;
         if (xmlPrecision == 0 && "FLOAT".equalsIgnoreCase(expected.getTypeName()))
             xmlPrecision = 12;  // Precision 12 is default for FLOAT
         if (xmlPrecision == 0 && "LONGBLOB".equalsIgnoreCase(expected.getTypeName()))
