@@ -69,5 +69,22 @@ CREATE TABLE other_table_seq (
    ENGINE=MYISAM;
 INSERT INTO OTHER_TABLE_SEQ values(0);
 
+CREATE TABLE IF NOT EXISTS maps_session_attributes (
+    nsessionattributeid BIGINT NOT NULL AUTO_INCREMENT,
+    nsessionid          BIGINT NOT NULL,
+    skey                VARCHAR(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    stype               VARCHAR(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    svalue              VARCHAR(255),
+    PRIMARY KEY (nsessionattributeid),
+    INDEX IDX_SEARCH_ATTR (nsessionid,skey)
+) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS maps_service (
+    nserviceid          BIGINT NOT NULL AUTO_INCREMENT,
+    stag                CHAR(32),
+    sdisplayname        CHAR(80),
+    bonline             bool DEFAULT TRUE,
+    PRIMARY KEY (nserviceid),
+    UNIQUE INDEX IDX_SEARCH_SERVICE (stag)
+) ENGINE=InnoDB;
 
