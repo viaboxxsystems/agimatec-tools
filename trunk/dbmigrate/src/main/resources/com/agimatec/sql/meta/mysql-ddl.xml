@@ -32,13 +32,14 @@
             [{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}]
             '(' {columns ${column}...','} ')'}]
             [{tableIndex [${isUnique(UNIQUE)}] [KEY] [INDEX] ${indexName} '(' {columns ${column}...','} ')'}]
-            [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [{precision '(' {numbers ${value}...','}
-            [CHAR] ')'}]
-            [${unsigned(UNSIGNED)}] [{characterSet CHARACTER SET ${charset}}] [{collation COLLATE ${collation}}] [{default DEFAULT ${defaultValue}}] [{constraint
-            CONSTRAINT ${constraintName}}] [${mandatory(NOT NULL)}]
-            [{default DEFAULT ${defaultValue}}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE
-            ${updateRule}}] [COMMENT] [${comment{'}}]}]...','} ')'}
+            [{columndefinition ${column} ${typeName}
+                [${varying(VARYING)}] [{precision '(' {numbers ${value}...','} [CHAR] ')'}]
+                [${unsigned(UNSIGNED)}] [{characterSet CHARACTER SET ${charset}}] [{collation COLLATE ${collation}}]
+                [${mandatory(NOT NULL)}]  [{default DEFAULT ${defaultValue}}] [${mandatory(NOT NULL)}]
+                [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}] [{onUpdate ON UPDATE ${updateRule}}] [COMMENT] [${comment{'}}] }]
+            ...','} ')'}
         </text>
+
         <text>
             {create-table CREATE TABLE ${table} '(' {tableElement
             [{primaryKey PRIMARY KEY '(' {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE

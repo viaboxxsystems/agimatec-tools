@@ -5,6 +5,7 @@ import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.checking.DatabaseSchemaChecker;
 import com.agimatec.sql.meta.script.DDLExpressions;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,14 +36,23 @@ public class MySqlSchemaChecker extends DatabaseSchemaChecker {
     protected boolean isPrecisionCompatible(ColumnDescription expected, ColumnDescription actual) {
         int xmlPrecision = expected.getPrecision();
         // if script type does not contain precision, add the default precision, because the jdbc-driver will return it.
-        if (xmlPrecision == 0 && "INT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 11; // Precision 11 is default for INT
-        if (xmlPrecision == 0 && "BIGINT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 20; // Precision 20 is default for BIGINT
-        if (xmlPrecision == 0 && "SMALLINT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 6;  // Precision 6 is default for SMALLINT
+        if (xmlPrecision == 0 && "INT".equalsIgnoreCase(expected.getTypeName()))
+            xmlPrecision = 11; // Precision 11 is default for INT
+        if (xmlPrecision == 0 && "BIGINT".equalsIgnoreCase(expected.getTypeName()))
+            xmlPrecision = 20; // Precision 20 is default for BIGINT
+        if (xmlPrecision == 0 && "SMALLINT".equalsIgnoreCase(expected.getTypeName()))
+            xmlPrecision = 6;  // Precision 6 is default for SMALLINT
         if (xmlPrecision == 0 && "DOUBLE".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 22;
         if (xmlPrecision == 0 && "TEXT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 65535;
         if (xmlPrecision == 0 && "MEDIUMTEXT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 16777215;
-        if (xmlPrecision == 0 && "FLOAT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 12;  // Precision 12 is default for FLOAT
-        if (xmlPrecision == 0 && "LONGBLOB".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 2147483647;  // Precision 2147483647 is default for LONGBLOB
-        return xmlPrecision == actual.getPrecision();
+        if (xmlPrecision == 0 && "FLOAT".equalsIgnoreCase(expected.getTypeName()))
+            xmlPrecision = 12;  // Precision 12 is default for FLOAT
+        if (xmlPrecision == 0 && "LONGBLOB".equalsIgnoreCase(expected.getTypeName()))
+            xmlPrecision = 2147483647;  // Precision 2147483647 is default for LONGBLOB
+        return xmlPrecision == actual.getPrecision() || (
+                ArrayUtils.contains(MySqlJdbcMetaFactory.NUM_TYPES, actual.getTypeName().toUpperCase()) &&
+                        actual.getPrecision() >
+                                xmlPrecision // wrong precision returned by driver int(8) ==> precision = 10
+        );
     }
 }

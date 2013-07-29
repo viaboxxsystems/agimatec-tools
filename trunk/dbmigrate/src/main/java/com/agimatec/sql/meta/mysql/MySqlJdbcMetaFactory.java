@@ -30,7 +30,7 @@ public class MySqlJdbcMetaFactory extends JdbcSqlMetaFactory {
         }
     }
 
-    private static final String[] NUM_TYPES = {"BIGINT", "SMALLINT", "INT", "TINYINT"};
+    static final String[] NUM_TYPES = {"BIGINT", "SMALLINT", "INT", "TINYINT"};
 
     @Override
     protected TableIdentifier createTableIdentifier(String table) {

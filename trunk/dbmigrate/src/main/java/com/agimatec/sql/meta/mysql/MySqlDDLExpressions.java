@@ -33,6 +33,9 @@ public class MySqlDDLExpressions extends DDLExpressions {
             cd.setTypeName("BIT");
             cd.setPrecision(0);
         }
+        if(cd.getDefaultValue()!=null && !cd.getDefaultValue().equalsIgnoreCase("NULL") && cd.getTypeName().equalsIgnoreCase("TIMESTAMP")) {
+            cd.setNullable(false);
+        }
     }
 
     @Override
