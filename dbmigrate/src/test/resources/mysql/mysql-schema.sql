@@ -46,8 +46,8 @@ CREATE TABLE `OTHER_TABLE`  (
 	`NORDER2` int(11) DEFAULT '1'  NOT NULL ,
 	`JOB_NAME` VARCHAR(100) NOT NULL,
 	`JOB_KEY` VARCHAR(32) NOT NULL,
-	constraint OTHER_TABLE_FK foreign key (JOB_NAME) references REFERENCED_TABLE(JOB_NAME_ID)
-    constraint OTHER_TABLE_UN unique (`JOB_NAME`, `JOB_KEY`)
+	constraint OTHER_TABLE_FK foreign key (JOB_NAME) references REFERENCED_TABLE(JOB_NAME_ID),
+  constraint OTHER_TABLE_UN unique (`JOB_NAME`, `JOB_KEY`)
 );
 -- ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -87,4 +87,19 @@ CREATE TABLE IF NOT EXISTS maps_service (
     PRIMARY KEY (nserviceid),
     UNIQUE INDEX IDX_SEARCH_SERVICE (stag)
 ) ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `push_status` (
+  `nstatusid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nmessageid` bigint(20) NOT NULL,
+  `ndeviceid` bigint(20) NOT NULL,
+  `bdelivered` tinyint(1) NOT NULL DEFAULT '0',
+  `brelayed` tinyint(1) NOT NULL,
+  PRIMARY KEY (`nstatusid`),
+  KEY `FK_push_status_push_device` (`ndeviceid`),
+  KEY `FK_push_status_push_message` (`nmessageid`),
+  CONSTRAINT `FK_push_status_push_device` FOREIGN KEY (`ndeviceid`) REFERENCES `push_device` (`ndeviceid`) ON DELETE CASCADE,
+  CONSTRAINT `FK_push_status_push_message` FOREIGN KEY (`nmessageid`) REFERENCES `push_message` (`nmessageid`) ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 

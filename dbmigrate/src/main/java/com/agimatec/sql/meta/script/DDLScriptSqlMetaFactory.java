@@ -404,6 +404,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             fk.setRefTableName(strip(aColDef.getString("foreignKey/refTable")));
             fk.setTableSpace(
                     strip(aColDef.getString("foreignKey/tableSpace/tableSpace")));
+            fk.setOnDeleteRule(aColDef.getString("foreignKey/onDeleteRule"));
             List columns = aColDef.getList("foreignKey/columns");
             List refcolumns = aColDef.getList("foreignKey/refcolumns/refcolumns");
             for (int j = 0; j < columns.size(); j++) {

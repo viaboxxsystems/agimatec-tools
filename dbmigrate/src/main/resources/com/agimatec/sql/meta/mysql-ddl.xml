@@ -28,7 +28,7 @@
         <text>
             {dezign-create-table CREATE TABLE [IF NOT EXISTS] ${table} '(' {tableElement
             [{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')'
-            REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]}]
+            REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] [ON] [DELETE] [${onDeleteRule}]}]
             [{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}]
             '(' {columns ${column}...','} ')'}]
             [{tableIndex [${isUnique(UNIQUE)}] [KEY] [INDEX] ${indexName} '(' {columns ${column}...','} ')'}]

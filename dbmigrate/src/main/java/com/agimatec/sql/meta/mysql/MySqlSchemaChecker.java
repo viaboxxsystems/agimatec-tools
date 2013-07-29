@@ -35,6 +35,7 @@ public class MySqlSchemaChecker extends DatabaseSchemaChecker {
     protected boolean isPrecisionCompatible(ColumnDescription expected, ColumnDescription actual) {
         int xmlPrecision = expected.getPrecision();
         // if script type does not contain precision, add the default precision, because the jdbc-driver will return it.
+        if (xmlPrecision == 0 && "INT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 11; // Precision 11 is default for INT
         if (xmlPrecision == 0 && "BIGINT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 20; // Precision 20 is default for BIGINT
         if (xmlPrecision == 0 && "SMALLINT".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 6;  // Precision 6 is default for SMALLINT
         if (xmlPrecision == 0 && "DOUBLE".equalsIgnoreCase(expected.getTypeName())) xmlPrecision = 22;
