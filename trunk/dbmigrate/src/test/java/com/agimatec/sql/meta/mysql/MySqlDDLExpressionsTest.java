@@ -41,7 +41,7 @@ public class MySqlDDLExpressionsTest {
         URL script = ConfigManager.toURL("cp://mysql/mysql-schema.sql");
         factory.fillCatalog(script);
         assertNotNull(factory.getCatalog());
-        assertEquals(8, factory.getCatalog().getTablesSize());
+        assertEquals(9, factory.getCatalog().getTablesSize());
         assertEquals(0, factory.getCatalog().getSequencesSize());
         assertEquals("OTHER_TABLE", factory.getCatalog().getTable("OTHER_TABLE").getTableName());
         assertEquals("TEST_TABLE", factory.getCatalog().getTable("TEST_TABLE").getTableName());
@@ -85,6 +85,20 @@ public class MySqlDDLExpressionsTest {
 
         table = factory.getCatalog().getTable("maps_service");
         assertNotNull(table);
+        assertTrue(table.getIndex("IDX_SEARCH_SERVICE").isUnique());
+
+        table = factory.getCatalog().getTable("push_status");
+        assertNotNull(table);
+        assertNotNull(table.getColumn("nstatusid"));
+        assertNotNull(table.getColumn("nmessageid"));
+        assertNotNull(table.getColumn("ndeviceid"));
+        assertNotNull(table.getColumn("bdelivered"));
+        assertNotNull(table.getColumn("brelayed"));
+        assertEquals("nstatusid", table.getPrimaryKey().getColumn(0));
+        assertEquals("ndeviceid", table.getIndex("FK_push_status_push_device").getColumn(0));
+        assertEquals("nmessageid", table.getIndex("FK_push_status_push_message").getColumn(0));
+        assertNotNull(table.getForeignKey("FK_push_status_push_device"));
+        assertEquals("CASCADE", table.getForeignKey("FK_push_status_push_device").getOnDeleteRule());
     }
 
     @Test
