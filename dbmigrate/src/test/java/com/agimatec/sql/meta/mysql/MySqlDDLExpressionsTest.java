@@ -41,7 +41,7 @@ public class MySqlDDLExpressionsTest {
         URL script = ConfigManager.toURL("cp://mysql/mysql-schema.sql");
         factory.fillCatalog(script);
         assertNotNull(factory.getCatalog());
-        assertEquals(6, factory.getCatalog().getTablesSize());
+        assertEquals(8, factory.getCatalog().getTablesSize());
         assertEquals(0, factory.getCatalog().getSequencesSize());
         assertEquals("OTHER_TABLE", factory.getCatalog().getTable("OTHER_TABLE").getTableName());
         assertEquals("TEST_TABLE", factory.getCatalog().getTable("TEST_TABLE").getTableName());
@@ -79,6 +79,12 @@ public class MySqlDDLExpressionsTest {
         table = factory.getCatalog().getTable("commented_table");
         assertNotNull(table);
         assertEquals("value can be 1-3", table.getColumn("commented_column").getComment());
+
+        table = factory.getCatalog().getTable("maps_session_attributes");
+        assertNotNull(table);
+
+        table = factory.getCatalog().getTable("maps_service");
+        assertNotNull(table);
     }
 
     @Test
