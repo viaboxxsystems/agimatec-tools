@@ -66,6 +66,7 @@ public class MySqlDDLExpressionsTest {
         assertNotNull(table.getColumn("surl"));
         assertNotNull(table.getColumn("scharacterset"));
         assertNotNull(table.getColumn("jj"));
+        assertEquals(false, table.getColumn("jj").isNullable());
         assertEquals(1, table.getIndex("IDX_CRC").getColumnSize());
         assertEquals(1, table.getIndex("IDX_PURGE").getColumnSize());
 
@@ -94,6 +95,9 @@ public class MySqlDDLExpressionsTest {
         assertNotNull(table.getColumn("ndeviceid"));
         assertNotNull(table.getColumn("bdelivered"));
         assertNotNull(table.getColumn("brelayed"));
+        assertTrue(table.getColumn("bdelivered").isNullable());
+        assertFalse(table.getColumn("dtinserted").isNullable());
+        assertEquals(8, table.getColumn("eight_int").getPrecision());
         assertEquals("nstatusid", table.getPrimaryKey().getColumn(0));
         assertEquals("ndeviceid", table.getIndex("FK_push_status_push_device").getColumn(0));
         assertEquals("nmessageid", table.getIndex("FK_push_status_push_message").getColumn(0));
