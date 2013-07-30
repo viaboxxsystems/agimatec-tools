@@ -28,6 +28,14 @@ CREATE TABLE `config` (
   UNIQUE KEY `skey` (`skey`,`col2`,`col1`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS config2 (
+    nconfigid bigint NOT NULL auto_increment,
+    skey      varchar(255) NOT NULL,
+    svalue    TEXT NOT NULL,
+    PRIMARY KEY (nconfigid),
+    UNIQUE KEY (skey)  -- optional indexName
+) ENGINE=MyISAM;
+
 CREATE TABLE `commented_table` (
   `col1` smallint(6) NOT NULL,
   `col2` text NOT NULL,

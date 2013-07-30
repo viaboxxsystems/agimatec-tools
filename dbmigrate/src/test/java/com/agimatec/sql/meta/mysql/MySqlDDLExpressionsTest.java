@@ -41,7 +41,7 @@ public class MySqlDDLExpressionsTest {
         URL script = ConfigManager.toURL("cp://mysql/mysql-schema.sql");
         factory.fillCatalog(script);
         assertNotNull(factory.getCatalog());
-        assertEquals(9, factory.getCatalog().getTablesSize());
+        assertEquals(10, factory.getCatalog().getTablesSize());
         assertEquals(0, factory.getCatalog().getSequencesSize());
         assertEquals("OTHER_TABLE", factory.getCatalog().getTable("OTHER_TABLE").getTableName());
         assertEquals("TEST_TABLE", factory.getCatalog().getTable("TEST_TABLE").getTableName());
@@ -72,10 +72,19 @@ public class MySqlDDLExpressionsTest {
 
         table = factory.getCatalog().getTable("config");
         assertNotNull(table);
+        assertEquals(6, table.getColumnSize());
         assertEquals(1, table.getIndexSize());
         assertNotNull(table.getIndex("skey"));
         assertEquals(3, table.getIndex("skey").getColumnSize());
         assertTrue(table.getIndex("skey").isUnique());
+
+        table = factory.getCatalog().getTable("config2");
+        assertNotNull(table);
+        assertEquals("nconfigid",table.getPrimaryKey().getColumn(0));
+        assertEquals(3, table.getColumnSize());
+        assertEquals(1, table.getIndexSize());
+        assertEquals("skey", table.getIndex(0).getColumn(0));
+        assertTrue(table.getIndex(0).isUnique());
 
         table = factory.getCatalog().getTable("commented_table");
         assertNotNull(table);
