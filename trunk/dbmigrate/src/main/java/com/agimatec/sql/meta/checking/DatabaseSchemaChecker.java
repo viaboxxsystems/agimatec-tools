@@ -223,7 +223,7 @@ public abstract class DatabaseSchemaChecker {
         String[] unmappedColumns = c.toArray(new String[0]);
         // check that unmapped columns exist in database
         for (String unmapped : c) {
-            assertTrue(databaseTableDescription.getTableName() + "." + unmapped +
+            assertTrue("Column: " + databaseTableDescription.getTableName() + "." + unmapped +
                     " [declared as unknown, but] not in database",
                     databaseTableDescription.getColumn(unmapped) != null);
         }
@@ -339,7 +339,7 @@ public abstract class DatabaseSchemaChecker {
             ColumnDescription xmlColumnDescription = xmlTableDescription.getColumn(i);
             ColumnDescription databaseColumnDescription = databaseTableDescription
                     .getColumn(xmlColumnDescription.getColumnName());
-            assertTrue(xmlTableDescription + "." + xmlColumnDescription + " not in database.",
+            assertTrue("Column: " + xmlTableDescription + "." + xmlColumnDescription + " not in database.",
                     databaseColumnDescription != null);
             if (databaseColumnDescription != null) {
                 assertTrue("Table: " + tableName + ", ColumnName: " +

@@ -494,6 +494,10 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                     strip(aColDef.getString("tableIndex/tableSpace/tableSpace")));
             index.setIndexName(strip(aColDef.getString(
                     "tableIndex/indexName")));
+            if(index.getIndexName() == null) {
+                index.setIndexName(strip(aColDef.getString(
+                    "tableIndex/optional/indexName")));
+            }
             List columns = aColDef.getList("tableIndex/columns");
             for (Object column : columns) {
                 Map eachCol = (Map) column;

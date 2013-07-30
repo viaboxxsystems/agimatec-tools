@@ -31,7 +31,7 @@
             REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}] [ON] [DELETE] [${onDeleteRule}]}]
             [{tableConstraint [{constraint CONSTRAINT ${constraintName}}] [${isPK(PRIMARY KEY)}] [${isUnique(UNIQUE)}]
             '(' {columns ${column}...','} ')'}]
-            [{tableIndex [${isUnique(UNIQUE)}] [KEY] [INDEX] ${indexName} '(' {columns ${column}...','} ')'}]
+            [{tableIndex [${isUnique(UNIQUE)}] [KEY] [INDEX] [{optional ${indexName}}] '(' {columns ${column}...','} ')'}]
             [{columndefinition ${column} ${typeName}
                 [${varying(VARYING)}] [{precision '(' {numbers ${value}...','} [CHAR] ')'}]
                 [${unsigned(UNSIGNED)}] [{characterSet CHARACTER SET ${charset}}] [{collation COLLATE ${collation}}]
