@@ -11,7 +11,7 @@
     <groupId>de.viaboxx</groupId>
     <artifactId>agimatec-tools</artifactId>
     <packaging>pom</packaging>
-    <version>2.5.16-SNAPSHOT</version>
+    <version>2.5.16</version>
     <name>agimatec</name>
     <description>a collection of java tools/frameworks for database migration, file import in various format and code
         generation
@@ -33,9 +33,9 @@
         <url>${teamcity-url}</url>
     </ciManagement>
     <scm>
-        <url>http://agimatec-tools.googlecode.com/svn/trunk</url>
-        <connection>scm:svn:http://agimatec-tools.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://agimatec-tools.googlecode.com/svn/trunk</developerConnection>
+        <url>http://agimatec-tools.googlecode.com/svn/tags/agimatec-tools-2.5.16</url>
+        <connection>scm:svn:http://agimatec-tools.googlecode.com/svn/tags/agimatec-tools-2.5.16</connection>
+        <developerConnection>scm:svn:https://agimatec-tools.googlecode.com/svn/tags/agimatec-tools-2.5.16</developerConnection>
     </scm>
     <developers>
         <developer>
@@ -53,12 +53,12 @@
             <dependency>
                 <groupId>de.viaboxx</groupId>
                 <artifactId>dbimport</artifactId>
-                <version>2.5.16-SNAPSHOT</version>
+                <version>2.5.16</version>
             </dependency>
             <dependency>
                 <groupId>de.viaboxx</groupId>
                 <artifactId>dbmigrate</artifactId>
-                <version>2.5.16-SNAPSHOT</version>
+                <version>2.5.16</version>
             </dependency>
             <dependency>
                 <groupId>de.viaboxx</groupId>
