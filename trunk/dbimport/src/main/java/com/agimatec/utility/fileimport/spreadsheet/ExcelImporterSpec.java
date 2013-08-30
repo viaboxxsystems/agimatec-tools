@@ -31,6 +31,10 @@ public abstract class ExcelImporterSpec extends LineImporterSpecAutoFields {
         setHeaderSpec(LineImporterSpec.Header.INDEX);
     }
 
+    public String getSheetName() {
+        return sheetName;
+    }
+
     @Override
     public LineReader createLineReader(Closeable aReader) throws IOException {
         ExcelRowReader reader = (ExcelRowReader) super.createLineReader(aReader);
