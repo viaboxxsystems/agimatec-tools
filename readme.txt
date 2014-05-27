@@ -97,5 +97,5 @@ http://code.google.com/p/agimatec-tools/
 http://www.viaboxxsystems.de
 http://www.viaboxxsystems.de/blog
 
-Roman Stumm, Viaboxx GmbH, 2008-2013
+Roman Stumm, Viaboxx GmbH, 2008-2014
 email: roman.stumm@viaboxx.de
