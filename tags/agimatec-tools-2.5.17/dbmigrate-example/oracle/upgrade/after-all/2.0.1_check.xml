@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+  <map name="env">
+    <ArrayList name="testdbfiles">
+      <String value="file:setup/create-tables.sql"/>
+    </ArrayList>
+  </map>
+
+  <list name="Operations">
+    <text name="checkSchemaComplete" value="oracle,testdbfiles"/>
+    <text name="checkObjectsValid" value="oracle"/>
+  </list>
+</config>
