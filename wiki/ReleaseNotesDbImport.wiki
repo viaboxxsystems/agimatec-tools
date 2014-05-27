@@ -1,5 +1,8 @@
 = dbimport =
 
+== 2.5.17 (May 2014) ==
+  * ExcelImporterSpec.getSheetName() - public method added 
+
 == 2.5.14.1 (May 2013) ==
   * NEW: SharedExcelRowReaderFactory: helps to implement multiple imports on the same excel workbook.
   * NEW: ExcelGenerator: convenience class to write data as excel worksheet.
