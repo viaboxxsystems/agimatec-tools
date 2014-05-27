@@ -8,14 +8,14 @@ The project agimatec-tools is a bundle that contains some frameworks used for:
 History
 -------
 1. first open-source release by Roman Stumm, agimatec GmbH, Bonn
-2. currently maintained by Roman Stumm, Viaboxx GmbH, K�nigswinter
+2. currently maintained by Roman Stumm, Viaboxx GmbH, Koenigswinter
 
 How to compile the project
 ==========================
 Requirements:
-0. Sources require java1.5 or higher. (Tested with JDK 1.6.0_24)
+0. Sources require java1.5 or higher. (Tested with JDK 1.6.0_24, 1.7.0_51)
 1. Maven2 required
-1a. The project is built with maven2.0.9. 
+1a. The project is built with maven2.0.9 .. 3.2.1.
 You need to download and install maven2 from: http://maven.apache.org/
 
 1b. Prepare local maven2 repository:
