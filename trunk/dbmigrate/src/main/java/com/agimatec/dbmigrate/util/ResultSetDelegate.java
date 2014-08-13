@@ -23,6 +23,10 @@ public class ResultSetDelegate {
         resultSet = aResultSet;
     }
 
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
+
     public boolean next() throws SQLException {
         return resultSet.next();
     }
