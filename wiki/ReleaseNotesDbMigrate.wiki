@@ -1,8 +1,8 @@
 = dbmigrate =
 
 == 2.5.18 (Sept 2014) ==
-  * support check on unnamed foreign keys. log info when "on delete" rule not equal
-  * update version of junit, log4j, slf4j, xstream, commons-net, joda-time
+  * DatabaseSchemaChecker: support check on unnamed foreign keys. log info when "on delete" rule not equal
+  * dependencies: update version of junit, log4j, slf4j, xstream, commons-net, joda-time
   * ResultSetDelegate class: new method getResultSet()
 
 == 2.5.17 (May 2014) ==
