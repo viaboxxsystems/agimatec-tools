@@ -20,13 +20,13 @@ public class TableDescription implements Serializable, Cloneable {
     private String comment;
     private String tableName;
     private List<ColumnDescription> columns =
-            new ArrayList(); // list of ColumnDescription
+        new ArrayList(); // list of ColumnDescription
     private IndexDescription primaryKey;
     private List<IndexDescription> indices = new ArrayList(); // list of IndexDescription
     private List<IndexDescription> constraints =
-            new ArrayList(); // list of IndexDescription
+        new ArrayList(); // list of IndexDescription
     private List<ForeignKeyDescription> foreignKeys =
-            new ArrayList(); // list of ForeignKeyDescription
+        new ArrayList(); // list of ForeignKeyDescription
     private String catalogName;
     private String schemaName;
 
@@ -203,9 +203,28 @@ public class TableDescription implements Serializable, Cloneable {
     public ForeignKeyDescription getForeignKey(String constraintName) {
         for (ForeignKeyDescription foreignKey : foreignKeys) {
             if (foreignKey.getConstraintName()
-                    .equalsIgnoreCase(constraintName)) return foreignKey;
+                .equalsIgnoreCase(constraintName)) return foreignKey;
         }
         return null;
+    }
+
+    /**
+     * find a foreignKey in this table that has the same constraintName or columns/refColumns/refTable than 'other'
+     *
+     * @param other
+     * @return the fk in this table or null if no similar fk found
+     */
+    public ForeignKeyDescription findForeignKeyLike(ForeignKeyDescription other) {
+        if (other.getConstraintName() == null || other.getConstraintName().length() == 0) {
+            for (ForeignKeyDescription foreignKey : foreignKeys) {
+                if (foreignKey.isSimilarTo(other)) {
+                    return foreignKey;
+                }
+            }
+        } else {
+            return getForeignKey(other.getConstraintName());
+        }
+        return null; // not found
     }
 
     public ForeignKeyDescription getForeignKey(int i) {
