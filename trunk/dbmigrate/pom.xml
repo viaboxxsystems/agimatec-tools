@@ -65,10 +65,10 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
 
-        <!--<dependency>
+ <!--       <dependency>
           <groupId>postgresql</groupId>
           <artifactId>postgresql</artifactId>
-          <scope>provided</scope>
+          <scope>test</scope>
         </dependency>-->
 
 <!--        <dependency>

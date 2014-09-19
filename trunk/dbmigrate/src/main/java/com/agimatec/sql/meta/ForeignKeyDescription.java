@@ -16,9 +16,9 @@ public class ForeignKeyDescription extends A_IntegrityRuleDescription {
     private String constraintName;   // the name of the foreign-key constraint, not the index-name
     private String refTableName;     // the name of the referenced table
     private List<String> columns =
-            new ArrayList(); // list of String , foreign key columns
+        new ArrayList(); // list of String , foreign key columns
     private List<String> refColumns =
-            new ArrayList(); // list of String , foreign key referenced columns
+        new ArrayList(); // list of String , foreign key referenced columns
     private String onDeleteRule;    // e.g. "CASCADE", null/"RESTRICT", "SET NULL"
 
     public ForeignKeyDescription deepCopy() {
@@ -31,7 +31,28 @@ public class ForeignKeyDescription extends A_IntegrityRuleDescription {
             return null;
         }
     }
-    
+
+    /**
+     * do NOT compare the constraintName, but the columns, refColumns, tables (independent of sequence)
+     *
+     * @param other
+     * @return true when similar, false otherwise
+     */
+    public boolean isSimilarTo(ForeignKeyDescription other) {
+        if (getColumnSize() == other.getColumnSize() &&
+            getRefTableName().equalsIgnoreCase(other.getRefTableName()) &&
+            getRefColumns().size() == other.getRefColumns().size()) {
+            for (String column : getColumns()) {
+                if (other.getColumn(column) == -1) return false;
+            }
+            for (String column : getRefColumns()) {
+                if (other.getRefColumn(column) == -1) return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param aTable - the tableDescription of My Table
      * @return true when all of my columns are nullable
@@ -39,7 +60,7 @@ public class ForeignKeyDescription extends A_IntegrityRuleDescription {
     public boolean isNullable(TableDescription aTable) {
         if (!aTable.getTableName().equalsIgnoreCase(getTableName()))
             throw new IllegalArgumentException(
-                    "Illegal table " + aTable + " for " + this);
+                "Illegal table " + aTable + " for " + this);
         for (int i = 0; i < columns.size(); i++) {
             String col = getColumn(i);
             if (!aTable.getColumn(col).isNullable()) return false;
@@ -117,8 +138,8 @@ public class ForeignKeyDescription extends A_IntegrityRuleDescription {
     }
 
     public boolean containsColumn(String columnName) {
-        for(String each : columns) {
-            if(each.equalsIgnoreCase(columnName)) return true;
+        for (String each : columns) {
+            if (each.equalsIgnoreCase(columnName)) return true;
         }
         return false;
     }

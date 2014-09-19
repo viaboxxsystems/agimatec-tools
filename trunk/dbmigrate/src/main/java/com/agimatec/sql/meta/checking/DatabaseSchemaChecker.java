@@ -8,6 +8,7 @@ import com.agimatec.sql.meta.mysql.MySqlSchemaChecker;
 import com.agimatec.sql.meta.oracle.OracleSchemaChecker;
 import com.agimatec.sql.meta.postgres.PostgresSchemaChecker;
 import com.agimatec.sql.meta.script.DDLScriptSqlMetaFactory;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,11 +168,11 @@ public abstract class DatabaseSchemaChecker {
         expectedCatalog = factory.getCatalog();
         if (expectedCatalog == null) {
             assertTrue("No expected Catalog: neither schemaconfig nor scripts given!",
-                    false);
+                false);
             throwAssertions();
         } else {
             CatalogDescription databaseCatalog =
-                    readDatabaseCatalog(expectedCatalog.getTableNames());
+                readDatabaseCatalog(expectedCatalog.getTableNames());
             print("Checking Database Schema " + databaseCatalog.getSchemaName() + "..");
             assertCatalogsComplete(expectedCatalog, databaseCatalog);
             print("Schema : Check OK");
@@ -182,7 +183,7 @@ public abstract class DatabaseSchemaChecker {
 
 
     protected abstract CatalogDescription readDatabaseCatalog(String[] tableNames) throws
-            SQLException, IOException;
+        SQLException, IOException;
 
     public void assertCatalogsComplete(CatalogDescription schemaConfig, CatalogDescription databaseConfig) {
         myFoundErrors.clear();
@@ -190,20 +191,20 @@ public abstract class DatabaseSchemaChecker {
         for (String theTable : tables) {
             TableDescription xmlTableDescription = schemaConfig.getTable(theTable);
             TableDescription databaseTableDescription = databaseConfig
-                    .getTable(xmlTableDescription.getTableName().toUpperCase());
+                .getTable(xmlTableDescription.getTableName().toUpperCase());
             if (databaseTableDescription != null) {
                 log("Checking " + databaseTableDescription.getTableName() + "...");
                 compareSingleIndexDescription(xmlTableDescription.getPrimaryKey(),
-                        databaseTableDescription.getPrimaryKey());
+                    databaseTableDescription.getPrimaryKey());
                 compareColumnDescription(xmlTableDescription, databaseTableDescription);
                 compareIndexDescription(xmlTableDescription, databaseTableDescription);
                 compareForeignKeyDescription(xmlTableDescription,
-                        databaseTableDescription);
+                    databaseTableDescription);
                 checkUnknownColumns(databaseTableDescription,
-                        xmlTableDescription.getColumnNames());
+                    xmlTableDescription.getColumnNames());
             } else {
                 assertTrue("Table: " + xmlTableDescription.getTableName() +
-                        "... not found in databaseCatalog!", false);
+                    "... not found in databaseCatalog!", false);
             }
         }
         // TODO RSt - views checking not yet implemented
@@ -219,20 +220,20 @@ public abstract class DatabaseSchemaChecker {
      */
     private void checkUnknownColumns(TableDescription databaseTableDescription, String[] configColumns) {
         Collection<String> c =
-                getUnmappedColumns(databaseTableDescription.getTableName());
+            getUnmappedColumns(databaseTableDescription.getTableName());
         String[] unmappedColumns = c.toArray(new String[0]);
         // check that unmapped columns exist in database
         for (String unmapped : c) {
             assertTrue("Column: " + databaseTableDescription.getTableName() + "." + unmapped +
-                    " [declared as unknown, but] not in database",
-                    databaseTableDescription.getColumn(unmapped) != null);
+                " [declared as unknown, but] not in database",
+                databaseTableDescription.getColumn(unmapped) != null);
         }
         String[] dbColumns = databaseTableDescription.getColumnNames();
         for (String theDbColumn : dbColumns) {
             if (!containsIgnoreCase(unmappedColumns, theDbColumn)) {
                 assertTrue("Table " + databaseTableDescription.getTableName() +
-                        " contains unknown column: '" + theDbColumn + "'",
-                        containsIgnoreCase(configColumns, theDbColumn));
+                    " contains unknown column: '" + theDbColumn + "'",
+                    containsIgnoreCase(configColumns, theDbColumn));
             }
         }
     }
@@ -249,59 +250,59 @@ public abstract class DatabaseSchemaChecker {
         if (xmlIndexDescription == null && databaseIndexDescription == null) return;
         if (xmlIndexDescription == null) {
             assertTrue("Table: " + databaseIndexDescription.getTableName() +
-                    "... IndexName not expected! " +
-                    databaseIndexDescription.getIndexName() + " databaseIndexName: " +
-                    databaseIndexDescription.getIndexName(), false);
+                "... IndexName not expected! " +
+                databaseIndexDescription.getIndexName() + " databaseIndexName: " +
+                databaseIndexDescription.getIndexName(), false);
             return;
         }
         if (databaseIndexDescription == null) {
             assertTrue("Table: " + xmlIndexDescription.getTableName() +
-                    "...DatabaseIndexName not found!! Expected IndexName: " +
-                    xmlIndexDescription.getIndexName(), false);
+                "...DatabaseIndexName not found!! Expected IndexName: " +
+                xmlIndexDescription.getIndexName(), false);
             return;
         }
         if (xmlIndexDescription.isFunctionBased() ||
-                databaseIndexDescription.isFunctionBased()) {
+            databaseIndexDescription.isFunctionBased()) {
             log("function based not yet supported"); // todo [RSt] nyi
             return;
         }
         if (xmlIndexDescription.getIndexName() == null || xmlIndexDescription
-                .getIndexName()
-                .equalsIgnoreCase(databaseIndexDescription.getIndexName())) {
+            .getIndexName()
+            .equalsIgnoreCase(databaseIndexDescription.getIndexName())) {
             boolean columnsOK = indexColumnsEqual(xmlIndexDescription,
-                    databaseIndexDescription);
+                databaseIndexDescription);
             if (!columnsOK) {
                 assertTrue("Table: " + xmlIndexDescription.getTableName() +
-                        ", index: " + xmlIndexDescription.getIndexName() +
-                        "... Columns differ! expected: " +
-                        xmlIndexDescription.getColumns() + " but was " +
-                        databaseIndexDescription.getColumns(), false);
+                    ", index: " + xmlIndexDescription.getIndexName() +
+                    "... Columns differ! expected: " +
+                    xmlIndexDescription.getColumns() + " but was " +
+                    databaseIndexDescription.getColumns(), false);
             }
         } else {
             assertTrue("Table: " + xmlIndexDescription.getTableName() +
-                    "... Wrong Indexname! Expected IndexName: " +
-                    xmlIndexDescription.getIndexName() + " databaseIndexName: " +
-                    databaseIndexDescription.getIndexName(), false);
+                "... Wrong Indexname! Expected IndexName: " +
+                xmlIndexDescription.getIndexName() + " databaseIndexName: " +
+                databaseIndexDescription.getIndexName(), false);
         }
     }
 
     private boolean indexColumnsEqual(IndexDescription xmlIndexDescription, IndexDescription databaseIndexDescription) {
         boolean columnsOK = xmlIndexDescription.getColumnSize() ==
-                databaseIndexDescription.getColumnSize();
+            databaseIndexDescription.getColumnSize();
         if (columnsOK) {
             for (int i = 0; i < xmlIndexDescription.getColumnSize(); i++) {
                 String xmlColumn = xmlIndexDescription.getColumn(i);
                 String dbColumn = databaseIndexDescription.getColumn(i);
                 if (xmlColumn.equalsIgnoreCase(dbColumn)) {
                     assertTrue("Table: " + xmlIndexDescription.getTableName() +
-                            "... Wrong Orderdirection! Column:" +
-                            xmlIndexDescription.getColumn(i) +
-                            " expected OrderDirection: " +
-                            xmlIndexDescription.getOrderDirection(i) +
-                            " databaseOrderDirection: " +
-                            databaseIndexDescription.getOrderDirection(i),
-                            xmlIndexDescription.getOrderDirection(i) ==
-                                    databaseIndexDescription.getOrderDirection(i));
+                        "... Wrong Orderdirection! Column:" +
+                        xmlIndexDescription.getColumn(i) +
+                        " expected OrderDirection: " +
+                        xmlIndexDescription.getOrderDirection(i) +
+                        " databaseOrderDirection: " +
+                        databaseIndexDescription.getOrderDirection(i),
+                        xmlIndexDescription.getOrderDirection(i) ==
+                            databaseIndexDescription.getOrderDirection(i));
                 } else {
                     columnsOK = false;
                 }
@@ -317,7 +318,7 @@ public abstract class DatabaseSchemaChecker {
             IndexDescription databaseIndexDescription = null;
             if (xmlIndexDescription.getIndexName() != null) {
                 databaseIndexDescription =
-                        databaseTableDescription.getIndex(xmlIndexDescription.getIndexName());
+                    databaseTableDescription.getIndex(xmlIndexDescription.getIndexName());
             } else {
                 for (IndexDescription each : databaseTableDescription.getIndices()) {
                     if (indexColumnsEqual(xmlIndexDescription, each)) {
@@ -338,36 +339,36 @@ public abstract class DatabaseSchemaChecker {
         for (int i = 0; i < xmlTableDescription.getColumnSize(); i++) {
             ColumnDescription xmlColumnDescription = xmlTableDescription.getColumn(i);
             ColumnDescription databaseColumnDescription = databaseTableDescription
-                    .getColumn(xmlColumnDescription.getColumnName());
+                .getColumn(xmlColumnDescription.getColumnName());
             assertTrue("Column: " + xmlTableDescription + "." + xmlColumnDescription + " not in database.",
-                    databaseColumnDescription != null);
+                databaseColumnDescription != null);
             if (databaseColumnDescription != null) {
                 assertTrue("Table: " + tableName + ", ColumnName: " +
-                        xmlColumnDescription.getColumnName() +
-                        "... Wrong Precision! Expected Precision: " +
-                        xmlColumnDescription.getPrecision() + " databasePrecision: " +
-                        databaseColumnDescription.getPrecision(),
-                        isPrecisionCompatible(xmlColumnDescription, databaseColumnDescription));
+                    xmlColumnDescription.getColumnName() +
+                    "... Wrong Precision! Expected Precision: " +
+                    xmlColumnDescription.getPrecision() + " databasePrecision: " +
+                    databaseColumnDescription.getPrecision(),
+                    isPrecisionCompatible(xmlColumnDescription, databaseColumnDescription));
 
                 assertTrue("Table: " + tableName + ", ColumnName: " +
-                        xmlColumnDescription.getColumnName() +
-                        "... Wrong Scale! Expected Scale: " +
-                        xmlColumnDescription.getScale() + " databaseScale: " +
-                        databaseColumnDescription.getScale(),
-                        isScaleCompatible(xmlColumnDescription, databaseColumnDescription));
+                    xmlColumnDescription.getColumnName() +
+                    "... Wrong Scale! Expected Scale: " +
+                    xmlColumnDescription.getScale() + " databaseScale: " +
+                    databaseColumnDescription.getScale(),
+                    isScaleCompatible(xmlColumnDescription, databaseColumnDescription));
 
                 assertTrue("Table: " + tableName + ", ColumnName: " +
-                        xmlColumnDescription.getColumnName() +
-                        "... Wrong Type! Expected Type: " +
-                        xmlColumnDescription.getTypeName() + " databaseType: " +
-                        databaseColumnDescription.getTypeName(),
-                        isTypeCompatible(xmlColumnDescription, databaseColumnDescription));
+                    xmlColumnDescription.getColumnName() +
+                    "... Wrong Type! Expected Type: " +
+                    xmlColumnDescription.getTypeName() + " databaseType: " +
+                    databaseColumnDescription.getTypeName(),
+                    isTypeCompatible(xmlColumnDescription, databaseColumnDescription));
 
                 assertTrue("Table: " + tableName + ", ColumnName: " +
-                        xmlColumnDescription.getColumnName() + "... : expected " +
-                        nullable(xmlColumnDescription.isNullable()) + " but was " +
-                        nullable(databaseColumnDescription.isNullable()), xmlColumnDescription
-                        .isNullable() == databaseColumnDescription.isNullable());
+                    xmlColumnDescription.getColumnName() + "... : expected " +
+                    nullable(xmlColumnDescription.isNullable()) + " but was " +
+                    nullable(databaseColumnDescription.isNullable()), xmlColumnDescription
+                    .isNullable() == databaseColumnDescription.isNullable());
             }
         }
     }
@@ -390,66 +391,107 @@ public abstract class DatabaseSchemaChecker {
 
     protected void compareForeignKeyDescription(TableDescription xmlTableDescription,
                                                 TableDescription databaseTableDescription) {
+        // todo onDeleteRule not yet hard checked!
         String tableName = xmlTableDescription.getTableName();
         List<ForeignKeyDescription> unCheckedDatabaseFKs = new ArrayList<ForeignKeyDescription>();
         if (databaseTableDescription.getForeignKeys() != null) {
             unCheckedDatabaseFKs.addAll(databaseTableDescription.getForeignKeys());
         }
+        List<ForeignKeyDescription> unnamedFKs =
+            new ArrayList<ForeignKeyDescription>(xmlTableDescription.getForeignKeySize());
         for (int i = 0; i < xmlTableDescription.getForeignKeySize(); i++) {
             ForeignKeyDescription xmlForeignKeyDescription =
-                    xmlTableDescription.getForeignKey(i);
+                xmlTableDescription.getForeignKey(i);
             if (xmlForeignKeyDescription.getConstraintName() == null ||
-                    xmlForeignKeyDescription.getConstraintName().length() == 0) {
-                log("cannot check unnamed foreign key in " +
-                        xmlForeignKeyDescription.getTableName() + " referencing " +
-                        xmlForeignKeyDescription.getRefTableName());
+                xmlForeignKeyDescription.getConstraintName().length() == 0) {
+                unnamedFKs.add(xmlForeignKeyDescription); // check later...
                 continue;
             }
             ForeignKeyDescription databaseForeignKeyDescription = databaseTableDescription
-                    .getForeignKey(xmlForeignKeyDescription.getConstraintName());
+                .getForeignKey(xmlForeignKeyDescription.getConstraintName());
             unCheckedDatabaseFKs.remove(databaseForeignKeyDescription);
             if (databaseForeignKeyDescription != null) {
-                assertTrue("Table: " + tableName +
-                        "... Wrong ConstraintName! Expected ConstraintName: " +
-                        xmlForeignKeyDescription.getConstraintName() +
-                        " databaseConstraintName: " +
-                        databaseForeignKeyDescription.getConstraintName(),
-                        xmlForeignKeyDescription.getConstraintName()
-                                .equalsIgnoreCase(
-                                        databaseForeignKeyDescription.getConstraintName()));
-
-                assertTrue("Table: " + tableName + ", ConstraintName: " +
-                        xmlForeignKeyDescription.getConstraintName() +
-                        "... Wrong ReferencedTable! Expected RefTable: " +
-                        xmlForeignKeyDescription.getRefTableName() +
-                        " databaseRefTable: " +
-                        databaseForeignKeyDescription.getRefTableName(),
-                        xmlForeignKeyDescription.getRefTableName().equalsIgnoreCase(
-                                databaseForeignKeyDescription.getRefTableName()));
-
-                for (int j = 0; j < xmlForeignKeyDescription.getColumnSize(); j++) {
-                    String xmlColumn = xmlForeignKeyDescription.getColumn(j);
-                    String xmlRefColumn = xmlForeignKeyDescription.getRefColumn(j);
-                    assertTrue("Table: " + tableName + ", ConstraintName: " +
-                            xmlForeignKeyDescription.getConstraintName() +
-                            "... Column not found! Expected Column: " + xmlColumn,
-                            databaseForeignKeyDescription.getColumn(xmlColumn) != -1);
-                    if (xmlRefColumn != null) {
-                        assertTrue("Table: " + tableName + ", ConstraintName: " +
-                                xmlForeignKeyDescription.getConstraintName() +
-                                "... ReferencedColumn not found! Expected Column: " +
-                                xmlRefColumn, databaseForeignKeyDescription
-                                .getRefColumn(xmlRefColumn) != -1);
-                    }
-                }
+                compareForeignKey(tableName, xmlForeignKeyDescription, databaseForeignKeyDescription);
             } else assertTrue("Table: " + tableName +
-                    "... ConstraintName not found! Expected ConstraintName: " +
-                    xmlForeignKeyDescription.getConstraintName(), false);
+                "... ConstraintName not found! Expected ConstraintName: " +
+                xmlForeignKeyDescription.getConstraintName(), false);
         }
+
+        for (ForeignKeyDescription unnamedFK : unnamedFKs) {
+            ForeignKeyDescription dbFk = databaseTableDescription.findForeignKeyLike(unnamedFK);
+            if (dbFk != null) {
+                unCheckedDatabaseFKs.remove(dbFk);
+                if (!StringUtils.equalsIgnoreCase(dbFk.getOnDeleteRule(), unnamedFK.getOnDeleteRule())) {
+                    log("Table: " + tableName + "... Different onDelete rules (found " + dbFk.getOnDeleteRule() +
+                        ", expected " + unnamedFK.getOnDeleteRule() + ") between foreign key on " +
+                        dbFk.getColumns());
+                }
+            } else {
+                assertTrue("Table: " + tableName + "... Missing unnamed foreign key on " +
+                    unnamedFK.getColumns() + " referencing " + unnamedFK.getRefTableName() + "." +
+                    unnamedFK.getRefColumns(), false);
+            }
+        }
+
         for (ForeignKeyDescription uncheckedFK : unCheckedDatabaseFKs) {
-            assertTrue("Table: " + tableName + " contains unexpected foreign key constaint named '"
-                    + uncheckedFK + " on columns " + uncheckedFK.getColumns() + "' referencing table '" +
-                    uncheckedFK.getRefTableName() + "'", false);
+            assertTrue("Table: " + tableName + " contains unexpected foreign key named '"
+                + uncheckedFK + " on columns " + uncheckedFK.getColumns() + "' referencing table '" +
+                uncheckedFK.getRefTableName() + "'." + uncheckedFK.getRefColumns(), false);
+        }
+    }
+
+    private void compareForeignKey(String tableName, ForeignKeyDescription xmlFk,
+                                   ForeignKeyDescription dbFk) {
+        assertTrue("Table: " + tableName +
+            "... Wrong ConstraintName! Expected ConstraintName: " +
+            xmlFk.getConstraintName() +
+            " databaseConstraintName: " +
+            dbFk.getConstraintName(),
+            xmlFk.getConstraintName()
+                .equalsIgnoreCase(
+                    dbFk.getConstraintName()));
+
+        assertTrue("Table: " + tableName + ", ConstraintName: " +
+            xmlFk.getConstraintName() +
+            "... Wrong ReferencedTable! Expected RefTable: " +
+            xmlFk.getRefTableName() +
+            " databaseRefTable: " +
+            dbFk.getRefTableName(),
+            xmlFk.getRefTableName().equalsIgnoreCase(
+                dbFk.getRefTableName()));
+
+        for (int j = 0; j < xmlFk.getColumnSize(); j++) {
+            String xmlColumn = xmlFk.getColumn(j);
+            String xmlRefColumn = xmlFk.getRefColumn(j);
+            assertTrue("Table: " + tableName + ", ConstraintName: " +
+                xmlFk.getConstraintName() +
+                "... Column not found! Expected Column: " + xmlColumn,
+                dbFk.getColumn(xmlColumn) != -1);
+            if (xmlRefColumn != null) {
+                assertTrue("Table: " + tableName + ", ConstraintName: " +
+                    xmlFk.getConstraintName() +
+                    "... ReferencedColumn not found! Expected Column: " +
+                    xmlRefColumn, dbFk
+                    .getRefColumn(xmlRefColumn) != -1);
+            }
+        }
+
+        assertTrue("Table: " + tableName + ", ConstraintName: " +
+            dbFk.getConstraintName() +
+            "... is defined on " + dbFk.getColumnSize() +
+            " columns, but expected " + xmlFk.getColumnSize(),
+            xmlFk.getColumnSize() == dbFk.getColumnSize());
+
+        assertTrue("Table: " + tableName + ", ConstraintName: " +
+            dbFk.getConstraintName() +
+            "... is referencing " + dbFk.getRefColumns().size() +
+            " columns, but expected " + xmlFk.getRefColumns().size(),
+            xmlFk.getRefColumns().size() == dbFk.getRefColumns().size());
+
+        if (!StringUtils.equalsIgnoreCase(dbFk.getOnDeleteRule(), xmlFk.getOnDeleteRule())) {
+            log("Table: " + tableName + ", ConstraintName: " + dbFk.getConstraintName() +
+                "... Different onDelete rules (found " + dbFk.getOnDeleteRule() +
+                ", expected " + xmlFk.getOnDeleteRule() + ")");
         }
     }
 
