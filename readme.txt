@@ -81,6 +81,24 @@ Old style (when distribution-management in pom.xml is enabled)
  
 mvn site-deploy
 
+(new) maven way to deploy to OSSRH and release them to the Central Repository
+-----------------------------------------------------------------------------
+see http://central.sonatype.org/pages/apache-maven.html
+
+If your version is a release version:
+  mvn clean deploy
+
+(With the property autoReleaseAfterClose set to false) Trigger a release of the staging repository with:
+  mvn nexus-staging:release
+
+If something went wrong you can drop the staging repository with:
+  mvn nexus-staging:drop
+
+Perform a release deployment to OSSRH with:
+  mvn release:clean release:prepare
+  mvn release:perform
+
+
 Getting started
 ---------------
 Refer to the project page and WIKI at:
