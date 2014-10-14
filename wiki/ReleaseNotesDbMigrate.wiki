@@ -1,7 +1,7 @@
 = dbmigrate =
 
 == 2.5.19 (Okt 2014) ==
-  * lock-busy: prevent parallel execution. More information, see DBMigrateConfigFile
+  * lock-busy: prevent parallel execution. More information, see [DBMigrateConfigFile]
 
 == 2.5.18 (Sept 2014) ==
   * DatabaseSchemaChecker: support check on unnamed foreign keys. log info when "on delete" rule not equal
