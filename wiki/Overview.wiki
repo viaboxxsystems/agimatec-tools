@@ -1,6 +1,9 @@
 #summary Wiki home of agimatec-tools
 #labels Featured
 
+You can find the latest version on maven-central:
+<a href="http://search.maven.org/#search|ga|1|g%3A%22de.viaboxx%22">here</a>
+
 = Introduction =
 
 agimatec-tools contains 3 frameworks, more or less independent of each other:
