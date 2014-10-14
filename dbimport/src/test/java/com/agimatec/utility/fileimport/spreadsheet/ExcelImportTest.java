@@ -20,7 +20,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 15:49:52 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ExcelImportTest extends TestCase {
     public ExcelImportTest(String s) {

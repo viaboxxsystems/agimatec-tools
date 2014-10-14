@@ -16,7 +16,6 @@ import java.io.IOException;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 15:25:13 <br/>
- * Copyright: Agimatec GmbH
  */
 public class CatalogGeneratorTool extends GeneratorTool {
     protected static final Logger log = LoggerFactory.getLogger(CatalogGeneratorTool.class);

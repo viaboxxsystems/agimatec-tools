@@ -5,7 +5,6 @@ package com.agimatec.jdbc;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 12:36:41 <br/>
- * Copyright: Agimatec GmbH
  */
 public class JdbcException extends RuntimeException {
 

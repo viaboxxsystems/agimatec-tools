@@ -13,7 +13,6 @@ import java.util.StringTokenizer;
 /**
  * <b>Description:</b>   script visitor with JdbcDatabase supporting reconnect<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  */
 public class ReconnectScriptVisitor extends ScriptVisitorDelegate {
     private static final Logger log = LoggerFactory.getLogger(ReconnectScriptVisitor.class);

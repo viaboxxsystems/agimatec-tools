@@ -5,7 +5,7 @@ package com.agimatec.annotations.jam;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 10:59:27 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public final class JAMGenInstruction {
     private String template, outputDir;

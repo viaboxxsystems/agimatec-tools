@@ -17,7 +17,6 @@ import java.util.StringTokenizer;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 17:39:50 <br/>
- * Copyright: Agimatec GmbH
  */
 public class UpdateVersionScriptVisitor extends ScriptVisitorDelegate {
     private static final Logger log = LoggerFactory.getLogger(UpdateVersionScriptVisitor.class);

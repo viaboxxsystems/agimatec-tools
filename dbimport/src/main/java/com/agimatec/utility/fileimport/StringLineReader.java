@@ -7,7 +7,6 @@ import java.io.*;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:43:00 <br/>
- * Copyright: Agimatec GmbH
  */
 public class StringLineReader implements LineReader<String> {
     protected BufferedReader lineReader;

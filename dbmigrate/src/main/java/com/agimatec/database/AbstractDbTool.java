@@ -15,7 +15,6 @@ import java.sql.SQLException;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 13:56:19 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class AbstractDbTool implements MigrationToolAware {
     protected Connection jdbcConnection;

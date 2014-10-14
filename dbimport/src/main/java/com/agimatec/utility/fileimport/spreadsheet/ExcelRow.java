@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Row;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:50:21 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ExcelRow implements IRow {
     private final Row row;

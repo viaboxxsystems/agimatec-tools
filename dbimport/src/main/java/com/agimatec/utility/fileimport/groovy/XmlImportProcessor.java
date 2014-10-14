@@ -15,7 +15,6 @@ import java.util.Iterator;
  * User: roman.stumm <br/>
  * Date: 22.11.2007 <br/>
  * Time: 11:56:33 <br/>
- * Copyright: Agimatec GmbH
  */
 public class XmlImportProcessor extends ImporterProcessor {
     protected final XmlSlurperSpec spec;

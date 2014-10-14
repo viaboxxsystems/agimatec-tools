@@ -12,7 +12,6 @@ import java.io.Writer;
  * User: roman.stumm <br/>
  * Date: 20.11.2007 <br/>
  * Time: 16:20:21 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Importer {
     protected static final Logger log = LoggerFactory.getLogger(Importer.class);

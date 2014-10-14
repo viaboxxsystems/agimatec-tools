@@ -41,7 +41,6 @@ import java.util.*;
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 14:58:47 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class DatabaseSchemaChecker {
     protected static final Logger logger = LoggerFactory.getLogger(DatabaseSchemaChecker.class);

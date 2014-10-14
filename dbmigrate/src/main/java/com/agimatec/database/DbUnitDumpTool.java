@@ -14,7 +14,6 @@ import java.sql.SQLException;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 13:56:07 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DbUnitDumpTool extends AbstractDbTool {
     protected static final Logger log = LoggerFactory.getLogger(DbUnitDumpTool.class);

@@ -24,7 +24,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 14:44:15 <br/>
- * Copyright: Agimatec GmbH
  */
 public class OracleSchemaChecker extends DatabaseSchemaChecker {
     /**

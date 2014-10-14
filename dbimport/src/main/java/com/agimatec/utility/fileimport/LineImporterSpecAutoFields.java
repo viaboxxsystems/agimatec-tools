@@ -11,7 +11,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 17:28:52 <br/>
- * Copyright: Agimatec GmbH
  */
 public class LineImporterSpecAutoFields extends LineImporterSpec {
     /**

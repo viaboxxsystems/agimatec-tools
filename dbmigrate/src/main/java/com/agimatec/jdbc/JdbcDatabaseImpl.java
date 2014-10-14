@@ -13,7 +13,6 @@ import java.util.Properties;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 13:48:02 <br/>
- * Copyright: Agimatec GmbH
  */
 class JdbcDatabaseImpl implements JdbcDatabase {
     protected static final Logger log = LoggerFactory.getLogger(JdbcDatabaseImpl.class);

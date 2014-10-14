@@ -10,7 +10,6 @@ import java.util.*;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 15:30:57 <br/>
- * Copyright: Agimatec GmbH
  */
 @XStreamAlias("conversion")
 public class CatalogConversion {

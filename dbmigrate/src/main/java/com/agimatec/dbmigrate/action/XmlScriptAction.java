@@ -7,7 +7,6 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
  * User: roman.stumm <br/>
  * Date: 01.12.2008 <br/>
  * Time: 10:44:18 <br/>
- * Copyright: Agimatec GmbH
  */
 public class XmlScriptAction extends ScriptAction {
     public XmlScriptAction(AutoMigrationTool tool, String scriptCmd) {

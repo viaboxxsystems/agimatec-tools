@@ -4,7 +4,6 @@ package com.agimatec.sql.meta.script;
 /**
  * <b>Description:</b>   <br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

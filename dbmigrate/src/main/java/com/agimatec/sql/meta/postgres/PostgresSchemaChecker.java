@@ -14,7 +14,6 @@ import java.sql.SQLException;
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 15:03:12 <br/>
- * Copyright: Agimatec GmbH
  */
 public class PostgresSchemaChecker extends DatabaseSchemaChecker {
     /**

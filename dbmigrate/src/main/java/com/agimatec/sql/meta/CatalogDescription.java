@@ -8,7 +8,6 @@ import java.util.*;
 /**
  * <b>Description:</b>   root object that contains the database schema description<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
  * User: roman.stumm <br/>
  * Date: 17.12.2007 <br/>
  * Time: 15:20:37 <br/>
- * Copyright: Agimatec GmbH
  */
 public class RevertableStringTokenizer implements Enumeration {
     private List<String> tokens = new ArrayList();

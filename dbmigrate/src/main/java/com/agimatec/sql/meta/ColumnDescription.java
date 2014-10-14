@@ -6,8 +6,6 @@ import java.io.Serializable;
 
 /**
  * <b>Description:</b>   <br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

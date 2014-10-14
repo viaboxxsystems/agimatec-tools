@@ -13,7 +13,6 @@ import java.util.Stack;
 /**
  * <b>Description:</b>   I_ScriptVisitor wrapper that supports conditional execution of a SQL script<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

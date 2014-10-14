@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: This class can be used like the java.util.StringTokenizer.
  * The main difference is, that the separator tokens are Strings not characters.</p>
  * <p>Copyright: Copyright (c) 2007</p>
- * <p>Company: Agimatec GmbH </p>
  *
  * @author Roman Stumm
  */

@@ -19,7 +19,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 13.11.2007 <br/>
  * Time: 16:09:13 <br/>
- * Copyright: Agimatec GmbH
  */
 public class GroovyScriptTool implements MigrationToolAware {
     private GroovyScriptEngine scriptEngine;

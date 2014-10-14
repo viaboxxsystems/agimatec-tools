@@ -17,7 +17,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 15:34:51 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class GeneratorSettings {
     protected String configFile = defaultConfigFileName();

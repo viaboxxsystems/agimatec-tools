@@ -10,7 +10,6 @@ import java.io.Serializable;
  * User: roman.stumm <br/>
  * Date: 13.04.2007 <br/>
  * Time: 10:31:21 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DBVersionMeta implements Serializable {
   private String tableName = "DB_VERSION";   // mandatory

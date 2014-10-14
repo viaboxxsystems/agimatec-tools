@@ -15,7 +15,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 03.07.2007 <br/>
  * Time: 16:20:11 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Ejb3Class extends Ejb3Prototype {
     private static final Logger log = LoggerFactory.getLogger(Ejb3Class.class);

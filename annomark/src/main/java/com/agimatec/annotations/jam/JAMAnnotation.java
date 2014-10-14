@@ -7,7 +7,7 @@ import org.codehaus.jam.JAnnotation;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 11:51:38 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public class JAMAnnotation {
     private final JAnnotation annotation;

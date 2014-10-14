@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport;
  * User: roman.stumm <br/>
  * Date: 11.09.2007 <br/>
  * Time: 19:30:59 <br/>
- * Copyright: Agimatec GmbH
  */
 public class FixedLengthStringTokenizerFactory implements LineTokenizerFactory<String, String>
 {

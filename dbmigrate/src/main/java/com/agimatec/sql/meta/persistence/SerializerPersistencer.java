@@ -7,7 +7,6 @@ import java.io.*;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 17:39:51 <br/>
- * Copyright: Agimatec GmbH
  */
 public class SerializerPersistencer implements ObjectPersistencer {
     public void save(Object obj, File target) throws IOException {

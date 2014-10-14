@@ -9,7 +9,6 @@ import java.sql.SQLException;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 17:41:24 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class ScriptVisitorDelegate implements ScriptVisitor {
     protected final ScriptVisitor nextVisitor;

@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 12:07:58 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public class JAMDtoField extends JAMDtoAnnotatedElement {
     private static final Logger log = LoggerFactory.getLogger(JAMDtoField.class);

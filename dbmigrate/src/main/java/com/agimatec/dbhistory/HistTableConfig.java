@@ -11,7 +11,6 @@ import java.util.Set;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 18:21:29 <br/>
- * Copyright: Agimatec GmbH
  */
 @XStreamAlias("tableConfig")
 public class HistTableConfig implements Serializable {

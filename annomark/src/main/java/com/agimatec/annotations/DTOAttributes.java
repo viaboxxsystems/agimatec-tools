@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 16:00:23 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(value = {ElementType.FIELD, ElementType.METHOD})

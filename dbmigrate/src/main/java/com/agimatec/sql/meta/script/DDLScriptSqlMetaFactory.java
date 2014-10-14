@@ -22,7 +22,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 19:01:18 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     private static final Logger log = LoggerFactory.getLogger(DDLScriptSqlMetaFactory.class);

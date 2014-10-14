@@ -1,4 +1,3 @@
-/* Copyright 2001 Agimatec GmbH  */
 
 package com.agimatec.commons.config;
 
@@ -6,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * A config node representing a list of nodes.
+ * Developed: 2001
  *
  * @author Roman Stumm
  */

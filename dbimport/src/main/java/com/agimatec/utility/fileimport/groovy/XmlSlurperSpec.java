@@ -16,7 +16,6 @@ import java.util.Iterator;
  * User: roman.stumm <br/>
  * Date: 20.11.2007 <br/>
  * Time: 15:24:53 <br/>
- * Copyright: Agimatec GmbH
  */
 public class XmlSlurperSpec implements ImporterSpec {
     protected static final Logger log = LoggerFactory.getLogger(XmlSlurperSpec.class);

@@ -4,12 +4,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 /**
  * <b>Description:</b>   Description of the definition of a Oracle Sequence <br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  * <b>Creation Date:</b> 17.11.2007
  *
  * @author Roman Stumm

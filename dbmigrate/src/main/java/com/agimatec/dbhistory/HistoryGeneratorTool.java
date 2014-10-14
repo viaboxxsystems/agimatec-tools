@@ -1,7 +1,7 @@
 package com.agimatec.dbhistory;
 
-import com.agimatec.sql.meta.persistence.XStreamPersistencer;
 import com.agimatec.commons.generator.GeneratorTool;
+import com.agimatec.sql.meta.persistence.XStreamPersistencer;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.io.IOException;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 18:08:23 <br/>
- * Copyright: Agimatec GmbH
  */
 public class HistoryGeneratorTool extends GeneratorTool {
     private HistSchemaConfig config;

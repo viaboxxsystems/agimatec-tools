@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
  * @> -> execSQLScript     (script as a single statement)
  * @| -> iterateSQLLines   (execute linewise)
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  */
 public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
     private static final Logger log = LoggerFactory.getLogger(SubscriptCapableVisitor.class);

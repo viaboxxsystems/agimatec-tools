@@ -8,8 +8,6 @@ import java.util.StringTokenizer;
 /**
  * <b>Description:</b>   a class that can extract properties out of a string by using an expression tree.
  * This is a kind of string parser to extract some values, e.g. out of a SQL script or anything.<br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

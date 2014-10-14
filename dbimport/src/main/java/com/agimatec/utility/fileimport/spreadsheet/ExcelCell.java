@@ -15,7 +15,6 @@ import java.util.Date;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:21:33 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ExcelCell implements ICell {
   private final DecimalFormat plainNumericFormat = new DecimalFormat("#.#");

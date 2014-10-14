@@ -7,7 +7,6 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
  * User: roman.stumm <br/>
  * Date: 09.11.2007 <br/>
  * Time: 11:54:53 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ChangeDirCommand extends MigrateAction {
     String dir;

@@ -15,7 +15,6 @@ import java.io.*;
  * User: roman.stumm <br/>
  * Date: 17.12.2007 <br/>
  * Time: 11:57:10 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ScriptTransformatorTool extends GeneratorTool implements FilenameFilter {
   private static final Logger log = LoggerFactory.getLogger(ScriptTransformatorTool.class);

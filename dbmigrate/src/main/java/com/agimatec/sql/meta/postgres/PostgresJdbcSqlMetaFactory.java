@@ -9,7 +9,6 @@ import com.agimatec.sql.meta.checking.JdbcSqlMetaFactory;
  * User: roman.stumm <br/>
  * Date: 10.03.2008 <br/>
  * Time: 10:41:46 <br/>
- * Copyright: Agimatec GmbH
  */
 public class PostgresJdbcSqlMetaFactory extends JdbcSqlMetaFactory {
     public PostgresJdbcSqlMetaFactory(JdbcDatabase database) {

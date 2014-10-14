@@ -10,7 +10,6 @@ import java.io.*;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 16:42:15 <br/>
- * Copyright: Agimatec GmbH
  */
 public class LineImporterSpec implements ImporterSpec {
     protected static final Logger log = LoggerFactory.getLogger(LineImporterSpec.class);

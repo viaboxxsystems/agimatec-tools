@@ -10,7 +10,6 @@ import java.io.Reader;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:42:47 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface LineReader<Line> {
     void setReader(Reader aReader) throws IOException;

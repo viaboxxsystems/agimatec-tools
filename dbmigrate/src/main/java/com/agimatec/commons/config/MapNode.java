@@ -1,5 +1,3 @@
-/* Copyright 2001 Agimatec GmbH  */
-
 package com.agimatec.commons.config;
 
 import java.util.HashMap;
@@ -7,6 +5,7 @@ import java.util.Map;
 
 /**
  * A config node representing a map with nodes.
+ * developed: 2001
  *
  * @author Roman Stumm
  */

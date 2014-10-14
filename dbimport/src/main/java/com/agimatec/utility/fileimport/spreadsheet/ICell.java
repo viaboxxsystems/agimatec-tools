@@ -7,7 +7,6 @@ import java.util.Date;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:21:10 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface ICell {
     /**

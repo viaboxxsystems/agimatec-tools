@@ -9,7 +9,6 @@ import java.io.Serializable;
  * User: roman.stumm <br/>
  * Date: 11.06.2007 <br/>
  * Time: 10:46:21 <br/>
- * Copyright: Agimatec GmbH
  */
 @XStreamAlias("transformation")
 public class DataTypeTransformation implements Serializable {

@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * <b>Description:</b>   Description of an index in the database<br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

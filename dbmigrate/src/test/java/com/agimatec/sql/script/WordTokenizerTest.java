@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.StringReader;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2007</p>
- * <p>Company: Agimatec GmbH </p>
  *
  * @author Roman Stumm
  */

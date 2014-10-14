@@ -6,7 +6,6 @@ import com.agimatec.sql.meta.persistence.SerializerPersistencer;
 import com.agimatec.sql.meta.persistence.XStreamPersistencer;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 04.05.2007 <br/>
  * Time: 10:43:11 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DDLParserTool {
     private String dbms;

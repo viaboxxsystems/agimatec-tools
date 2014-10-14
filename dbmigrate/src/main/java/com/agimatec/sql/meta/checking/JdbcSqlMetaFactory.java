@@ -15,7 +15,6 @@ import java.util.*;
  * User: roman.stumm <br/>
  * Date: 10.03.2008 <br/>
  * Time: 10:42:36 <br/>
- * Copyright: Agimatec GmbH
  */
 public class JdbcSqlMetaFactory implements SqlMetaFactory {
     private final JdbcDatabase database;

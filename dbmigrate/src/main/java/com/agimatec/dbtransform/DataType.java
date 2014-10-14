@@ -7,7 +7,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 16:41:43 <br/>
- * Copyright: Agimatec GmbH
  */
 @XStreamAlias("dataType")
 public class DataType implements Cloneable {

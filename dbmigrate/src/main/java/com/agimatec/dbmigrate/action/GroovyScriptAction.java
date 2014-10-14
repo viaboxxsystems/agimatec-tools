@@ -7,7 +7,6 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
  * User: roman.stumm <br/>
  * Date: 01.12.2008 <br/>
  * Time: 10:44:11 <br/>
- * Copyright: Agimatec GmbH
  */
 public class GroovyScriptAction extends ScriptAction {
     public GroovyScriptAction(AutoMigrationTool tool, String scriptCmd) {

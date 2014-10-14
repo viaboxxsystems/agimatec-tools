@@ -11,7 +11,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 03.07.2007 <br/>
  * Time: 16:23:30 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Ejb3Attribute extends Ejb3Prototype {
     private static final Map<String, String> typeNames = new HashMap();
