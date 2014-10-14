@@ -16,7 +16,6 @@ import java.nio.charset.Charset;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 17:39:36 <br/>
- * Copyright: Agimatec GmbH
  */
 public class XStreamPersistencer implements ObjectPersistencer {
     static final XStream xstream = new XStream();

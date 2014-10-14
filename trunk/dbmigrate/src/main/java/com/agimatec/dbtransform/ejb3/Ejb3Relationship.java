@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
  * User: roman.stumm <br/>
  * Date: 03.07.2007 <br/>
  * Time: 16:23:41 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Ejb3Relationship extends Ejb3Prototype {
     protected final ForeignKeyDescription foreignKey;

@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 16:32:14 <br/>
- * Copyright: Agimatec GmbH
  */
 public class CSVStringTokenizerFactory implements LineTokenizerFactory<String, String> {
     private String delimeter = ";";

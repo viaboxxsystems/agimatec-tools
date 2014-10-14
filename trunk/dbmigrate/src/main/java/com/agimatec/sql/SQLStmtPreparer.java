@@ -13,7 +13,6 @@ import java.util.List;
  * <b>Description:</b>   Replace params in a SQL string so that they can be bound as
  * host-variables when possible.<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

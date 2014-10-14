@@ -10,7 +10,6 @@ import java.text.ParseException;
 /**
  * <b>Description:</b>   Create an extract expr from its toString() representation<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

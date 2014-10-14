@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 16:31:35 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface LineTokenizerFactory<Line, SingleValue> {
     /**

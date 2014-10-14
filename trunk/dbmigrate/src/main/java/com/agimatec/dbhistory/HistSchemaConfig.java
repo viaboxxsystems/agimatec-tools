@@ -12,7 +12,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 18:15:27 <br/>
- * Copyright: Agimatec GmbH
  */
 @XStreamAlias("historyConfig")
 public class HistSchemaConfig implements Serializable {

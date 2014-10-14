@@ -12,7 +12,6 @@ import java.util.Map;
  * <b>Description:</b>   a wrapper of a result set. simply delegates all methods. use this
  * class for subclassing.<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

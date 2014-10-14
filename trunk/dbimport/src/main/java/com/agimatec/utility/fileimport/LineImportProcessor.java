@@ -13,7 +13,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 22.11.2007 <br/>
  * Time: 11:56:57 <br/>
- * Copyright: Agimatec GmbH
  */
 public class LineImportProcessor extends ImporterProcessor {
     protected final LineImporterSpec spec;

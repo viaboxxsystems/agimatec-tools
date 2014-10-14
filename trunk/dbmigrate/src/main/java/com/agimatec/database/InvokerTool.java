@@ -9,7 +9,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 15:11:38 <br/>
- * Copyright: Agimatec GmbH
  */
 public class InvokerTool {
     public static void main(String[] args) throws Exception {

@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: This class is capable to parse SQL scripts. It is not a fully SQL and PL/SQL parser and
  * somehow heuristic.<br>
  * Able to parse:<br>
@@ -32,7 +31,6 @@ import java.util.Map;
  * correctly. (Just try it.)
  * </p>
  * <p>Copyright: Copyright (c) 2007</p>
- * <p>Company: Agimatec GmbH </p>
  *
  * @author Roman Stumm
  */

@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
  * <p>Description: Tokenizer that replies empty strings
  * when two separators are immediately in sequence and can handle "".
  * Useful for parsing a line in a .csv file.</p>
- * <p>Copyright: Agimatec GmbH, 2007</p>
  *
  * @author Roman Stumm
  */

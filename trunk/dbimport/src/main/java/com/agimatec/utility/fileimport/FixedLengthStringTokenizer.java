@@ -9,7 +9,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 11.09.2007 <br/>
  * Time: 19:20:27 <br/>
- * Copyright: Agimatec GmbH
  */
 class FixedLengthStringTokenizer implements LineTokenizer<String, String> {
     private List myStringList = new ArrayList();

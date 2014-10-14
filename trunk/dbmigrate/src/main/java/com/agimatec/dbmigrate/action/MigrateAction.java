@@ -7,7 +7,6 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
  * User: roman.stumm <br/>
  * Date: 01.12.2008 <br/>
  * Time: 10:26:08 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class MigrateAction {
     protected final AutoMigrationTool tool;

@@ -34,10 +34,9 @@ import java.text.DateFormat;
 import java.util.*;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: Base class for Migration and Testcases.
  * Provides infrastructure and common utilities.</p>
- * <p>development: 2007-2010</p>
+ * <p>development: 2007-2014</p>
  *
  * @author Roman Stumm
  */

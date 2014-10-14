@@ -9,7 +9,6 @@ import java.sql.Timestamp;
  * User: roman.stumm <br/>
  * Date: 30.08.2007 <br/>
  * Time: 13:29:51 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ImportControl implements Serializable {
    protected long importId;

@@ -12,7 +12,7 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 17:18:39 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public class JAMDtoFieldAnnotation {
     private final JAMAnnotation annotation;

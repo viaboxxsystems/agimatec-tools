@@ -9,7 +9,6 @@ import com.agimatec.sql.meta.script.ExtractExpr;
  * User: roman.stumm <br/>
  * Date: 24.04.2007 <br/>
  * Time: 19:00:56 <br/>
- * Copyright: Agimatec GmbH
  */
 public class PostgresDDLExpressions extends DDLExpressions {
     public static final ExtractExpr[] expressions;

@@ -9,7 +9,6 @@ import com.agimatec.sql.meta.script.ExtractExpr;
  * User: roman.stumm <br/>
  * Date: 17.12.2007 <br/>
  * Time: 16:42:43 <br/>
- * Copyright: Agimatec GmbH
  */
 public class SomeDDLExpressions extends DDLExpressions {
     private final DDLExpressions all;

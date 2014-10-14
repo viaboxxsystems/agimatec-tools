@@ -8,7 +8,6 @@ import java.util.Enumeration;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 16:11:33 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface LineTokenizer<Line, Single> extends Enumeration<Single> {
     /**

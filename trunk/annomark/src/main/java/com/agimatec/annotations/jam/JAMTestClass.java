@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 09:16:15 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public class JAMTestClass extends JAMTestAnnotatedElement {
 

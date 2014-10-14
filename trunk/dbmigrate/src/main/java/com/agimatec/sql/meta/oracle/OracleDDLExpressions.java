@@ -9,7 +9,6 @@ import com.agimatec.sql.meta.script.ExtractExpr;
  * Build a CatalogDescription by parsing a SQL DDL script.
  * Caution: this class not not thread-safe. <br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

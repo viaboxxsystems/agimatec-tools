@@ -7,10 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: Class to replace ${property} properties by a value in a Map.
  * Idea and code based on Jakarta ANT's ProjectHelper.java.</p>
- * <p>Company: Agimatec GmbH </p>
  *
  * @author Roman Stumm
  */

@@ -11,7 +11,6 @@ import java.util.StringTokenizer;
 
 /**
  * Description: Abstract superclass of all Node-Classes representing Config-elements.
- * Company: Agimatec GmbH
  *
  * @author Roman Stumm
  */

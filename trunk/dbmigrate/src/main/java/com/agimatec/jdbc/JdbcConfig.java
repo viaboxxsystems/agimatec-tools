@@ -11,7 +11,6 @@ import java.util.Properties;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 12:34:49 <br/>
- * Copyright: Agimatec GmbH
  */
 public class JdbcConfig {
     private final Properties properties = new Properties();

@@ -17,7 +17,6 @@ import java.util.*;
  * User: roman.stumm <br/>
  * Date: 27.04.2007 <br/>
  * Time: 17:57:39 <br/>
- * Copyright: Agimatec GmbH
  */
 public class FreemarkerFileGenerator {
     protected static final Logger log = LoggerFactory.getLogger(FreemarkerFileGenerator.class);

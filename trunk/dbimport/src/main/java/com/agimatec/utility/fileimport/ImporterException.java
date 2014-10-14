@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport;
  * User: roman.stumm <br/>
  * Date: 28.08.2007 <br/>
  * Time: 16:51:07 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ImporterException extends RuntimeException {
     /** set to true when import should immediately stop */

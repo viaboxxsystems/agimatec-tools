@@ -15,7 +15,7 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 08.06.2007 <br/>
  * Time: 12:10:31 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public abstract class JAMDtoAnnotatedElement {
     private final Map<String, JAMAnnotation> annotations = new HashMap();

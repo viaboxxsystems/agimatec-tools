@@ -7,7 +7,6 @@ import com.agimatec.sql.meta.ForeignKeyDescription;
  * User: roman.stumm <br/>
  * Date: 04.07.2007 <br/>
  * Time: 15:45:14 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Ejb3RelationshipOneToMany extends Ejb3Relationship {
     private Ejb3Relationship mappedByRelationship;

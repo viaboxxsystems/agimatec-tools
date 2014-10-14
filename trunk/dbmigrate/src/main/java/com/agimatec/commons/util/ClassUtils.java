@@ -1,10 +1,8 @@
 package com.agimatec.commons.util;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: Reflection util for class access.</p>
  * <p>Copyright (c) 2007</p>
- * <p>Company: Agimatec GmbH </p>
  *
  * @author Roman Stumm
  */

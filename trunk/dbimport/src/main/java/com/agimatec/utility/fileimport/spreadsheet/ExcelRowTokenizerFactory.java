@@ -9,7 +9,6 @@ import com.agimatec.utility.fileimport.LineTokenizerFactory;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:12:58 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ExcelRowTokenizerFactory implements LineTokenizerFactory<ExcelRow, ExcelCell> {
 

@@ -8,8 +8,6 @@ import java.util.StringTokenizer;
 
 /**
  * <b>Description:</b>  Class to parse a file name with dbversion at beginning of the name <br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  *
  * @author Roman Stumm
  */

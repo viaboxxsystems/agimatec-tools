@@ -12,7 +12,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 15:39:09 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class GeneratorTool {
     protected GeneratorSettings settings;

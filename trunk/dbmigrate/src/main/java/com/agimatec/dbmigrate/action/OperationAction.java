@@ -7,7 +7,6 @@ import com.agimatec.dbmigrate.AutoMigrationTool;
  * User: roman.stumm <br/>
  * Date: 01.12.2008 <br/>
  * Time: 10:26:26 <br/>
- * Copyright: Agimatec GmbH
  */
 public class OperationAction extends MigrateAction {
     private String operation;

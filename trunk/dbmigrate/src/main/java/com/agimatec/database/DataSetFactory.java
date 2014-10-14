@@ -9,7 +9,6 @@ import java.io.IOException;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 12:27:10 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DataSetFactory {
     /**

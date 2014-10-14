@@ -14,7 +14,6 @@ import java.io.OutputStream;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 14:15:29 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DataSetFlatXML extends DataSet {
     protected DataSetFlatXML(String dataFile) {

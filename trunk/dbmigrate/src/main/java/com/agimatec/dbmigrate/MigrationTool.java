@@ -9,7 +9,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 13.11.2007 <br/>
  * Time: 16:18:39 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface MigrationTool {
     JdbcDatabase getTargetDatabase();

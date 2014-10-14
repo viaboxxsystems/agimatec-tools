@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport.spreadsheet;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:50:16 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface IRow {
     /**

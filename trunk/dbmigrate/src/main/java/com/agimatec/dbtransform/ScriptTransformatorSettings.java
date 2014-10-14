@@ -9,7 +9,6 @@ import java.io.IOException;
  * User: roman.stumm <br/>
  * Date: 17.12.2007 <br/>
  * Time: 11:59:54 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ScriptTransformatorSettings extends GeneratorSettings {
   private String fromDir, targetDir, fromDbms = "postgres", prefix = "up-";

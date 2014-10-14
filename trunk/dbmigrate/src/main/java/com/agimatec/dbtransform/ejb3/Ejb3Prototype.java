@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
  * User: roman.stumm <br/>
  * Date: 03.07.2007 <br/>
  * Time: 16:22:52 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class Ejb3Prototype implements Serializable {
     protected String toProperEntityName(String tableName) {

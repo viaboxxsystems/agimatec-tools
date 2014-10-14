@@ -1,5 +1,3 @@
-/* Copyright 2001-2007 Agimatec GmbH  */
-
 package com.agimatec.commons.config;
 
 import java.util.List;

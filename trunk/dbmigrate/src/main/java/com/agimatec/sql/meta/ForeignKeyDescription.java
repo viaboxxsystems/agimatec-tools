@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * <b>Description:</b>   Hold information about a foreign key in the database<br>
  * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  */
 @XStreamAlias("foreignKey")
 public class ForeignKeyDescription extends A_IntegrityRuleDescription {

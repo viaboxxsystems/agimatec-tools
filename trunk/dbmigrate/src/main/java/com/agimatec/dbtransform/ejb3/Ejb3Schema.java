@@ -29,7 +29,6 @@ import java.util.*;
  * User: roman.stumm <br/>
  * Date: 03.07.2007 <br/>
  * Time: 16:20:04 <br/>
- * Copyright: Agimatec GmbH
  */
 public class Ejb3Schema extends Ejb3Prototype {
     private final CatalogDescription catalog;

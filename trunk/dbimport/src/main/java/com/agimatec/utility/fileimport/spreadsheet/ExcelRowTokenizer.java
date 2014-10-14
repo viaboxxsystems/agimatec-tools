@@ -10,7 +10,6 @@ import java.util.Iterator;
  * User: roman.stumm <br/>
  * Date: 11.06.2008 <br/>
  * Time: 17:13:30 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ExcelRowTokenizer implements LineTokenizer<ExcelRow, ExcelCell> {
     private Iterator<Cell> cellIterator;

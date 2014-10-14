@@ -8,7 +8,6 @@ import java.util.Properties;
  * User: roman.stumm <br/>
  * Date: 04.04.2007 <br/>
  * Time: 12:33:50 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface JdbcDatabase {
   Connection getConnection();

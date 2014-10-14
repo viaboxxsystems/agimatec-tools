@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Automatical database migration program for Agimatec GmbH
+ * Automatical database migration tool.
  * <pre>
  * Features:
  * 01- detect from-version from database or config-file
@@ -43,7 +43,7 @@ import java.util.*;
  * 17 - runs sql, xml or groovy script (auto-detect by file suffix)
  * </pre>
  * Author: Roman Stumm
- * Date: 2007, 2008, 2009, 2010, 2011
+ * Date: 2007-2014
  * <pre>
  * final String sim = System.getProperty(SYSTEM_PROPERTY_SIM);
  * sim = "true"|"yes" :: simulation, echo execution sequence into log, but do not invoke any script

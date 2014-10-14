@@ -7,7 +7,6 @@ import java.io.Writer;
  * User: roman.stumm <br/>
  * Date: 22.11.2007 <br/>
  * Time: 11:46:35 <br/>
- * Copyright: Agimatec GmbH
  */
 public interface ImporterSpec {
     /**

@@ -5,7 +5,6 @@ package com.agimatec.utility.fileimport;
  * User: roman.stumm <br/>
  * Date: 16.06.2008 <br/>
  * Time: 12:08:04 <br/>
- * Copyright: Agimatec GmbH
  */
 public enum ImportState {
     /** import not yet started / scheduled / waiting to receive lock */

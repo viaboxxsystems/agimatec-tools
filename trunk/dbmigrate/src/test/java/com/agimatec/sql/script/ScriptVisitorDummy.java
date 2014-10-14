@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Title: Agimatec GmbH</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2007</p>
- * <p>Company: Agimatec GmbH </p>
  * @author Roman Stumm
  */
 public class ScriptVisitorDummy implements ScriptVisitor {

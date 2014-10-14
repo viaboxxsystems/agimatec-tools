@@ -9,7 +9,6 @@ import java.io.IOException;
  * User: roman.stumm <br/>
  * Date: 05.06.2007 <br/>
  * Time: 15:26:03 <br/>
- * Copyright: Agimatec GmbH
  */
 public class CatalogGeneratorSettings extends GeneratorSettings {
     private String catalogFile;

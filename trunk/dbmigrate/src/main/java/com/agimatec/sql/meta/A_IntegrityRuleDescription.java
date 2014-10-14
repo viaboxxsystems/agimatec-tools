@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 /**
  * <b>Description:</b>   Base class for different kinds of integrity rule descriptions<br>
- * <b>Copyright:</b>     Copyright (c) 2007<br>
- * <b>Company:</b>       Agimatec GmbH<br>
  * <b>Creation Date:</b> 17.11.2007
  *
  * @author Roman Stumm

@@ -15,7 +15,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 04.05.2007 <br/>
  * Time: 10:36:52 <br/>
- * Copyright: Agimatec GmbH
  */
 public abstract class DDLExpressions {
     public abstract ExtractExpr[] getExpressions();

@@ -15,7 +15,6 @@ import java.util.Map;
  * User: roman.stumm <br/>
  * Date: 30.08.2007 <br/>
  * Time: 11:59:08 <br/>
- * Copyright: Agimatec GmbH
  */
 public class SqlUtil implements Serializable {
     private static final String[] SEQ =

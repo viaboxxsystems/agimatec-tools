@@ -15,7 +15,7 @@ import com.agimatec.annotations.TestMethodDocumentation;
  * User: roman.stumm <br/>
  * Date: 13.06.2007 <br/>
  * Time: 14:55:23 <br/>
- * Copyright: Agimatec GmbH
+ * Copyright: Apache 2.0 License
  */
 public class JAMTestMethod extends JAMTestAnnotatedElement {
     private final JMethod jmethod;

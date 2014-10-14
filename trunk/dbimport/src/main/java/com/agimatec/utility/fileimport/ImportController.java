@@ -17,7 +17,6 @@ import java.util.List;
  * User: roman.stumm <br/>
  * Date: 30.08.2007 <br/>
  * Time: 13:02:51 <br/>
- * Copyright: Agimatec GmbH
  */
 public class ImportController {
     private static final Logger log = LoggerFactory.getLogger(ImportController.class);

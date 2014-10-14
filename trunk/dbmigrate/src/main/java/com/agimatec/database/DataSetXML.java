@@ -13,7 +13,6 @@ import java.io.OutputStream;
  * User: roman.stumm <br/>
  * Date: 01.06.2007 <br/>
  * Time: 14:15:36 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DataSetXML extends DataSet {
     protected DataSetXML(String dataFile) {

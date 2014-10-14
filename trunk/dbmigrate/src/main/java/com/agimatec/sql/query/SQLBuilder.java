@@ -12,7 +12,6 @@ import java.util.Properties;
  * User: roman.stumm <br/>
  * Date: 09.11.2007 <br/>
  * Time: 15:08:00 <br/>
- * Copyright: Agimatec GmbH
  */
 public class SQLBuilder {
     private final Properties querySpecs;

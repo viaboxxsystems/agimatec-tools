@@ -19,7 +19,6 @@ import java.text.MessageFormat;
  * User: roman.stumm <br/>
  * Date: 09.11.2007 <br/>
  * Time: 15:54:36 <br/>
- * Copyright: Agimatec GmbH
  */
 public class DeleteHistoryTriggers extends AbstractDbTool {
     protected static final Logger log = LoggerFactory.getLogger("agimatec.migration");
