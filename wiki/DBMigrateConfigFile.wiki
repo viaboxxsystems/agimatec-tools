@@ -143,3 +143,32 @@ configure where/how to store the database version in the database.
   * insert-only = boolean, default = false. if true, tool inserts new version into db_version (so that you get a version journal)
   * auto-create = boolean, default = true. if true, create db_version table if it does not exist
   * auto-version = boolean, default = false. insert/update the value in db_version after execution of an upgrade script automatically. false: you need to set the version in the script explicitly
+
+
+==== lock-busy: prevent parallel execution ====
+The configuration "lock-busy" in the "version-meta" section is a new feature, since dbmigrate 2.5.19.
+It is useful when dbmigrate is installed in a cluster to prevent parallel execution on the same database at the same time.
+Parallel execution will most likely corrupt the database or fail.
+The lock-busy behavior writes a row "busy" into the db_version table and deletes when dbmigrate is finished. 
+
+Known issue:
+It requires a unique index (or primary key) on the "version" column of "db_version"!! It does not work with "insert-only" = "true"!!
+
+{{{
+    <map name="version-meta">
+        <Boolean name="auto-version" value="true"/>
+        <String name="lock-busy" value="Wait"/>
+    </map>
+}}}
+
+lock-busy can be one of: No, Fail, Wait. The default behavior is "No".
+
+    * No: do not care about parallel runs. The user must himself avoid to run multiple dbmigrate processes at the same database at the same time.
+    * Wait or Fail:
+    * Fail: fail when busy
+    * Wait: wait until not busy anymore, then start
+      Defaults for Wait: unlimited attempts, 10 seconds between delay between attempts.
+
+
+
+For more information see class com.agimatec.dbmigrate.util.BusyLocker
