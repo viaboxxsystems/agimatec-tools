@@ -2,6 +2,9 @@
 
 = Introduction =
 
+You can find the latest version on maven-central:
+<a href="http://search.maven.org/#search|ga|1|dbmigrate">here</a>
+
 *Why database migration?*
 
 The flyway framework is a good alternative for dbmigrate, too.
