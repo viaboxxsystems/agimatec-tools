@@ -40,7 +40,7 @@ public class UpdateVersionScriptVisitor extends ScriptVisitorDelegate {
         if (idx < 0) idx = theComment.indexOf("#version");
         if (idx >= 0) {
             StringTokenizer tokens = new StringTokenizer(
-                    theComment.substring(idx + "#version".length()), "()");
+                theComment.substring(idx + "#version".length()), "()");
             String dbVersion = null;
             if (tokens.hasMoreTokens()) dbVersion = tokens.nextToken();
             if (dbVersion == null) {
@@ -60,31 +60,63 @@ public class UpdateVersionScriptVisitor extends ScriptVisitorDelegate {
         boolean canAccessDbVersionTable = true;
         if (!meta.isInsertOnly()) {
             s = jdbcStore.getConnection()
-                    .prepareStatement(meta.toSQLUpdate());
+                .prepareStatement(meta.toSQLUpdate());
             try {
                 setParameters(s, dbVersion, meta);
                 count = s.executeUpdate();
             } catch (SQLException ex) { // we assume: no DB_VERSION table in database
                 log.warn("cannot update " + meta.getQualifiedVersionColumn() + " = " +
-                        dbVersion + " because " + ex.getMessage());
+                    dbVersion + " because " + ex.getMessage());
                 canAccessDbVersionTable = createTable(jdbcStore, meta);
                 if (!canAccessDbVersionTable) {
                     log.info("autoCreate=false, create table " + meta.getTableName() +
-                            " to persist the database version: " +
-                            dbVersion);
+                        " to persist the database version: " +
+                        dbVersion);
                 }
             } finally {
                 s.close();
             }
         }
         if (count == 0 && canAccessDbVersionTable) {  // no rows affected by update, try insert instead
-            s = jdbcStore.getConnection().prepareStatement(meta.toSQLInsert());
-            try {
-                setParameters(s, dbVersion, meta);
-                s.execute();
-            } finally {
-                s.close();
-            }
+            insertVersion(jdbcStore, dbVersion, meta);
+        }
+    }
+
+    /**
+     * @since 2.5.19
+     * @param jdbcStore
+     * @param dbVersion
+     * @param meta
+     * @return
+     * @throws SQLException
+     */
+    public static int insertVersion(JdbcDatabase jdbcStore, String dbVersion, DBVersionMeta meta) throws SQLException {
+        PreparedStatement s;
+        s = jdbcStore.getConnection().prepareStatement(meta.toSQLInsert());
+        try {
+            setParameters(s, dbVersion, meta);
+            return s.executeUpdate();
+        } finally {
+            s.close();
+        }
+    }
+
+    /**
+     * @since 2.5.19
+     * @param jdbcStore
+     * @param dbVersion
+     * @param meta
+     * @return
+     * @throws SQLException
+     */
+    public static int deleteVersion(JdbcDatabase jdbcStore, String dbVersion, DBVersionMeta meta) throws SQLException {
+        PreparedStatement s;
+        s = jdbcStore.getConnection().prepareStatement(meta.toSQLDelete());
+        try {
+            s.setString(1, dbVersion);
+            return s.executeUpdate();
+        } finally {
+            s.close();
         }
     }
 

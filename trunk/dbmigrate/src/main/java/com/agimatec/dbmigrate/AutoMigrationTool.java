@@ -134,24 +134,24 @@ public class AutoMigrationTool extends BaseMigrationTool {
 
     private void printUsage() {
         System.out.println("usage: java " + getClass().getName() +
-                " -sim false -exit true -root url -conf migration.xml -script aScript -op operationName " +
-                "operationParameter ");
+            " -sim false -exit true -root url -conf migration.xml -script aScript -op operationName " +
+            "operationParameter ");
         System.out.println("Options:\n\t-help \t (optional) print this help");
         System.out.println(
-                "\t-sim \t (optional) true|yes=simulation only, default is false");
+            "\t-sim \t (optional) true|yes=simulation only, default is false");
         System.out.println(
-                "\t-conf \t (optional) name of migration.xml configuration file, default is migration.xml");
+            "\t-conf \t (optional) name of migration.xml configuration file, default is migration.xml");
         System.out.println(
-                "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml)" +
-                        " with operations. tool will execute the given file(s) only!");
+            "\t-script \t (optional, multiple occurrence supported) name of a upgrade-file (sql, groovy, xml)" +
+                " with operations. tool will execute the given file(s) only!");
         System.out.println(
-                "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an" +
-                        " upgrade-file. tool will execute the given operation(s) only!");
+            "\t-op \t (optional, multiple occurrence supported) the operation in the same syntax as in an" +
+                " upgrade-file. tool will execute the given operation(s) only!");
         System.out.println(
-                "\t-exit \t (optional) true|yes to exit JVM after main(), otherwise no System.exit() will be invoked");
+            "\t-exit \t (optional) true|yes to exit JVM after main(), otherwise no System.exit() will be invoked");
         System.out.println(
-                "\t-base \t (optional) set the config base URL of the resource or directory, defaults to the path " +
-                        "given in resource 'configmanager.ini' or file: if none available");
+            "\t-base \t (optional) set the config base URL of the resource or directory, defaults to the path " +
+                "given in resource 'configmanager.ini' or file: if none available");
     }
 
     // overwritten to provide the enviroment (or local env) to the script executor
@@ -171,6 +171,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     public void startAutomaticMigration() throws Exception {
         log("----------------- start migration -----------------");
         connectTargetDatabase();
+        if (busyLocker.isEnabled(dbVersionMeta)) lockBusy();
         if (actionOverride != null && !actionOverride.isEmpty()) {
             print("performing command line actions only!");
             performActions(actionOverride);
@@ -189,7 +190,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
                 for (MigrateAction each : actionOverride) {
                     i++;
                     print("action " + i + " (of " + actionOverride.size() + ") = " +
-                            each.getInfo());
+                        each.getInfo());
                     each.doIt();
                 }
             }
@@ -212,13 +213,13 @@ public class AutoMigrationTool extends BaseMigrationTool {
     public void doXmlScript(String filePath) throws Exception {
         if (!sim) {
             Config cfg = ConfigManager.getDefault()
-                    .readConfig(filePath, false);
+                .readConfig(filePath, false);
             try {
                 prepareLocalEnvironment(cfg);
                 perform(cfg.getList("Operations"));
             } finally {
                 localEnv =
-                        null;    // remove localEnv after exec. of config
+                    null;    // remove localEnv after exec. of config
             }
         }
     }
@@ -295,10 +296,10 @@ public class AutoMigrationTool extends BaseMigrationTool {
     }
 
     private List<MigrateAction> createActions()
-            throws SQLException, IOException {
+        throws SQLException, IOException {
         String upDir = getScriptsDir();
         List<DBVersionString> files =
-                filterVersions(getFromVersion(), readDir(getScriptPrefix(), upDir));
+            filterVersions(getFromVersion(), readDir(getScriptPrefix(), upDir));
         List<MigrateAction> actions;
         String beforeDir = getBeforeAllScriptsDir();
         if (beforeDir != null) {
@@ -333,9 +334,9 @@ public class AutoMigrationTool extends BaseMigrationTool {
      * @throws IOException
      */
     public List<MigrateAction> createUpgradeActions(String scriptDir, boolean enableAutoVersion)
-            throws SQLException, IOException {
+        throws SQLException, IOException {
         List<DBVersionString> files =
-                filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
+            filterVersions(getFromVersion(), readDir(getScriptPrefix(), scriptDir));
         List<MigrateAction> actions = new ArrayList<MigrateAction>();
         if (scriptDir != null || !files.isEmpty()) {
             actions.add(new ChangeDirCommand(this, scriptDir));
@@ -357,7 +358,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
         List<MigrateAction> actions = new LinkedList<MigrateAction>();
         for (DBVersionString file : files) {
             ScriptAction action =
-                    ScriptAction.create(this, file.getFileName(), file.getFileType());
+                ScriptAction.create(this, file.getFileName(), file.getFileType());
             if (action != null) {
                 actions.add(action);
                 if (autoVersion) {
@@ -377,7 +378,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
      * @throws java.io.IOException
      */
     private List<DBVersionString> readDir(String prefix, String directory)
-            throws IOException {
+        throws IOException {
         if (directory == null) return new ArrayList<DBVersionString>();
         Collection<String> resources = readResources(directory);
         List<DBVersionString> order = new ArrayList<DBVersionString>(resources.size());

@@ -45,7 +45,11 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     protected JdbcDatabase targetDatabase;
     protected String migrateConfigFileName = "migration.xml";
-    protected final DBVersionMeta dbVersionMeta = new DBVersionMeta();
+    protected DBVersionMeta dbVersionMeta = new DBVersionMeta();
+    /**
+     * @since 2.5.19
+     */
+    protected BusyLocker busyLocker = new BusyLocker();
     private String scriptsDir;
 
     public BaseMigrationTool() {
@@ -80,10 +84,14 @@ public abstract class BaseMigrationTool implements MigrationTool {
             if (versionMeta.get("auto-version") != null) {
                 dbVersionMeta.setAutoVersion(versionMeta.getBoolean("auto-version"));
             }
+            if (versionMeta.get("lock-busy") != null) {
+                dbVersionMeta.setLockBusy(DBVersionMeta.LockBusy.valueOf(versionMeta.getString("lock-busy")));
+            }
         }
     }
 
     public void tearDown() throws Exception {
+        if (busyLocker.isEnabled(dbVersionMeta)) unlockBusy();
         terminateTransactions();
         disconnectDatabase();
     }
@@ -104,10 +112,42 @@ public abstract class BaseMigrationTool implements MigrationTool {
     public void version(String dbVersion) throws JdbcException {
         try {
             UpdateVersionScriptVisitor
-                    .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
+                .updateVersionInDatabase(targetDatabase, dbVersion, dbVersionMeta);
         } catch (Exception ex) {
             handleException("cannot update db-version to " + dbVersion, ex);
         }
+    }
+
+    public void lockBusy() {
+        busyLocker.lockBusy(dbVersionMeta, targetDatabase);
+    }
+
+    public void unlockBusy() {
+        busyLocker.unlockBusy(dbVersionMeta, targetDatabase);
+    }
+
+    /**
+     * @return
+     * @since 2.5.19
+     */
+    public BusyLocker getBusyLocker() {
+        return busyLocker;
+    }
+
+    /**
+     * @param busyLocker
+     * @since 2.5.19
+     */
+    public void setBusyLocker(BusyLocker busyLocker) {
+        this.busyLocker = busyLocker;
+    }
+
+    /**
+     * @param dbVersionMeta
+     * @since 2.5.19
+     */
+    public void setDbVersionMeta(DBVersionMeta dbVersionMeta) {
+        this.dbVersionMeta = dbVersionMeta;
     }
 
     /**
@@ -172,7 +212,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     protected void iterateSQLLines(ScriptVisitor visitor, String scriptName,
                                    boolean failOnError)
-            throws IOException, SQLException {
+        throws IOException, SQLException {
         SQLScriptParser parser = new SQLScriptParser(getScriptsDir(), getLog());
         Map env;
         parser.setEnvironment(env = getEnvironment());
@@ -182,7 +222,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         visitor = new SubscriptCapableVisitor(visitor, parser);
         visitor = new UpdateVersionScriptVisitor(targetDatabase, visitor, dbVersionMeta);
         visitor = new ConditionalScriptVisitor(visitor,
-                env); // must be outer visitor to prevent execution in case of false-conditions
+            env); // must be outer visitor to prevent execution in case of false-conditions
 
         parser.iterateSQLLines(visitor, scriptName);
     }
@@ -220,7 +260,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
             String optionsKey = t.nextToken();
             Object value = getEnvironment().get(optionsKey);
             List rawOptions = value instanceof List ? (List) value :
-                    (value instanceof ListNode) ? ((ListNode) value).getList() : null;
+                (value instanceof ListNode) ? ((ListNode) value).getList() : null;
             if (rawOptions != null) {
                 for (Object each : rawOptions) {
                     Map map = each instanceof Map ? (Map) each : ((MapNode) each).getMap();
@@ -351,7 +391,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     protected void invokeClassMethod(boolean isStatic, String classMethod)
-            throws Exception {
+        throws Exception {
         Object[] args = splitMethodArgs(classMethod);
         Class clazz = Class.forName((String) args[0]);
         Method m;
@@ -394,7 +434,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     protected Method findMethod(Class clazz, String methodName, int paramCount) {
         for (Method m : clazz.getMethods()) {
             if (m.getName().equals(methodName) &&
-                    m.getParameterTypes().length == paramCount) {
+                m.getParameterTypes().length == paramCount) {
                 return m;
             }
         }
@@ -417,7 +457,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         List<String> params = null;
         if (pos > 0) {
             StringTokenizer paramTokens =
-                    new StringTokenizer(methodName.substring(pos + 1), "(,)");
+                new StringTokenizer(methodName.substring(pos + 1), "(,)");
             params = new ArrayList();
             while (paramTokens.hasMoreTokens()) {
                 params.add(paramTokens.nextToken());
@@ -431,7 +471,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     protected void iterateSQLScript(ScriptVisitor visitor, String scriptName,
                                     boolean failOnError)
-            throws IOException, SQLException {
+        throws IOException, SQLException {
         SQLScriptParser parser = new SQLScriptParser(getScriptsDir(), getLog());
         Map env;
         parser.setEnvironment(env = getEnvironment());
@@ -441,7 +481,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         visitor = new SubscriptCapableVisitor(visitor, parser);
         visitor = new UpdateVersionScriptVisitor(targetDatabase, visitor, dbVersionMeta);
         visitor = new ConditionalScriptVisitor(visitor,
-                env); // must be outer visitor to prevent execution in case of false-conditions
+            env); // must be outer visitor to prevent execution in case of false-conditions
 
         parser.iterateSQLScript(visitor, scriptName);
     }
@@ -531,7 +571,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     public Config getMigrateConfig() {
         Config migCfg = ConfigManager.getDefault()
-                .getConfig("migration", getMigrateConfigFileName());
+            .getConfig("migration", getMigrateConfigFileName());
         if (migCfg == null) {
             migCfg = new Config();
             ConfigManager.getDefault().cacheConfig(migCfg, "migration");
@@ -607,7 +647,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     public void doMethodOperation(String methodName, String methodParam)
-            throws Exception {
+        throws Exception {
         print("Next operation: " + methodName + "(\"" + methodParam + "\")");
         Method method = getClass().getMethod(methodName, String.class);
         try {
@@ -677,7 +717,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
         v = env.get("DB_SCHEMA");
         if (v != null) {
             String urlConnect = ReconnectScriptVisitor
-                    .replaceJdbcSchemaName(jdbcConfig.getConnect(), (String) v);
+                .replaceJdbcSchemaName(jdbcConfig.getConnect(), (String) v);
             jdbcConfig.setConnect(urlConnect);
         }
         v = env.get("DB_DRIVER");
@@ -750,7 +790,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
      */
     protected boolean acceptDirectoryForSQLParser(File aDirectory) {
         return (!aDirectory.getName().equalsIgnoreCase("packages") &&
-                !aDirectory.getName().equalsIgnoreCase("triggers"));
+            !aDirectory.getName().equalsIgnoreCase("triggers"));
     }
 
     /**
