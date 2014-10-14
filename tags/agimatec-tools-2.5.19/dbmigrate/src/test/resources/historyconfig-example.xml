@@ -1,0 +1,20 @@
+<historyConfig>
+  <tableConfig>
+    <excludeColumns>
+      <string>registrationTime</string>
+    </excludeColumns>
+    <tableName>user_core</tableName>
+    <historyTable>H_user_core</historyTable>
+    <insertTrigger>TR_I_user_core</insertTrigger>
+    <updateTrigger>TR_U_user_core</updateTrigger>
+  </tableConfig>
+  <tableConfig>
+    <tableName>Privilege</tableName>
+    <historyTable>H_Privilege</historyTable>
+    <insertTrigger>TR_I_Privilege</insertTrigger>
+    <updateTrigger>TR_U_Privilege</updateTrigger>
+  </tableConfig>
+  <tableConfig>
+    <tableName>ROLE</tableName>
+  </tableConfig>
+</historyConfig>

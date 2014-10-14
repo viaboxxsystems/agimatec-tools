@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+  <list name="Operations">
+    <text name="execSQLScript" value="../setup/plsql-history-session-spec.sql"/>
+    <text name="execSQLScript" value="../setup/plsql-history-session-body.sql"/>
+  </list>
+</config>
