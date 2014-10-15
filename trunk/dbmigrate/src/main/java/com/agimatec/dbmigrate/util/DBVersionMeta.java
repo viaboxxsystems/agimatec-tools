@@ -198,6 +198,28 @@ public class DBVersionMeta implements Serializable {
         return sqlSelect;
     }
 
+    /**
+     * SQL-Statement check for existence of a specific version
+     */
+    public String toSQLCountVersion() {
+        if (sqlSelect == null) {
+            sqlSelect = "SELECT COUNT(*) FROM " + getTableName() + " WHERE "
+                + getColumn_version() + "=?";
+        }
+        return sqlSelect;
+    }
+
+    /**
+     * SQL-Statement check for existence of a specific version
+     */
+    public String toSQLLockAll() {
+        if (sqlSelect == null) {
+            sqlSelect = "UPDATE " + getTableName() + " SET "
+                + getColumn_version() + "=" + getColumn_version();
+        }
+        return sqlSelect;
+    }
+
     public void setInsertOnly(boolean aBoolean) {
         insertOnly = aBoolean;
     }

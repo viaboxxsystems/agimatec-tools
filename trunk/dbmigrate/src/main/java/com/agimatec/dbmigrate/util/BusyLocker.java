@@ -5,6 +5,8 @@ import com.agimatec.jdbc.JdbcDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -58,6 +60,23 @@ public class BusyLocker {
 
         if (dbVersionMeta.isInsertOnly()) {
            throw new UnsupportedOperationException("not yet implemented: insertOnly + lock-busy");
+            /*
+                // update db-version all rows, no change => lock
+                lockAll(dbVersionMeta, database); // => does not work when auto-commit enabled
+                // count busy-locks => 0
+                int count = countBusy(dbVersionMeta, database);
+                if (count == 0) {
+                    // insert lock: tryLock
+                    tryLock(dbVersionMeta, database);
+                    // => what now?
+                } else {
+                    if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
+                        fail(dbVersionMeta, null);
+                    } else if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
+                        waitAndRetry(dbVersionMeta, database, 1, null); // => what now?
+                    }
+                }
+             */
         } else {
             try {
                 tryLock(dbVersionMeta, database);
@@ -69,6 +88,24 @@ public class BusyLocker {
                 }
             }
         }
+    }
+
+    private void lockAll(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
+        PreparedStatement stmt = database.getConnection().prepareStatement(dbVersionMeta.toSQLLockAll());
+        stmt.execute();
+        stmt.close();
+    }
+
+    private int countBusy(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
+        PreparedStatement stmt;
+        stmt = database.getConnection().prepareStatement(dbVersionMeta.toSQLCountVersion());
+        stmt.setString(1, BUSY_VERSION);
+        ResultSet resultSet = stmt.executeQuery();
+        resultSet.next();
+        int count = resultSet.getInt(1);
+        resultSet.close();
+        stmt.close();
+        return count;
     }
 
     private void tryLock(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
