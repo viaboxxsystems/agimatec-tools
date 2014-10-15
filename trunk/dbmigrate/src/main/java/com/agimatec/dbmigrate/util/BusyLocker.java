@@ -137,6 +137,7 @@ public class BusyLocker {
                 } else {
                     log.info(
                         "Deleted busy-lock '" + BUSY_VERSION + "' on table " + dbVersionMeta.getTableName());
+                    setOwnLock(false);
                 }
             } catch (SQLException e) {
                 log.error("Failed to delete busy-lock", e);
