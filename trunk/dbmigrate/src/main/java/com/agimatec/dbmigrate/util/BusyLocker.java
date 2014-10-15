@@ -56,13 +56,17 @@ public class BusyLocker {
     public void lockBusy(DBVersionMeta dbVersionMeta, JdbcDatabase database) {
         if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.No) return;
 
-        try {
-            tryLock(dbVersionMeta, database);
-        } catch (SQLException ex) {
-            if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
-                fail(dbVersionMeta, ex);
-            } else if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
-                waitAndRetry(dbVersionMeta, database, 1, ex);
+        if (dbVersionMeta.isInsertOnly()) {
+           throw new UnsupportedOperationException("not yet implemented: insertOnly + lock-busy");
+        } else {
+            try {
+                tryLock(dbVersionMeta, database);
+            } catch (SQLException ex) {
+                if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
+                    fail(dbVersionMeta, ex);
+                } else if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
+                    waitAndRetry(dbVersionMeta, database, 1, ex);
+                }
             }
         }
     }
