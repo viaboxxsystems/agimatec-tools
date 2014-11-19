@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config name="migration">
+
+  <!-- Optional: environment variables, can be used inside scripts as ${DB_USER}.
+   Predefined keys:
+    DB_USER       : if exists, overrule user from JdbcConfig
+    DB_PASSWORD   : if exists, overrule password from JdbcConfig
+    DB_SCHEMA     : if exists, overrule schema name of jdbcUrl from JdbcConfig
+    DB_URL        : if exists, overrule jdbcUrl from JdbcConfig
+  -->
+  <map name="env">
+    <String name="DB_USER" value="dbuser"/>
+    <String name="DB_PASSWORD" value="password"/>
+    <String name="DB_SCHEMA" value="test"/>
+    <String name="DB_URL" value="jdbc:postgresql://localhost:5432/${DB_SCHEMA}"/>
+  </map>
+
+  <!-- Scripts = the source path for scripts to scan for -->
+  <file name="Scripts" dir="test-scripts" file="" relative="false"/>
+  <file name="JdbcConfig" file="postgres-test.properties"/>
+
+  <!-- optional:
+    CREATE TABLE DB_VERSION (SINCE timestamp, VERSION varchar(100));
+        
+    when from-version is not set, determine automatically from database (table: DB_VERSION).
+    when from-version is set, versions higher than this (exclusive!) will be executed. -->
+  <!--<text name="from-version" value="2.0.12"/>-->
+
+  <!-- optional:
+    when to-version is NOT set, execute configs/scripts for ALL LATER versions.
+    when to-version is set, it is the last version (inclusive) to be executed. -->
+  <!--<text name="to-version" value="2.0.15"/>-->
+
+  <!-- this optional map can be used to set different table/column names for the DB_VERSION
+  table (to store the version in the database).
+  Default names (when map is not here): DBVERSION, version, since
+  column 'since' is optional. leave empty if not available in the database.
+  if table does NOT exist, the programm will NOT create it on-the-fly. -->
+  <!--
+  <map name="version-meta">
+    <String name="table" value="DB_VERSION"/>
+    <String name="version" value="version"/>
+    <String name="since" value="since"/>
+  </map>
+  -->
+
+</config>
