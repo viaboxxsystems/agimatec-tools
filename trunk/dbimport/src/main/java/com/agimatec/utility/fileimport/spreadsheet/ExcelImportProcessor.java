@@ -46,6 +46,12 @@ public class ExcelImportProcessor extends LineImportProcessor {
         return ExcelUtils.getInteger(row, colName);
     }
 
+    public Long getLong(String colName) {
+        @SuppressWarnings("unchecked")
+        Map<String, ICell> row = getCurrentRow();
+        return ExcelUtils.getLong(row, colName);
+    }
+
     public Time getTime(String colName) {
         @SuppressWarnings("unchecked")
         Map<String, ICell> row = getCurrentRow();

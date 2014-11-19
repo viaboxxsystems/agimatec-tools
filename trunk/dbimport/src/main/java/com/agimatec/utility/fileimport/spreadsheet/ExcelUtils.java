@@ -49,6 +49,17 @@ public class ExcelUtils {
         }
     }
 
+    public static Long getLong(Map<String, ICell> row, String columnName) {
+        ICell cell = row.get(columnName);
+        if (cell == null) {
+            return null;
+        } else {
+            Object val = cell.getValue();
+            if (val instanceof Number) return ((Number) val).longValue();
+            else return null;
+        }
+    }
+
     public static Double getDouble(Map<String, ICell> row, String columnName) {
         ICell cell = row.get(columnName);
         if (cell == null) {
