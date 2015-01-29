@@ -92,7 +92,13 @@ public class ExcelCell implements ICell {
   public Date getDateValue() {
     if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC ||
         cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
-      return cell.getDateCellValue();
+        try {
+            return cell.getDateCellValue();
+        } catch(NullPointerException ex) { // workaround for bug in POI 3.11
+            // NullPointerException at org.apache.poi.ss.usermodel.DateUtil.getJavaDate(DateUtil.java:231) ~[poi-3.11.jar:3.11]
+            // TODO RSt - remove when https://issues.apache.org/bugzilla/show_bug.cgi?id=57512 is fixed
+            return null;
+        }
     } else {
       return null;
     }
