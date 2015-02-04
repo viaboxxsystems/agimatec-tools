@@ -35,6 +35,13 @@ public class ConfigManagerTest extends TestCase {
         assertTrue(url != null);
         assertTrue(url.toString().endsWith("migration.xml"));
     }
+
+    public void testToURL_with_dot() throws Exception {
+        URL url = ConfigManager.toURL("cp://./testscript.sql");
+        assertNotNull(url);
+        url = ConfigManager.toURL("cp://subdir/./other.xml");
+        assertNotNull(url);
+    }
     
     public void testResolvePath() {
         String in = "/root/folder/subdir/../migration.xml";
