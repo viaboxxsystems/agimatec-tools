@@ -33,9 +33,9 @@
         <url>${teamcity-url}</url>
     </ciManagement>
     <scm>
-        <url>http://agimatec-tools.googlecode.com/svn/trunk</url>
-        <connection>scm:svn:http://agimatec-tools.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://agimatec-tools.googlecode.com/svn/trunk</developerConnection>
+        <url>http://github.com/viaboxxsystems/agimatec-tools</url>
+        <connection>scm:git:http://github.com/viaboxxsystems/agimatec-tools</connection>
+        <developerConnection>scm:git:https://github.com/viaboxxsystems/agimatec-tools</developerConnection>
     </scm>
     <developers>
         <developer>
