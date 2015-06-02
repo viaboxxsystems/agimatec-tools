@@ -102,7 +102,7 @@ public class UpdateVersionScriptVisitor extends ScriptVisitorDelegate {
     }
 
     /**
-     * @since 2.5.19
+     * @since 2.5.19  - fixed since 2.5.22
      * @param jdbcStore
      * @param dbVersion
      * @param meta

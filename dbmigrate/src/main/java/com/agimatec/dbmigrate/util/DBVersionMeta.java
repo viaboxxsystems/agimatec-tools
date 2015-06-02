@@ -46,7 +46,7 @@ public class DBVersionMeta implements Serializable {
 
     private LockBusy lockBusy = LockBusy.No;
 
-    private String sqlInsert, sqlSelect, sqlUpdate; // cache
+    private String sqlInsert, sqlSelect, sqlUpdate, sqlDelete; // cache
 
     public boolean isAutoCreate() {
         return autoCreate;
@@ -102,6 +102,7 @@ public class DBVersionMeta implements Serializable {
         sqlInsert = null;
         sqlSelect = null;
         sqlUpdate = null;
+        sqlDelete = null;
     }
 
     /**
@@ -160,19 +161,19 @@ public class DBVersionMeta implements Serializable {
 
     /**
      * @return
-     * @since 2.5.19
+     * @since 2.5.19 - fixed since 2.5.22
      */
     public String toSQLDelete() {
-        if (sqlUpdate == null) {
+        if (sqlDelete == null) {
             StringBuilder sql = new StringBuilder();
             sql.append("DELETE FROM ");
             sql.append(getTableName());
             sql.append(" WHERE ");
             sql.append(getColumn_version());
             sql.append("=?");
-            sqlUpdate = sql.toString();
+            sqlDelete = sql.toString();
         }
-        return sqlUpdate;
+        return sqlDelete;
     }
 
     public String toSQLCreateTable() {
