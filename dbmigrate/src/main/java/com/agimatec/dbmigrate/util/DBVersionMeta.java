@@ -216,9 +216,8 @@ public class DBVersionMeta implements Serializable, Cloneable {
         buf.append(getColumn_version()).append(" VARCHAR(100) NOT NULL");
         if (!isInsertOnly()) {
             buf.append(", PRIMARY KEY (" + getColumn_version() + ")");
-        } else {
-            buf.append(")");
         }
+        buf.append(")");
         return buf.toString();
     }
 

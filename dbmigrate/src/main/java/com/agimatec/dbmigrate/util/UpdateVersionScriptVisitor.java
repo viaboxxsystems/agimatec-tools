@@ -120,7 +120,7 @@ public class UpdateVersionScriptVisitor extends ScriptVisitorDelegate {
         }
     }
 
-    private static boolean createTable(JdbcDatabase jdbcStore, DBVersionMeta meta) throws SQLException {
+    public static boolean createTable(JdbcDatabase jdbcStore, DBVersionMeta meta) throws SQLException {
         if (!meta.isAutoCreate()) {
             return false; // do not autoCreate
         }

@@ -12,10 +12,10 @@ import junit.framework.TestCase;
 public class DBVersionMetaTest extends TestCase {
     public void testCreate() {
         DBVersionMeta d = new DBVersionMeta();
-        assertEquals("CREATE TABLE DB_VERSION (since TIMESTAMP, version VARCHAR(100) NOT NULL, PRIMARY KEY (version)",
+        assertEquals("CREATE TABLE DB_VERSION (since TIMESTAMP, version VARCHAR(100) NOT NULL, PRIMARY KEY (version))",
             d.toSQLCreateTable());
         d.setColumn_since(null);
-        assertEquals("CREATE TABLE DB_VERSION (version VARCHAR(100) NOT NULL, PRIMARY KEY (version)",
+        assertEquals("CREATE TABLE DB_VERSION (version VARCHAR(100) NOT NULL, PRIMARY KEY (version))",
             d.toSQLCreateTable());
     }
 
@@ -33,10 +33,10 @@ public class DBVersionMetaTest extends TestCase {
         DBVersionMeta d = new DBVersionMeta();
         d.setTableName(d.getLockTableName());
         d.setInsertOnly(false);
-        assertEquals("CREATE TABLE DB_MIGLOCK (since TIMESTAMP, version VARCHAR(100) NOT NULL, PRIMARY KEY (version)",
+        assertEquals("CREATE TABLE DB_MIGLOCK (since TIMESTAMP, version VARCHAR(100) NOT NULL, PRIMARY KEY (version))",
             d.toSQLCreateTable());
         d.setColumn_since(null);
-        assertEquals("CREATE TABLE DB_MIGLOCK (version VARCHAR(100) NOT NULL, PRIMARY KEY (version)",
+        assertEquals("CREATE TABLE DB_MIGLOCK (version VARCHAR(100) NOT NULL, PRIMARY KEY (version))",
             d.toSQLCreateTable());
     }
 }

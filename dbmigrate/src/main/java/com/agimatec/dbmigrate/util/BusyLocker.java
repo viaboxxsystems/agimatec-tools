@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Description: Implements the behavior to prevent dbmigrate to execute more than once at the same time
@@ -84,6 +85,26 @@ public class BusyLocker implements DatabaseLocker {
     }
 
     private void tryLock(JdbcDatabase database) throws SQLException {
+        Statement stmt = database.getConnection().createStatement();
+        SQLCursor cursor = null;
+        try {
+            cursor = new SQLCursor(stmt, stmt.executeQuery(lockMeta.toSQLSelectVersion()));
+            cursor.next();
+            cursor.close();
+        } catch (SQLException ex) { // assume that lock-table does not yet exist, auto-create
+            if(cursor != null) cursor.close();
+            log.warn("Cannot access " + lockMeta.getTableName() + ": " + ex.getMessage());
+            try {
+                UpdateVersionScriptVisitor.createTable(database, lockMeta);
+            } catch(SQLException ex2) {
+                log.warn("Read exception was: ", ex);
+                log.warn("Cannot create " + lockMeta.getTableName() + " write exception was: ", ex2);
+                throw ex2;
+            }
+        } finally {
+            stmt.close();
+        }
+
         int count = UpdateVersionScriptVisitor.insertVersion(database, BUSY_VERSION, lockMeta);
         if (count != 1) {
             log.warn(
