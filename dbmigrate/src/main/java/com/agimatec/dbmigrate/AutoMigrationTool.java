@@ -171,7 +171,7 @@ public class AutoMigrationTool extends BaseMigrationTool {
     public void startAutomaticMigration() throws Exception {
         log("----------------- start migration -----------------");
         connectTargetDatabase();
-        if (busyLocker.isEnabled(dbVersionMeta)) lockBusy();
+        if (databaseLocker.isEnabled()) lockBusy();
         if (actionOverride != null && !actionOverride.isEmpty()) {
             print("performing command line actions only!");
             performActions(actionOverride);

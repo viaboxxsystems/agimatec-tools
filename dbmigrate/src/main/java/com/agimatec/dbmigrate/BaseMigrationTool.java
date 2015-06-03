@@ -45,11 +45,11 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     protected JdbcDatabase targetDatabase;
     protected String migrateConfigFileName = "migration.xml";
-    protected DBVersionMeta dbVersionMeta = new DBVersionMeta();
+    protected final DBVersionMeta dbVersionMeta = new DBVersionMeta();
     /**
-     * @since 2.5.19
+     * @since 2.5.23
      */
-    protected BusyLocker busyLocker = new BusyLocker();
+    protected DatabaseLocker databaseLocker;
     private String scriptsDir;
 
     public BaseMigrationTool() {
@@ -57,6 +57,7 @@ public abstract class BaseMigrationTool implements MigrationTool {
 
     public void setUp() {
         setupVersionMeta();
+        setupDatabaseLocker();
     }
 
     public void setConfigRootUrl(String configRoot) {
@@ -87,11 +88,18 @@ public abstract class BaseMigrationTool implements MigrationTool {
             if (versionMeta.get("lock-busy") != null) {
                 dbVersionMeta.setLockBusy(DBVersionMeta.LockBusy.valueOf(versionMeta.getString("lock-busy")));
             }
+            if (versionMeta.get("lock-table") != null) {
+                dbVersionMeta.setLockTableName(versionMeta.getString("lock-table"));
+            }
         }
     }
 
+    protected void setupDatabaseLocker() {
+        databaseLocker = new BusyLocker(dbVersionMeta);
+    }
+
     public void tearDown() throws Exception {
-        if (busyLocker.isEnabled(dbVersionMeta)) unlockBusy();
+        if (databaseLocker.isEnabled()) unlockBusy();
         terminateTransactions();
         disconnectDatabase();
     }
@@ -119,35 +127,27 @@ public abstract class BaseMigrationTool implements MigrationTool {
     }
 
     public void lockBusy() {
-        busyLocker.lockBusy(dbVersionMeta, targetDatabase);
+        databaseLocker.lock(targetDatabase);
     }
 
     public void unlockBusy() {
-        busyLocker.unlockBusy(dbVersionMeta, targetDatabase);
+        databaseLocker.unlock(targetDatabase);
     }
 
     /**
      * @return
-     * @since 2.5.19
+     * @since 2.5.23
      */
-    public BusyLocker getBusyLocker() {
-        return busyLocker;
+    public DatabaseLocker getDatabaseLocker() {
+        return databaseLocker;
     }
 
     /**
      * @param busyLocker
-     * @since 2.5.19
+     * @since 2.5.23
      */
-    public void setBusyLocker(BusyLocker busyLocker) {
-        this.busyLocker = busyLocker;
-    }
-
-    /**
-     * @param dbVersionMeta
-     * @since 2.5.19
-     */
-    public void setDbVersionMeta(DBVersionMeta dbVersionMeta) {
-        this.dbVersionMeta = dbVersionMeta;
+    public void setDatabaseLocker(DatabaseLocker busyLocker) {
+        this.databaseLocker = busyLocker;
     }
 
     /**

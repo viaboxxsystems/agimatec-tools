@@ -5,8 +5,6 @@ import com.agimatec.jdbc.JdbcDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -19,9 +17,10 @@ import java.sql.SQLException;
  *
  * @since 2.5.19
  */
-public class BusyLocker {
+public class BusyLocker implements DatabaseLocker {
     protected final String BUSY_VERSION = "busy";
     protected static final Logger log = LoggerFactory.getLogger(BusyLocker.class);
+    private final DBVersionMeta lockMeta;
 
     /**
      * number of attempts. -1 = unlimited.
@@ -51,71 +50,47 @@ public class BusyLocker {
         this.delayBetweenAttempts = delayBetweenAttempts;
     }
 
-    public boolean isEnabled(DBVersionMeta dbVersionMeta) {
-        return (dbVersionMeta.getLockBusy() != null && dbVersionMeta.getLockBusy() != DBVersionMeta.LockBusy.No);
+    public BusyLocker(DBVersionMeta dbVersionMeta) {
+        this.lockMeta = createLockMeta(dbVersionMeta);
     }
 
-    public void lockBusy(DBVersionMeta dbVersionMeta, JdbcDatabase database) {
-        if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.No) return;
+    public boolean isEnabled() {
+        return (lockMeta.getLockBusy() != null && lockMeta.getLockBusy() != DBVersionMeta.LockBusy.No);
+    }
 
-        if (dbVersionMeta.isInsertOnly()) {
-           throw new UnsupportedOperationException("not yet implemented: insertOnly + lock-busy");
-            /*
-                // update db-version all rows, no change => lock
-                lockAll(dbVersionMeta, database); // => does not work when auto-commit enabled
-                // count busy-locks => 0
-                int count = countBusy(dbVersionMeta, database);
-                if (count == 0) {
-                    // insert lock: tryLock
-                    tryLock(dbVersionMeta, database);
-                    // => what now?
-                } else {
-                    if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
-                        fail(dbVersionMeta, null);
-                    } else if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
-                        waitAndRetry(dbVersionMeta, database, 1, null); // => what now?
-                    }
-                }
-             */
-        } else {
-            try {
-                tryLock(dbVersionMeta, database);
-            } catch (SQLException ex) {
-                if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
-                    fail(dbVersionMeta, ex);
-                } else if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
-                    waitAndRetry(dbVersionMeta, database, 1, ex);
-                }
+    public void lock(JdbcDatabase database) {
+        if (lockMeta.getLockBusy() == DBVersionMeta.LockBusy.No) return;
+        DBVersionMeta lockMeta = createLockMeta(this.lockMeta);
+        try {
+            tryLock(database);
+        } catch (SQLException ex) {
+            if (lockMeta.getLockBusy() == DBVersionMeta.LockBusy.Fail) {
+                fail(ex);
+            } else if (lockMeta.getLockBusy() == DBVersionMeta.LockBusy.Wait) {
+                waitAndRetry(database, 1, ex);
             }
         }
     }
 
-    private void lockAll(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
-        PreparedStatement stmt = database.getConnection().prepareStatement(dbVersionMeta.toSQLLockAll());
-        stmt.execute();
-        stmt.close();
+    public DBVersionMeta getLockMeta() {
+        return lockMeta;
     }
 
-    private int countBusy(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
-        PreparedStatement stmt;
-        stmt = database.getConnection().prepareStatement(dbVersionMeta.toSQLCountVersion());
-        stmt.setString(1, BUSY_VERSION);
-        ResultSet resultSet = stmt.executeQuery();
-        resultSet.next();
-        int count = resultSet.getInt(1);
-        resultSet.close();
-        stmt.close();
-        return count;
+    protected DBVersionMeta createLockMeta(DBVersionMeta dbVersionMeta) {
+        DBVersionMeta lockMeta = dbVersionMeta.copy();
+        lockMeta.setInsertOnly(false);
+        lockMeta.setTableName(lockMeta.getLockTableName());
+        return lockMeta;
     }
 
-    private void tryLock(DBVersionMeta dbVersionMeta, JdbcDatabase database) throws SQLException {
-        int count = UpdateVersionScriptVisitor.insertVersion(database, BUSY_VERSION, dbVersionMeta);
+    private void tryLock(JdbcDatabase database) throws SQLException {
+        int count = UpdateVersionScriptVisitor.insertVersion(database, BUSY_VERSION, lockMeta);
         if (count != 1) {
             log.warn(
-                dbVersionMeta.toSQLInsert() + " for busy-lock '" + BUSY_VERSION + "' affected " + count +
+                lockMeta.toSQLInsert() + " for busy-lock '" + BUSY_VERSION + "' affected " + count +
                     " rows!");
         } else {
-            log.info("Required busy-lock '" + BUSY_VERSION + "' on table " + dbVersionMeta.getTableName());
+            log.info("Required busy-lock '" + BUSY_VERSION + "' on table " + lockMeta.getTableName());
             setOwnLock(true);
         }
     }
@@ -128,18 +103,18 @@ public class BusyLocker {
         this.ownLock = ownLock;
     }
 
-    private void fail(DBVersionMeta dbVersionMeta, SQLException ex) {
+    private void fail(SQLException ex) {
         throw new HaltedException(
-            "Could not require busy-lock '" + BUSY_VERSION + "' from table '" + dbVersionMeta.getTableName() +
+            "Could not require busy-lock '" + BUSY_VERSION + "' from table '" + lockMeta.getLockTableName() +
                 "'. " +
                 "Perhaps another instance of dbmigrate is currently running on the database or " +
                 "the lock was not correctly removed from a previous execution of dbmigrate. " +
                 "\nTo remove the lock, execute: " +
-                "DELETE FROM " + dbVersionMeta.getTableName() + " WHERE " + dbVersionMeta.getColumn_version() +
+                "DELETE FROM " + lockMeta.getTableName() + " WHERE " + lockMeta.getColumn_version() +
                 " = '" + BUSY_VERSION + "';", ex);
     }
 
-    private void waitAndRetry(DBVersionMeta dbVersionMeta, JdbcDatabase database, int attempt, SQLException ex) {
+    private void waitAndRetry(JdbcDatabase database, int attempt, SQLException ex) {
         while (maxAttempts < 0 || attempt < maxAttempts) {
             log.warn("Attempt " + attempt + " to require busy-lock failed. Waiting for " + delayBetweenAttempts +
                 " millis to retry...", ex);
@@ -151,7 +126,7 @@ public class BusyLocker {
                 }
             }
             try {
-                tryLock(dbVersionMeta, database);
+                tryLock(database);
                 return;
             } catch (SQLException e) {
                 ex = e;
@@ -159,25 +134,25 @@ public class BusyLocker {
             }
         }
 
-        fail(dbVersionMeta, ex);
+        fail(ex);
     }
 
-    public void unlockBusy(DBVersionMeta dbVersionMeta, JdbcDatabase database) {
-        if (dbVersionMeta.getLockBusy() == DBVersionMeta.LockBusy.No) return;
+    public void unlock(JdbcDatabase database) {
+        if (lockMeta.getLockBusy() == DBVersionMeta.LockBusy.No) return;
 
         if (!isOwnLock()) {
-            log.info("Not deleting lock '" + BUSY_VERSION + "' on table " + dbVersionMeta.getTableName() +
+            log.info("Not deleting lock '" + BUSY_VERSION + "' on table " + lockMeta.getTableName() +
                 " because this instance does not own it.");
         } else {
             try {
-                int count = UpdateVersionScriptVisitor.deleteVersion(database, BUSY_VERSION, dbVersionMeta);
+                int count = UpdateVersionScriptVisitor.deleteVersion(database, BUSY_VERSION, lockMeta);
                 if (count != 1) {
                     log.warn(
-                        dbVersionMeta.toSQLDelete() + " for busy-lock '" + BUSY_VERSION + "' affected " + count +
+                        lockMeta.toSQLDelete() + " for busy-lock '" + BUSY_VERSION + "' affected " + count +
                             " rows!");
                 } else {
                     log.info(
-                        "Deleted busy-lock '" + BUSY_VERSION + "' on table " + dbVersionMeta.getTableName());
+                        "Deleted busy-lock '" + BUSY_VERSION + "' on table " + lockMeta.getTableName());
                     setOwnLock(false);
                 }
             } catch (SQLException e) {

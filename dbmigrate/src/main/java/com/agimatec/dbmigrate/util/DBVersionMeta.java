@@ -11,8 +11,14 @@ import java.io.Serializable;
  * Date: 13.04.2007 <br/>
  * Time: 10:31:21 <br/>
  */
-public class DBVersionMeta implements Serializable {
+public class DBVersionMeta implements Serializable, Cloneable {
     private String tableName = "DB_VERSION";   // mandatory
+    /**
+     * default name of the table to coordinate lock-busy behavior = "DB_MIGLOCK"
+     *
+     * @since 2.5.23
+     */
+    private String lockTableName = "DB_MIGLOCK";   // optional
     private String column_version = "version"; // mandatory
     private String column_since = "since";   // optional
     // optional: when true, version will always be inserted (journalling)
@@ -64,6 +70,14 @@ public class DBVersionMeta implements Serializable {
         this.autoVersion = autoVersion;
     }
 
+    public DBVersionMeta copy() {
+        try {
+            return (DBVersionMeta) clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+
     /**
      * @return
      * @since 2.5.19
@@ -86,6 +100,23 @@ public class DBVersionMeta implements Serializable {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+        resetCache();
+    }
+
+    /**
+     * @return name of the table to coordinate lock-busy behavior
+     * @since 2.5.23
+     */
+    public String getLockTableName() {
+        return lockTableName;
+    }
+
+    /**
+     * @param lockTableName
+     * @since 2.5.23
+     */
+    public void setLockTableName(String lockTableName) {
+        this.lockTableName = lockTableName;
         resetCache();
     }
 
@@ -182,7 +213,12 @@ public class DBVersionMeta implements Serializable {
         if (StringUtils.isNotEmpty(getColumn_since())) {
             buf.append(getColumn_since()).append(" TIMESTAMP, ");
         }
-        buf.append(getColumn_version()).append(" VARCHAR(100) NOT NULL)");
+        buf.append(getColumn_version()).append(" VARCHAR(100) NOT NULL");
+        if (!isInsertOnly()) {
+            buf.append(", PRIMARY KEY (" + getColumn_version() + ")");
+        } else {
+            buf.append(")");
+        }
         return buf.toString();
     }
 
@@ -195,28 +231,6 @@ public class DBVersionMeta implements Serializable {
             if (StringUtils.isNotEmpty(getColumn_since())) {
                 sqlSelect = sqlSelect + " ORDER BY " + getColumn_since() + " DESC";
             }
-        }
-        return sqlSelect;
-    }
-
-    /**
-     * SQL-Statement check for existence of a specific version
-     */
-    public String toSQLCountVersion() {
-        if (sqlSelect == null) {
-            sqlSelect = "SELECT COUNT(*) FROM " + getTableName() + " WHERE "
-                + getColumn_version() + "=?";
-        }
-        return sqlSelect;
-    }
-
-    /**
-     * SQL-Statement check for existence of a specific version
-     */
-    public String toSQLLockAll() {
-        if (sqlSelect == null) {
-            sqlSelect = "UPDATE " + getTableName() + " SET "
-                + getColumn_version() + "=" + getColumn_version();
         }
         return sqlSelect;
     }
