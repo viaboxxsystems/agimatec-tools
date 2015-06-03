@@ -101,8 +101,8 @@ Perform a release deployment to OSSRH with:
 
 Getting started
 ---------------
-Refer to the project page and WIKI at:
-http://code.google.com/p/agimatec-tools/
+Refer to the project page on github and WIKI at:
+https://github.com/viaboxxsystems/agimatec-tools
 
 You can checkout latest sources and releases from there.
 You can also refer to the test cases, examples and templates.
@@ -115,5 +115,5 @@ http://code.google.com/p/agimatec-tools/
 http://www.viaboxxsystems.de
 http://www.viaboxxsystems.de/blog
 
-Roman Stumm, Viaboxx GmbH, 2008-2014
+Roman Stumm, Viaboxx GmbH, 2008-2015
 email: roman.stumm@viaboxx.de
