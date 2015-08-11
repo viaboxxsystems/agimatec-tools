@@ -150,7 +150,7 @@ public class BusyLocker implements DatabaseLocker {
                 tryLock(database);
                 return;
             } catch (SQLException e) {
-                ex = e;d
+                ex = e;
                 attempt++;
             }
         }
