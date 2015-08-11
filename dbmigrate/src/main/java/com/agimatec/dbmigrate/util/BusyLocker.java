@@ -111,7 +111,7 @@ public class BusyLocker implements DatabaseLocker {
                 lockMeta.toSQLInsert() + " for busy-lock '" + BUSY_VERSION + "' affected " + count +
                     " rows!");
         } else {
-            log.info("Required busy-lock '" + BUSY_VERSION + "' on table " + lockMeta.getTableName());
+            log.info("Aquired busy-lock '" + BUSY_VERSION + "' on table " + lockMeta.getTableName());
             setOwnLock(true);
         }
     }
@@ -126,7 +126,7 @@ public class BusyLocker implements DatabaseLocker {
 
     private void fail(SQLException ex) {
         throw new HaltedException(
-            "Could not require busy-lock '" + BUSY_VERSION + "' from table '" + lockMeta.getLockTableName() +
+            "Could not aquire busy-lock '" + BUSY_VERSION + "' from table '" + lockMeta.getLockTableName() +
                 "'. " +
                 "Perhaps another instance of dbmigrate is currently running on the database or " +
                 "the lock was not correctly removed from a previous execution of dbmigrate. " +
@@ -137,7 +137,7 @@ public class BusyLocker implements DatabaseLocker {
 
     private void waitAndRetry(JdbcDatabase database, int attempt, SQLException ex) {
         while (maxAttempts < 0 || attempt < maxAttempts) {
-            log.warn("Attempt " + attempt + " to require busy-lock failed. Waiting for " + delayBetweenAttempts +
+            log.warn("Attempt " + attempt + " to aquire busy-lock failed. Waiting for " + delayBetweenAttempts +
                 " millis to retry...", ex);
             if (delayBetweenAttempts > 0) {
                 try {
@@ -150,7 +150,7 @@ public class BusyLocker implements DatabaseLocker {
                 tryLock(database);
                 return;
             } catch (SQLException e) {
-                ex = e;
+                ex = e;d
                 attempt++;
             }
         }
