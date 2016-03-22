@@ -1,6 +1,7 @@
 package com.agimatec.sql.meta.postgres;
 
 import com.agimatec.commons.config.ConfigManager;
+import com.agimatec.sql.meta.ColumnDescription;
 import com.agimatec.sql.meta.TableDescription;
 import com.agimatec.sql.meta.persistence.ObjectPersistencer;
 import com.agimatec.sql.meta.persistence.SerializerPersistencer;
@@ -62,11 +63,16 @@ public class PostgresDDLExpressionsTest {
         factory.fillCatalog(script);
         TableDescription table = factory.getCatalog().getTable("alternative_foreignkey_syntax");
         assertNotNull(factory.getCatalog());
-        assertEquals(19, factory.getCatalog().getTablesSize());
+        assertEquals(20, factory.getCatalog().getTablesSize());
         assertEquals(1, factory.getCatalog().getSequencesSize());
         assertEquals("alternative_foreignkey_syntax", table.getTableName());
         assertNotNull(table.getPrimaryKey());
         assertEquals(2, table.getForeignKeySize());
         assertNotNull(table.getForeignKey("fk_authorities_users"));
+
+        table = factory.getCatalog().getTable("TS_WITH_ZONE");
+        assertEquals(2, table.getColumnSize());
+        ColumnDescription column = table.getColumn("mytime");
+        assertEquals("timestamp with time zone", column.getTypeName());
     }
 }

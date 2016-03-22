@@ -27,6 +27,12 @@ CREATE SEQUENCE hibernate_sequence INCREMENT 1 START 500000;
 /* Add table "Address"                                                    */
 /* ---------------------------------------------------------------------- */
 
+create table TS_WITH_ZONE (
+	id int8 not null,
+	myTime timestamp with time zone,
+	primary key (id)
+);
+
 CREATE TABLE Address_0 (
     field_1 CHARACTER VARYING(255),
 );

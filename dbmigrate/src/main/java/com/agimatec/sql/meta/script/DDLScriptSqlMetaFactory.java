@@ -156,11 +156,17 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
                 }
             }
             cd.setTypeName(aColDef.getString("typeName"));
-            if (aColDef.getString("unsigned") != null) {
-                cd.setTypeName(cd.getTypeName() + " " + aColDef.getString("unsigned"));
+            String option = aColDef.getString("unsigned");
+            if (option != null) {
+                cd.setTypeName(cd.getTypeName() + " " + option);
             }
-            if (aColDef.getString("varying") != null) {
-                cd.setTypeName(cd.getTypeName() + " " + aColDef.getString("varying"));
+            option = aColDef.getString("varying");
+            if (option != null) {
+                cd.setTypeName(cd.getTypeName() + " " + option);
+            }
+            option = aColDef.getString("typeOptionTimeZone");
+            if (option != null) {
+                cd.setTypeName(cd.getTypeName() + " " + option);
             }
             cd.setDefaultValue(aColDef.getString("default/defaultValue"));
             ddlSpec.equalizeColumn(cd);

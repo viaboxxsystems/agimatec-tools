@@ -22,14 +22,14 @@
             [{foreignKey [{constraint CONSTRAINT ${constraintName}}] FOREIGN KEY '(' {columns ${column}...','} ')'
             REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]
             [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}]
-            [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [{precision '('
+            [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [${typeOptionTimeZone(WITH TIME ZONE)}] [{precision '('
             {numbers ${value}...','} [CHAR] ')'}] [{default DEFAULT ${defaultValue}}]
             [{constraint CONSTRAINT ${constraintName}}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}] [${isPK(PRIMARY KEY)}]}]...','} ')'}
         </text>
         <text>{create-table CREATE TABLE ${table} '(' {tableElement [{primaryKey PRIMARY KEY '(' {columns
             ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}] [{foreignKey FOREIGN KEY '('
             {columns ${column}...','} ')' REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]
-            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}] [{columndefinition ${column} ${typeName} [{precision
+            [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}] [{columndefinition ${column} ${typeName} [${varying(VARYING)}] [${typeOptionTimeZone(WITH TIME ZONE)}] [{precision
             '(' {numbers ${value}...','} [CHAR] ')'}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]
             [${isPK(PRIMARY KEY)}]}]...','} ')'}
         </text>
@@ -44,7 +44,7 @@
             ADD CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' REFERENCES ${refTable}
             [{refcolumns '(' {refcolumns ${column}...','} ')'}] [ON] [DELETE] [${onDeleteRule}] [{tableSpace USING INDEX
             TABLESPACE ${tableSpace}}]}] [{drop-constraint DROP CONSTRAINT ${constraintName}}] [{drop-column DROP
-            [COLUMN] ${column}}] [{add-column ADD [COLUMN] ${column} ${typeName} [${varying(VARYING)}] [{default DEFAULT
+            [COLUMN] ${column}}] [{add-column ADD [COLUMN] ${column} ${typeName} [${varying(VARYING)}] [${typeOptionTimeZone(WITH TIME ZONE)}][{default DEFAULT
             ${defaultValue}}] [{constraint CONSTRAINT ${constraintName}}] [{precision '(' {numbers ${value}...','} ')'}]
             [${mandatory(NOT NULL)}]}] [{alter-column-type ALTER [COLUMN] ${column} TYPE ${typeName}
             [${varying(VARYING)}] [{default DEFAULT ${defaultValue}}] [{constraint CONSTRAINT ${constraintName}}]
