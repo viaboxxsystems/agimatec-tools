@@ -166,7 +166,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
             }
             option = aColDef.getString("typeOptionTimeZone");
             if (option != null) {
-                cd.setTypeName(cd.getTypeName() + " " + option);
+                cd.setTypeName(cd.getTypeName() + "tz");
             }
             cd.setDefaultValue(aColDef.getString("default/defaultValue"));
             ddlSpec.equalizeColumn(cd);

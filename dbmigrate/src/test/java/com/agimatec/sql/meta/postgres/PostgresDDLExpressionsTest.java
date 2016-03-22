@@ -70,9 +70,16 @@ public class PostgresDDLExpressionsTest {
         assertEquals(2, table.getForeignKeySize());
         assertNotNull(table.getForeignKey("fk_authorities_users"));
 
+        // test typeOptionTimeZone
         table = factory.getCatalog().getTable("TS_WITH_ZONE");
-        assertEquals(2, table.getColumnSize());
-        ColumnDescription column = table.getColumn("mytime");
-        assertEquals("timestamp with time zone", column.getTypeName());
+        assertEquals(5, table.getColumnSize());
+        ColumnDescription column = table.getColumn("mytimestamp");
+        assertEquals("timestamptz", column.getTypeName());
+        column = table.getColumn("mytimestamp2");
+        assertEquals("timestamptz", column.getTypeName());
+        column = table.getColumn("mytime");
+        assertEquals("timetz", column.getTypeName());
+        column = table.getColumn("mytime2");
+        assertEquals("TIMETZ", column.getTypeName());
     }
 }

@@ -29,7 +29,10 @@ CREATE SEQUENCE hibernate_sequence INCREMENT 1 START 500000;
 
 create table TS_WITH_ZONE (
 	id int8 not null,
-	myTime timestamp with time zone,
+	myTimeStamp timestamp with time zone,
+	myTimeStamp2 timestamptz,
+	myTime time with time zone,
+	myTime2 TIMETZ,
 	primary key (id)
 );
 

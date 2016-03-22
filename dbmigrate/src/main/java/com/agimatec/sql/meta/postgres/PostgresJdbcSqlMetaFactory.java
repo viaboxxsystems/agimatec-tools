@@ -38,6 +38,10 @@ public class PostgresJdbcSqlMetaFactory extends JdbcSqlMetaFactory {
         } else if (cd.getTypeName().equalsIgnoreCase("time")) {
             cd.setPrecisionEnabled(false);
             cd.setPrecision(0);
+        } else if(cd.getTypeName().equalsIgnoreCase("timestamptz")) {
+            cd.setPrecision(0);
+        } else if(cd.getTypeName().equalsIgnoreCase("timetz")) {
+            cd.setPrecision(0);
         }
     }
 
