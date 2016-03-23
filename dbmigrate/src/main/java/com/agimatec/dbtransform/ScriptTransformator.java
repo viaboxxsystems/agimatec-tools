@@ -97,7 +97,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
 
     protected class TransformDezignCreateTableBuilder extends DezignCreateTableBuilder {
         public void process(MapNode values, CatalogDescription catalog)
-                throws IOException, TemplateException {
+                throws IOException {
             super.process(values, catalog);
             final String tableName = strip(values.getString("table"));
             final TableDescription td = getTable(catalog, tableName);
@@ -112,7 +112,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
     protected class CreateIndexBuilder extends CatalogBuilder {
         @Override
         public void process(MapNode map, CatalogDescription catalog)
-                throws IOException, TemplateException {
+                throws IOException {
             IndexDescription index = new IndexDescription();
 //            index.setBitmap();  // enhancement: some index options are not yet supported
 //            index.setContext();
@@ -136,7 +136,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
     protected class TableAlterColumnsBuilder extends CatalogBuilder {
         @Override
         public void process(MapNode values, CatalogDescription catalog)
-                throws IOException, TemplateException {
+                throws IOException {
             TableDescription td = getTable(catalog, values.getString("table"));
             List columns = values.getList("tableElement");
             templateEngine.putModel("table", td);
@@ -167,7 +167,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
             }
         }
 
-        private void genDropConstraint(Map map) throws IOException, TemplateException {
+        private void genDropConstraint(Map map) throws IOException {
             MapNode node = new MapNode((Map) map.get("drop-constraint"));
             String colName = node.getString("constraintName");
             templateEngine.setTemplateName("alter-table-drop-constraint.ftl");
@@ -175,7 +175,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
             templateEngine.generate(target);
         }
 
-        private void genDropColumn(Map map) throws IOException, TemplateException {
+        private void genDropColumn(Map map) throws IOException {
             MapNode node = new MapNode((Map) map.get("drop-column"));
             String colName = node.getString("column");
             templateEngine.setTemplateName("alter-table-drop-column.ftl");
@@ -184,7 +184,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
         }
 
         private void genAddForeignKey(Map map, MapNode values)
-                throws IOException, TemplateException {
+                throws IOException {
             MapNode node = new MapNode((Map) map.get("add-foreign-key"));
             ForeignKeyDescription fk = new ForeignKeyDescription();
             fk.setConstraintName(strip(node.getString("constraintName")));
@@ -210,7 +210,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
         }
 
         private void genAddConstraint(Map map, MapNode values)
-                throws IOException, TemplateException {
+                throws IOException {
             MapNode node = new MapNode((Map) map.get("constraint"));
             IndexDescription id = new IndexDescription();
             id.setTableName(strip(values.getString("table")));
@@ -227,7 +227,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
             templateEngine.generate(target);
         }
 
-        private void genColumnSetNotNull(Map map) throws IOException, TemplateException {
+        private void genColumnSetNotNull(Map map) throws IOException {
             MapNode node = new MapNode((Map) map.get("alter-column-set-notnull"));
             String colName = node.getString("column");
 
@@ -236,7 +236,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
             templateEngine.generate(target);
         }
 
-        private void genColumnDropNotNull(Map map) throws IOException, TemplateException {
+        private void genColumnDropNotNull(Map map) throws IOException {
             MapNode node = new MapNode((Map) map.get("alter-column-drop-notnull"));
             String colName = node.getString("column");
             templateEngine.setTemplateName("alter-table-drop-notnull.ftl");
@@ -244,7 +244,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
             templateEngine.generate(target);
         }
 
-        private void genAlterColumnType(Map map) throws IOException, TemplateException {
+        private void genAlterColumnType(Map map) throws IOException {
             MapNode node = new MapNode((Map) map.get("alter-column-type"));
             String colName = node.getString("column");
             ColumnDescription colDef = new ColumnDescription();
@@ -259,7 +259,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
         }
 
         private void genAddColumn(Map map, TableDescription td)
-                throws IOException, TemplateException {
+                throws IOException {
             ColumnDescription colDef =
                     buildColumnDescription(new MapNode((Map) map.get("add-column")), td);
             ColumnDescription newColDef = colDef.deepCopy();
@@ -273,7 +273,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
     protected class DropTriggerBuilder extends CatalogBuilder {
         @Override
         public void process(MapNode values, CatalogDescription catalog)
-                throws IOException, TemplateException {
+                throws IOException {
             templateEngine.putModel("trigger", values.getString("trigger"));
             templateEngine.setTemplateName("drop-trigger.ftl");
             templateEngine.generate(target);
@@ -283,7 +283,7 @@ public class ScriptTransformator extends DDLScriptSqlMetaFactory {
     protected class DropTableBuilder extends CatalogBuilder {
         @Override
         public void process(MapNode values, CatalogDescription catalog)
-                throws IOException, TemplateException {
+                throws IOException {
             templateEngine.putModel("table", values.getString("table"));
             templateEngine.setTemplateName("drop-table.ftl");
             templateEngine.generate(target);

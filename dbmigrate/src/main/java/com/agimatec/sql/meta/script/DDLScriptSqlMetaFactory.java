@@ -5,7 +5,6 @@ import com.agimatec.dbmigrate.action.ScriptAction;
 import com.agimatec.sql.meta.*;
 import com.agimatec.sql.script.SQLScriptParser;
 import com.agimatec.sql.script.ScriptVisitor;
-import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,8 +84,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     }
 
     protected abstract class CatalogBuilder {
-        public abstract void process(MapNode values, CatalogDescription catalog) throws
-                IOException, TemplateException;
+        public abstract void process(MapNode values, CatalogDescription catalog) throws IOException;
 
         /**
          * remove \"
@@ -347,7 +345,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
 
     class DropSequenceBuilder extends CatalogBuilder {
 
-        public void process(MapNode values, CatalogDescription catalog) throws IOException, TemplateException {
+        public void process(MapNode values, CatalogDescription catalog) throws IOException {
             String seqName = values.getString("sequence");
             catalog.removeSequence(seqName);
         }
@@ -374,7 +372,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
     }
 
     class DropTableBuilder extends CatalogBuilder {
-        public void process(MapNode values, CatalogDescription catalog) throws IOException, TemplateException {
+        public void process(MapNode values, CatalogDescription catalog) throws IOException {
             final String tableName = strip(values.getString("table"));
             catalog.removeTable(tableName);
         }
@@ -384,8 +382,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         // {table=NLSBUNDLE, columndefinition=[
         // {typeName=VARCHAR, column=DOMAIN, mandatory=NOT NULL, precision={numbers=[{value=500}]}}]}
 
-        public void process(MapNode values, CatalogDescription catalog) throws IOException,
-                TemplateException {
+        public void process(MapNode values, CatalogDescription catalog) throws IOException {
             final String tableName = strip(values.getString("table"));
             final TableDescription td = getTable(catalog, tableName);
             final List elements = values.getList("tableElement");
@@ -443,8 +440,7 @@ public class DDLScriptSqlMetaFactory implements SqlMetaFactory, ScriptVisitor {
         // {table=NLSBUNDLE, columndefinition=[
         // {typeName=VARCHAR, column=DOMAIN, mandatory=NOT NULL, precision={numbers=[{value=500}]}}]}
 
-        public void process(MapNode values, CatalogDescription catalog) throws IOException,
-                TemplateException {
+        public void process(MapNode values, CatalogDescription catalog) throws IOException {
             super.process(values, catalog);
             final String tableName = strip(values.getString("table"));
             final TableDescription td = getTable(catalog, tableName);

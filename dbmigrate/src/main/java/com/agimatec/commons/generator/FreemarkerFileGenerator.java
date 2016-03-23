@@ -101,10 +101,14 @@ public class FreemarkerFileGenerator {
         }
     }
 
-    public void generate(Writer out) throws IOException, TemplateException {
+    public void generate(Writer out) throws IOException {
         applyDefaults();
         Template template = freemarker.getTemplate(templateName);
-        template.process(root, out);
+        try {
+            template.process(root, out);
+        } catch (TemplateException e) {
+            throw new GeneratorException(e);
+        }
     }
 
     public File getDestFile() {
