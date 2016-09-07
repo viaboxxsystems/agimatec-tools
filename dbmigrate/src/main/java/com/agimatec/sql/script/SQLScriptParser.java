@@ -172,8 +172,8 @@ public class SQLScriptParser {
         } finally {
             input.close();
         }
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + path);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + path);
         }
     }
 
@@ -197,8 +197,8 @@ public class SQLScriptParser {
         } finally {
             input.close();
         }
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + path);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + path);
         }
     }
 
@@ -237,8 +237,8 @@ public class SQLScriptParser {
         } finally {
             input.close();
         }
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + url);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + url);
         }
     }
 
@@ -262,8 +262,8 @@ public class SQLScriptParser {
         ParseState parseState = new ParseState(visitor);
         parseState.appendSql(statement);
         parseState.visitSql();
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + path);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + path);
         }
     }
 
@@ -279,8 +279,8 @@ public class SQLScriptParser {
         ParseState parseState = new ParseState(visitor);
         parseState.appendSql(statement);
         parseState.visitSql();
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + url);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + url);
         }
     }
 
@@ -329,8 +329,8 @@ public class SQLScriptParser {
         } finally {
             input.close();
         }
-        if (getLog().isInfoEnabled()) {
-            getLog().info("DONE with " + url);
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("DONE with " + url);
         }
     }
 
