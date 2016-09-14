@@ -46,14 +46,16 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
             }
             return 0;
         } else if (statement.length() > 5 && statement.substring(0, 4).toLowerCase().equals("set ")) {
-            doSetExpression(statement.substring(4));
+            if(!doSetExpression(statement.substring(4))) {
+                super.visitStatement(statement);
+            }
             return 0;
         } else {
             return super.visitStatement(statement);
         }
     }
 
-    private void doSetExpression(String expression) {
+    private boolean doSetExpression(String expression) {
         StringTokenizer tokens = new StringTokenizer(expression, "=,; ", true);
 
         String varName = nextToken(tokens, expression);
@@ -61,17 +63,19 @@ public class SubscriptCapableVisitor extends ScriptVisitorDelegate {
             String nt = nextToken(tokens, expression);
             if (!"=".equals(nt) && !" ".equals(nt)) {
                 log.warn("Illegal operator, expected '=' in: " + expression);
-                return;
+                return false;
             } else if ("=".equals(nt)) break;
         }
         String value = nextToken(tokens, expression);
-        if (varName == null || value == null) return;
+        if (varName == null || value == null) return false;
         if (varName.equals("FAIL_ON_ERROR")) { // derzeit nur 1 Variable, derzeit noch hard-coded. 
             boolean bool = Boolean.parseBoolean(value);
             log.info("SET " + varName + "=" + bool + ";");
             parser.setFailOnError(bool);
+            return true;
         } else {
             log.warn("Illegal script set-option: " + expression);
+            return false;
         }
     }
 
