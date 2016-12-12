@@ -4,11 +4,12 @@ import com.agimatec.utility.fileimport.ImporterException;
 import com.agimatec.utility.fileimport.LineImportProcessor;
 import com.agimatec.utility.fileimport.LineReader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,6 @@ import java.util.Iterator;
 public class ExcelRowReader implements LineReader<ExcelRow> {
     protected ExcelFormat format = ExcelFormat.HSSF;
     private int sheetIndex = 0;
-    private POIFSFileSystem fileSystem;
     private Workbook workbook;
     private Sheet sheet;
     private Iterator<Row> rowIterator;
@@ -137,11 +137,21 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
     protected void init() throws IOException, ImporterException {
         if (rowIterator != null) return; // short-circuit
 
-        if (fileSystem == null) {
-            fileSystem = new POIFSFileSystem(stream);
-        }
         if (workbook == null) {
-            workbook = new HSSFWorkbook(fileSystem);
+            if(format == null) {
+                workbook = new HSSFWorkbook(stream);
+            } else {
+                switch(format) {
+                    case XSSF:
+                        workbook = new XSSFWorkbook(stream);
+                        break;
+                    case SXSSF:
+                        workbook = new SXSSFWorkbook(new XSSFWorkbook(stream));
+                        break;
+                    case HSSF:
+                        workbook = new HSSFWorkbook(stream);
+                }
+            }
         }
         if (sheet == null) {
             if (sheetName != null) {
@@ -163,15 +173,6 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
      */
     public void close() throws IOException {
         if (!keepOpen && stream != null) stream.close();
-    }
-
-    public POIFSFileSystem getFileSystem() {
-        return fileSystem;
-    }
-
-    public void setFileSystem(POIFSFileSystem fileSystem) {
-        this.fileSystem = fileSystem;
-        setWorkbook(null);
     }
 
     public Iterator<Row> getRowIterator() {
@@ -259,7 +260,7 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
 
                 Cell nextCell = row.getCell(x);
                 if (nextCell != null) {
-                    Cell newCell = row.createCell(x - 1, nextCell.getCellType());
+                    Cell newCell = row.createCell(x - 1, nextCell.getCellTypeEnum());
                     cloneCell(newCell, nextCell);
                 }
             }
