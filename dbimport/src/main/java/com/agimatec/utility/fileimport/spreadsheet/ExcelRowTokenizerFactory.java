@@ -11,12 +11,29 @@ import com.agimatec.utility.fileimport.LineTokenizerFactory;
  * Time: 17:12:58 <br/>
  */
 public class ExcelRowTokenizerFactory implements LineTokenizerFactory<ExcelRow, ExcelCell> {
+    protected ExcelFormat format = ExcelFormat.HSSF;
+
+    /**
+     * @since 2.5.25
+     */
+    public ExcelFormat getFormat() {
+        return format;
+    }
+
+    /**
+     * @since 2.5.25
+     */
+    public void setFormat(ExcelFormat format) {
+        this.format = format;
+    }
 
     public LineTokenizer<ExcelRow, ExcelCell> createTokenizer(ExcelRow aLine) {
         return new ExcelRowTokenizer(aLine);
     }
 
     public LineReader<ExcelRow> createLineReader() {
-        return new ExcelRowReader();
+        ExcelRowReader err = new ExcelRowReader();
+        if (format != null) err.setFormat(format);
+        return err;
     }
 }

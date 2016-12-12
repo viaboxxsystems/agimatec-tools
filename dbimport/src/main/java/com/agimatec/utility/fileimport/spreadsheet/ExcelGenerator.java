@@ -3,9 +3,9 @@ package com.agimatec.utility.fileimport.spreadsheet;
 
 import com.agimatec.utility.fileimport.ImporterException;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,10 +28,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2.5.13
  */
 public abstract class ExcelGenerator {
-    protected HSSFWorkbook wb;
+    protected ExcelFormat format = ExcelFormat.HSSF;
+    protected Workbook wb;
     protected Styles styles;
 
-    public HSSFWorkbook generateWorkbook() {
+    public ExcelFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(ExcelFormat format) {
+        this.format = format;
+    }
+
+    public Workbook generateWorkbook() {
         initWorkbook();
         initStyles();
         generateSheets();
@@ -44,7 +53,16 @@ public abstract class ExcelGenerator {
     protected abstract void generateSheets();
 
     protected void initWorkbook() {
-        wb = new HSSFWorkbook();
+        switch (format) {
+            case HSSF:
+                wb = new HSSFWorkbook();
+                break;
+            case XSSF:
+                wb = new XSSFWorkbook();
+                break;
+            case SXSSF:
+                wb = new SXSSFWorkbook();
+        }
     }
 
     /**
@@ -54,7 +72,7 @@ public abstract class ExcelGenerator {
         styles = new Styles();
     }
 
-    public HSSFWorkbook getWb() {
+    public Workbook getWb() {
         return wb;
     }
 
@@ -66,15 +84,15 @@ public abstract class ExcelGenerator {
         return getStyles().get(name);
     }
 
-    protected HSSFCell createCell(HSSFRow row, int column, Object value, CellStyle style) {
-        HSSFCell cell = createCell(row, column, value);
+    protected Cell createCell(Row row, int column, Object value, CellStyle style) {
+        Cell cell = createCell(row, column, value);
         if (style != null)
             cell.setCellStyle(style);
         return cell;
     }
 
-    protected HSSFCell createCell(HSSFRow row, int column, Object value) {
-        HSSFCell cell = row.createCell(column);
+    protected Cell createCell(Row row, int column, Object value) {
+        Cell cell = row.createCell(column);
         if (value instanceof String)
             cell.setCellValue((String) value);
         else if (value instanceof Enum)
@@ -94,7 +112,7 @@ public abstract class ExcelGenerator {
         return cell;
     }
 
-    protected void createHeaders(HSSFRow row, int column, CellStyle style, String... headers) {
+    protected void createHeaders(Row row, int column, CellStyle style, String... headers) {
         int i = 0;
         for (String header : headers) {
             createCell(row, column + i, header, style);
@@ -142,36 +160,36 @@ public abstract class ExcelGenerator {
           STYLE METHODS: must return a CellStyle, must be public, must be no-arg methods.
          */
 
-        public HSSFCellStyle boldTitle() {
-            HSSFCellStyle style = wb.createCellStyle();
-            HSSFFont font = wb.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        public CellStyle boldTitle() {
+            CellStyle style = wb.createCellStyle();
+            Font font = wb.createFont();
+            font.setBold(true);
             font.setFontHeightInPoints((short) 14);
             style.setFont(font);
             return style;
         }
 
-        public HSSFCellStyle boldHeader() {
-            HSSFCellStyle style = wb.createCellStyle();
-            HSSFFont font = wb.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        public CellStyle boldHeader() {
+            CellStyle style = wb.createCellStyle();
+            Font font = wb.createFont();
+            font.setBold(true);
             font.setFontHeightInPoints((short) 10);
             style.setFont(font);
             return style;
         }
 
-        public HSSFCellStyle redCell() {
-            HSSFCellStyle style = wb.createCellStyle();
-            HSSFFont font = wb.createFont();
+        public CellStyle redCell() {
+            CellStyle style = wb.createCellStyle();
+            Font font = wb.createFont();
             font.setColor(IndexedColors.RED.getIndex());
             font.setFontHeightInPoints((short) 10);
             style.setFont(font);
             return style;
         }
 
-        public HSSFCellStyle blueCell() {
-            HSSFCellStyle style = wb.createCellStyle();
-            HSSFFont font = wb.createFont();
+        public CellStyle blueCell() {
+            CellStyle style = wb.createCellStyle();
+            Font font = wb.createFont();
             font.setColor(IndexedColors.BLUE.getIndex());
             font.setFontHeightInPoints((short) 10);
             style.setFont(font);

@@ -1,9 +1,9 @@
 package com.agimatec.utility.fileimport.spreadsheet;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Comment;
 
 import java.text.DecimalFormat;
@@ -21,8 +21,8 @@ public class ExcelCell implements ICell {
   private final Cell cell;
   private CellStyle style;
 
-  public ExcelCell(Cell hssfCell) {
-    cell = hssfCell;
+  public ExcelCell(Cell excelCell) {
+    cell = excelCell;
     plainNumericFormat.setGroupingUsed(false);
     DecimalFormatSymbols dfs = new DecimalFormatSymbols();
     dfs.setDecimalSeparator('.');
@@ -37,24 +37,28 @@ public class ExcelCell implements ICell {
   }
 
   public Object getValue() {
-    return getValue(cell.getCellType());
+    return getValue(cell.getCellTypeEnum());
   }
 
-  private Object getValue(int cellType) {
+    /**
+     * @param cellType
+     * @return
+     */
+  private Object getValue(CellType cellType) {
     switch (cellType) {
-      case HSSFCell.CELL_TYPE_NUMERIC:
+      case NUMERIC:
         if (HSSFDateUtil.isCellDateFormatted(cell)) {
           return cell.getDateCellValue();
         } else {
           return cell.getNumericCellValue();
         }
-      case HSSFCell.CELL_TYPE_FORMULA:
-        return getValue(cell.getCachedFormulaResultType());
-      case HSSFCell.CELL_TYPE_BOOLEAN:
+      case FORMULA:
+        return getValue(cell.getCachedFormulaResultTypeEnum());
+      case BOOLEAN:
         return cell.getBooleanCellValue();
-      case HSSFCell.CELL_TYPE_STRING:
+      case STRING:
         return cell.getRichStringCellValue().getString();
-      case HSSFCell.CELL_TYPE_ERROR:
+      case ERROR:
         return cell.getErrorCellValue();
       default:
         return null;
@@ -90,8 +94,8 @@ public class ExcelCell implements ICell {
   }
 
   public Date getDateValue() {
-    if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC ||
-        cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
+    if (cell.getCellTypeEnum() == CellType.NUMERIC ||
+        cell.getCellTypeEnum() == CellType.FORMULA) {
         try {
             return cell.getDateCellValue();
         } catch(NullPointerException ex) { // workaround for bug in POI 3.11

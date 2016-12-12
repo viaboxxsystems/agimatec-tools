@@ -3,13 +3,12 @@ package com.agimatec.utility.fileimport.spreadsheet;
 import com.agimatec.utility.fileimport.ImporterException;
 import com.agimatec.utility.fileimport.LineImportProcessor;
 import com.agimatec.utility.fileimport.LineReader;
-import org.apache.poi.hssf.usermodel.HSSFAccess;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,10 +23,11 @@ import java.util.Iterator;
  * Copyright: Viaboxx GmbH
  */
 public class ExcelRowReader implements LineReader<ExcelRow> {
+    protected ExcelFormat format = ExcelFormat.HSSF;
     private int sheetIndex = 0;
     private POIFSFileSystem fileSystem;
-    private HSSFWorkbook workbook;
-    private HSSFSheet sheet;
+    private Workbook workbook;
+    private Sheet sheet;
     private Iterator<Row> rowIterator;
     private InputStream stream;
     /**
@@ -82,6 +82,20 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
      */
     public boolean isKeepOpen() {
         return keepOpen;
+    }
+
+    /**
+     * @since 2.5.25
+     */
+    public ExcelFormat getFormat() {
+        return format;
+    }
+
+    /**
+     * @since 2.5.25
+     */
+    public void setFormat(ExcelFormat format) {
+        this.format = format;
     }
 
     /**
@@ -168,20 +182,20 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         this.rowIterator = rowIterator;
     }
 
-    public HSSFSheet getSheet() {
+    public Sheet getSheet() {
         return sheet;
     }
 
-    public void setSheet(HSSFSheet sheet) {
+    public void setSheet(Sheet sheet) {
         this.sheet = sheet;
         setRowIterator(null);
     }
 
-    public HSSFWorkbook getWorkbook() {
+    public Workbook getWorkbook() {
         return workbook;
     }
 
-    public void setWorkbook(HSSFWorkbook workbook) {
+    public void setWorkbook(Workbook workbook) {
         this.workbook = workbook;
         setSheet(null);
     }
@@ -208,8 +222,12 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         // A HACK, I know. Prevent from ConcurrentModificationException but remove row from sheet:
         rowIterator.remove(); // remove the row that has just been read: from iterator..
         ExcelRow line = (ExcelRow) processor.getCurrentLine();
-        HSSFAccess.getInternalSheet(sheet)
-                .removeRow(HSSFAccess.getRowRecord(((HSSFRow) line.getRow()))); // .. and from physical sheet
+//        if(sheet instanceof HSSFSheet) {
+//            HSSFAccess.getInternalSheet((HSSFSheet)sheet)
+//                .removeRow(HSSFAccess.getRowRecord(((HSSFRow) line.getRow()))); // .. and from physical sheet
+//        } else {
+        sheet.removeRow(line.getRow());
+//        }
     }
 
     // source from http://pastebin.com/ff806298
@@ -261,24 +279,24 @@ public class ExcelRowReader implements LineReader<ExcelRow> {
         cNew.setCellComment(cOld.getCellComment());
         cNew.setCellStyle(cOld.getCellStyle());
 
-        switch (cNew.getCellType()) {
-            case Cell.CELL_TYPE_BOOLEAN:
+        switch (cNew.getCellTypeEnum()) {
+            case BOOLEAN:
                 cNew.setCellValue(cOld.getBooleanCellValue());
                 break;
 
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 cNew.setCellValue(cOld.getNumericCellValue());
                 break;
 
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 cNew.setCellValue(cOld.getStringCellValue());
                 break;
 
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 cNew.setCellValue(cOld.getErrorCellValue());
                 break;
 
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 cNew.setCellFormula(cOld.getCellFormula());
                 break;
         }

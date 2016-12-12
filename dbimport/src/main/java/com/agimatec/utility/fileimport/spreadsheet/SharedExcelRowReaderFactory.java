@@ -83,6 +83,7 @@ public class SharedExcelRowReaderFactory extends ExcelRowTokenizerFactory {
     public LineReader<ExcelRow> createLineReader() {
         if (sharedReader == null) {
             sharedReader = new ExcelRowReader(keepOpen);
+            if (format != null) sharedReader.setFormat(format);
         } else {
             sharedReader.setRowIterator(null);
         }

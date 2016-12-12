@@ -11,8 +11,8 @@ import org.apache.poi.ss.usermodel.Row;
 public class ExcelRow implements IRow {
     private final Row row;
 
-    public ExcelRow(Row hssfRow) {
-        row = hssfRow;
+    public ExcelRow(Row row) {
+        this.row = row;
     }
 
     public Row getRow() {
