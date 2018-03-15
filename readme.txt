@@ -95,8 +95,8 @@ If something went wrong you can drop the staging repository with:
   mvn nexus-staging:drop
 
 Perform a release deployment to OSSRH with:
-  mvn release:clean release:prepare
-  mvn release:perform
+  mvn release:clean release:prepare -Dusername=[github user] -Dpassword=[github password]
+  mvn release:perform               -Dusername=[github user] -Dpassword=[github password]
 
 
 Getting started
