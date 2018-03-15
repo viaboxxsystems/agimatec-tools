@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.FileOutputStream;
@@ -43,7 +44,7 @@ public class ExcelImportTest extends TestCase {
         HSSFRow row = sheet.getRow(2);
         HSSFCell cell = row.getCell(3);
         if (cell == null) cell = row.createCell(3);
-        cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+        cell.setCellType(CellType.STRING);
         cell.setCellValue(new HSSFRichTextString("a test"));
 
         // Write the output to a file
@@ -99,14 +100,14 @@ public class ExcelImportTest extends TestCase {
 
     private String getStringValue(Cell cell) {
         String strValue;
-        switch(cell.getCellType()) {
-            case HSSFCell.CELL_TYPE_NUMERIC:
+        switch(cell.getCellTypeEnum()) {
+            case NUMERIC:
                 strValue = String.valueOf(cell.getNumericCellValue());
                 break;
-            case HSSFCell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 strValue = String.valueOf(cell.getBooleanCellValue());
                 break;
-            case HSSFCell.CELL_TYPE_STRING:
+            case STRING:
                 strValue = cell.getRichStringCellValue().getString();
                 break;
             default:
