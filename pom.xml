@@ -28,10 +28,6 @@
         <maven>2.0</maven>
     </prerequisites>
     <inceptionYear>2008</inceptionYear>
-    <ciManagement>
-        <system>Teamcity</system>
-        <url>${teamcity-url}</url>
-    </ciManagement>
     <scm>
         <url>http://github.com/viaboxxsystems/agimatec-tools</url>
         <connection>scm:git:http://github.com/viaboxxsystems/agimatec-tools</connection>
@@ -74,7 +70,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>4.2.6.RELEASE</version>
+                <version>5.0.4.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -100,7 +96,7 @@
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
-                <version>2.4.6</version>
+                <version>2.4.13</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -127,15 +123,15 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.4</version>
+                <version>2.6</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
-                <version>1.8.3</version>
+                <version>1.9.3</version>
             </dependency>
             <dependency>
-                <groupId>commons-httpclient</groupId>
+                <groupId>commons-httpclient</groupId>                                                                                   
                 <artifactId>commons-httpclient</artifactId>
                 <version>3.1</version>
             </dependency>
@@ -168,7 +164,7 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.9.3</version>
+                <version>2.9.9</version>
             </dependency>
             <dependency>
                 <groupId>ant-contrib</groupId>
@@ -178,7 +174,7 @@
             <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.1-901-1.jdbc4</version>
+                <version>42.2.1.jre7</version>
             </dependency>
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -198,7 +194,7 @@
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
-                <version>1.4.9</version>
+                <version>1.4.10</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
@@ -218,7 +214,7 @@
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.10</version>
+                <version>1.11</version>
             </dependency>
             <!--          <dependency>
                           <groupId>oracle</groupId>
@@ -377,7 +373,7 @@
 
     <properties>
         <agimatec-version>${project.version}</agimatec-version>
-        <slf4j-version>1.7.21</slf4j-version>
-        <poi.version>3.15</poi.version>
+        <slf4j-version>1.7.25</slf4j-version>
+        <poi.version>3.17</poi.version>
     </properties>
 </project>
