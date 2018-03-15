@@ -21,24 +21,23 @@ public class XStreamPersistencer implements ObjectPersistencer {
     static final XStream xstream = new XStream();
 
     static {
-        xstream.processAnnotations(HistSchemaConfig.class);
-        xstream.processAnnotations(HistTableConfig.class);
-        xstream.processAnnotations(CatalogDescription.class);
-        xstream.processAnnotations(ColumnDescription.class);
-        xstream.processAnnotations(ForeignKeyDescription.class);
-        xstream.processAnnotations(IndexDescription.class);
-        xstream.processAnnotations(SequenceDescription.class);
-        xstream.processAnnotations(TableDescription.class);
-        xstream.processAnnotations(CatalogConversion.class);
-        xstream.processAnnotations(DataType.class);
-        xstream.processAnnotations(DataTypeTransformation.class);
+        Class[] types =
+            {HistSchemaConfig.class, HistTableConfig.class,
+                CatalogDescription.class, ColumnDescription.class,
+                ForeignKeyDescription.class, IndexDescription.class,
+                SequenceDescription.class, TableDescription.class,
+                CatalogConversion.class,
+                DataType.class, DataTypeTransformation.class};
+        XStream.setupDefaultSecurity(xstream);
+        xstream.allowTypes(types);
+        xstream.processAnnotations(types);
     }
 
     static Charset charset = Charset.forName("UTF-8");
 
     public void save(Object obj, File target) throws IOException {
         OutputStreamWriter out =
-                new OutputStreamWriter(new FileOutputStream(target), charset);
+            new OutputStreamWriter(new FileOutputStream(target), charset);
         try {
             xstream.toXML(obj, out);
         } finally {
@@ -48,7 +47,7 @@ public class XStreamPersistencer implements ObjectPersistencer {
 
     public Object load(File source) throws IOException, ClassNotFoundException {
         InputStreamReader reader =
-                new InputStreamReader(new FileInputStream(source), charset);
+            new InputStreamReader(new FileInputStream(source), charset);
         try {
             return xstream.fromXML(reader);
         } finally {
