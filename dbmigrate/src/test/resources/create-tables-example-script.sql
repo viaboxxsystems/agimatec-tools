@@ -303,12 +303,15 @@ ALTER TABLE Privilege ADD CONSTRAINT Role_Privilege_FK_1
 ALTER TABLE Rule ADD CONSTRAINT CV_Rule_Type_Rule_FK_1 
     FOREIGN KEY (type) REFERENCES CV_Rule_Type (id);
 
-ALTER TABLE User_Authentication ADD CONSTRAINT User_Core_User_Authentication_FK_1 
+alter table if
+	exists User_Authentication ADD CONSTRAINT User_Core_User_Authentication_FK_1
     FOREIGN KEY (user_id) REFERENCES User_Core (user_id);
 
-ALTER TABLE Card ADD CONSTRAINT User_Core_Card_FK_1 
+alter table if
+	exists Card ADD CONSTRAINT User_Core_Card_FK_1
     FOREIGN KEY (user_id) REFERENCES User_Core (user_id);
 
-ALTER TABLE Geo_data ADD CONSTRAINT Address_Geo_data_FK_1 
+alter table if
+	exists Geo_data ADD CONSTRAINT Address_Geo_data_FK_1
     FOREIGN KEY (address_id) REFERENCES Address (address_id);
 
