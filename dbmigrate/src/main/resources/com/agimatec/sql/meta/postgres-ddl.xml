@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config name="mysql">
     <list name="ddl">
-        <text>{table-add-constraint ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName}
+        <text>{table-add-constraint ALTER TABLE [IF] [EXISTS] ${table} ADD {constraint CONSTRAINT ${constraintName}
             [${unique(UNIQUE)}] '(' {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
         </text>
         <text>{create-index CREATE [${unique(UNIQUE)}] INDEX ${indexName} ON ${table} '(' {columns ${column} [{func '('
             {elements ${each}...','} ')'}] [ASC] [${desc(DESC)}]...','} ')' [{tableSpace TABLESPACE ${tableSpace}}]}
         </text>
-        <text>{table-add-foreign-key ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName} FOREIGN KEY '('
+        <text>{table-add-foreign-key ALTER TABLE [IF] [EXISTS] ${table} ADD {constraint CONSTRAINT ${constraintName} FOREIGN KEY '('
             {columns ${column}...','} ')' REFERENCES ${refTable} [{refcolumns '(' {refcolumns ${column}...','} ')'}]
             [ON] [DELETE] [${onDeleteRule}] [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
         </text>
@@ -33,12 +33,12 @@
             '(' {numbers ${value}...','} [CHAR] ')'}] [${mandatory(NOT NULL)}] [${isUnique(UNIQUE)}]
             [${isPK(PRIMARY KEY)}]}]...','} ')'}
         </text>
-        <text>{table-add-primary-key ALTER TABLE ${table} ADD {constraint CONSTRAINT ${constraintName} PRIMARY KEY '('
+        <text>{table-add-primary-key ALTER TABLE [IF] [EXISTS] ${table} ADD {constraint CONSTRAINT ${constraintName} PRIMARY KEY '('
             {columns ${column}...','} ')' [{tableSpace USING INDEX TABLESPACE ${tableSpace}}]}}
         </text>
         <text>{table-comment COMMENT ON TABLE ${table} IS ${comment{'}}}</text>
         <text>{column-comment COMMENT ON COLUMN ${tableColumn} IS ${comment{'}}}</text>
-        <text>{table-alter-columns ALTER TABLE ${table} {tableElement [{alter-column-set-notnull ALTER [COLUMN]
+        <text>{table-alter-columns ALTER TABLE [IF] [EXISTS] ${table} {tableElement [{alter-column-set-notnull ALTER [COLUMN]
             ${column} SET NOT NULL}] [{alter-column-drop-notnull ALTER [COLUMN] ${column} DROP NOT NULL}] [{constraint
             ADD CONSTRAINT ${constraintName} [${unique(UNIQUE)}] '(' {columns ${column}...','} ')'}] [{add-foreign-key
             ADD CONSTRAINT ${constraintName} FOREIGN KEY '(' {columns ${column}...','} ')' REFERENCES ${refTable}
